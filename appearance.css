@@ -8,4 +8,6 @@ body {
     border: 1px solid grey;
     border-radius: 2px;
     padding: 8px 10px;
+    resize: both;
+    overflow: auto;
 }
