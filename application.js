@@ -1,15 +1,16 @@
-hide_intro = document.getElementById("hide-intro");
+HIDE_INTRO = document.getElementById("hide-INTRO");
+INTRO = document.getElementById("INTRO");
 
 var intro_hidden = false;
 
-hide_intro.onclick = function() {
+HIDE_INTRO.onclick = function() {
     if (intro_hidden) {
-        document.getElementById("intro").style.display = "block";
-        hide_intro.textContent = "Ok, hide this please!";
+        INTRO.style.display = "block";
+        HIDE_INTRO.textContent = "Ok, hide this please!";
         intro_hidden = false;
     } else {
-        document.getElementById("intro").style.display = "none";
-        hide_intro.textContent = "Show me the intro!";
+        INTRO.style.display = "none";
+        HIDE_INTRO.textContent = "Show me the intro!";
         intro_hidden = true;
     }
 };
