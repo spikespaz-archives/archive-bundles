@@ -11,3 +11,9 @@ body {
     resize: both;
     overflow: auto;
 }
+
+code {
+    background: lightgrey;
+    border-radius: 2px;
+    padding: 2px;
+}
