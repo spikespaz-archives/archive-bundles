@@ -23,3 +23,10 @@ code {
     border-radius: 2px;
     padding: 2px;
 }
+
+#footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    padding-right: 20px;
+}
