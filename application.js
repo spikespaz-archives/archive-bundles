@@ -16,8 +16,6 @@ HIDE_INTRO.onclick = function() {
     }
 };
 
-STORY_EDIT.onkeyup = function(event) {
-    if (event.which === 221) {
-        this.innerHTML = this.innerText.replace(/\[([\w\s]+)]/g, "<code>[$1]</code>");
-    }
+STORY_EDIT.onkeyup = function() {
+    this.innerHTML = this.innerText.replace(/\[([\w\s]+)]/g, "<code>[$1]</code>");
 };
