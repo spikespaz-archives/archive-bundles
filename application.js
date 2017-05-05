@@ -1,6 +1,6 @@
 HIDE_INTRO = document.getElementById("hide-intro");
 INTRO = document.getElementById("intro");
-STORY = document.getElementById("story-edit");
+STORY_EDIT = document.getElementById("story-edit");
 
 var intro_hidden = false;
 
@@ -16,8 +16,8 @@ HIDE_INTRO.onclick = function() {
     }
 };
 
-STORY.onkeyup = function(event) {
+STORY_EDIT.onkeyup = function(event) {
     if (event.which === 221) {
-        this.innerHTML = this.innerText.replace(/\[([\w\s]+)]/g, "<code>[$1]</code> ");
+        this.innerHTML = this.innerText.replace(/\[([\w\s]+)]/g, "<code>[$1]</code>");
     }
 };
