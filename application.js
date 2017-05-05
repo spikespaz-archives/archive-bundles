@@ -18,6 +18,6 @@ HIDE_INTRO.onclick = function() {
 
 STORY.onkeyup = function(event) {
     if (event.which === 221) {
-        this.firstChild.innerHTML = this.innerText.replace(/\[([\w\s]+)]/g, "<code>[$1]</code> ");
+        this.innerHTML = this.innerText.replace(/\[([\w\s]+)]/g, "<code>[$1]</code> ");
     }
 };
