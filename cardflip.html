@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Card Flip Game</title>
+    <style>
+        table, td {
+            border: solid 1px grey;
+        }
+
+        td {
+            width: 80px;
+            height: 160px;
+            color: white;
+            background: black;
+        }
+    </style>
+</head>
+<body>
+    <table id="cards">
+        <tbody>
+        <tr>
+            <td onclick="updateActive(this)">A1 - 0</td>
+            <td onclick="updateActive(this)">A2 - 1</td>
+            <td onclick="updateActive(this)">A3 - 2</td>
+            <td onclick="updateActive(this)">A4 - 3</td>
+        </tr>
+        <tr>
+            <td onclick="updateActive(this)">B1 - 4</td>
+            <td onclick="updateActive(this)">B2 - 5</td>
+            <td onclick="updateActive(this)">B3 - 6</td>
+            <td onclick="updateActive(this)">B4 - 7</td>
+        </tr>
+        <tr>
+            <td onclick="updateActive(this)">C1 - 8</td>
+            <td onclick="updateActive(this)">C2 - 9</td>
+            <td onclick="updateActive(this)">C3 - 10</td>
+            <td onclick="updateActive(this)">C4 - 11</td>
+        </tr>
+        <tr>
+            <td onclick="updateActive(this)">D1 - 12</td>
+            <td onclick="updateActive(this)">D2 - 13</td>
+            <td onclick="updateActive(this)">D3 - 14</td>
+            <td onclick="updateActive(this)">D4 - 15</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <script>
+        const print = console.log;
+        const table = document.getElementById("cards");
+
+        let cards = [];
+        let active = [];
+
+        let row, cell;
+        for (row = 0; row < table.rows.length; row++) {
+            for (cell = 0; cell < table.rows[row].cells.length; cell++) {
+                cards.push(table.rows[row].cells[cell])
+            }
+        }
+
+        function updateActive(card) {
+            if (active.includes(card)) {
+                active.splice(active.indexOf(card));
+                card.style.background = "black"
+            } else if (active.length > 0) {
+                if (active.length === 1) {
+                    active.push(card);
+                    card.style.background = "white"
+                } else if (active.length === 2) {
+                    // Check match
+                    active[0].style.background = "black";
+                    active[1].style.background = "black";
+                    active = [card];
+                    card.style.background = "white"
+                }
+            } else {
+                active.push(card);
+                card.style.background = "white"
+            }
+        }
+    </script>
+</body>
+</html>
