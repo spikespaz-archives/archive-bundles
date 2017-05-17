@@ -62,19 +62,16 @@
 
         function updateActive(card) {
             if (active.includes(card)) {
-                active.splice(active.indexOf(card));
+                active.splice(active.indexOf(card), 1);
                 card.style.background = "black"
-            } else if (active.length > 0) {
-                if (active.length === 1) {
-                    active.push(card);
-                    card.style.background = "white"
-                } else if (active.length === 2) {
-                    // Check match
-                    active[0].style.background = "black";
-                    active[1].style.background = "black";
-                    active = [card];
-                    card.style.background = "white"
-                }
+            } else if (active.length < 2) {
+                active.push(card);
+                card.style.background = "white"
+            } else if (active.length === 2) {
+                active[0].style.background = "black";
+                active[1].style.background = "black";
+                active = [card];
+                card.style.background = "white"
             } else {
                 active.push(card);
                 card.style.background = "white"
