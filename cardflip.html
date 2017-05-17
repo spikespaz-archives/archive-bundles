@@ -17,7 +17,7 @@
     </style>
 </head>
 <body>
-    <table id="cards">
+    <table>
         <tbody>
         <tr>
             <td onclick="updateActive(this)">A1 - 0</td>
@@ -48,7 +48,7 @@
 
     <script>
         const print = console.log;
-        const table = document.getElementById("cards");
+        const table = document.getElementsByTagName("table")[0];
 
         let cards = [];
         let active = [];
