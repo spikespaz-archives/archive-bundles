@@ -13,6 +13,12 @@
             height: 160px;
             color: white;
             background: black;
+            transition: all 0.2s ease-in;
+        }
+
+        td.active {
+            background: white;
+            transform: rotateY(180deg);
         }
     </style>
 </head>
@@ -63,18 +69,18 @@
         function updateActive(card) {
             if (active.includes(card)) {
                 active.splice(active.indexOf(card), 1);
-                card.style.background = "black"
+                card.classList.remove("active")
             } else if (active.length < 2) {
                 active.push(card);
-                card.style.background = "white"
+                card.classList.add("active")
             } else if (active.length === 2) {
-                active[0].style.background = "black";
-                active[1].style.background = "black";
+                active[0].classList.remove("active");
+                active[1].classList.remove("active");
                 active = [card];
-                card.style.background = "white"
+                card.classList.add("active")
             } else {
                 active.push(card);
-                card.style.background = "white"
+                card.classList.add("active")
             }
         }
     </script>
