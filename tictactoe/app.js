@@ -1,7 +1,6 @@
 const table = document.getElementById("grid");
 const turn = document.getElementById("turn").lastChild;
 const time = document.getElementById("time").lastChild;
-const matches = document.getElementById("matches").lastChild;
 
 const counter = setInterval(() => {
     centiseconds++;
@@ -26,6 +25,17 @@ function getSeconds() {
     return Math.floor(centiseconds / 10)
 }
 
+function updateCell(cell) {
+    console.log(cell.innerText);
+    if (!cell.innerText) {
+        cell.innerText = next;
+        if (next === "x") {
+            next = "o"
+        } else {
+            next = "x"
+        }
+    }
+}
 
 setTimeout(() => {
     clearTimeout(counter);

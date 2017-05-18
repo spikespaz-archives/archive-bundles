@@ -17,11 +17,11 @@ code {
 td {
     width: 80px;
     height: 80px;
-    color: white;
     transition: all 0.2s ease-in;
     border-radius: 10px;
     border: solid 1px grey;
     text-align: center;
+    text-transform: uppercase;
     color: black;
     font-size: 50px;
 }
