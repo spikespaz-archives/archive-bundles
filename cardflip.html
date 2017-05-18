@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Card Flip Game</title>
     <style>
         td {
             width: 80px;
-            height: 160px;
+            height: 120px;
             color: white;
             background: black;
             transition: all 0.2s ease-in;
@@ -18,9 +19,23 @@
             background: white;
             transform: rotateY(180deg);
         }
+
+        #head {
+            text-align: center;
+        }
+
+        #head h3 {
+            display: inline-block;
+            padding: 0 8px;
+        }
     </style>
 </head>
 <body>
+    <div id="head">
+        <h3 id="points">Points: <code>0</code></h3>
+        <h3 id="matches">Matches: <code>3</code></h3>
+        <h3 id="time">Time: <code>0m 0s</code></h3>
+    </div>
     <table>
         <tbody>
         <tr>
@@ -81,6 +96,19 @@
                 card.classList.add("active")
             }
         }
+
+        const time = document.getElementById("time").lastChild;
+        let seconds = 0;
+
+        const counter = setInterval(() => {
+            seconds++;
+            time.innerText = Math.floor(seconds / 60) + "m " + seconds % 60 + "s"
+        }, 1000);
+
+        setTimeout(() => {
+            clearTimeout(counter);
+            alert("Time up!")
+        }, 120000)
     </script>
 </body>
 </html>
