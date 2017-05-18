@@ -2,13 +2,7 @@ const table = document.getElementById("grid");
 const turn = document.getElementById("turn").lastChild;
 const time = document.getElementById("time").lastChild;
 
-let next = "x", grid = [], seconds = 0, row, cell, index;
-
-function randomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
-}
+let next = "x", grid = [], seconds = 0, row, cell;
 
 for (row = 0; row < table.rows.length; row++) {
     for (cell = 0; cell < table.rows[row].cells.length; cell++) {
@@ -16,16 +10,22 @@ for (row = 0; row < table.rows.length; row++) {
     }
 }
 
+function updateNext() {
+    if (next === "x") {
+        next = "o"
+    } else {
+        next = "x"
+    }
+    turn.innerText = next.toUpperCase()
+}
+
 function updateCell(cell) {
     console.log(cell.innerText);
     if (!cell.innerText) {
         cell.innerText = next;
-        if (next === "x") {
-            next = "o"
-        } else {
-            next = "x"
-        }
+        
         cell.classList.add("filled");
+        updateNext()
     }
 }
 
