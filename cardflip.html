@@ -162,7 +162,7 @@
                 active.push(card);
                 activateCard(card);
                 if (active.length === 2) {
-                    setTimeout(checkMatches, 1000);
+                    setTimeout(checkMatches, 500);
                 }
             } else if (active.length > 1) {
                 if (active[0].classList.contains("hidden") && active[1].classList.contains("hidden")) {
@@ -184,12 +184,14 @@
         const counter = setInterval(() => {
             seconds++;
             time.innerText = seconds % 60 + "s"
-        }, 1000);
+        }, 500);
+
+        alert("You have 80 seconds, go!");
 
         setTimeout(() => {
             clearTimeout(counter);
             alert("Time up!")
-        }, 60000)
+        }, 80000)
     </script>
 </body>
 </html>
