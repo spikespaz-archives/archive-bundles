@@ -34,6 +34,7 @@ function updateCell(cell) {
         } else {
             next = "x"
         }
+        cell.classList.add("filled");
     }
 }
 

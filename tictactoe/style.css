@@ -22,8 +22,13 @@ td {
     border: solid 1px grey;
     text-align: center;
     text-transform: uppercase;
-    color: black;
+    color: transparent;
     font-size: 50px;
+    transition: all 0.2s ease-in;
+}
+
+td.filled {
+    color: black;
 }
 
 td:hover {
