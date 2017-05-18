@@ -155,6 +155,7 @@
                     alert("You win!\nTime: " + centiseconds + "\nPoints: " + points);
                     location.reload()
                 }
+
             } else {
                 resetCard(active[0]);
                 resetCard(active[1]);
@@ -166,19 +167,24 @@
             if (active.includes(card)) {
                 active.splice(active.indexOf(card), 1);
                 resetCard(card);
+
             } else if (active.length < 2) {
                 active.push(card);
                 activateCard(card);
-                if (active.length === 2) {
+
+                if (active.length > 1) {
                     setTimeout(checkMatches, 500);
                 }
+
             } else if (active.length > 1) {
                 if (active[0].classList.contains("hidden") && active[1].classList.contains("hidden")) {
                     resetCard(active[0]);
                     resetCard(active[1]);
                 }
+
                 active = [card];
                 activateCard(card);
+
             } else {
                 active.push(card);
                 activateCard(card)
