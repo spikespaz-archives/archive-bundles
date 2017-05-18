@@ -91,13 +91,17 @@
     </table>
 
     <script>
-        const print = console.log;
         const table = document.getElementById("cards");
         const score = document.getElementById("points").lastChild;
+        const time = document.getElementById("time").lastChild;
+        const matches = document.getElementById("matches").lastChild;
 
-        let cards = [];
-        let active = [];
-        let pairs = 0;
+        const counter = setInterval(() => {
+            centiseconds++;
+            time.innerText = Math.floor(centiseconds / 10) + "s";
+        }, 100);
+
+        let cards = [], active = [], pairs = 0, last = 0, points = 0, centiseconds = 0, row, cell, index;
 
         let colors = [
             "red", "red",
@@ -110,24 +114,30 @@
             "pink", "pink"
         ];
 
-        let last = 0, points = 0;
-
         function randomInt(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);
             return Math.floor(Math.random() * (max - min)) + min;
         }
 
-        let row, cell;
         for (row = 0; row < table.rows.length; row++) {
             for (cell = 0; cell < table.rows[row].cells.length; cell++) {
-                let index = randomInt(0, colors.length - 1);
+                index = randomInt(0, colors.length - 1);
                 table.rows[row].cells[cell].classList.add(colors[index]);
                 colors.splice(index, 1)
             }
         }
 
-        const matches = document.getElementById("matches").lastChild;
+        function activateCard(card) {
+            card.classList.add("active");
+            card.style.background = card.style.color = card.classList[0];
+        }
+
+        function resetCard(card) {
+            card.style.background = "black";
+            card.style.color = "white";
+            card.classList.remove("active")
+        }
 
         function checkMatches() {
             if (active[0].classList[0] === active[1].classList[0]) {
@@ -152,17 +162,6 @@
             }
         }
 
-        function activateCard(card) {
-            card.classList.add("active");
-            card.style.background = card.style.color = card.classList[0];
-        }
-
-        function resetCard(card) {
-            card.style.background = "black";
-            card.style.color = "white";
-            card.classList.remove("active")
-        }
-
         function updateActive(card) {
             if (active.includes(card)) {
                 active.splice(active.indexOf(card), 1);
@@ -184,17 +183,7 @@
                 active.push(card);
                 activateCard(card)
             }
-            print(active)
         }
-
-        const time = document.getElementById("time").lastChild;
-        let centiseconds = 0;
-
-        const counter = setInterval(() => {
-            centiseconds++;
-            time.innerText = Math.floor(centiseconds / 10) + "s";
-            print(centiseconds)
-        }, 100);
 
         alert("You have 80 seconds, go!");
 
