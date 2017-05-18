@@ -33,7 +33,6 @@
         }
 
         td.active {
-            background: white;
             transform: rotateY(180deg);
         }
 
@@ -99,46 +98,78 @@
         let active = [];
         let pairs = 0;
 
+        let colors = [
+            "red", "red",
+            "yellow", "yellow",
+            "green", "green",
+            "blue", "blue",
+            "orange", "orange",
+            "purple", "purple",
+            "yellow", "yellow",
+            "pink", "pink"
+        ];
+
+        function randomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
         let row, cell;
         for (row = 0; row < table.rows.length; row++) {
             for (cell = 0; cell < table.rows[row].cells.length; cell++) {
-                cards.push(table.rows[row].cells[cell])
+                let index = randomInt(0, colors.length - 1);
+                table.rows[row].cells[cell].classList.add(colors[index]);
+                colors.splice(index, 1)
             }
         }
 
         const matches = document.getElementById("matches").lastChild;
 
         function checkMatches() {
-            active[0].classList.add("hidden");
-            active[1].classList.add("hidden");
-            pairs++;
-            matches.innerText = pairs;
+            if (active[0].classList[0] === active[1].classList[0]) {
+                active[0].classList.add("hidden");
+                active[1].classList.add("hidden");
+                pairs++;
+                matches.innerText = pairs;
 
-            if (pairs === 8) {
-                alert("You win!")
+                if (pairs === 8) {
+                    alert("You win!")
+                }
             }
+        }
+
+        function activateCard(card) {
+            card.classList.remove("active");
+            card.style.background = card.classList[0];
+            print(card.classList[0])
+        }
+
+        function resetCard(card) {
+            card.style.background = "black";
+            card.classList.remove("active")
         }
 
         function updateActive(card) {
             if (active.includes(card)) {
                 active.splice(active.indexOf(card), 1);
-                card.classList.remove("active")
+                resetCard(card);
             } else if (active.length < 2) {
                 active.push(card);
-                card.classList.add("active");
+                activateCard(card);
                 if (active.length === 2) {
                     setTimeout(checkMatches, 1000);
                 }
             } else if (active.length > 1) {
                 if (active[0].classList.contains("hidden") && active[1].classList.contains("hidden")) {
-                    active[0].classList.remove("active");
-                    active[1].classList.remove("active");
+                    resetCard(active[0]);
+                    resetCard(active[1]);
                 }
                 active = [card];
-                card.classList.add("active")
+                activateCard(card);
             } else {
                 active.push(card);
-                card.classList.add("active")
+                activateCard(card)
             }
         }
 
