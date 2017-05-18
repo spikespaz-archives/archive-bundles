@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Card Flip Game</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script defer rel="script" type="text/javascript" src="app.js"></script>
+</head>
+<body>
+    <div id="head">
+        <h3 id="points">Points: <code>0</code></h3>
+        <h3 id="matches">Matches: <code>0</code></h3>
+        <h3 id="time">Time: <code>0s</code></h3>
+    </div>
+    <table id="cards">
+        <tbody>
+        <tr>
+            <td onclick="updateActive(this)">A1 - 0</td>
+            <td onclick="updateActive(this)">A2 - 1</td>
+            <td onclick="updateActive(this)">A3 - 2</td>
+            <td onclick="updateActive(this)">A4 - 3</td>
+        </tr>
+        <tr>
+            <td onclick="updateActive(this)">B1 - 4</td>
+            <td onclick="updateActive(this)">B2 - 5</td>
+            <td onclick="updateActive(this)">B3 - 6</td>
+            <td onclick="updateActive(this)">B4 - 7</td>
+        </tr>
+        <tr>
+            <td onclick="updateActive(this)">C1 - 8</td>
+            <td onclick="updateActive(this)">C2 - 9</td>
+            <td onclick="updateActive(this)">C3 - 10</td>
+            <td onclick="updateActive(this)">C4 - 11</td>
+        </tr>
+        <tr>
+            <td onclick="updateActive(this)">D1 - 12</td>
+            <td onclick="updateActive(this)">D2 - 13</td>
+            <td onclick="updateActive(this)">D3 - 14</td>
+            <td onclick="updateActive(this)">D4 - 15</td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>
