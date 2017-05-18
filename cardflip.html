@@ -8,6 +8,7 @@
         body {
             margin: 0;
             font-family: "Segoe UI", sans-serif;
+            overflow: hidden;
         }
 
         code {
@@ -16,6 +17,8 @@
 
         #cards {
             margin: auto;
+            border: solid 1px grey;
+            border-radius: 10px;
         }
 
         td {
@@ -32,6 +35,11 @@
         td.active {
             background: white;
             transform: rotateY(180deg);
+        }
+
+        td.hidden {
+            transform: translateY(2000px);
+            visibility: hidden;
         }
 
         td:hover {
@@ -51,8 +59,8 @@
 <body>
     <div id="head">
         <h3 id="points">Points: <code>0</code></h3>
-        <h3 id="matches">Matches: <code>3</code></h3>
-        <h3 id="time">Time: <code>0m 0s</code></h3>
+        <h3 id="matches">Matches: <code>0</code></h3>
+        <h3 id="time">Time: <code>0s</code></h3>
     </div>
     <table id="cards">
         <tbody>
@@ -89,11 +97,25 @@
 
         let cards = [];
         let active = [];
+        let pairs = 0;
 
         let row, cell;
         for (row = 0; row < table.rows.length; row++) {
             for (cell = 0; cell < table.rows[row].cells.length; cell++) {
                 cards.push(table.rows[row].cells[cell])
+            }
+        }
+
+        const matches = document.getElementById("matches").lastChild;
+
+        function checkMatches() {
+            active[0].classList.add("hidden");
+            active[1].classList.add("hidden");
+            pairs++;
+            matches.innerText = pairs;
+
+            if (pairs === 8) {
+                alert("You win!")
             }
         }
 
@@ -103,10 +125,15 @@
                 card.classList.remove("active")
             } else if (active.length < 2) {
                 active.push(card);
-                card.classList.add("active")
-            } else if (active.length === 2) {
-                active[0].classList.remove("active");
-                active[1].classList.remove("active");
+                card.classList.add("active");
+                if (active.length === 2) {
+                    setTimeout(checkMatches, 1000);
+                }
+            } else if (active.length > 1) {
+                if (active[0].classList.contains("hidden") && active[1].classList.contains("hidden")) {
+                    active[0].classList.remove("active");
+                    active[1].classList.remove("active");
+                }
                 active = [card];
                 card.classList.add("active")
             } else {
@@ -120,13 +147,13 @@
 
         const counter = setInterval(() => {
             seconds++;
-            time.innerText = Math.floor(seconds / 60) + "m " + seconds % 60 + "s"
+            time.innerText = seconds % 60 + "s"
         }, 1000);
 
         setTimeout(() => {
             clearTimeout(counter);
             alert("Time up!")
-        }, 120000)
+        }, 60000)
     </script>
 </body>
 </html>
