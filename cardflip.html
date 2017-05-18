@@ -134,7 +134,7 @@
                 matches.innerText = pairs;
 
                 if (pairs === 8) {
-                    alert("You win!")
+                    alert("You win!\nTime: " + seconds + "\nPoints: ")
                 }
             } else {
                 resetCard(active[0]);
@@ -190,7 +190,7 @@
 
         setTimeout(() => {
             clearTimeout(counter);
-            alert("Time up!")
+            alert("Time up!\nYou got " + pairs + "/8 matches.")
         }, 80000)
     </script>
 </body>
