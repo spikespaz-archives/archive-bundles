@@ -22,14 +22,8 @@ td {
     border-radius: 10px;
     border: solid 1px grey;
     text-align: center;
-}
-
-td.x {
-    transform: rotateY(180deg);
-}
-
-td.o {
-    background: x;
+    color: black;
+    font-size: 50px;
 }
 
 td:hover {
