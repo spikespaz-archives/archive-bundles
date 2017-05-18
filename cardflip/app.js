@@ -54,9 +54,9 @@ function checkMatches() {
         matches.innerText = pairs;
 
         points = 1000 - (centiseconds - last);
-        score.innerText = points;
-
         last = centiseconds;
+
+        score.innerText = points;
 
         if (pairs === 8) {
             alert("You win!\nTime: " + centiseconds + "\nPoints: " + points);
