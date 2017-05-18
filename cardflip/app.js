@@ -8,7 +8,7 @@ const counter = setInterval(() => {
     time.innerText = Math.floor(centiseconds / 10) + "s";
 }, 100);
 
-let cards = [], active = [], pairs = 0, last = 0, points = 0, centiseconds = 0, row, cell, index;
+let active = [], pairs = 0, last = 0, points = 0, centiseconds = 0, row, cell, index;
 
 let colors = [
     "red", "red",
