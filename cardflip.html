@@ -136,17 +136,21 @@
                 if (pairs === 8) {
                     alert("You win!")
                 }
+            } else {
+                resetCard(active[0]);
+                resetCard(active[1]);
+                active = []
             }
         }
 
         function activateCard(card) {
-            card.classList.remove("active");
-            card.style.background = card.classList[0];
-            print(card.classList[0])
+            card.classList.add("active");
+            card.style.background = card.style.color = card.classList[0];
         }
 
         function resetCard(card) {
             card.style.background = "black";
+            card.style.color = "white";
             card.classList.remove("active")
         }
 
@@ -171,6 +175,7 @@
                 active.push(card);
                 activateCard(card)
             }
+            print(active)
         }
 
         const time = document.getElementById("time").lastChild;
