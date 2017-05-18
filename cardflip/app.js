@@ -57,7 +57,7 @@ function checkMatches() {
         pairs++;
         matches.innerText = pairs;
 
-        points = 1000 - (centiseconds - last);
+        points += 1000 - (centiseconds - last);
         last = centiseconds;
 
         score.innerText = points;
