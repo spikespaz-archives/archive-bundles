@@ -93,6 +93,7 @@
     <script>
         const print = console.log;
         const table = document.getElementById("cards");
+        const score = document.getElementById("points").lastChild;
 
         let cards = [];
         let active = [];
@@ -105,9 +106,11 @@
             "blue", "blue",
             "orange", "orange",
             "purple", "purple",
-            "yellow", "yellow",
+            "brown", "brown",
             "pink", "pink"
         ];
+
+        let last = 0, points = 0;
 
         function randomInt(min, max) {
             min = Math.ceil(min);
@@ -133,8 +136,13 @@
                 pairs++;
                 matches.innerText = pairs;
 
+                points = 1000 - (centiseconds - last);
+                score.innerText = points;
+
+                last = centiseconds;
+
                 if (pairs === 8) {
-                    alert("You win!\nTime: " + seconds + "\nPoints: ");
+                    alert("You win!\nTime: " + centiseconds + "\nPoints: " + points);
                     location.reload()
                 }
             } else {
@@ -180,12 +188,13 @@
         }
 
         const time = document.getElementById("time").lastChild;
-        let seconds = 0;
+        let centiseconds = 0;
 
         const counter = setInterval(() => {
-            seconds++;
-            time.innerText = seconds % 60 + "s"
-        }, 1000);
+            centiseconds++;
+            time.innerText = Math.floor(centiseconds / 10) + "s";
+            print(centiseconds)
+        }, 100);
 
         alert("You have 80 seconds, go!");
 
