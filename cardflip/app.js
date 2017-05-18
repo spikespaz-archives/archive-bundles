@@ -5,7 +5,7 @@ const matches = document.getElementById("matches").lastChild;
 
 const counter = setInterval(() => {
     centiseconds++;
-    time.innerText = Math.floor(centiseconds / 10) + "s";
+    time.innerText = getSeconds() + "s";
 }, 100);
 
 let active = [], pairs = 0, last = 0, points = 0, centiseconds = 0, row, cell, index;
@@ -35,6 +35,10 @@ for (row = 0; row < table.rows.length; row++) {
     }
 }
 
+function getSeconds() {
+    return Math.floor(centiseconds / 10)
+}
+
 function activateCard(card) {
     card.classList.add("active");
     card.style.background = card.style.color = card.classList[0];
@@ -59,7 +63,7 @@ function checkMatches() {
         score.innerText = points;
 
         if (pairs === 8) {
-            alert("You win!\nTime: " + centiseconds + "\nPoints: " + points);
+            alert("You win!\nTime: " + getSeconds() + "s\nPoints: " + points);
             location.reload()
         }
 
