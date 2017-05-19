@@ -59,8 +59,11 @@ function updateCell(cell) {
         cell.classList.add("filled");
 
         switch (checkWin()) {
-            case 0:
-                updateNext();
+            case 2:
+                setTimeout(() => {
+                    alert("Nobody wins!\nTime: " + getTime());
+                    location.reload()
+                }, 200);
                 break;
             case 1:
                 setTimeout(() => {
@@ -68,11 +71,8 @@ function updateCell(cell) {
                     location.reload()
                 }, 200);
                 break;
-            case 2:
-                setTimeout(() => {
-                    alert("Nobody wins!\nTime: " + getTime());
-                    location.reload()
-                }, 200)
+            case 0:
+                updateNext()
         }
     }
 }
