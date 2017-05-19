@@ -2,6 +2,7 @@
 ### *A repository for small, open sourced projects without a home.*
 
 ## Index
+### Web Pages
 > * Card Flip Game:
 >    * URL: [http://spikespaz.com/tinythings/cardflip](http://spikespaz.com/tinythings/cardflip)
 >    * Status: Complete
@@ -11,5 +12,11 @@
 > * Madlibs Game:
 >    * URL: [http://spikespaz.com/tinythings/madlibs](http://spikespaz.com/tinythings/madlibs)
 >    * Status: In Progress (Not Functional)
+
+## Python
+> * Binary Library:
+>    * URL: [https://github.com/spikespaz/tinythings/blob/master/python/binlib.py](https://github.com/spikespaz/tinythings/blob/master/python/binlib.py)
+>    * Status: Complete
+
 
 *Credit to Jacob Birkett (spikespaz). [Github](https://github.com/spikespaz/tinythings/)*
