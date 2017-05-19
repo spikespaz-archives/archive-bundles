@@ -13,7 +13,7 @@
 >    * URL: [http://spikespaz.com/tinythings/madlibs](http://spikespaz.com/tinythings/madlibs)
 >    * Status: In Progress (Not Functional)
 
-## Python
+### Python
 > * Binary Library:
 >    * URL: [https://github.com/spikespaz/tinythings/blob/master/python/binlib.py](https://github.com/spikespaz/tinythings/blob/master/python/binlib.py)
 >    * Status: Complete
