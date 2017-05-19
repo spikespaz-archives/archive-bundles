@@ -8,5 +8,8 @@
 > * Tic Tac Toe:
 >    * URL: [http://spikespaz.com/tinythings/tictactoe](http://spikespaz.com/tinythings/tictactoe)
 >    * Status: In Progress
+> * Madlibs Game:
+>    * URL: [http://spikespaz.com/tinythings/madlibs](http://spikespaz.com/tinythings/madlibs)
+>    * Status: In Progress (Not Functional)
 
-*Credit to Jacob Birkett (spikespaz).*
+*Credit to Jacob Birkett (spikespaz). [Github](https://github.com/spikespaz/tinythings/)*
