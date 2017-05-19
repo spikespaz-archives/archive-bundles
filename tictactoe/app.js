@@ -24,9 +24,9 @@ function updateNext() {
 }
 
 function checkWin() {
-    for (let i = 0; i < 3; i++) {
-        if ((grid[i].innerText === grid[i + 1].innerText && grid[i + 1].innerText === grid[i + 2].innerText && grid[i].innerText !== "") ||
-            (grid[i].innerText === grid[i + 3].innerText && grid[i + 3].innerText === grid[i + 6].innerText && grid[i].innerText !== "")) {
+    for (cell = 0; cell < 3; cell++) {
+        if ((grid[cell].innerText === grid[cell + 1].innerText && grid[cell + 1].innerText === grid[cell + 2].innerText && grid[cell].innerText !== "") ||
+            (grid[cell].innerText === grid[cell + 3].innerText && grid[cell + 3].innerText === grid[cell + 6].innerText && grid[cell].innerText !== "")) {
             return 1
         }
     }
