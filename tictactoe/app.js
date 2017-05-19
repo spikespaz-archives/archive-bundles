@@ -31,10 +31,10 @@ function checkWin() {
         }
     }
     
-    // if (grid[0].innerText == grid[4].innerText == grid[8].innerText != "" ||
-    //     grid[2].innerText == grid[4].innerText == grid[6].innerText != "") {
-    //     return true
-    // }
+    if ((grid[0].innerText == grid[4].innerText && grid[4].innerText == grid[8].innerText && grid[0].innerText !== "") ||
+        (grid[2].innerText == grid[4].innerText && grid[4].innerText == grid[6].innerText && grid[2].innerText !== "")) {
+        return true
+    }
 }
 
 function updateCell(cell) {
@@ -45,9 +45,9 @@ function updateCell(cell) {
         
         if (checkWin()) {
             setTimeout(() => alert("Winner: " + next.toUpperCase() + "\nTime: " + getTime()), 200)
+        } else {
+            updateNext();
         }
-        
-        updateNext();
     }
 }
 
