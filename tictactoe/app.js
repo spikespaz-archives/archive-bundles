@@ -10,7 +10,7 @@ for (row = 0; row < table.rows.length; row++) {
     }
 }
 
-function getTime() {0
+function getTime() {
     return Math.floor(seconds / 60) + "m " + seconds % 60 + "s"
 }
 
@@ -65,7 +65,7 @@ function updateCell(cell) {
                 }, 200)
         } else if (checkWin() === 2) {
             setTimeout(() => {
-                alert("Winner: " + next.toUpperCase() + "\nTime: " + getTime());
+                alert("Nobody wins!\nTime: " + getTime());
                 location.reload()
             }, 200)
         } else {
