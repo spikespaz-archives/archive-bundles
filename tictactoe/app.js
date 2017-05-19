@@ -57,19 +57,22 @@ function updateCell(cell) {
         cell.innerText = next;
         
         cell.classList.add("filled");
-        
-        if (checkWin() === 1) {
-            setTimeout(() => {
-                alert("Winner: " + next.toUpperCase() + "\nTime: " + getTime());
-                location.reload()
+
+        switch (checkWin()) {
+            case 0:
+                updateNext();
+                break;
+            case 1:
+                setTimeout(() => {
+                    alert("Winner: " + next.toUpperCase() + "\nTime: " + getTime());
+                    location.reload()
+                }, 200);
+                break;
+            case 2:
+                setTimeout(() => {
+                    alert("Nobody wins!\nTime: " + getTime());
+                    location.reload()
                 }, 200)
-        } else if (checkWin() === 2) {
-            setTimeout(() => {
-                alert("Nobody wins!\nTime: " + getTime());
-                location.reload()
-            }, 200)
-        } else {
-            updateNext();
         }
     }
 }
