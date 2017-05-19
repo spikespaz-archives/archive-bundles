@@ -24,16 +24,32 @@ function updateNext() {
 }
 
 function checkWin() {
-    for (let i = 0; i < 3; i++) {
+    for (let  = 0; i < 3; i++) {
         if ((grid[i].innerText == grid[i + 1].innerText && grid[i + 1].innerText == grid[i + 2].innerText && grid[i].innerText !== "") ||
             (grid[i].innerText == grid[i + 3].innerText && grid[i + 3].innerText == grid[i + 6].innerText && grid[i].innerText !== "")) {
-            return true
+            return 1
         }
     }
     
     if ((grid[0].innerText == grid[4].innerText && grid[4].innerText == grid[8].innerText && grid[0].innerText !== "") ||
         (grid[2].innerText == grid[4].innerText && grid[4].innerText == grid[6].innerText && grid[2].innerText !== "")) {
-        return true
+        return 1
+        
+    } else if {
+        let full = 0;
+        
+        grid.forEach((cell) => {
+            if (cell.innerText != "") {
+                full++
+            }
+        })
+        
+        if (full = 9) {
+            return 2
+        }
+        
+    } else {
+        return 0
     }
 }
 
@@ -43,11 +59,16 @@ function updateCell(cell) {
         
         cell.classList.add("filled");
         
-        if (checkWin()) {
+        if (checkWin() == 1) {
             setTimeout(() => {
                 alert("Winner: " + next.toUpperCase() + "\nTime: " + getTime());
                 location.reload()
                 }, 200)
+        } else if (checkWin() == 2) {
+            setTimeout(() => {
+                alert("Winner: " + next.toUpperCase() + "\nTime: " + getTime());
+                location.reload()
+            }, 200)
         } else {
             updateNext();
         }
