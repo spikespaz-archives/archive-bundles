@@ -10,6 +10,10 @@ for (row = 0; row < table.rows.length; row++) {
     }
 }
 
+function getTime() {0
+    return Math.floor(seconds / 60) + "m " + seconds % 60 + "s"
+}
+
 function updateNext() {
     if (next === "x") {
         next = "o"
@@ -19,17 +23,35 @@ function updateNext() {
     turn.innerText = next.toUpperCase()
 }
 
+function checkWin() {
+    for (let i = 0; i < 3; i++) {
+        if ((grid[i].innerText == grid[i + 1].innerText && grid[i + 1].innerText == grid[i + 2].innerText && grid[i].innerText !== "") ||
+            (grid[i].innerText == grid[i + 3].innerText && grid[i + 3].innerText == grid[i + 6].innerText && grid[i].innerText !== "")) {
+            return true
+        }
+    }
+    
+    // if (grid[0].innerText == grid[4].innerText == grid[8].innerText != "" ||
+    //     grid[2].innerText == grid[4].innerText == grid[6].innerText != "") {
+    //     return true
+    // }
+}
+
 function updateCell(cell) {
-    console.log(cell.innerText);
     if (!cell.innerText) {
         cell.innerText = next;
         
         cell.classList.add("filled");
-        updateNext()
+        
+        if (checkWin()) {
+            setTimeout(() => alert("Winner: " + next.toUpperCase() + "\nTime: " + getTime()), 200)
+        }
+        
+        updateNext();
     }
 }
 
 setInterval(() => {
     seconds++;
-    time.innerText = seconds + "s";
+    time.innerText = getTime();
 }, 1000);
