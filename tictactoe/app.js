@@ -44,7 +44,10 @@ function updateCell(cell) {
         cell.classList.add("filled");
         
         if (checkWin()) {
-            setTimeout(() => alert("Winner: " + next.toUpperCase() + "\nTime: " + getTime()), 200)
+            setTimeout(() => {
+                alert("Winner: " + next.toUpperCase() + "\nTime: " + getTime());
+                location.reload()
+                }, 200)
         } else {
             updateNext();
         }
