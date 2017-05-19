@@ -17,6 +17,9 @@
 > * Binary Library:
 >    * URL: [https://github.com/spikespaz/tinythings/blob/master/python/binlib.py](https://github.com/spikespaz/tinythings/blob/master/python/binlib.py)
 >    * Status: Complete
+> * Coin Flip Simulator:
+>    * URL: [https://github.com/spikespaz/tinythings/blob/master/python/coinflip.py](https://github.com/spikespaz/tinythings/blob/master/python/coinflip.py)
+>    * Status: Complete
 
 
 *Credit to Jacob Birkett (spikespaz). [Github](https://github.com/spikespaz/tinythings/)*
