@@ -11,7 +11,7 @@
 >    * Status: In Progress
 > * Madlibs Game:
 >    * URL: [http://spikespaz.com/tinythings/madlibs](http://spikespaz.com/tinythings/madlibs)
->    * Status: In Progress (Not Functional)
+>    * Status: Not Functional
 
 ### Python
 > * Binary Library:
@@ -21,5 +21,15 @@
 >    * URL: [https://github.com/spikespaz/tinythings/blob/master/python/coinflip.py](https://github.com/spikespaz/tinythings/blob/master/python/coinflip.py)
 >    * Status: Complete
 
+### Snippets
+> * Arrays:
+>    * URL: [https://github.com/spikespaz/tinythings/blob/master/snippets/arrays.js](https://github.com/spikespaz/tinythings/blob/master/snippets/arrays.js)
+>    * Status: In Progress
+> * Timer:
+>    * URL: [https://github.com/spikespaz/tinythings/blob/master/snippets/timer.js](https://github.com/spikespaz/tinythings/blob/master/snippets/timer.js)
+>    * Status: In Progress
+> * Variables:
+>    * URL: [https://github.com/spikespaz/tinythings/blob/master/snippets/variables.js](https://github.com/spikespaz/tinythings/blob/master/snippets/variables.js)
+>    * Status: In Progress
 
 *Credit to Jacob Birkett (spikespaz). [Github](https://github.com/spikespaz/tinythings/)*
