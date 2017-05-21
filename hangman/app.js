@@ -104,9 +104,8 @@ document.onkeypress = (event) => {
 
     } else {
         scaffold.push(body_parts[0]);
-        console.log("Body part lost: " + scaffold);
+        drawPart(body_parts[0]);
         body_parts.splice(0, 1);
-        console.log("Wrong letter!");
 
         if (scaffold.length === 6) {
             console.log("You lose!");
