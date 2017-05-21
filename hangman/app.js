@@ -9,7 +9,8 @@ let correct = [];
 initial[1].onclick = () => {
     acceptable = initial[0].value;
     if (!acceptable) {return;}
-    initial[1].parentNode.style.display = "none"
+    initial[1].parentNode.style.display = "none";
+    updateResult()
 };
 
 let body_parts = [
