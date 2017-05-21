@@ -1,5 +1,25 @@
 const canvas = document.getElementById("scaffold");
 const drawing = canvas.getContext("2d");
+const initial = document.getElementById("initial").getElementsByTagName("input");
+
+let correct;
+
+initial[1].onclick = () => {
+    correct = initial[0].value;
+    if (!correct) {return;}
+    initial[1].parentNode.style.display = "none"
+};
+
+let body_parts = [
+    "head",
+    "body",
+    "left_arm",
+    "right_arm",
+    "left_leg",
+    "right_leg"
+];
+
+let scaffold = [];
 
 drawing.lineWidth = 6;
 drawing.lineCap = "round";
@@ -46,11 +66,28 @@ function drawPart(part) {
     drawing.stroke()
 }
 
+function letterIsCorrect(character) {
+    return correct.indexOf(character) > -1;
+}
 
-drawPart("head");
-drawPart("body");
-drawPart("left_arm");
-drawPart("right_arm");
-drawPart("left_leg");
-drawPart("right_leg");
+function letter(code) {
+    return String.fromCharCode(code)
+}
 
+document.onkeypress = (event) => {
+    if (!correct) {return;}
+
+    if (letterIsCorrect(letter(event.keyCode))) {
+        console.log("Letter correct.");
+
+    } else {
+        scaffold.push(body_parts[0]);
+        console.log("Body part lost: " + scaffold);
+        body_parts.splice(0, 1);
+        console.log("Wrong letter!");
+
+        if (scaffold.length === 6) {
+            console.log("You lose!");
+        }
+    }
+};
