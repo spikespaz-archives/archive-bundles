@@ -1,0 +1,49 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    overflow: hidden;
+}
+
+code {
+    font-family: "Courier New", monospace;
+}
+
+#scaffold {
+    border: solid 1px black;
+}
+
+/*#grid {*/
+    /*margin: auto;*/
+    /*border: solid 1px grey;*/
+    /*border-radius: 10px;*/
+/*}*/
+
+/*td {*/
+    /*width: 80px;*/
+    /*height: 80px;*/
+    /*transition: all 0.2s ease-in;*/
+    /*border-radius: 10px;*/
+    /*border: solid 1px grey;*/
+    /*text-align: center;*/
+    /*text-transform: uppercase;*/
+    /*color: transparent;*/
+    /*font-size: 50px;*/
+    /*transition: all 0.2s ease-in;*/
+/*}*/
+
+/*td.filled {*/
+    /*color: black;*/
+/*}*/
+
+/*td:hover {*/
+    /*box-shadow: yellow 0 0 2px 2px;*/
+/*}*/
+
+/*#head {*/
+    /*text-align: center;*/
+/*}*/
+
+/*#head h3 {*/
+    /*display: inline-block;*/
+    /*padding: 0 8px;*/
+/*}*/
