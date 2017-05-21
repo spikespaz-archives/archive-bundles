@@ -1,12 +1,14 @@
 const canvas = document.getElementById("scaffold");
 const drawing = canvas.getContext("2d");
 const initial = document.getElementById("initial").getElementsByTagName("input");
+const result = document.getElementById("result");
 
-let correct;
+let acceptable;
+let correct = [];
 
 initial[1].onclick = () => {
-    correct = initial[0].value;
-    if (!correct) {return;}
+    acceptable = initial[0].value;
+    if (!acceptable) {return;}
     initial[1].parentNode.style.display = "none"
 };
 
@@ -35,6 +37,7 @@ drawing.lineTo(250, 30);
 // Hook
 drawing.lineTo(250, 90);
 drawing.stroke();
+
 
 function drawPart(part) {
     switch (part) {
@@ -67,18 +70,36 @@ function drawPart(part) {
 }
 
 function letterIsCorrect(character) {
-    return correct.indexOf(character) > -1;
+    return acceptable.indexOf(character) > -1;
 }
 
-function letter(code) {
+function getLetter(code) {
     return String.fromCharCode(code)
 }
 
-document.onkeypress = (event) => {
-    if (!correct) {return;}
+function updateResult() {
+    let generated = "";
 
-    if (letterIsCorrect(letter(event.keyCode))) {
-        console.log("Letter correct.");
+    let character;
+    for (character in acceptable) {
+        if (correct.indexOf(acceptable[character]) > -1) {
+            generated += acceptable[character]
+        } else if (acceptable[character] === " ") {
+            generated += " "
+        } else {
+            generated += "_"
+        }
+    }
+
+    result.innerText = generated;
+}
+
+document.onkeypress = (event) => {
+    if (!acceptable) {return;}
+
+    if (letterIsCorrect(getLetter(event.keyCode))) {
+        correct.push(getLetter(event.keyCode));
+        updateResult()
 
     } else {
         scaffold.push(body_parts[0]);
