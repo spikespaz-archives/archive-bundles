@@ -3,16 +3,23 @@ const game = document.getElementById("game");
 const initial = document.getElementById("initial").getElementsByTagName("input");
 const result = document.getElementById("result");
 const guessed = document.getElementById("guessed");
+const time = document.getElementById("time").lastChild;
 
 let acceptable;
 let correct = [];
+let seconds = 0;
 
 initial[1].onclick = () => {
     acceptable = initial[0].value;
     if (!acceptable) {return;}
     initial[1].parentNode.style.display = "none";
     game.style.display = "block";
-    updateResult()
+    updateResult();
+
+    setInterval(() => {
+        seconds++;
+        time.innerText = Math.floor(seconds / 60) + "m " + seconds % 60 + "s";
+    }, 1000)
 };
 
 let body_parts = [
@@ -103,7 +110,12 @@ document.onkeypress = (event) => {
 
     if (letterIsCorrect(getLetter(event.keyCode))) {
         correct.push(getLetter(event.keyCode));
-        updateResult()
+        updateResult();
+
+        if (result.innerText === acceptable) {
+            alert("You won!");
+            location.reload()
+        }
 
     } else {
         scaffold.push(body_parts[0]);
@@ -114,12 +126,15 @@ document.onkeypress = (event) => {
 
         guessed.innerText += getLetter(event.keyCode).toUpperCase();
 
+        drawPart(body_parts[0]);
+
         if (scaffold.length === 6) {
-            console.log("You lose!");
-            return
+            setTimeout(() => {
+                alert("You got hung!");
+                location.reload();
+            }, 1000);
         }
 
-        drawPart(body_parts[0]);
         body_parts.splice(0, 1);
     }
 };
