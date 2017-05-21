@@ -1,5 +1,5 @@
-const canvas = document.getElementById("scaffold");
-const drawing = canvas.getContext("2d");
+const drawing = document.getElementById("scaffold").getContext("2d");
+const game = document.getElementById("game");
 const initial = document.getElementById("initial").getElementsByTagName("input");
 const result = document.getElementById("result");
 
@@ -10,6 +10,7 @@ initial[1].onclick = () => {
     acceptable = initial[0].value;
     if (!acceptable) {return;}
     initial[1].parentNode.style.display = "none";
+    game.style.display = "block";
     updateResult()
 };
 
