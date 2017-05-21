@@ -35,7 +35,7 @@ let scaffold = [];
 
 drawing.lineWidth = 2;
 drawing.lineCap = "round";
-drawing.translate(0.5, 0.5); // Hacky way to force anti-alias
+drawing.translate(0.5, 0.5);
 
 // Base
 drawing.moveTo(30, 470);
@@ -80,8 +80,14 @@ function drawPart(part) {
     drawing.stroke()
 }
 
-function letterIsCorrect(character) {
-    return acceptable.toUpperCase().indexOf(character.toUpperCase()) > -1;
+function letterIsCorrect(compare, character) {
+    if (Array.isArray(compare)) {
+        compare = compare.map((letter) => letter.toUpperCase())
+    } else {
+        compare.toUpperCase()
+    }
+
+    return compare.indexOf(character.toUpperCase()) > -1;
 }
 
 function getLetter(code) {
@@ -93,7 +99,7 @@ function updateResult() {
 
     let character;
     for (character in acceptable) {
-        if (correct.indexOf(acceptable[character]) > -1) {
+        if (letterIsCorrect(correct, acceptable[character])) {
             generated += acceptable[character]
         } else if (acceptable[character] === " ") {
             generated += " "
@@ -114,7 +120,7 @@ document.onkeypress = (event) => {
         return;
     }
 
-    if (letterIsCorrect(getLetter(event.keyCode))) {
+    if (letterIsCorrect(acceptable, getLetter(event.keyCode))) {
         correct.push(getLetter(event.keyCode));
         updateResult();
 
