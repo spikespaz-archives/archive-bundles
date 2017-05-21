@@ -106,7 +106,13 @@ function updateResult() {
 }
 
 document.onkeypress = (event) => {
-    if (!acceptable) {return;}
+    if (!acceptable) {
+        if (event.keyCode === 13) {
+            initial[1].click()
+        }
+
+        return;
+    }
 
     if (letterIsCorrect(getLetter(event.keyCode))) {
         correct.push(getLetter(event.keyCode));
