@@ -8,8 +8,22 @@ code {
     font-family: "Courier New", monospace;
 }
 
+#initial {
+    text-align: center;
+}
+
 #result {
+    font-size: 40px;
     display: block;
+}
+
+.guessed {
+    display: none;
+    font-size: 30px;
+}
+
+#guessed {
+    display: inline-block;
     font-size: 40px;
 }
 
@@ -24,5 +38,5 @@ code {
 
 #game {
     display: none;
-    margin: auto;
+    text-align: center;
 }

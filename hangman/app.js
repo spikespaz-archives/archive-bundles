@@ -2,6 +2,7 @@ const drawing = document.getElementById("scaffold").getContext("2d");
 const game = document.getElementById("game");
 const initial = document.getElementById("initial").getElementsByTagName("input");
 const result = document.getElementById("result");
+const guessed = document.getElementById("guessed");
 
 let acceptable;
 let correct = [];
@@ -25,8 +26,9 @@ let body_parts = [
 
 let scaffold = [];
 
-drawing.lineWidth = 6;
+drawing.lineWidth = 2;
 drawing.lineCap = "round";
+drawing.translate(0.5, 0.5); // Hacky way to force anti-alias
 
 // Base
 drawing.moveTo(30, 470);
@@ -72,7 +74,7 @@ function drawPart(part) {
 }
 
 function letterIsCorrect(character) {
-    return acceptable.indexOf(character) > -1;
+    return acceptable.toUpperCase().indexOf(character.toUpperCase()) > -1;
 }
 
 function getLetter(code) {
@@ -105,11 +107,19 @@ document.onkeypress = (event) => {
 
     } else {
         scaffold.push(body_parts[0]);
-        drawPart(body_parts[0]);
-        body_parts.splice(0, 1);
+
+        if (!guessed.innerText) {
+            document.getElementsByClassName("guessed")[0].style.display = "block";
+        }
+
+        guessed.innerText += getLetter(event.keyCode).toUpperCase();
 
         if (scaffold.length === 6) {
             console.log("You lose!");
+            return
         }
+
+        drawPart(body_parts[0]);
+        body_parts.splice(0, 1);
     }
 };
