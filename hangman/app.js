@@ -133,8 +133,10 @@ document.onkeypress = (event) => {
             drawPart(body_parts[0]);
 
             if (hung.length === 6) {
+                result.innerText = match;
+
                 setTimeout(() => {
-                    alert("You got hung!");
+                    alert("You got hung!\nThe message was:\n\"" + match + "\"");
                     location.reload();
                 }, 1000);
             }
