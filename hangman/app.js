@@ -120,6 +120,8 @@ document.onkeypress = (event) => {
             updateResult();
 
             if (result.innerText === match) { // This means that the letters the user found match the initial string.
+                active = false;
+
                 setTimeout(() => {
                     alert("You win!\nTime: " + getTime());
                     location.reload();
@@ -135,6 +137,8 @@ document.onkeypress = (event) => {
             drawPart(body_parts[0]);
 
             if (hung.length === 6) { // Lose, the body parts all on the scaffold
+                active = false;
+
                 result.innerText = match;
 
                 setTimeout(() => {
