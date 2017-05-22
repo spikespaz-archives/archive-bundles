@@ -6,6 +6,7 @@ const scaffold = document.getElementById("scaffold").getContext("2d");
 const result = document.getElementById("result");
 const guessed = document.getElementById("guessed");
 const guessed_wrapper = document.getElementById("guessed-wrapper");
+const message = document.getElementById("message");
 
 let active = false, seconds = 0, correct = [], hung = [], match; // Initialize variables
 // List of body parts, to be removed when added to the scaffold.
@@ -117,7 +118,11 @@ function isLetter(code) { // Check if ASCII character codes are within acceptabl
 }
 
 document.onkeypress = (event) => {
-    if (active && isLetter(event.keyCode)) {
+    if (active && isLetter(event.keyCode) &&
+        !inArray(correct, event.key.toLowerCase()) &&
+        !inArray(guessed.innerText, event.key.toUpperCase())) {
+        message.innerHTML = "Last guess: <code>" + event.key.toUpperCase() + "</code>";
+
         if (inArray(match.toLowerCase(), event.key.toLowerCase())) { // User got the letter correct
             correct.push(event.key);
             updateResult();
@@ -131,7 +136,7 @@ document.onkeypress = (event) => {
                 }, 1000);
             }
 
-        } else if (!inArray(guessed.innerText, event.key.toUpperCase())){ // The user missed the letter
+        } else { // The user missed the letter
             hung.push(body_parts[0]);
 
             guessed_wrapper.style.display = "block";
