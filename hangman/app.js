@@ -1,27 +1,13 @@
-const drawing = document.getElementById("scaffold").getContext("2d");
-const game = document.getElementById("game");
-const initial = document.getElementById("initial").getElementsByTagName("input");
+const initial_screen = document.getElementById("initial");
+const initial_form = initial_screen.getElementsByTagName("input");
+const game_screen = document.getElementById("game");
+const time = document.getElementById("time").lastChild;
+const scaffold = document.getElementById("scaffold").getContext("2d");
 const result = document.getElementById("result");
 const guessed = document.getElementById("guessed");
-const time = document.getElementById("time").lastChild;
+const guessed_wrapper = document.getElementById("guessed-wrapper");
 
-let acceptable;
-let correct = [];
-let seconds = 0;
-
-initial[1].onclick = () => {
-    acceptable = initial[0].value;
-    if (!acceptable) {return;}
-    initial[1].parentNode.style.display = "none";
-    game.style.display = "block";
-    updateResult();
-
-    setInterval(() => {
-        seconds++;
-        time.innerText = Math.floor(seconds / 60) + "m " + seconds % 60 + "s";
-    }, 1000)
-};
-
+let active = false, seconds = 0, correct = [], hung = [], match;
 let body_parts = [
     "head",
     "body",
@@ -31,122 +17,124 @@ let body_parts = [
     "right_leg"
 ];
 
-let scaffold = [];
+scaffold.lineWidth = 2;
+scaffold.lineCap = "round";
+scaffold.translate(0.5, 0.5);
 
-drawing.lineWidth = 2;
-drawing.lineCap = "round";
-drawing.translate(0.5, 0.5);
+scaffold.moveTo(30, 470);
+scaffold.lineTo(370, 470);
 
-// Base
-drawing.moveTo(30, 470);
-drawing.lineTo(370, 470);
-// Vertical Line
-drawing.moveTo(120, 470);
-drawing.lineTo(120, 30);
-// Top Line
-drawing.lineTo(250, 30);
-// Hook
-drawing.lineTo(250, 90);
-drawing.stroke();
+scaffold.moveTo(120, 470);
+scaffold.lineTo(120, 30);
 
+scaffold.lineTo(250, 30);
+
+scaffold.lineTo(250, 90);
+scaffold.stroke();
 
 function drawPart(part) {
     switch (part) {
         case "head":
-            drawing.moveTo(280, 120);
-            drawing.arc(250, 120, 30, 0, Math.PI * 2, true);
+            scaffold.moveTo(280, 120);
+            scaffold.arc(250, 120, 30, 0, Math.PI * 2, true);
             break;
         case "body":
-            drawing.moveTo(250, 150);
-            drawing.lineTo(250, 290);
+            scaffold.moveTo(250, 150);
+            scaffold.lineTo(250, 290);
             break;
         case "left_arm":
-            drawing.moveTo(250, 190);
-            drawing.lineTo(300, 160);
+            scaffold.moveTo(250, 190);
+            scaffold.lineTo(300, 160);
             break;
         case "right_arm":
-            drawing.moveTo(250, 190);
-            drawing.lineTo(200, 160);
+            scaffold.moveTo(250, 190);
+            scaffold.lineTo(200, 160);
             break;
         case "left_leg":
-            drawing.moveTo(250, 290);
-            drawing.lineTo(300, 320);
+            scaffold.moveTo(250, 290);
+            scaffold.lineTo(300, 320);
             break;
         case "right_leg":
-            drawing.moveTo(250, 290);
-            drawing.lineTo(200, 320);
+            scaffold.moveTo(250, 290);
+            scaffold.lineTo(200, 320);
             break;
     }
-    drawing.stroke()
+    scaffold.stroke()
 }
 
-function letterIsCorrect(compare, character) {
-    if (Array.isArray(compare)) {
-        compare = compare.map((letter) => letter.toUpperCase())
-    } else {
-        compare.toUpperCase()
+function getTime() {
+    return Math.floor(seconds / 60) + "m " + seconds % 60 + "s"
+}
+
+initial_form[1].onclick = () => {
+    if (initial_form[0].value) {
+        active = true;
+        match = initial_form[0].value;
+        initial_screen.style.display = "none";
+        game_screen.style.display = "block";
+
+        setInterval(() => {
+            seconds++;
+            time.innerText = getTime();
+        }, 1000)
     }
+};
 
-    return compare.indexOf(character.toUpperCase()) > -1;
-}
-
-function getLetter(code) {
-    return String.fromCharCode(code)
+function inArray(array, item) {
+    return array.indexOf(item) > -1
 }
 
 function updateResult() {
     let generated = "";
 
-    let character;
-    for (character in acceptable) {
-        if (letterIsCorrect(correct, acceptable[character])) {
-            generated += acceptable[character]
-        } else if (acceptable[character] === " ") {
+    let letter;
+    for (letter in match) {
+        if (inArray(correct.map(letter => letter.toLowerCase()), match[letter].toLowerCase())) {
+            generated += match[letter]
+        } else if (match[letter] === " ") {
             generated += " "
         } else {
             generated += "_"
         }
     }
 
-    result.innerText = generated;
+    result.innerText = generated
 }
 
 document.onkeypress = (event) => {
-    if (!acceptable) {
-        if (event.keyCode === 13) {
-            initial[1].click()
-        }
+    if (active) {
+        if (inArray(match.toLowerCase(), event.key.toLowerCase())) {
+            correct.push(event.key);
+            updateResult();
 
-        return;
-    }
+            if (result.innerText === match) {
+                setTimeout(() => {
+                    alert("You win!\nTime: " + getTime());
+                    location.reload();
+                }, 1000);
+            }
 
-    if (letterIsCorrect(acceptable, getLetter(event.keyCode))) {
-        correct.push(getLetter(event.keyCode));
-        updateResult();
+        } else if (!inArray(guessed.innerText, event.key.toUpperCase())){
+            hung.push(body_parts[0]);
 
-        if (result.innerText === acceptable) {
-            alert("You won!");
-            location.reload()
+            guessed_wrapper.style.display = "block";
+            guessed.innerText += event.key.toUpperCase();
+
+            drawPart(body_parts[0]);
+
+            if (hung.length === 6) {
+                setTimeout(() => {
+                    alert("You got hung!");
+                    location.reload();
+                }, 1000);
+            }
+
+            body_parts.splice(0, 1);
         }
 
     } else {
-        scaffold.push(body_parts[0]);
-
-        if (!guessed.innerText) {
-            document.getElementsByClassName("guessed")[0].style.display = "block";
+        if (event.keyCode === 13) {
+            initial_form[1].click()
         }
-
-        guessed.innerText += getLetter(event.keyCode).toUpperCase();
-
-        drawPart(body_parts[0]);
-
-        if (scaffold.length === 6) {
-            setTimeout(() => {
-                alert("You got hung!");
-                location.reload();
-            }, 1000);
-        }
-
-        body_parts.splice(0, 1);
     }
 };

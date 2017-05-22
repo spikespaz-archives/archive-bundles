@@ -22,14 +22,14 @@ code {
     display: block;
 }
 
-.guessed {
-    display: none;
-    font-size: 30px;
-}
-
 #guessed {
     display: inline-block;
     font-size: 40px;
+}
+
+#guessed-wrapper {
+    display: none;
+    font-size: 30px;
 }
 
 #head {
