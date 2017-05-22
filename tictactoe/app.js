@@ -25,24 +25,25 @@ function updateNext() {
 
 function checkWin() {
     for (cell = 0; cell < 3; cell++) {
-        if ((grid[cell].innerText === grid[cell + 1].innerText && grid[cell + 1].innerText === grid[cell + 2].innerText && grid[cell].innerText !== "") ||
-            (grid[cell].innerText === grid[cell + 3].innerText && grid[cell + 3].innerText === grid[cell + 6].innerText && grid[cell].innerText !== "")) {
+        console.log(cell * 3, cell * 3 + 1, cell * 3 + 2);
+        if ((grid[cell * 3].innerText === grid[cell * 3 + 1].innerText && grid[cell * 3 + 1].innerText === grid[cell * 3 + 2].innerText && grid[cell * 3].innerText) ||
+            (grid[cell].innerText === grid[cell + 3].innerText && grid[cell + 3].innerText === grid[cell + 6].innerText && grid[cell].innerText)) {
             return 1
         }
     }
     
-    if ((grid[0].innerText === grid[4].innerText && grid[4].innerText === grid[8].innerText && grid[0].innerText !== "") ||
-        (grid[2].innerText === grid[4].innerText && grid[4].innerText === grid[6].innerText && grid[2].innerText !== "")) {
+    if ((grid[0].innerText === grid[4].innerText && grid[4].innerText === grid[8].innerText && grid[0].innerText) ||
+        (grid[2].innerText === grid[4].innerText && grid[4].innerText === grid[6].innerText && grid[2].innerText)) {
         return 1
         
     } else {
         full = 0;
 
-        grid.forEach((cell) => {
-            if (cell.innerText !== "") {
+        for (cell in grid) {
+            if (grid[cell].innerText) {
                 full++
             }
-        });
+        }
 
         if (full === 9) {
             return 2
