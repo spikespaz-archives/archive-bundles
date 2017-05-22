@@ -12,6 +12,9 @@
 > * Madlibs Game:
 >    * URL: [http://spikespaz.com/tinythings/madlibs](http://spikespaz.com/tinythings/madlibs)
 >    * Status: Not Functional
+> * Hangman:
+>    * URL: [http://spikespaz.com/tinythings/hangman](http://spikespaz.com/tinythings/hangman)
+>    * Status: Complete
 
 ### Python
 > * Binary Library:
