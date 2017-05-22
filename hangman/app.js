@@ -82,6 +82,10 @@ initial_form[1].onclick = () => {
     }
 };
 
+function alphabetize(text) {
+    return text.split("").sort().join("");
+}
+
 function inArray(array, item) {
     return array.indexOf(item) > -1
 }
@@ -124,7 +128,7 @@ document.onkeypress = (event) => {
             hung.push(body_parts[0]);
 
             guessed_wrapper.style.display = "block";
-            guessed.innerText += event.key.toUpperCase();
+            guessed.innerText = alphabetize(guessed.innerText + event.key.toUpperCase());
 
             drawPart(body_parts[0]);
 
