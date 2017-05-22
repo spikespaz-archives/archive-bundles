@@ -32,6 +32,9 @@ scaffold.lineTo(120, 30);
 scaffold.lineTo(250, 30);
 // Hook
 scaffold.lineTo(250, 90);
+// Brace
+scaffold.moveTo(185, 30);
+scaffold.lineTo(120, 100);
 scaffold.stroke();
 
 function drawPart(part) { // Draw specified body part
