@@ -7,7 +7,8 @@ const result = document.getElementById("result");
 const guessed = document.getElementById("guessed");
 const guessed_wrapper = document.getElementById("guessed-wrapper");
 
-let active = false, seconds = 0, correct = [], hung = [], match;
+let active = false, seconds = 0, correct = [], hung = [], match; // Initialize variables
+// List of body parts, to be removed when added to the scaffold.
 let body_parts = [
     "head",
     "body",
@@ -20,19 +21,20 @@ let body_parts = [
 scaffold.lineWidth = 2;
 scaffold.lineCap = "round";
 scaffold.translate(0.5, 0.5);
-
+// Draw main scaffold
+// Base
 scaffold.moveTo(30, 470);
 scaffold.lineTo(370, 470);
-
+// Vertical line
 scaffold.moveTo(120, 470);
 scaffold.lineTo(120, 30);
-
+// Top line
 scaffold.lineTo(250, 30);
-
+// Hook
 scaffold.lineTo(250, 90);
 scaffold.stroke();
 
-function drawPart(part) {
+function drawPart(part) { // Draw specified body part
     switch (part) {
         case "head":
             scaffold.moveTo(280, 120);
@@ -62,11 +64,11 @@ function drawPart(part) {
     scaffold.stroke()
 }
 
-function getTime() {
+function getTime() { // Return time in min/sec from seconds variable
     return Math.floor(seconds / 60) + "m " + seconds % 60 + "s"
 }
 
-initial_form[1].onclick = () => {
+initial_form[1].onclick = () => { // The Continue button on initial screen is clicked
     if (initial_form[0].value) {
         active = true;
         match = initial_form[0].value;
@@ -82,15 +84,15 @@ initial_form[1].onclick = () => {
     }
 };
 
-function alphabetize(text) {
+function alphabetize(text) { // Used for organizing the guessed and missed letters
     return text.split("").sort().join("");
 }
 
-function inArray(array, item) {
+function inArray(array, item) { // Check if a character is in a specified array
     return array.indexOf(item) > -1
 }
 
-function updateResult() {
+function updateResult() { // Update the displayed sentence/word under the scaffold
     let generated = "";
 
     let character;
@@ -107,24 +109,24 @@ function updateResult() {
     result.innerText = generated
 }
 
-function isLetter(code) {
+function isLetter(code) { // Check if ASCII character codes are within acceptable ranges (a-Z)
     return code >= 65 && code <= 90 || code >= 97 && code <= 122
 }
 
 document.onkeypress = (event) => {
     if (active && isLetter(event.keyCode)) {
-        if (inArray(match.toLowerCase(), event.key.toLowerCase())) {
+        if (inArray(match.toLowerCase(), event.key.toLowerCase())) { // User got the letter correct
             correct.push(event.key);
             updateResult();
 
-            if (result.innerText === match) {
+            if (result.innerText === match) { // This means that the letters the user found match the initial string.
                 setTimeout(() => {
                     alert("You win!\nTime: " + getTime());
                     location.reload();
                 }, 1000);
             }
 
-        } else if (!inArray(guessed.innerText, event.key.toUpperCase())){
+        } else if (!inArray(guessed.innerText, event.key.toUpperCase())){ // The user missed the letter
             hung.push(body_parts[0]);
 
             guessed_wrapper.style.display = "block";
@@ -132,7 +134,7 @@ document.onkeypress = (event) => {
 
             drawPart(body_parts[0]);
 
-            if (hung.length === 6) {
+            if (hung.length === 6) { // Lose, the body parts all on the scaffold
                 result.innerText = match;
 
                 setTimeout(() => {
@@ -145,7 +147,7 @@ document.onkeypress = (event) => {
         }
 
     } else {
-        if (event.keyCode === 13) {
+        if (event.keyCode === 13) { // Enter is pressed on initial screen
             initial_form[1].click()
         }
     }
