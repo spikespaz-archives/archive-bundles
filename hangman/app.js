@@ -73,6 +73,8 @@ initial_form[1].onclick = () => {
         initial_screen.style.display = "none";
         game_screen.style.display = "block";
 
+        updateResult();
+
         setInterval(() => {
             seconds++;
             time.innerText = getTime();
@@ -91,8 +93,8 @@ function updateResult() {
     for (letter in match) {
         if (inArray(correct.map(letter => letter.toLowerCase()), match[letter].toLowerCase())) {
             generated += match[letter]
-        } else if (match[letter] === " ") {
-            generated += " "
+        } else if (!isWordCharacter(match[letter].charCodeAt(0))) {
+            generated += match[letter]
         } else {
             generated += "_"
         }
@@ -101,8 +103,12 @@ function updateResult() {
     result.innerText = generated
 }
 
+function isWordCharacter(code) {
+    return code >= 65 && code <= 90 || code >= 97 && code <= 122
+}
+
 document.onkeypress = (event) => {
-    if (active) {
+    if (active && isWordCharacter(event.keyCode)) {
         if (inArray(match.toLowerCase(), event.key.toLowerCase())) {
             correct.push(event.key);
             updateResult();
