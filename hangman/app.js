@@ -114,7 +114,8 @@ function updateResult() { // Update the displayed sentence/word under the scaffo
 }
 
 function isLetter(character) { // Check if ASCII character codes are within acceptable ranges (a-Z)
-    return character.charCodeAt(0) >= 65 && character.charCodeAt(0) <= 90 || character.charCodeAt(0) >= 97 && character.charCodeAt(0) <= 122
+    return character.charCodeAt(0) >= 65 && character.charCodeAt(0) <= 90 ||
+        character.charCodeAt(0) >= 97 && character.charCodeAt(0) <= 122
 }
 
 document.onkeypress = (event) => {
