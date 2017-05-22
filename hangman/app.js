@@ -73,7 +73,7 @@ function getTime() { // Return time in min/sec from seconds variable
 }
 
 initial_form[1].onclick = () => { // The Continue button on initial screen is clicked
-    if (initial_form[0].value) {
+    if (initial_form[0].value.some(isLetter)) { // Check if the input contains a letter
         active = true;
         match = initial_form[0].value;
         initial_screen.style.display = "none";
@@ -103,7 +103,7 @@ function updateResult() { // Update the displayed sentence/word under the scaffo
     for (character in match) {
         if (inArray(correct.map(character => character.toLowerCase()), match[character].toLowerCase())) {
             generated += match[character]
-        } else if (!isLetter(match[character].charCodeAt(0))) {
+        } else if (!isLetter(match[character])) {
             generated += match[character]
         } else {
             generated += "_"
@@ -113,12 +113,12 @@ function updateResult() { // Update the displayed sentence/word under the scaffo
     result.innerText = generated
 }
 
-function isLetter(code) { // Check if ASCII character codes are within acceptable ranges (a-Z)
-    return code >= 65 && code <= 90 || code >= 97 && code <= 122
+function isLetter(character) { // Check if ASCII character codes are within acceptable ranges (a-Z)
+    return character.charCodeAt(0) >= 65 && character.charCodeAt(0) <= 90 || character.charCodeAt(0) >= 97 && character.charCodeAt(0) <= 122
 }
 
 document.onkeypress = (event) => {
-    if (active && isLetter(event.keyCode) &&
+    if (active && isLetter(event.key) &&
         !inArray(correct, event.key.toLowerCase()) &&
         !inArray(guessed.innerText, event.key.toUpperCase())) {
         message.innerHTML = "Last guess: <code>" + event.key.toUpperCase() + "</code>";
