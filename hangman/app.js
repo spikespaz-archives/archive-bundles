@@ -93,12 +93,12 @@ function inArray(array, item) {
 function updateResult() {
     let generated = "";
 
-    let letter;
-    for (letter in match) {
-        if (inArray(correct.map(letter => letter.toLowerCase()), match[letter].toLowerCase())) {
-            generated += match[letter]
-        } else if (!isWordCharacter(match[letter].charCodeAt(0))) {
-            generated += match[letter]
+    let character;
+    for (character in match) {
+        if (inArray(correct.map(character => character.toLowerCase()), match[character].toLowerCase())) {
+            generated += match[character]
+        } else if (!isLetter(match[character].charCodeAt(0))) {
+            generated += match[character]
         } else {
             generated += "_"
         }
@@ -107,12 +107,12 @@ function updateResult() {
     result.innerText = generated
 }
 
-function isWordCharacter(code) {
+function isLetter(code) {
     return code >= 65 && code <= 90 || code >= 97 && code <= 122
 }
 
 document.onkeypress = (event) => {
-    if (active && isWordCharacter(event.keyCode)) {
+    if (active && isLetter(event.keyCode)) {
         if (inArray(match.toLowerCase(), event.key.toLowerCase())) {
             correct.push(event.key);
             updateResult();
