@@ -73,7 +73,7 @@ function getTime() { // Return time in min/sec from seconds variable
 }
 
 initial_form[1].onclick = () => { // The Continue button on initial screen is clicked
-    if (initial_form[0].value.some(isLetter)) { // Check if the input contains a letter
+    if (initial_form[0].value.split("").some(isLetter)) { // Check if the input contains a letter
         active = true;
         match = initial_form[0].value;
         initial_screen.style.display = "none";
