@@ -45,3 +45,10 @@ code {
     display: none;
     text-align: center;
 }
+
+#footer {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    margin: 0;
+}

@@ -43,3 +43,10 @@ td:hover {
     display: inline-block;
     padding: 0 8px;
 }
+
+#footer {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    margin: 0;
+}

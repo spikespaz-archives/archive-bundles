@@ -8,20 +8,21 @@
     <script defer rel="script" type="text/javascript" src="app.min.js"></script>
 </head>
 <body>
-<div id="initial">
-    <p>Type a word or sentence to play hangman with.</p>
-    <p>When you're ready, press enter. Just press a key to make a guess!</p>
-    <input type="text">
-    <input type="button" value="Continue">
-</div>
-<div id="game">
-    <div id="head">
-        <h3 id="message">Press a key!</h3>
-        <h3 id="time">Time: <code>0m 0s</code></h3>
+    <div id="initial">
+        <p>Type a word or sentence to play hangman with.</p>
+        <p>When you're ready, press enter. Just press a key to make a guess!</p>
+        <input type="text">
+        <input type="button" value="Continue">
     </div>
-    <canvas id="scaffold" width="400" height="500"></canvas>
-    <code id="result"></code>
-    <p id="guessed-wrapper">Guessed:&nbsp;<code id="guessed"></code></p>
-</div>
+    <div id="game">
+        <div id="head">
+            <h3 id="message">Press a key!</h3>
+            <h3 id="time">Time: <code>0m 0s</code></h3>
+        </div>
+        <canvas id="scaffold" width="400" height="500"></canvas>
+        <code id="result"></code>
+        <p id="guessed-wrapper">Guessed:&nbsp;<code id="guessed"></code></p>
+    </div>
+    <p id="footer">Made by spikespaz. See it on <a href="https://github.com/spikespaz/tinythings/">GitHub</a>.</p>
 </body>
 </html>
