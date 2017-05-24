@@ -24,7 +24,6 @@ td {
     text-transform: uppercase;
     color: transparent;
     font-size: 50px;
-    transition: all 0.2s ease-in;
 }
 
 td.filled {
