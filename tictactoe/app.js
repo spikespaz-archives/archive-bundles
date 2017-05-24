@@ -25,7 +25,6 @@ function updateNext() {
 
 function checkWin() {
     for (cell = 0; cell < 3; cell++) {
-        console.log(cell * 3, cell * 3 + 1, cell * 3 + 2);
         if ((grid[cell * 3].innerText === grid[cell * 3 + 1].innerText && grid[cell * 3 + 1].innerText === grid[cell * 3 + 2].innerText && grid[cell * 3].innerText) ||
             (grid[cell].innerText === grid[cell + 3].innerText && grid[cell + 3].innerText === grid[cell + 6].innerText && grid[cell].innerText)) {
             return 1
