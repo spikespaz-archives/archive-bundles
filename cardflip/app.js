@@ -46,7 +46,6 @@ function activateCard(card) {
 
 function resetCard(card) {
     card.style.background = "black";
-    card.style.color = "white";
     card.classList.remove("active")
 }
 
