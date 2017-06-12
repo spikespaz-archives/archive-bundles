@@ -1,5 +1,6 @@
 const flood = document.getElementById("flood");
 const fullscreen = document.getElementById("fullscreen");
+const noSleep = new NoSleep();
 
 fullscreen.onclick = () => {
     let isFullscreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
@@ -17,6 +18,8 @@ fullscreen.onclick = () => {
         } else if (document.body.msRequestFullscreen) {
             document.body.msRequestFullscreen();
         }
+
+        noSleep.enable()
     } else {
         if (document.exitFullscreen) {
             document.exitFullscreen();
@@ -27,6 +30,8 @@ fullscreen.onclick = () => {
         } else if (document.msExitFullscreen) {
             document.msExitFullscreen();
         }
+
+        noSleep.disable()
     }
 };
 
