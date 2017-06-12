@@ -1,48 +1,77 @@
-// Get the canvas element form the page
-const canvas = document.getElementById("viewer");
-const ctx = canvas.getContext("2d");
+const flood = document.getElementById("flood");
+const fullscreen = document.getElementById("fullscreen");
 
-canvas.width = screen.width;
-canvas.height = screen.height;
+fullscreen.onclick = () => {
+    let isFullscreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
+        (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+        (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+        (document.msFullscreenElement && document.msFullscreenElement !== null);
 
-function fullscreen() {
-    if (canvas.webkitRequestFullScreen) {
-        canvas.webkitRequestFullScreen();
-        canvas.style.display = "block";
-    } else if (canvas.mozRequestFullScreen) {
-        canvas.mozRequestFullScreen();
-        canvas.style.display = "block";
-    } else if (canvas.msRequestFullScreen) {
-        canvas.msRequestFullScreen();
-        canvas.style.display = "block";
+    if (!isFullscreen) {
+        if (document.body.requestFullscreen) {
+            document.body.requestFullscreen();
+        } else if (document.body.mozRequestFullScreen) {
+            document.body.mozRequestFullScreen();
+        } else if (document.body.webkitRequestFullScreen) {
+            document.body.webkitRequestFullScreen();
+        } else if (document.body.msRequestFullscreen) {
+            document.body.msRequestFullscreen();
+        }
     } else {
-        alert("Your browser does not support full screen canvas.")
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
     }
-}
+};
 
-function floodScreen(color) {
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
+let counter = 0;
 
-function pickBand(previous) {
-    let choice = Math.random();
-    let color = choice < 1/3 ? "red" : choice < 2/3 ? "green" : "blue";
+setInterval(
+    () => {
+        if (counter === 0) {
+            flood.style.background = "red"
+        } else if (counter === 1) {
+            flood.style.background = "green"
+        } else if (counter === 2) {
+            flood.style.background = "blue"
+        }
 
-    if (color === previous) {
-        pickBand(previous)
-    } else {
-        previous = color;
-        return color
+        if (counter < 3) {
+            counter++;
+        } else {
+            counter = 0;
+        }
+    }, 10
+);
+
+let dragging = false;
+let floodX, floodY, initialX, initialY;
+
+document.onmousedown = (event) => {
+    dragging = true;
+    initialX = event.clientX;
+    initialY = event.clientY;
+    floodX = parseInt(flood.offsetLeft);
+    floodY = parseInt(flood.offsetTop);
+};
+
+document.onmouseup = () => {
+    dragging = false;
+};
+
+document.onmousemove = (event) => {
+    if (dragging) {
+        let deltaX = (initialX - event.clientX) * -1;
+        let deltaY = (initialY - event.clientY) * -1;
+
+        flood.style.left = (floodX + deltaX) + "px";
+        flood.style.top = (floodY + deltaY) + "px";
+
     }
-}
-
-document.onclick = () => {
-    let previous;
-
-    fullscreen();
-
-    setInterval(() => {
-        floodScreen(pickBand(previous))
-    }, 10);
 };
