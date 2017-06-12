@@ -58,19 +58,24 @@ setInterval(
 let dragging = false;
 let floodX, floodY, initialX, initialY;
 
-document.onmousedown = (event) => {
+document.onmousedown = startDrag;
+document.touchstart = startDrag;
+
+function startDrag(event) {
     dragging = true;
     initialX = event.clientX;
     initialY = event.clientY;
     floodX = parseInt(flood.offsetLeft);
     floodY = parseInt(flood.offsetTop);
-};
+}
 
-document.onmouseup = () => {
-    dragging = false;
-};
+document.onmouseup = () => {dragging = false};
+document.ontouchend = () => {dragging = false};
 
-document.onmousemove = (event) => {
+document.onmousemove = moveFlood;
+document.ontouchmove = moveFlood;
+
+function moveFlood(event) {
     if (dragging) {
         let deltaX = (initialX - event.clientX) * -1;
         let deltaY = (initialY - event.clientY) * -1;
@@ -79,4 +84,4 @@ document.onmousemove = (event) => {
         flood.style.top = (floodY + deltaY) + "px";
 
     }
-};
+}
