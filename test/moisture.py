@@ -4,6 +4,11 @@ from time import sleep
 
 device, endpoint = claim_device()
 
-while True:
-    print(moisture_reading(device, endpoint))
-    sleep(1)
+if __name__ == "__main__":
+    while True:
+        print(moisture_reading(device, endpoint))
+        sleep(1)
+else:
+    while True:
+        yield moisture_reading(device, endpoint)
+        sleep(1)
