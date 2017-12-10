@@ -1,0 +1,3 @@
+[submodule "vernierlib"]
+	path = vernierlib
+	url = https://github.com/spikespaz/vernierlib
