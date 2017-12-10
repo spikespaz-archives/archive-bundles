@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+venv/
+*.pyc
+
+# IDE
+.idea/
+*.ipr
+*.iml
+*.iws
+
+# Workspace
+.sublime-*
+sftp*.json
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+.bash_history
+
+# Misc
+.cache/
+.local/
+.nano/
+.python_history
