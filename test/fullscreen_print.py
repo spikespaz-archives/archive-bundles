@@ -8,4 +8,4 @@ counter = 100
 while True:
     fullscreen_print(str(counter))
     counter -= 1
-    sleep(2)
+    sleep(0.01)
