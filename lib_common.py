@@ -24,11 +24,9 @@ def fullscreen_print(text, font="dotmatrix", top_pad=0):
 
 
 # Write a line to a log file with args
-def log_line(log_file, text, level=None, indent=0):
-    line_text = (" " * indent +
-                 strftime("[%m-%d-%y | %I:%M:%S %p]") +
-                 ((" [" + level.upper() + "]") if level else "") +
-                 ": " + text + "\n")
+def log_line(log_file, text, level=None, indent=0, date_fmt="%m-%d-%y", time_fmt="%I:%M:%S %p"):
+    line_text = (" " * indent + strftime("[" + date_fmt + " | " + time_fmt + "]") +
+                 ((" [" + level.upper() + "]") if level else "") + ": " + text + "\n")
 
     if log_file.mode in ("a", "a+"):
         log_file.write(line_text)
