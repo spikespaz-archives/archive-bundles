@@ -71,7 +71,7 @@ test_map = {
 
 
 if len(argv) > 1:
-    exceptions = []
+    exceptions = {}
     print("Starting", len(argv) - 1, "test" + ("s." if len(argv) - 1 > 1 else "."))
 
     for test in argv[1:]:
@@ -81,7 +81,7 @@ if len(argv) > 1:
                 sleep(2)
                 test_map[test]()
             except Exception as error:
-                exceptions.append(error)
+                exceptions[test] = error
                 print("Failed with exception:", error)
         else:
             print("Test not found:", test)
@@ -89,4 +89,6 @@ if len(argv) > 1:
     print("Completed tests:", ", ".join(argv[1:]), "\n", len(exceptions), "failed.")
 
     if exceptions:
-        print("\nExceptions:\n", "\n".join(map(lambda x: str(x), exceptions)))
+        print("\nExceptions:\n")
+        for test, error in exceptions.items():
+            print(test + ":\n", error)
