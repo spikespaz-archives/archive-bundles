@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 from vernierlib.go_link import *
-from sensors import *
+from vernierlib.sensors import *
 
 
 def claim_device(device=None, interface=0, verbose=True):  # If the device has been
