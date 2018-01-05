@@ -45,6 +45,6 @@
 }
 
 .console-input-line::before {
-    content: ">\00a0";
+    content: "\a>\00a0";
     white-space: pre;
 }
