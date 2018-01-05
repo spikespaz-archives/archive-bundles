@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="description" content="Home page of Jacob Birkett - Placeholder page.">
-	<meta name="keywords" content="jacob, birkett, spike, spikespaz, github, programming, open, source, projects">
-	<title>Home page of Jacob Birkett</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Home page of Jacob Birkett - Placeholder page.">
+    <meta name="keywords" content="jacob, birkett, spike, spikespaz, github, programming, open, source, projects">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" type="text/css">
+    <link rel="stylesheet" href="css/console.css" type=text/css>
+    <title>spikespaz</title>
 </head>
 <body>
-	<div class="wrapper" id="main-wrapper">
-		<div class="wrapper" id="head-wrapper">
-			<h1 id="header-title">spikespaz</h1>
-			<h2 id="header-subtext">About me:</h2>
-		</div>
-		<div class="wrapper" id="body-wrapper">
-			<p class="indented-block">
-				Placeholder text for <a href="https://www.spikespaz.com/"><code>https://www.spikespaz.com/</code></a>
-			</p>
-		</div>
+    <input id="console-input-text" type="text" autofocus>
+
+    <ul id="console-buffer">
+        <li class="console-buffer-entry">
+            <p>Welcome!
+            Please enter a command below, or type "help" to list commands.</p>
+        </li>
+    </ul>
+
+	<div class="console-input">
+    	<span id="console-input-display"></span>
 	</div>
+
+    <script src="js/console.js" type="text/javascript"></script>
 </body>
 </html>
