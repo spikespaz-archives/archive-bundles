@@ -1,51 +1,41 @@
-html, body {
-    margin: 0;
-    padding: 0;
-}
 
-* {
-    color: #ffff33; /*Terminal Amber*/
-        /* #33ff66;   Terminal Green */
+.console-application-wrapper {
+    display: block;
+    background: #000000;
+    padding: 10px 20px;
+    color: #ffff33;
     font-family: "Source Code Pro", monospace;
-    font-size: 16px;
+    font-size: 13px;
+    min-height: 250px;
 }
 
-* mark {
+.console-application-wrapper mark {
     background: #ffff33;
-    color: #000;
+    color: #000000;
 }
 
-body {
-    background: black;
-}
-
-#console-buffer {
-    list-style: none;
-    padding: 0 20px;
-}
-
-.console-buffer-entry {
-    padding: 0;
-}
-
-#console-input-text {
+.console-input-box {
     position: absolute;
-    left: -1000px;
+    width: 0;
+    height: 0;
+    left: -100px;
 }
 
-.console-input {
-    padding: 0 20px;
-}
-
-#console-input-display {
-    background: none;
-    border: none;
-    outline: none;
-    word-wrap: break-word;
+.console-buffer-list {
+    list-style: none;
     padding: 0;
+    margin: 0;
 }
 
-#console-input-display::before {
-    content: "> ";
+.console-buffer-line > * {
+    margin: 0;
+}
+
+.console-input-line {
+    word-wrap: break-word;
+}
+
+.console-input-line::before {
+    content: ">\00a0";
     white-space: pre;
 }
