@@ -32,7 +32,7 @@ function registerConsole(console_app) {
 
     getInputLine(buffer_list).innerHTML = input_box.value;
 
-    console_app.onclick = function() input_box.focus();
+    console_app.onclick = function() {input_box.focus()};
 
     function updateInputLine() {
         getInputLine(buffer_list).innerHTML =
