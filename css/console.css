@@ -1,11 +1,13 @@
 .console-application-wrapper {
     display: block;
+    overflow-y: auto;
     background: #000000;
     padding: 10px 20px;
     color: #ffff33;
     font-family: "Source Code Pro", monospace;
     font-size: 13px;
-    min-height: 250px;
+    height: 250px;
+    width: 800px;
 }
 
 .console-application-wrapper mark {
@@ -26,8 +28,16 @@
     margin: 0;
 }
 
+.console-buffer-list:last-child {
+    padding-bottom: 10px;
+}
+
 .console-buffer-line > * {
     margin: 0;
+}
+
+.console-buffer-line a {
+    color: #ffff33;
 }
 
 .console-input-line {

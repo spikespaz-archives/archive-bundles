@@ -35,9 +35,14 @@ function registerConsole(console_app) {
             getFormattedSelection(input_box.value, getSelectionRange(input_box));
     }
 
-    input_box.onkeyup = updateInputLine;
-    input_box.onkeydown = updateInputLine;
-    input_box.onkeypress = updateInputLine;
+    function keyUpdate() {
+        updateInputLine();
+        console_app.scrollTop = console_app.scrollHeight;
+    };
+
+    input_box.onkeyup = keyUpdate;
+    input_box.onkeydown = keyUpdate;
+    input_box.onkeypress = keyUpdate;
 
     var console_blink = true;
     var selection_range;
