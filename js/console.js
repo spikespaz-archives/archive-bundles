@@ -27,8 +27,12 @@ function registerConsole(console_app) {
     var input_box = console_app.getElementsByClassName("console-input-box")[0];
     var buffer_list = console_app.getElementsByClassName("console-buffer-list")[0];
 
+    var console_blink = true;
+    var selection_range;
+
+    getInputLine(buffer_list).innerHTML = input_box.value;
+
     console_app.onclick = function() input_box.focus();
-    // console_app.onclick = input_box.focus;
 
     function updateInputLine() {
         getInputLine(buffer_list).innerHTML =
@@ -37,17 +41,13 @@ function registerConsole(console_app) {
 
     function keyUpdate() {
         updateInputLine();
+        console_blink = true;
         console_app.scrollTop = console_app.scrollHeight;
     };
 
     input_box.onkeyup = keyUpdate;
     input_box.onkeydown = keyUpdate;
     input_box.onkeypress = keyUpdate;
-
-    var console_blink = true;
-    var selection_range;
-
-    getInputLine(buffer_list).innerHTML = input_box.value;
 
     window.setInterval(function() {
         if (document.activeElement == input_box) {
