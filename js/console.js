@@ -60,8 +60,10 @@ function registerConsole(console_app) {
                 getInputLine(buffer_list).innerHTML = input_box.value;
 
             console_blink = !console_blink;
-        } else
+        } else {
+            console_blink = true;
             getInputLine(buffer_list).innerHTML = input_box.value;
+        }
     }, 700);
 }
 
