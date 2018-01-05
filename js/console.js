@@ -1,52 +1,66 @@
-var console_input_text = document.getElementById("console-input-text");
-var console_input_display = document.getElementById("console-input-display");
-
-var console_input_blink = true;
-
-
-function getSelection() {
-    return [console_input_text.selectionStart, console_input_text.selectionEnd];
+function getInputLine(buffer_list) {
+    var input_lines = buffer_list.getElementsByClassName("console-input-line");
+    return input_lines[input_lines.length - 1];
 }
 
 
-function getSelectionText(selection) {
-    if (selection[0] == selection[1]) {
-        return console_input_text.value.substring(0, selection[0]) + "&#9608;" +
-               console_input_text.value.substring(selection[0] + 1, console_input_text.value.length);
-    } else {
-        return console_input_text.value.substring(0, selection[0]) +
-               "<mark>" + console_input_text.value.substring(selection[0], selection[1]) + "</mark>" +
-               console_input_text.value.substring(selection[1], console_input_text.value.length);
+function getSelectionRange(input_element) {
+    return [input_element.selectionStart, input_element.selectionEnd];
+}
+
+
+function getFormattedSelection(input_text, selection_range) {
+    if (selection_range[0] == selection_range[1])
+        return input_text.substring(0, selection_range[0]) +
+               "&#9608;" +
+               input_text.substring(selection_range[0] + 1, input_text.length);
+    else
+        return input_text.substring(0, selection_range[0]) +
+               "<mark>" +
+               input_text.substring(selection_range[0], selection_range[1]) +
+               "</mark>" +
+               input_text.substring(selection_range[1], input_text.length);
+}
+
+
+function registerConsole(console_app) {
+    var input_box = console_app.getElementsByClassName("console-input-box")[0];
+    var buffer_list = console_app.getElementsByClassName("console-buffer-list")[0];
+
+    console_app.onclick = function() input_box.focus();
+    // console_app.onclick = input_box.focus;
+
+    function updateInputLine() {
+        getInputLine(buffer_list).innerHTML =
+            getFormattedSelection(input_box.value, getSelectionRange(input_box));
     }
-}
 
+    input_box.onkeyup = updateInputLine;
+    input_box.onkeydown = updateInputLine;
+    input_box.onkeypress = updateInputLine;
 
-function updateDisplay() {
-    console_input_display.innerHTML = getSelectionText(getSelection());
+    var console_blink = true;
+    var selection_range;
+
+    getInputLine(buffer_list).innerHTML = input_box.value;
+
+    window.setInterval(function() {
+        if (document.activeElement == input_box) {
+            selection_range = getSelectionRange(input_box);
+
+            if (selection_range[1] > selection_range[0] ||
+                 console_blink && selection_range[0] == selection_range[1])
+                updateInputLine();
+            else
+                getInputLine(buffer_list).innerHTML = input_box.value;
+
+            console_blink = !console_blink;
+        } else
+            getInputLine(buffer_list).innerHTML = input_box.value;
+    }, 700);
 }
 
 
 window.onload = function() {
-    console_input_text.focus();
-    console_input_text.onblur = console_input_text.focus;
-
-    console_input_text.onkeyup = updateDisplay;
-    console_input_text.onkeydown = updateDisplay;
-    console_input_text.onkeypress = updateDisplay;
-
-
-    window.setInterval(function() {
-        var selection = getSelection();
-
-
-        if (selection[1] > selection[0]) {
-            console_input_display.innerHTML = getSelectionText(selection);
-        } else if (console_input_blink && selection[0] == selection[1]) {
-            console_input_display.innerHTML= getSelectionText(selection);
-        } else {
-            console_input_display.innerHTML = console_input_text.value;
-        }
-
-        console_input_blink = !console_input_blink;
-    }, 700);
+    registerConsole(document.getElementsByClassName("console-application-wrapper")[0]);
 }
