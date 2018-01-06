@@ -27,3 +27,8 @@ html, body {
 .console-buffer-line a {
     color: #ffffff;
 }
+
+.cursor {
+    background: #ffffff;
+    height: 18px;
+}

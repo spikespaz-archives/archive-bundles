@@ -1,73 +1,33 @@
-function getInputLine(buffer_list) {
-    var input_lines = buffer_list.getElementsByClassName("console-input-line");
-    return input_lines[input_lines.length - 1];
+function nextInputLine(buffer) {
+    var buffer_line = document.createElement("li");
+    buffer_line.className = "console-buffer-line";
+
+    var input_line = document.createElement("p");
+    input_line.className = "console-input-line";
+    input_line.innerHTML = "<span class='cursor blink'></span>"
+
+    buffer_line.appendChild(input_line);
+    buffer.appendChild(buffer_line);
+
+    return input_line
 }
 
 
-function getSelectionRange(input_element) {
-    return [input_element.selectionStart, input_element.selectionEnd];
-}
+function registerConsole(console_element) {
+    var input_box = document.createElement("input");
+    input_box.setAttribute("class", "console-input-box");
+    input_box.setAttribute("type", "text");
+    console_element.appendChild(input_box);
 
+    console_element.onclick = function() {input_box.focus()};
+    console_element.onblur = function() {};
 
-function getFormattedSelection(input_text, selection_range) {
-    if (selection_range[0] == selection_range[1])
-        return input_text.substring(0, selection_range[0]) +
-               "&#9608;" +
-               input_text.substring(selection_range[0] + 1, input_text.length);
-    else
-        return input_text.substring(0, selection_range[0]) +
-               "<mark>" +
-               input_text.substring(selection_range[0], selection_range[1]) +
-               "</mark>" +
-               input_text.substring(selection_range[1], input_text.length);
-}
+    var buffer = console_element.getElementsByClassName("console-buffer-list")[0];
 
-
-function registerConsole(console_app) {
-    var input_box = console_app.getElementsByClassName("console-input-box")[0];
-    var buffer_list = console_app.getElementsByClassName("console-buffer-list")[0];
-
-    var console_blink = true;
-    var selection_range;
-
-    getInputLine(buffer_list).innerHTML = input_box.value;
-
-    console_app.onclick = function() {input_box.focus()};
-
-    function updateInputLine() {
-        getInputLine(buffer_list).innerHTML =
-            getFormattedSelection(input_box.value, getSelectionRange(input_box));
-    }
-
-    function keyUpdate() {
-        updateInputLine();
-        console_blink = true;
-        console_app.scrollTop = console_app.scrollHeight;
-    };
-
-    input_box.onkeyup = keyUpdate;
-    input_box.onkeydown = keyUpdate;
-    input_box.onkeypress = keyUpdate;
-
-    window.setInterval(function() {
-        if (document.activeElement == input_box) {
-            selection_range = getSelectionRange(input_box);
-
-            if (selection_range[1] > selection_range[0] ||
-                 console_blink && selection_range[0] == selection_range[1])
-                updateInputLine();
-            else
-                getInputLine(buffer_list).innerHTML = input_box.value;
-
-            console_blink = !console_blink;
-        } else {
-            console_blink = true;
-            getInputLine(buffer_list).innerHTML = input_box.value;
-        }
-    }, 700);
+    var current_line = nextInputLine(buffer);
 }
 
 
 window.onload = function() {
-    registerConsole(document.getElementsByClassName("console-application-wrapper")[0]);
+    registerConsole(document.getElementById("main-console"));
 }

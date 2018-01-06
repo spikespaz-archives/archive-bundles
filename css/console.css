@@ -48,3 +48,21 @@
     content: "\a>\00a0";
     white-space: pre;
 }
+
+.cursor {
+    display: inline-block;
+    position: fixed;
+    width: 1ch;
+    height: 12px;
+    background: #ffff33;
+}
+
+.blink {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 0; }
+  25%, 75% { opacity: 1; }
+  100% { opacity: 0; }
+}
