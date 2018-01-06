@@ -5,30 +5,9 @@ html, body {
     height: 100%;
 }
 
-.body-center-wrapper {
+.body-wrapper {
     display: flex;
     height: 100%;
     justify-content: center;
     align-items: center;
-}
-
-.console-application-wrapper {
-    width: 1280px;
-    height: 720px;
-    font-size: 16px;
-    color: #ffffff;
-}
-
-.console-application-wrapper mark {
-    background: #ffffff;
-    color: #000000;
-}
-
-.console-buffer-line a {
-    color: #ffffff;
-}
-
-.cursor {
-    background: #ffffff;
-    height: 18px;
 }
