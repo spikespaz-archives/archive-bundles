@@ -11,3 +11,26 @@ html, body {
     justify-content: center;
     align-items: center;
 }
+
+.console-wrapper {
+    background: #000000;
+    color: #ffffff;
+    width: 1280px;
+    height: 720px;
+    font-size: 16px;
+}
+
+.console-wrapper mark {
+    background: #ffffff;
+    color: #000000;
+}
+
+.console-line * {
+    color: #ffffff;
+}
+
+.console-cursor {
+    height: 20px;
+    background: #ffffff;
+}
+
