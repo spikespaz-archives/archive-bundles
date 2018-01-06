@@ -16,4 +16,14 @@ html, body {
     width: 1280px;
     height: 720px;
     font-size: 16px;
+    color: #ffffff;
+}
+
+.console-application-wrapper mark {
+    background: #ffffff;
+    color: #000000;
+}
+
+.console-buffer-line a {
+    color: #ffffff;
 }
