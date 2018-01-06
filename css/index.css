@@ -5,25 +5,32 @@ html, body {
     height: 100%;
 }
 
-.body-center-wrapper {
+.body-wrapper {
     display: flex;
     height: 100%;
     justify-content: center;
     align-items: center;
 }
 
-.console-application-wrapper {
+.console-wrapper {
+    background: #000000;
+    color: #ffffff;
     width: 1280px;
     height: 720px;
     font-size: 16px;
-    color: #ffffff;
 }
 
-.console-application-wrapper mark {
+.console-wrapper mark {
     background: #ffffff;
     color: #000000;
 }
 
-.console-buffer-line a {
+.console-line * {
     color: #ffffff;
 }
+
+.console-cursor {
+    height: 20px;
+    background: #ffffff;
+}
+

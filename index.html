@@ -10,36 +10,17 @@
     <title>spikespaz</title>
 </head>
 <body>
-    <div class="body-center-wrapper">
-        <div class="console-application-wrapper">
-            <input class="console-input-box" type="text" autofocus>
-
-            <ul class="console-buffer-list">
-                <li class="console-buffer-line">
-                    <p><b>Welcome! Please enter a command below, or type "help" to list commands.</b></p>
-                </li>
-                <li class="console-buffer-line"><br></li>
-                <li class="console-buffer-line">
-                    <p>Just kidding. This console doesn't work yet.
-                    It's a shitty proof-of-concept to make a "console like" interface with as few lines of web code as possible.</p>
-                </li>
-                <li class="console-buffer-line"><br></li>
-                <li class="console-buffer-line">
-                    <p>The blinking cursor was a bitch to implement.
-                    There's a hidden text input that gets focused when the console area is clicked on,
-                    and the content of the last line in this list element will update to match it with proper styling for the caret position etc.</p>
-                </li>
-                <li class="console-buffer-line">
-                    <p>Each line in the console buffer is a separate list item with a paragraph element inside.</p>
-                </li>
-                <li class="console-buffer-line"><br></li>
-                <li class="console-buffer-line">
-                    <p><mark>Shift + Arrow</mark> selection should be fully functional, and blinking should start and stop in accordance to the focus of the console element.
-                    Give it a try, and if you break anything, make an issue on the <a href="http://gh.spikespaz.com/spikespaz.github.io">github repository</a>.</p>
-                </li>
-                <li class="console-buffer-line">
-                    <p class="console-input-line"></p>
-                </li>
+    <div class="body-wrapper">
+        <div class="console-wrapper" id="main-console">
+            <ul class="console-buffer">
+                <li class="console-line"><p><b>Welcome! Please enter a command below, or type "help" to list commands.</b></p></li>
+                <li class="console-line"><br></li>
+                <li class="console-line"><p>Just kidding. This console doesn't work yet. It's a shitty proof-of-concept to make a "console like" interface with as few lines of web code as possible.</p></li>
+                <li class="console-line"><br></li>
+                <li class="console-line"><p>The blinking cursor was a bitch to implement. There's a hidden text input that gets focused when the console area is clicked on, and the content of the last line in this list element will update to match it with proper styling for the caret position etc.</p></li>
+                <li class="console-line"><p>Each line in the console buffer is a separate list item with a paragraph element inside.</p></li>
+                <li class="console-line"><br></li>
+                <li class="console-line"><p><mark>Shift + Arrow</mark> selection should be fully functional, and blinking should start and stop in accordance to the focus of the console element. Give it a try, and if you break anything, make an issue on the <a href="http://gh.spikespaz.com/spikespaz.github.io">github repository</a>.</p></li>
             </ul>
         </div>
     </div>

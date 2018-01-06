@@ -1,4 +1,4 @@
-.console-application-wrapper {
+.console-wrapper {
     display: block;
     overflow-y: auto;
     background: #000000;
@@ -10,41 +10,57 @@
     font-size: 12px;
 }
 
-.console-application-wrapper mark {
+.console-wrapper mark {
     background: #ffff33;
     color: #000000;
 }
 
-.console-input-box {
+.console-input {
     position: absolute;
     width: 0;
     height: 0;
     left: -100px;
 }
 
-.console-buffer-list {
+.console-buffer {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.console-buffer-list:last-child {
+.console-buffer:last-child {
     padding-bottom: 10px;
 }
 
-.console-buffer-line > * {
-    margin: 0;
-}
-
-.console-buffer-line a {
-    color: #ffff33;
-}
-
-.console-input-line {
+.console-line {
     word-wrap: break-word;
 }
 
-.console-input-line::before {
+.console-line * {
+    margin: 0;
+    color: #ffff33;
+}
+
+.console-display {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.console-display::before {
     content: "\a>\00a0";
-    white-space: pre;
+}
+
+.console-cursor {
+    display: inline-block;
+    position: absolute;
+    width: 1ch;
+    height: 15px;
+    background: #ffff33;
+    animation: blink 1.5s infinite;
+    animation-delay: 750ms;
+}
+
+@keyframes blink {
+  0%,  50% { opacity: 1; }
+  20%, 30% { opacity: 0; }
 }
