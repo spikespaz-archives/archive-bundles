@@ -2,6 +2,7 @@
 from json import loads
 from pathlib import Path
 from addict import Dict
+from requests import request
 
 endpoints = Dict(loads(Path(__file__).with_name("endpoints.json").read_text()))
 
@@ -15,18 +16,28 @@ class Quizlet:
 
 
 class QClass:
-    def __init__(self):
-        self.id = 0
-        self.name = ""
-        self.set_count = 0
-        self.user_count = 0
-        self.created_date = ""
-        self.admin_only = False
-        self.has_access = False
-        self.access_level = ""
-        self.description = ""
-        self.sets = []
-        self.members = []
+    def __init__(self, class_id, base_uri="https://api.quizlet.com/2.0"):
+        api_request = request.get(base_uri + endpoints["view_class"].format(class_id=class_id))
+
+        if not api_request.ok:
+            raise ConnectionError("There was an error (" + str(api_request.status_code) +
+                                  ") when fetching data from: " + api_request.url)
+
+        self.request = api_request
+
+        api_request_json = api_request.json()
+
+        self.id = api_request_json["id"]
+        self.name = api_request_json["name"]
+        # self.set_count = api_request_json["set_count"]
+        # self.user_count = api_request_json["user_count"]
+        self.created_date = api_request_json["created_date"]
+        self.admin_only = api_request_json["admin_only"]
+        self.has_access = api_request_json["has_access"]
+        self.access_level = api_request_json["access_level"]
+        self.description = api_request_json["description"]
+        self.sets = [class_set["id"] for class_set in api_request_json["sets"]]
+        self.members = [class_set["id"] for class_set in api_request_json["members"]]
 
 
 class QImage:
