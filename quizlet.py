@@ -19,23 +19,35 @@ response_codes = {
 }
 
 
+def val_by_str(dictionary, key_map, sep="."):
+    for key in key_map.split(sep):
+        dictionary = dictionary[key]
+
+    return dictionary
+
+
+def get_request(self, action, reps={}, params={}):
+    api_request = requests.get(endpoints["base_uri"] + val_by_str[action].format(**reps),
+                               params=params)
+
+    if not api_request.ok:
+        raise ConnectionError("There was an error when fetching data from: " +
+                              api_request.url + "\nError " + str(api_request.status_code) +
+                              ": " + response_codes[api_request.status_code])
+    else:
+        return api_request.json()
+
+
 class Quizlet:
     def __init__(self, client_id):
         self.client_id = client_id
 
-    def _get_request(self, endpoint, reps={}, params={}):
-        return requests.get(endpoints["base_uri"] + endpoint.format(**reps),
-                            params={**params, "client_id": self.client_id})
+    def _get_request(self, action, reps={}, params={}):
+        return get_request(action, reps, {**params, "client_id": self.client_id})
 
     def get_class(self, class_id):
-        api_request = self._get_request(endpoints["classes"]["view_class"], {"class_id": class_id})
-
-        if not api_request.ok:
-            raise ConnectionError("There was an error when fetching data from: " + api_request.url +
-                                  "\nError " + str(api_request.status_code) +
-                                  ": " + response_codes[api_request.status_code])
-
-        return QClass(**api_request.json())
+        return QClass(**self._get_request("classes.view_class", {"class_id": class_id}),
+                      _client_id=self.client_id)
 
 
 class QClass:
@@ -65,6 +77,20 @@ class QClass:
         self.has_password =    kwargs.get("has_password", False)
         self.member_add_sets = kwargs.get("member_add_sets", True)
         self.school =          QClass.QSchool(**kwargs.get("school", {}))
+
+        self._client_id = kwargs.get("_client_id", None)
+
+    def get_sets(self, client_id=None):
+        if client_id is None and self._client_id is not None:
+            client_id = self._client_id
+        else:
+            raise ValueError("No client ID is set, it must be set by keyword argument"
+                             "during initialization or passed within the method.")
+
+        api_request = get_request("classes.get_class_sets", params={"client_id": self.client_id})
+
+        for class_set in api_request:
+            yield QSet(**class_set, _client_id=client_id)
 
 
 class QImage:
