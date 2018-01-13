@@ -24,28 +24,32 @@ class Quizlet:
 
 
 class QClass:
-    def __init__(self, class_id, base_uri="https://api.quizlet.com/2.0"):
-        api_request = request.get(base_uri + endpoints["view_class"].format(class_id=class_id))
+    class QSchool:
+        def __init__(self, **kwargs):
+            self.id = kwargs.get("id")
+            self.name = kwargs.get("name")
+            self.city = kwargs.get("city")
+            self.state = kwargs.get("state")
+            self.country_code = kwargs.get("country_code")
+            self.latitude = kwargs.get("latitude")
+            self.longitude = kwargs.get("longitude")
 
-        if not api_request.ok:
-            raise ConnectionError("There was an error (" + str(api_request.status_code) +
-                                  ") when fetching data from: " + api_request.url)
-
-        self.request = api_request
-
-        api_request_json = api_request.json()
-
-        self.id = api_request_json["id"]
-        self.name = api_request_json["name"]
-        # self.set_count = api_request_json["set_count"]
-        # self.user_count = api_request_json["user_count"]
-        self.created_date = api_request_json["created_date"]
-        self.admin_only = api_request_json["admin_only"]
-        self.has_access = api_request_json["has_access"]
-        self.access_level = api_request_json["access_level"]
-        self.description = api_request_json["description"]
-        self.sets = [class_set["id"] for class_set in api_request_json["sets"]]
-        self.members = [class_set["id"] for class_set in api_request_json["members"]]
+    def __init__(self, **kwargs):
+        self.id = kwargs.get("id")
+        self.url = kwargs.get("url")
+        self.name = kwargs.get("name")
+        self.set_count = kwargs.get("set_count")
+        self.user_count = kwargs.get("user_count")
+        self.created_date = kwargs.get("created_date")
+        self.has_access = kwargs.get("has_access")
+        self.access_level = kwargs.get("access_level")
+        self.role_level = kwargs.get("role_level")
+        self.description = kwargs.get("description")
+        self.admin_only = kwargs.get("admin_only")
+        self.is_public = kwargs.get("is_public")
+        self.has_password = kwargs.get("has_password")
+        self.member_add_sets = kwargs.get("member_add_sets")
+        self.school = QClass.QSchool(**kwargs.get("school"))
 
 
 class QImage:
