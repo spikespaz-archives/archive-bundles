@@ -1,41 +1,5 @@
 #! /usr/bin/env python3
-import requests
-
-from json import loads
-from pathlib import Path
-
-
-endpoints = loads(Path(__file__).with_name("endpoints.json").read_text())
-
-response_codes = {
-    200: "OK",
-    201: "Created",
-    204: "No Content",
-    400: "Bad Request",
-    401: "Unauthorized",
-    404: "Not Found",
-    405: "Method Not Allowed",
-    500: "Server Error"
-}
-
-
-def val_by_str(dictionary, key_map, sep="."):
-    for key in key_map.split(sep):
-        dictionary = dictionary[key]
-
-    return dictionary
-
-
-def get_request(self, action, reps={}, params={}):
-    api_request = requests.get(endpoints["base_uri"] + val_by_str[action].format(**reps),
-                               params=params)
-
-    if not api_request.ok:
-        raise ConnectionError("There was an error when fetching data from: " +
-                              api_request.url + "\nError " + str(api_request.status_code) +
-                              ": " + response_codes[api_request.status_code])
-    else:
-        return api_request.json()
+from utils import get_request
 
 
 class Quizlet:
@@ -46,8 +10,7 @@ class Quizlet:
         return get_request(action, reps, {**params, "client_id": self.client_id})
 
     def get_class(self, class_id):
-        return QClass(**self._get_request("classes.view_class", {"class_id": class_id}),
-                      _client_id=self.client_id)
+        return QClass(**self._get_request("classes.view_class", {"class_id": class_id}), _client_id=self.client_id)
 
 
 class QClass:
