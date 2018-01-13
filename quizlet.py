@@ -1,12 +1,20 @@
 #! /usr/bin/env python3
 from json import loads
 from pathlib import Path
-from addict import Dict
 from requests import request
 
-endpoints = Dict(loads(Path(__file__).with_name("endpoints.json").read_text()))
+endpoints = loads(Path(__file__).with_name("endpoints.json").read_text())
 
-print(endpoints.classes.view_class)
+response_codes = {
+    200: "OK",
+    201: "Created",
+    204: "No Content",
+    400: "Bad Request",
+    401: "Unauthorized",
+    404: "Not Found",
+    405: "Method Not Allowed",
+    500: "Server Error"
+}
 
 
 class Quizlet:
