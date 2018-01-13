@@ -1,7 +1,9 @@
 #! /usr/bin/env python3
+import requests
+
 from json import loads
 from pathlib import Path
-from requests import request
+
 
 endpoints = loads(Path(__file__).with_name("endpoints.json").read_text())
 
@@ -18,9 +20,20 @@ response_codes = {
 
 
 class Quizlet:
-    def __init__(self, api_key="", base_uri="https://api.quizlet.com/2.0"):
-        self.api_key = api_key
-        self.base_uri = base_uri
+    def __init__(self, client_id):
+        self.client_id = client_id
+
+    def _get_request(self, endpoint, reps={}, params={}):
+        return requests.get(endpoints["base_uri"] + endpoint.format(**reps),
+                            params={**params, "client_id": self.client_id})
+
+    def get_class(self, class_id):
+        api_request = self._get_request(endpoints["classes"]["view_class"], {"class_id": class_id})
+
+        if not api_request.ok:
+            raise ConnectionError("There was an error when fetching data from: " + api_request.url +
+                                  "\nError " + str(api_request.status_code) +
+                                  ": " + response_codes[api_request.status_code])
 
 
 class QClass:
