@@ -11,4 +11,4 @@ class Quizlet:
         return get_request(action, reps, {**params, "client_id": self.client_id})
 
     def get_class(self, class_id):
-        return QClass(**self._get_request("classes.view_class", {"class_id": class_id}), _client_id=self.client_id)
+        return QClass(**self._get_request("classes.view_class", {"class_id": class_id}), __client_id=self.client_id)

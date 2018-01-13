@@ -15,6 +15,8 @@ class QClass:
             self.longitude =    kwargs.get("longitude", 0.0)
 
     def __init__(self, **kwargs):
+        self.__client_id = kwargs.get("__client_id", None)
+
         self.id =              kwargs.get("id", None)
         self.name =            kwargs.get("name", None)
         self.url =             kwargs.get("url", None)
@@ -31,11 +33,9 @@ class QClass:
         self.member_add_sets = kwargs.get("member_add_sets", True)
         self.school =          QClass.QSchool(**kwargs.get("school", {}))
 
-        self._client_id = kwargs.get("_client_id", None)
-
     def get_sets(self, client_id=None):
-        if client_id is None and self._client_id is not None:
-            client_id = self._client_id
+        if client_id is None and self.__client_id is not None:
+            client_id = self.__client_id
         else:
             raise ValueError("No client ID is set, it must be set by keyword argument"
                              "during initialization or passed within the method.")
@@ -43,4 +43,4 @@ class QClass:
         api_request = get_request("classes.get_class_sets", params={"client_id": self.client_id})
 
         for class_set in api_request:
-            yield QSet(**class_set, _client_id=client_id)
+            yield QSet(**class_set, __client_id=client_id)
