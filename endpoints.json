@@ -1,4 +1,5 @@
 {
+    "base_uri": "https://api.quizlet.com/2.0",
     "classes": {
         "view_class": "/classes/{class_id}",
         "view_class_sets": "/classes/{class_id}/sets",
