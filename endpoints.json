@@ -1,0 +1,45 @@
+{
+    "classes": {
+        "view_class": "/classes/{class_id}",
+        "view_class_sets": "/classes/{class_id}/sets",
+        "add_class": "/classes",
+        "edit_class": "/classes/{class_id}",
+        "delete_class": "/classes/{class_id}",
+        "add_class_set": "/classes/{class_id}/sets/{set_id}",
+        "remove_class_set": "/classes/{class_id}/sets/{set_id}",
+        "join_class": "/classes/{class_id}/members/{username}",
+        "leave_class": "/classes/{class_id}/members/{username}"
+    },
+    "images": {
+        "upload_image": "/images"
+    },
+    "search": {
+        "search_sets": "/search/sets",
+        "search_classes": "/search/classes",
+        "search_universal": "/search/universal"
+    },
+    "sets": {
+        "view_set": "/sets/{set_id}",
+        "view_set_terms": "/sets/{set_id}/terms",
+        "submit_password": "/sets/{set_id}/password",
+        "view_random_sets": "/sets",
+        "view_all_class_sets": "/classes/{class_id}/sets",
+        "view_all_user_sets": "/users/{username}/sets",
+        "view_all_user_favorite_sets": "/users/{username}/favorites",
+        "add_set": "/sets",
+        "edit_set": "/sets/{set_id}",
+        "delete_set": "/sets/{set_id}",
+        "add_set_term": "/sets/{set_id}/terms",
+        "edit_set_term": "/sets/{set_id}/terms/{term_id}",
+        "delete_set_term": "/sets/{set_id}/terms/{term_id}"
+    },
+    "users": {
+        "view_user": "/users/{username}",
+        "view_user_sets": "/users/{username}/sets",
+        "view_user_favorites": "/users/{username}/favorites",
+        "view_user_classes": "/users/{username}/classes",
+        "view_recently_studied": "/users/{username}/studied",
+        "add_favorite_set": "/users/{username}/favorites/{set_id}",
+        "remove_favorite_set": "/users/{username}/favorites/{set_id}"
+    }
+}
