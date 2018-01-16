@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 from utils import get_request
 from qclass import QClass
+from qset import QSet
 
 
 class Quizlet:
@@ -12,3 +13,6 @@ class Quizlet:
 
     def get_class(self, class_id):
         return QClass(**self._get_request("classes.view_class", {"class_id": class_id}), __client_id=self.client_id)
+
+    def get_set(self, set_id):
+        return QSet(**self._get_request("sets.view_set", {"set_id": set_id}), __client_id=self.client_id)
