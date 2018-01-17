@@ -40,7 +40,8 @@ class QClass:
             raise ValueError("No client ID is set, it must be set by keyword argument"
                              "during initialization or passed within the method.")
 
-        api_request = get_request("classes.get_class_sets", params={"client_id": self.client_id})
+        api_request = get_request("classes.view_class_sets",
+                                  reps={"class_id": self.id}, params={"client_id": client_id})
 
         for class_set in api_request:
             yield QSet(**class_set, __client_id=client_id)
