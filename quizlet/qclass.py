@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
-from utils import get_request
-from qset import QSet
+from .utils import get_request
+from .qset import QSet
 
 
 class QClass:
