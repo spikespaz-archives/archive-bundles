@@ -1,6 +1,10 @@
 from PyQt5 import QtWidgets
 from interface import Ui_batch_media_converter
+from json import load, dump
 import sys
+
+
+SAVE_STATE_FILE = "bmfc_state.json"
 
 
 class Interface(Ui_batch_media_converter):
@@ -45,6 +49,13 @@ if __name__ == "__main__":
     interface = Interface()
     interface.setupUi(main_window)
     main_window.show()
+
+    try:
+        with open(SAVE_STATE_FILE, "r") as save_state_file:
+            save_state = load(save_state_file)
+            interface.set_state(**save_state)
+    except FileNotFoundError:
+        interface.push_status("No save state file. Is this the first run?", 5000)
 
     sys.exit(app.exec_())
 
