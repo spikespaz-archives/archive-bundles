@@ -54,7 +54,8 @@ class Interface(Ui_batch_media_converter):
             "output_directory": self.output_directory_edit.text(),
             "input_format": self.input_format_combo.currentText(),
             "output_format": self.output_format_combo.currentText(),
-            "skip_present_files": self.skip_present_files_checkbox.checkState()
+            "skip_present_files": self.skip_present_files_checkbox.checkState(),
+            "window_size": (self.window.width(), self.window.height())
         }
 
     def set_state(self, **kwargs):
@@ -73,7 +74,8 @@ class Interface(Ui_batch_media_converter):
                                   range(self.output_format_combo.count())]
             self.output_format_combo.setCurrentIndex(output_combo_items.index(output_combo_text))
 
-        self.skip_present_files_checkbox.setChecked(kwargs.get("skip_present_files"))
+        self.skip_present_files_checkbox.setChecked(kwargs.get("skip_present_files", 2))
+        self.window.resize(*kwargs.get("window_size", (265, 419)))
 
     def allow_changes(self, boolean):
         self.changes_allowed = boolean
@@ -106,7 +108,7 @@ if __name__ == "__main__":
     try:
         saved_state = load_state()
         interface.set_state(**saved_state)
-    except FileNotFoundError:
+    except (FileNotFoundError, ValueError):
         interface.push_status("No save state file. Is this the first run?")
 
     interface.push_status("Ready!", 5000)
