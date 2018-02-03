@@ -2,6 +2,7 @@
 __pycache__/
 
 # Project
+*_state.json
 
 # IDE
 *.ipr
