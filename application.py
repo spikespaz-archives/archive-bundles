@@ -9,6 +9,12 @@ SAVE_STATE_FILE = "bmfc_state.json"
 
 
 class Interface(Ui_batch_media_converter):
+    def __init__(self, app=QtWidgets.QApplication([]), window=QtWidgets.QMainWindow(), *args, **kwargs):
+        self.app = app
+        self.window = window
+
+        self.setupUi(window, *args, **kwargs)
+
     def setupUi(self, *args, **kwargs):
         super().setupUi(*args, **kwargs)
         self.exit_button.clicked.connect(self.exit)
@@ -78,11 +84,8 @@ class Interface(Ui_batch_media_converter):
 
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
-    main_window = QtWidgets.QMainWindow()
     interface = Interface()
-    interface.setupUi(main_window)
-    main_window.show()
+    interface.window.show()
 
     try:
         with open(SAVE_STATE_FILE, "r") as save_state_file:
@@ -96,5 +99,5 @@ if __name__ == "__main__":
     interface.start_button.clicked.connect(lambda: interface.set_active(True))
     interface.cancel_button.clicked.connect(lambda: interface.set_active(False))
 
-    sys.exit(app.exec_())
+    sys.exit(interface.app.exec_())
 
