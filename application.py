@@ -8,6 +8,16 @@ import sys
 SAVE_STATE_FILE = "bmfc_state.json"
 
 
+def save_state(state):
+    with open(SAVE_STATE_FILE, "w") as save_state_file:
+        dump(state, save_state_file)
+
+
+def load_state():
+    with open(SAVE_STATE_FILE, "r") as save_state_file:
+        return load(save_state_file)
+
+
 class Interface(Ui_batch_media_converter):
     def __init__(self, app=QtWidgets.QApplication([]), window=QtWidgets.QMainWindow(), *args, **kwargs):
         self.app = app
@@ -22,8 +32,7 @@ class Interface(Ui_batch_media_converter):
     def exit(self):
         self.allow_changes(False)
 
-        with open(SAVE_STATE_FILE, "w") as save_state_file:
-            dump(self.fetch_state(), save_state_file)
+        save_state(self.fetch_state())
 
         exit()
 
@@ -88,9 +97,8 @@ if __name__ == "__main__":
     interface.window.show()
 
     try:
-        with open(SAVE_STATE_FILE, "r") as save_state_file:
-            save_state = load(save_state_file)
-            interface.set_state(**save_state)
+        state = load_state()
+        interface.set_state(**state)
     except FileNotFoundError:
         interface.push_status("No save state file. Is this the first run?")
 
