@@ -58,9 +58,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="horizontal_layout_0">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="vertical_layout_0">
         <item>
          <widget class="QLabel" name="input_format_label">
           <property name="text">
@@ -74,7 +74,7 @@
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <layout class="QVBoxLayout" name="vertical_layout_1">
         <item>
          <widget class="QLabel" name="output_format_label">
           <property name="text">
