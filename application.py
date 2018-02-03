@@ -23,6 +23,9 @@ class Interface(Ui_batch_media_converter):
         self.app = app
         self.window = window
 
+        self.changes_allowed = True
+        self.is_active = False
+
         self.setupUi(window, *args, **kwargs)
 
     def setupUi(self, *args, **kwargs):
@@ -72,24 +75,28 @@ class Interface(Ui_batch_media_converter):
 
         self.skip_present_files_checkbox.setChecked(kwargs.get("skip_present_files"))
 
-    def allow_changes(self, state):
-        self.input_directory_edit.setEnabled(state)
-        self.output_directory_edit.setEnabled(state)
+    def allow_changes(self, boolean):
+        self.changes_allowed = boolean
 
-        self.input_directory_picker.setEnabled(state)
-        self.output_directory_picker.setEnabled(state)
+        self.input_directory_edit.setEnabled(boolean)
+        self.output_directory_edit.setEnabled(boolean)
 
-        self.input_format_combo.setEnabled(state)
-        self.output_format_combo.setEnabled(state)
+        self.input_directory_picker.setEnabled(boolean)
+        self.output_directory_picker.setEnabled(boolean)
 
-        self.skip_present_files_checkbox.setEnabled(state)
-        self.exit_button.setEnabled(state) 
+        self.input_format_combo.setEnabled(boolean)
+        self.output_format_combo.setEnabled(boolean)
 
-    def set_active(self, state):
-        self.allow_changes(not state)
+        self.skip_present_files_checkbox.setEnabled(boolean)
+        self.exit_button.setEnabled(boolean) 
 
-        self.start_button.setEnabled(not state)
-        self.cancel_button.setEnabled(state)
+    def set_active(self, boolean):
+        self.is_active = boolean
+
+        self.allow_changes(not boolean)
+
+        self.start_button.setEnabled(not boolean)
+        self.cancel_button.setEnabled(boolean)
 
 
 if __name__ == "__main__":
@@ -97,8 +104,8 @@ if __name__ == "__main__":
     interface.window.show()
 
     try:
-        state = load_state()
-        interface.set_state(**state)
+        saved_state = load_state()
+        interface.set_state(**saved_state)
     except FileNotFoundError:
         interface.push_status("No save state file. Is this the first run?")
 
