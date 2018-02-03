@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+
+# Project
+
+# IDE
+*.ipr
+*.iml
+*.iws
+.idea/
