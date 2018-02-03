@@ -8,6 +8,13 @@ import sys
 SAVE_STATE_FILE = "bmfc_state.json"
 
 
+def open_directory_picker(parent, path=""):
+    picker = QtWidgets.QFileDialog()
+    picker.setDirectory(path)
+
+    return str(picker.getExistingDirectory(parent, "Select Directory"))
+
+
 def save_state(state):
     with open(SAVE_STATE_FILE, "w") as save_state_file:
         dump(state, save_state_file)
@@ -30,6 +37,12 @@ class Interface(Ui_batch_media_converter):
 
     def setupUi(self, *args, **kwargs):
         super().setupUi(*args, **kwargs)
+
+        self.input_directory_picker.clicked.connect(lambda: self.input_directory_edit.setText(
+            open_directory_picker(self.window, self.input_directory_edit.text())))
+        self.output_directory_picker.clicked.connect(lambda: self.output_directory_edit.setText(
+            open_directory_picker(self.window, self.output_directory_edit.text())))
+
         self.exit_button.clicked.connect(self.exit)
 
     def exit(self):
