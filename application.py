@@ -38,10 +38,8 @@ class Interface(Ui_batch_media_converter):
     def setupUi(self, *args, **kwargs):
         super().setupUi(*args, **kwargs)
 
-        self.input_directory_picker.clicked.connect(lambda: self.input_directory_edit.setText(
-            open_directory_picker(self.window, self.input_directory_edit.text())))
-        self.output_directory_picker.clicked.connect(lambda: self.output_directory_edit.setText(
-            open_directory_picker(self.window, self.output_directory_edit.text())))
+        self.input_directory_picker.clicked.connect(self.pick_input_directory)
+        self.output_directory_picker.clicked.connect(self.pick_output_directory)
 
         self.exit_button.clicked.connect(self.exit)
 
@@ -51,6 +49,18 @@ class Interface(Ui_batch_media_converter):
         save_state(self.fetch_state())
 
         exit()
+
+    def pick_input_directory(self):
+        input_directory_value = open_directory_picker(self.window, self.input_directory_edit.text())
+
+        if input_directory_value:
+            self.input_directory_edit.setText()
+
+    def pick_output_directory(self):
+        output_directory_value = open_directory_picker(self.window, self.output_directory_edit.text())
+
+        if output_directory_value:
+            self.output_directory_edit.setText()
 
     def push_status(self, status, msecs=0):
         list_item = QtWidgets.QListWidgetItem()
@@ -116,13 +126,14 @@ class Interface(Ui_batch_media_converter):
 
 if __name__ == "__main__":
     interface = Interface()
-    interface.window.show()
 
     try:
         saved_state = load_state()
         interface.set_state(**saved_state)
     except (FileNotFoundError, ValueError):
         interface.push_status("No save state file. Is this the first run?")
+
+    interface.window.show()
 
     interface.push_status("Ready!", 5000)
 
