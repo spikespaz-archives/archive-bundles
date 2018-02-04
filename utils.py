@@ -74,14 +74,13 @@ def open_directory_picker(parent, path=""):
     return str(picker.getExistingDirectory(parent, "Select Directory"))
 
 
-def file_batch_operation(input_dir, output_dir, extension, operation):
-    """A function to run a function on each file in a directory tree, and mirror that tree somewhere else."""
-    old_working_directory = os.getcwd()
-    os.chdir(input_dir)
+def glob_from(path, ext):
+    """Return glob from a directory."""
+    working_dir = os.getcwd()
+    os.chdir(path)
 
-    path_list = glob("**/*." + extension)
+    file_paths = glob("**/*." + ext)
 
-    os.chdir(old_working_directory)
+    os.chdir(working_dir)
 
-    for path in path_list:
-        operation(os.path.join(input_dir, path), os.path.join(output_dir, path))
+    return file_paths
