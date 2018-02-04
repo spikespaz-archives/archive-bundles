@@ -42,11 +42,15 @@ class Interface(Ui_batch_media_file_converter):
         self.input_directory_picker.clicked.connect(self.pick_input_directory)
         self.output_directory_picker.clicked.connect(self.pick_output_directory)
 
-        self.input_directory_edit.textChanged.connect(self.update_ready)
-        self.output_directory_edit.textChanged.connect(self.update_ready)
+        def update_state_and_ready():  # Function to save the current state and then run update_ready()
+            save_state(self.fetch_state())
+            self.update_ready()
 
-        self.input_format_combo.currentIndexChanged.connect(self.update_ready)
-        self.output_format_combo.currentIndexChanged.connect(self.update_ready)
+        self.input_directory_edit.textChanged.connect(update_state_and_ready)
+        self.output_directory_edit.textChanged.connect(update_state_and_ready)
+
+        self.input_format_combo.currentIndexChanged.connect(update_state_and_ready)
+        self.output_format_combo.currentIndexChanged.connect(update_state_and_ready)
 
         self.exit_button.clicked.connect(self.exit)
 
@@ -67,6 +71,7 @@ class Interface(Ui_batch_media_file_converter):
         if input_directory_value:  # If the directory is not blank or not None
             self.input_directory_edit.setText(input_directory_value)
             self.push_status("Set new input directory: " + input_directory_value, 5000)
+            save_state(self.fetch_state())
 
     def pick_output_directory(self):
         """Open the file picker, get the new value, and set the `output_directory_edit box`
@@ -76,6 +81,7 @@ class Interface(Ui_batch_media_file_converter):
         if output_directory_value:  # If the directory is not blank or not None
             self.output_directory_edit.setText(output_directory_value)
             self.push_status("Set new output directory: " + output_directory_value, 5000)
+            save_state(self.fetch_state())
 
     def update_ready(self):
         """Ensure that a valid path and format is selected for file inputs and outputs, and if they are,
