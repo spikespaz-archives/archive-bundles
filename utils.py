@@ -8,8 +8,7 @@ ERROR_INVALID_NAME = 123
 
 # From https://stackoverflow.com/a/34102855 - Question #1
 def is_path_exists(pathname: str) -> bool:
-    """
-    `True` if the passed pathname is a valid pathname for the current OS;
+    """`True` if the passed pathname is a valid pathname for the current OS;
     `False` otherwise.
     """
     try:
@@ -41,8 +40,7 @@ def is_path_exists(pathname: str) -> bool:
 
 # From https://stackoverflow.com/a/34102855 - Question #2
 def is_path_creatable(pathname: str) -> bool:
-    """
-    `True` if the current user has sufficient permissions to create the passed
+    """`True` if the current user has sufficient permissions to create the passed
     pathname; `False` otherwise.
     """
     dirname = os.path.dirname(pathname) or os.getcwd()
@@ -51,8 +49,7 @@ def is_path_creatable(pathname: str) -> bool:
 
 # From https://stackoverflow.com/a/34102855 - Question #2
 def is_path_exists_or_creatable(pathname: str) -> bool:
-    """
-    `True` if the passed pathname is a valid pathname for the current OS _and_
+    """`True` if the passed pathname is a valid pathname for the current OS _and_
     either currently exists or is hypothetically creatable; `False` otherwise.
 
     This function is guaranteed to _never_ raise exceptions.
@@ -65,6 +62,8 @@ def is_path_exists_or_creatable(pathname: str) -> bool:
 
 
 def open_directory_picker(parent, path=""):
+    """Opens a directory selection dialogue based on the parent window at the specified path.
+    If the path specified is blank (default) just use the current directory."""
     picker = QFileDialog()
     picker.setDirectory(path)
 
