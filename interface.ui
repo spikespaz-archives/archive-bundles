@@ -69,7 +69,18 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="input_format_combo"/>
+         <widget class="QComboBox" name="input_format_combo">
+          <item>
+           <property name="text">
+            <string>MP3</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>FLAC</string>
+           </property>
+          </item>
+         </widget>
         </item>
        </layout>
       </item>
@@ -83,7 +94,18 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="output_format_combo"/>
+         <widget class="QComboBox" name="output_format_combo">
+          <item>
+           <property name="text">
+            <string>MP3</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>FLAC</string>
+           </property>
+          </item>
+         </widget>
         </item>
        </layout>
       </item>
