@@ -2,18 +2,11 @@ from PyQt5 import QtWidgets
 from interface import Ui_batch_media_converter
 from json import load, dump
 from time import sleep
-from utils import is_path_exists, is_path_exists_or_creatable
+from utils import is_path_exists, is_path_exists_or_creatable, open_directory_picker
 import sys
 
 
 SAVE_STATE_FILE = "bmfc_state.json"
-
-
-def open_directory_picker(parent, path=""):
-    picker = QtWidgets.QFileDialog()
-    picker.setDirectory(path)
-
-    return str(picker.getExistingDirectory(parent, "Select Directory"))
 
 
 def save_state(state):

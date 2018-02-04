@@ -1,3 +1,4 @@
+from PyQt5.QtWidgets import QFileDialog
 import errno
 import os
 import sys
@@ -57,7 +58,14 @@ def is_path_exists_or_creatable(pathname: str) -> bool:
     This function is guaranteed to _never_ raise exceptions.
     """
     try:
-        return is_pathname_valid(pathname) and (
+        return is_path_exists(pathname) and (
             os.path.exists(pathname) or is_path_creatable(pathname))
     except OSError:
         return False
+
+
+def open_directory_picker(parent, path=""):
+    picker = QFileDialog()
+    picker.setDirectory(path)
+
+    return str(picker.getExistingDirectory(parent, "Select Directory"))
