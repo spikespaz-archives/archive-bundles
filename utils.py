@@ -1,15 +1,45 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 from PyQt5.QtWidgets import QFileDialog
-from pathlib import Path
+from glob import glob
 
+import errno
 import os
+import sys
+
+ERROR_INVALID_NAME = 123
 
 
-# Replaces the function previously found at SO. THis is simpler and uses python built-ins.
-def is_path_exists(path):
-    """Return `True` if a path exists, `False` otherwise."""
-    return Path(path).exists()
+# From https://stackoverflow.com/a/34102855 - Question #1
+def is_path_exists(pathname: str) -> bool:
+    """`True` if the passed pathname is a valid pathname for the current OS;
+    `False` otherwise.
+    """
+    try:
+        if not isinstance(pathname, str) or not pathname:
+            return False
+
+        _, pathname = os.path.splitdrive(pathname)
+
+        root_dirname = os.environ.get("HOMEDRIVE", "C:") \
+            if sys.platform == "win32" else os.path.sep
+        assert os.path.isdir(root_dirname)
+
+        root_dirname = root_dirname.rstrip(os.path.sep) + os.path.sep
+
+        for pathname_part in pathname.split(os.path.sep):
+            try:
+                os.lstat(root_dirname + pathname_part)
+            except OSError as exc:
+                if hasattr(exc, "winerror"):
+                    if exc.winerror == ERROR_INVALID_NAME:
+                        return False
+                elif exc.errno in {errno.ENAMETOOLONG, errno.ERANGE}:
+                    return False
+    except TypeError as exc:
+        return False
+    else:
+        return True
 
 
 # From https://stackoverflow.com/a/34102855 - Question #2
@@ -46,10 +76,12 @@ def open_directory_picker(parent, path=""):
 
 def file_batch_operation(input_dir, output_dir, extension, operation):
     """A function to run a function on each file in a directory tree, and mirror that tree somewhere else."""
-    path_list = Path(input_dir).glob("**/*." + extension)
-    path_list = [(path, str(path).replace(input_dir, output_dir)) for path in path_list]
+    old_working_directory = os.getcwd()
+    os.chdir(input_dir)
+
+    path_list = glob("**/*." + extension)
+
+    os.chdir(old_working_directory)
 
     for path in path_list:
-        if path[0].is_file():
-            os.makedirs(path[1], exist_ok=True)
-            yield operation(str(path[0], path[1]))
+        operation(os.path.join(input_dir, path), os.path.join(output_dir, path))
