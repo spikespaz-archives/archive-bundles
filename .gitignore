@@ -3,6 +3,7 @@ __pycache__/
 
 # Project
 *_state.json
+*_test.py
 
 # IDE
 *.ipr

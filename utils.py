@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 from PyQt5.QtWidgets import QFileDialog
+
 import errno
 import os
 import sys
