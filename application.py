@@ -3,7 +3,6 @@
 from PyQt5 import QtWidgets
 from interface import Ui_batch_media_file_converter
 from json import load, dump
-from time import sleep
 from utils import is_path_exists, is_path_exists_or_creatable, open_directory_picker
 import sys
 
@@ -107,15 +106,26 @@ class Interface(Ui_batch_media_file_converter):
 
     def push_status(self, status, msecs=0):
         """Push a status to the status bar for X milliseconds and add it to the process log."""
+        message_count = self.current_processes_list.count()  # Get the number of messages in process log
+
+        if message_count:
+            last_message = self.current_processes_list.item(message_count - 1)
+
+            if status != last_message.text():  # Don't send a duplicate
+                self.push_message(status)
+        else:
+            self.push_message(status)
+
+        # Show it on the status bar for the time specified if any
+        self.statusbar.showMessage(status, msecs)
+
+    def push_message(self, message):
         list_item = QtWidgets.QListWidgetItem()
-        list_item.setText(status)
+        list_item.setText(message)
 
         # Add the message to the process log and scroll to bottom
         self.current_processes_list.addItem(list_item)
         self.current_processes_list.scrollToBottom()
-
-        # Show it on the status bar for the time specified if any
-        self.statusbar.showMessage(status, msecs)
 
     def fetch_state(self):
         """Fetch the state values of the interface and shove it into a dictionary and return."""
