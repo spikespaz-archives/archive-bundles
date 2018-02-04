@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets
-from interface import Ui_batch_media_converter
+from interface import Ui_batch_media_file_converter
 from json import load, dump
 from time import sleep
 from utils import is_path_exists, is_path_exists_or_creatable, open_directory_picker
@@ -18,7 +18,7 @@ def load_state():
         return load(save_state_file)
 
 
-class Interface(Ui_batch_media_converter):
+class Interface(Ui_batch_media_file_converter):
     def __init__(self, app=QtWidgets.QApplication([]), window=QtWidgets.QMainWindow(), *args, **kwargs):
         self.app = app
         self.window = window

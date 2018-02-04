@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>batch_media_converter</class>
- <widget class="QMainWindow" name="batch_media_converter">
+ <class>batch_media_file_converter</class>
+ <widget class="QMainWindow" name="batch_media_file_converter">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Batch Media Converter</string>
+   <string>Batch Media File Converter</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="vertical_layout_0">

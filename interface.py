@@ -8,11 +8,11 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_batch_media_converter(object):
-    def setupUi(self, batch_media_converter):
-        batch_media_converter.setObjectName("batch_media_converter")
-        batch_media_converter.resize(265, 419)
-        self.centralwidget = QtWidgets.QWidget(batch_media_converter)
+class Ui_batch_media_file_converter(object):
+    def setupUi(self, batch_media_file_converter):
+        batch_media_file_converter.setObjectName("batch_media_file_converter")
+        batch_media_file_converter.resize(265, 419)
+        self.centralwidget = QtWidgets.QWidget(batch_media_file_converter)
         self.centralwidget.setObjectName("centralwidget")
         self.vertical_layout_0 = QtWidgets.QVBoxLayout(self.centralwidget)
         self.vertical_layout_0.setObjectName("vertical_layout_0")
@@ -108,42 +108,42 @@ class Ui_batch_media_converter(object):
         self.exit_button.setObjectName("exit_button")
         self.actions_section_layout.addWidget(self.exit_button)
         self.vertical_layout_0.addLayout(self.actions_section_layout)
-        batch_media_converter.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(batch_media_converter)
+        batch_media_file_converter.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(batch_media_file_converter)
         self.statusbar.setObjectName("statusbar")
-        batch_media_converter.setStatusBar(self.statusbar)
+        batch_media_file_converter.setStatusBar(self.statusbar)
 
-        self.retranslateUi(batch_media_converter)
-        QtCore.QMetaObject.connectSlotsByName(batch_media_converter)
+        self.retranslateUi(batch_media_file_converter)
+        QtCore.QMetaObject.connectSlotsByName(batch_media_file_converter)
 
-    def retranslateUi(self, batch_media_converter):
+    def retranslateUi(self, batch_media_file_converter):
         _translate = QtCore.QCoreApplication.translate
-        batch_media_converter.setWindowTitle(_translate("batch_media_converter", "Batch Media Converter"))
-        self.input_directory_label.setText(_translate("batch_media_converter", "Input Directory"))
-        self.input_directory_picker.setText(_translate("batch_media_converter", "..."))
-        self.output_directory_label.setText(_translate("batch_media_converter", "Output Directory"))
-        self.output_directory_picker.setText(_translate("batch_media_converter", "..."))
-        self.input_format_label.setText(_translate("batch_media_converter", "Input Format"))
-        self.input_format_combo.setItemText(0, _translate("batch_media_converter", "MP3"))
-        self.input_format_combo.setItemText(1, _translate("batch_media_converter", "FLAC"))
-        self.output_format_label.setText(_translate("batch_media_converter", "Output Format"))
-        self.output_format_combo.setItemText(0, _translate("batch_media_converter", "MP3"))
-        self.output_format_combo.setItemText(1, _translate("batch_media_converter", "FLAC"))
-        self.skip_present_files_checkbox.setText(_translate("batch_media_converter", "Skip converted files already in output directory"))
-        self.files_completed_label.setText(_translate("batch_media_converter", "Files Completed"))
-        self.data_completed_label.setText(_translate("batch_media_converter", "Data Completed"))
-        self.current_processes_label.setText(_translate("batch_media_converter", "Current Processes"))
-        self.start_button.setText(_translate("batch_media_converter", "Start"))
-        self.cancel_button.setText(_translate("batch_media_converter", "Cancel"))
-        self.exit_button.setText(_translate("batch_media_converter", "Exit"))
+        batch_media_file_converter.setWindowTitle(_translate("batch_media_file_converter", "Batch Media File Converter"))
+        self.input_directory_label.setText(_translate("batch_media_file_converter", "Input Directory"))
+        self.input_directory_picker.setText(_translate("batch_media_file_converter", "..."))
+        self.output_directory_label.setText(_translate("batch_media_file_converter", "Output Directory"))
+        self.output_directory_picker.setText(_translate("batch_media_file_converter", "..."))
+        self.input_format_label.setText(_translate("batch_media_file_converter", "Input Format"))
+        self.input_format_combo.setItemText(0, _translate("batch_media_file_converter", "MP3"))
+        self.input_format_combo.setItemText(1, _translate("batch_media_file_converter", "FLAC"))
+        self.output_format_label.setText(_translate("batch_media_file_converter", "Output Format"))
+        self.output_format_combo.setItemText(0, _translate("batch_media_file_converter", "MP3"))
+        self.output_format_combo.setItemText(1, _translate("batch_media_file_converter", "FLAC"))
+        self.skip_present_files_checkbox.setText(_translate("batch_media_file_converter", "Skip converted files already in output directory"))
+        self.files_completed_label.setText(_translate("batch_media_file_converter", "Files Completed"))
+        self.data_completed_label.setText(_translate("batch_media_file_converter", "Data Completed"))
+        self.current_processes_label.setText(_translate("batch_media_file_converter", "Current Processes"))
+        self.start_button.setText(_translate("batch_media_file_converter", "Start"))
+        self.cancel_button.setText(_translate("batch_media_file_converter", "Cancel"))
+        self.exit_button.setText(_translate("batch_media_file_converter", "Exit"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    batch_media_converter = QtWidgets.QMainWindow()
-    ui = Ui_batch_media_converter()
-    ui.setupUi(batch_media_converter)
-    batch_media_converter.show()
+    batch_media_file_converter = QtWidgets.QMainWindow()
+    ui = Ui_batch_media_file_converter()
+    ui.setupUi(batch_media_file_converter)
+    batch_media_file_converter.show()
     sys.exit(app.exec_())
 
