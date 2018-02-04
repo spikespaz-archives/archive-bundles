@@ -38,26 +38,35 @@ class Interface(Ui_batch_media_file_converter):
         """Extended interface setup, does initial prep of Qt interface."""
         super().setupUi(*args, **kwargs)  # Call the super of this object and do the setup in the original interface
 
+        # Connect actions to update functions
         self.input_directory_picker.clicked.connect(self.pick_input_directory)
         self.output_directory_picker.clicked.connect(self.pick_output_directory)
 
-        def update_state_and_ready():  # Function to save the current state and then run update_ready()
-            save_state(self.fetch_state())
-            self.update_ready()
+        self.input_directory_edit.textChanged.connect(self.update_ready)
+        self.output_directory_edit.textChanged.connect(self.update_ready)
 
-        self.input_directory_edit.textChanged.connect(update_state_and_ready)
-        self.output_directory_edit.textChanged.connect(update_state_and_ready)
-
-        self.input_format_combo.currentIndexChanged.connect(update_state_and_ready)
-        self.output_format_combo.currentIndexChanged.connect(update_state_and_ready)
+        self.input_format_combo.currentIndexChanged.connect(self.update_ready)
+        self.output_format_combo.currentIndexChanged.connect(self.update_ready)
 
         self.exit_button.clicked.connect(self.exit)
 
-    def exit(self):
-        """Simple exit function to save state to `SAVE_STATE_FILE` and say "Exit." when the button is pushed."""
-        self.allow_changes(False)
+        # Connect each input that can change to update the save state file
+        self.input_directory_edit.textChanged.connect(self.save_state)
+        self.output_directory_edit.textChanged.connect(self.save_state)
 
-        save_state(self.fetch_state())
+        self.input_format_combo.currentIndexChanged.connect(self.save_state)
+        self.output_format_combo.currentIndexChanged.connect(self.save_state)
+
+        self.skip_present_files_checkbox.stateChanged.connect(self.save_state)
+
+        self.start_button.clicked.connect(self.save_state)
+        self.exit_button.clicked.connect(self.save_state)
+
+        self.window.resizeEvent = lambda _: self.save_state()
+
+    def exit(self):
+        """Simple exit function to say "Exit." when the button is pushed."""
+        self.allow_changes(False)
         self.push_status("Exit.")
 
         exit()  # Finally exit the application
@@ -70,7 +79,6 @@ class Interface(Ui_batch_media_file_converter):
         if input_directory_value:  # If the directory is not blank or not None
             self.input_directory_edit.setText(input_directory_value)
             self.push_status("Set new input directory: " + input_directory_value, 5000)
-            save_state(self.fetch_state())
 
     def pick_output_directory(self):
         """Open the file picker, get the new value, and set the `output_directory_edit box`
@@ -80,7 +88,6 @@ class Interface(Ui_batch_media_file_converter):
         if output_directory_value:  # If the directory is not blank or not None
             self.output_directory_edit.setText(output_directory_value)
             self.push_status("Set new output directory: " + output_directory_value, 5000)
-            save_state(self.fetch_state())
 
     def update_ready(self):
         """Ensure that a valid path and format is selected for file inputs and outputs, and if they are,
@@ -126,6 +133,9 @@ class Interface(Ui_batch_media_file_converter):
         # Add the message to the process log and scroll to bottom
         self.current_processes_list.addItem(list_item)
         self.current_processes_list.scrollToBottom()
+
+    def save_state(self):
+        save_state(self.fetch_state())
 
     def fetch_state(self):
         """Fetch the state values of the interface and shove it into a dictionary and return."""
