@@ -54,13 +54,13 @@ class Interface(Ui_batch_media_converter):
         input_directory_value = open_directory_picker(self.window, self.input_directory_edit.text())
 
         if input_directory_value:
-            self.input_directory_edit.setText()
+            self.input_directory_edit.setText(input_directory_value)
 
     def pick_output_directory(self):
         output_directory_value = open_directory_picker(self.window, self.output_directory_edit.text())
 
         if output_directory_value:
-            self.output_directory_edit.setText()
+            self.output_directory_edit.setText(output_directory_value)
 
     def push_status(self, status, msecs=0):
         list_item = QtWidgets.QListWidgetItem()

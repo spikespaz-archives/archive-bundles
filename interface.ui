@@ -160,6 +160,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="start_button">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Start</string>
         </property>
@@ -167,6 +170,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="cancel_button">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Cancel</string>
         </property>
