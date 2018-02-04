@@ -46,6 +46,7 @@ class Interface(Ui_batch_media_file_converter):
         self.allow_changes(False)
 
         save_state(self.fetch_state())
+        self.push_status("Exit.")
 
         exit()
 
@@ -54,12 +55,14 @@ class Interface(Ui_batch_media_file_converter):
 
         if input_directory_value:
             self.input_directory_edit.setText(input_directory_value)
+            self.push_status("Set new input directory: " + input_directory_value, 5000)
 
     def pick_output_directory(self):
         output_directory_value = open_directory_picker(self.window, self.output_directory_edit.text())
 
         if output_directory_value:
             self.output_directory_edit.setText(output_directory_value)
+            self.push_status("Set new output directory: " + output_directory_value, 5000)
 
     def update_ready(self):
         if (self.validate_input_directory() and self.validate_output_directory()
@@ -69,11 +72,9 @@ class Interface(Ui_batch_media_file_converter):
             self.start_button.setEnabled(False)
 
     def validate_input_directory(self):
-        print(is_path_exists(self.input_directory_edit.text()))
         return is_path_exists(self.input_directory_edit.text())
 
     def validate_output_directory(self):
-        print(is_path_exists_or_creatable(self.output_directory_edit.text()))
         return is_path_exists_or_creatable(self.output_directory_edit.text())
 
     def push_status(self, status, msecs=0):
@@ -144,6 +145,7 @@ if __name__ == "__main__":
     try:
         saved_state = load_state()
         interface.set_state(**saved_state)
+        interface.push_status("Loaded last saved state!")
     except (FileNotFoundError, ValueError):
         interface.push_status("No save state file. Is this the first run?")
 
