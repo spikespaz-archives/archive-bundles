@@ -57,7 +57,8 @@ class Interface(Ui_batch_media_file_converter):
         self.input_format_combo.currentIndexChanged.connect(self.save_state)
         self.output_format_combo.currentIndexChanged.connect(self.save_state)
 
-        self.skip_present_files_checkbox.stateChanged.connect(self.save_state)
+        self.overwrite_output_checkbox.stateChanged.connect(self.save_state)
+        self.thread_count_spinbox.valueChanged.connect(self.save_state)
 
         self.start_button.clicked.connect(self.save_state)
         self.exit_button.clicked.connect(self.save_state)
@@ -113,10 +114,10 @@ class Interface(Ui_batch_media_file_converter):
 
     def push_status(self, status, msecs=0):
         """Push a status to the status bar for X milliseconds and add it to the process log."""
-        message_count = self.current_processes_list.count()  # Get the number of messages in process log
+        message_count = self.information_console_list.count()  # Get the number of messages in process log
 
         if message_count:
-            last_message = self.current_processes_list.item(message_count - 1)
+            last_message = self.information_console_list.item(message_count - 1)
 
             if status != last_message.text():  # Don't send a duplicate
                 self.push_message(status)
@@ -131,8 +132,8 @@ class Interface(Ui_batch_media_file_converter):
         list_item.setText(message)
 
         # Add the message to the process log and scroll to bottom
-        self.current_processes_list.addItem(list_item)
-        self.current_processes_list.scrollToBottom()
+        self.information_console_list.addItem(list_item)
+        self.information_console_list.scrollToBottom()
 
     def save_state(self):
         save_state(self.fetch_state())
@@ -144,7 +145,8 @@ class Interface(Ui_batch_media_file_converter):
             "output_directory": self.output_directory_edit.text(),
             "input_format": self.input_format_combo.currentText(),
             "output_format": self.output_format_combo.currentText(),
-            "skip_present_files": self.skip_present_files_checkbox.checkState(),
+            "overwrite_output": self.overwrite_output_checkbox.checkState(),
+            "thread_count": self.thread_count_spinbox.value(),
             "window_size": (self.window.width(), self.window.height())
         }
 
@@ -168,8 +170,10 @@ class Interface(Ui_batch_media_file_converter):
                                   range(self.output_format_combo.count())]
             self.output_format_combo.setCurrentIndex(output_combo_items.index(output_combo_text))
 
-        self.skip_present_files_checkbox.setChecked(kwargs.get("skip_present_files", 2))
-        self.window.resize(*kwargs.get("window_size", (265, 419)))
+        self.overwrite_output_checkbox.setChecked(kwargs.get("overwrite_output", 2))
+        self.thread_count_spinbox.setValue(kwargs.get("thread_count", 4))
+
+        self.window.resize(*kwargs.get("window_size", (313, 438)))
 
     def allow_changes(self, boolean):
         """Unlock all of the state values of the interface and allow the user to change them."""
@@ -184,7 +188,9 @@ class Interface(Ui_batch_media_file_converter):
         self.input_format_combo.setEnabled(boolean)
         self.output_format_combo.setEnabled(boolean)
 
-        self.skip_present_files_checkbox.setEnabled(boolean)
+        self.overwrite_output_checkbox.setEnabled(boolean)
+        self.thread_count_spinbox.setEnabled(boolean)
+
         self.exit_button.setEnabled(boolean)
 
     def set_active(self, boolean):
