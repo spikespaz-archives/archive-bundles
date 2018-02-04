@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets
 from interface import Ui_batch_media_file_converter
 from json import load, dump
