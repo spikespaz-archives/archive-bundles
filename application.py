@@ -5,7 +5,6 @@ from time import sleep
 from utils import is_path_exists, is_path_exists_or_creatable, open_directory_picker
 import sys
 
-
 SAVE_STATE_FILE = "bmfc_state.json"
 
 
@@ -35,6 +34,12 @@ class Interface(Ui_batch_media_converter):
         self.input_directory_picker.clicked.connect(self.pick_input_directory)
         self.output_directory_picker.clicked.connect(self.pick_output_directory)
 
+        self.input_directory_edit.textChanged.connect(self.update_ready)
+        self.output_directory_edit.textChanged.connect(self.update_ready)
+
+        self.input_format_combo.currentIndexChanged.connect(self.update_ready)
+        self.output_format_combo.currentIndexChanged.connect(self.update_ready)
+
         self.exit_button.clicked.connect(self.exit)
 
     def exit(self):
@@ -56,11 +61,20 @@ class Interface(Ui_batch_media_converter):
         if output_directory_value:
             self.output_directory_edit.setText(output_directory_value)
 
+    def update_ready(self):
+        if (self.validate_input_directory() and self.validate_output_directory()
+                and self.input_format_combo.currentText() and self.output_format_combo.currentText()):
+            self.start_button.setEnabled(True)
+        else:
+            self.start_button.setEnabled(False)
+
     def validate_input_directory(self):
+        print(is_path_exists(self.input_directory_edit.text()))
         return is_path_exists(self.input_directory_edit.text())
 
     def validate_output_directory(self):
-        return is_path_exists_or_creatable(self.output_directory_edit)
+        print(is_path_exists_or_creatable(self.output_directory_edit.text()))
+        return is_path_exists_or_creatable(self.output_directory_edit.text())
 
     def push_status(self, status, msecs=0):
         list_item = QtWidgets.QListWidgetItem()
@@ -113,7 +127,7 @@ class Interface(Ui_batch_media_converter):
         self.output_format_combo.setEnabled(boolean)
 
         self.skip_present_files_checkbox.setEnabled(boolean)
-        self.exit_button.setEnabled(boolean) 
+        self.exit_button.setEnabled(boolean)
 
     def set_active(self, boolean):
         self.is_active = boolean
@@ -141,4 +155,3 @@ if __name__ == "__main__":
     interface.cancel_button.clicked.connect(lambda: interface.set_active(False))
 
     sys.exit(interface.app.exec_())
-
