@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets
 from interface import Ui_batch_media_converter
 from json import load, dump
 from time import sleep
+from utils import is_path_exists, is_path_exists_or_creatable
 import sys
 
 
@@ -61,6 +62,12 @@ class Interface(Ui_batch_media_converter):
 
         if output_directory_value:
             self.output_directory_edit.setText(output_directory_value)
+
+    def validate_input_directory(self):
+        return is_path_exists(self.input_directory_edit.text())
+
+    def validate_output_directory(self):
+        return is_path_exists_or_creatable(self.output_directory_edit)
 
     def push_status(self, status, msecs=0):
         list_item = QtWidgets.QListWidgetItem()
