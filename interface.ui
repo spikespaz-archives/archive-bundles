@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>313</width>
-    <height>388</height>
+    <height>438</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -124,7 +124,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="thread_count_spinbox"/>
+         <widget class="QSpinBox" name="thread_count_spinbox">
+          <property name="value">
+           <number>4</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>

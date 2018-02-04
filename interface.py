@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_batch_media_file_converter(object):
     def setupUi(self, batch_media_file_converter):
         batch_media_file_converter.setObjectName("batch_media_file_converter")
-        batch_media_file_converter.resize(313, 388)
+        batch_media_file_converter.resize(313, 438)
         self.centralwidget = QtWidgets.QWidget(batch_media_file_converter)
         self.centralwidget.setObjectName("centralwidget")
         self.vertical_layout_0 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -66,6 +66,7 @@ class Ui_batch_media_file_converter(object):
         self.thread_count_label.setObjectName("thread_count_label")
         self.horizontal_layout_1.addWidget(self.thread_count_label)
         self.thread_count_spinbox = QtWidgets.QSpinBox(self.centralwidget)
+        self.thread_count_spinbox.setProperty("value", 4)
         self.thread_count_spinbox.setObjectName("thread_count_spinbox")
         self.horizontal_layout_1.addWidget(self.thread_count_spinbox)
         self.grid_layout_0.addLayout(self.horizontal_layout_1, 2, 1, 1, 1)
