@@ -1,9 +1,10 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets
-from interface import Ui_batch_media_file_converter
 from json import load, dump
+from interface import Ui_batch_media_file_converter
 from utils import is_path_exists, is_path_exists_or_creatable, open_directory_picker
+
 import sys
 
 # Constant to represent the name of the save state file
@@ -68,7 +69,7 @@ class Interface(Ui_batch_media_file_converter):
     def exit(self):
         """Simple exit function to say "Exit." when the button is pushed."""
         self.allow_changes(False)
-        self.push_status("Exit.")
+        self.push_both_message("Exit application.")
 
         exit()  # Finally exit the application
 
@@ -79,7 +80,7 @@ class Interface(Ui_batch_media_file_converter):
 
         if input_directory_value:  # If the directory is not blank or not None
             self.input_directory_edit.setText(input_directory_value)
-            self.push_status("Set new input directory: " + input_directory_value, 5000)
+            self.push_console_message("Set new input directory: " + input_directory_value)
 
     def pick_output_directory(self):
         """Open the file picker, get the new value, and set the `output_directory_edit box`
@@ -88,7 +89,7 @@ class Interface(Ui_batch_media_file_converter):
 
         if output_directory_value:  # If the directory is not blank or not None
             self.output_directory_edit.setText(output_directory_value)
-            self.push_status("Set new output directory: " + output_directory_value, 5000)
+            self.push_console_message("Set new output directory: " + output_directory_value)
 
     def update_ready(self):
         """Ensure that a valid path and format is selected for file inputs and outputs, and if they are,
@@ -96,11 +97,11 @@ class Interface(Ui_batch_media_file_converter):
         if (self.validate_input_directory() and self.validate_output_directory()
                 and self.input_format_combo.currentText() and self.output_format_combo.currentText()):
             self.start_button.setEnabled(True)
-            self.push_status("File paths and formats look good, ready to go!", 1000)
+            self.push_status_message("Ready.")
             return True
-        else:  # Something isn't valid, say that in the log and return
+        else:  # Something isn't valid, say that in the information console and return
             self.start_button.setEnabled(False)
-            self.push_status("Not ready!", 1000)
+            self.push_status_message("Not ready.")
             return False
 
     def validate_input_directory(self):
@@ -112,30 +113,39 @@ class Interface(Ui_batch_media_file_converter):
         path that already exists OR can be created."""
         return is_path_exists_or_creatable(self.output_directory_edit.text())
 
-    def push_status(self, status, msecs=0):
-        """Push a status to the status bar for X milliseconds and add it to the process log."""
-        message_count = self.information_console_list.count()  # Get the number of messages in process log
+    def push_status_message(self, message, msecs=0):
+        """Push a status to the status bar for X milliseconds."""
+        # Show it on the status bar for the time specified if any (by default infinite)
+        self.statusbar.showMessage(message, msecs)
 
-        if message_count:
-            last_message = self.information_console_list.item(message_count - 1)
+    def push_console_message(self, message, force=False):
+        """Push a message to the information console if there is no duplicate and force is `False`."""
 
-            if status != last_message.text():  # Don't send a duplicate
-                self.push_message(status)
-        else:
-            self.push_message(status)
+        if force:  # Push regardless of any duplicate
+            list_item = QtWidgets.QListWidgetItem()
+            list_item.setText(message)
 
-        # Show it on the status bar for the time specified if any
-        self.statusbar.showMessage(status, msecs)
+            self.information_console_list.addItem(list_item)
+            self.information_console_list.scrollToBottom()
 
-    def push_message(self, message):
-        list_item = QtWidgets.QListWidgetItem()
-        list_item.setText(message)
+        else:  # Run the duplicate checking logic here so it isn't done if it isn't needed
+            message_count = self.information_console_list.count()  # Get the number of messages in information console
 
-        # Add the message to the process log and scroll to bottom
-        self.information_console_list.addItem(list_item)
-        self.information_console_list.scrollToBottom()
+            if message_count:
+                last_message = self.information_console_list.item(message_count - 1)
+
+                if message != last_message.text():  # Don't send a duplicate
+                    self.push_console_message(message, force=True)
+            else:
+                self.push_console_message(message, force=True)
+
+    def push_both_message(self, message, msecs=0, force=False):
+        """Push a message to both the status bar and information console."""
+        self.push_status_message(message, msecs)
+        self.push_console_message(message, force)
 
     def save_state(self):
+        """Save the current field values of the interface to the save state file."""
         save_state(self.fetch_state())
 
     def fetch_state(self):
@@ -209,13 +219,13 @@ if __name__ == "__main__":  # The interface has been started through the main fi
     try:  # Try loading the previous state (found in the SAVE_STATE_FILE)
         saved_state = load_state()
         interface.set_state(**saved_state)
-        interface.push_status("Loaded last saved state!")
+        interface.push_console_message("Loaded options from save state file.")
     except (FileNotFoundError, ValueError):
-        interface.push_status("No save state file. Is this the first run?")
+        interface.push_console_message("No save state file found. Is this the first run?")
 
     interface.window.show()  # Show the interface window
 
-    interface.push_status("Ready!", 5000)
+    interface.push_status_message("Interface loaded.", 5000)
 
     # Temporary function to the buttons, disables and enables the interface changes
     interface.start_button.clicked.connect(lambda: interface.set_active(True))
