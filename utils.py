@@ -1,11 +1,12 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
-from PyQt5.QtWidgets import QFileDialog
-from glob import glob
-
 import errno
 import os
 import sys
+
+from PyQt5.QtWidgets import QFileDialog
+from glob import glob
+
 
 ERROR_INVALID_NAME = 123
 

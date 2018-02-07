@@ -1,11 +1,12 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
+import sys
+
 from PyQt5 import QtWidgets
 from json import load, dump
 from interface import Ui_batch_media_file_converter
 from utils import is_path_exists, is_path_exists_or_creatable, open_directory_picker
 
-import sys
 
 # Constant to represent the name of the save state file
 SAVE_STATE_FILE = "bmfc_state.json"
