@@ -190,7 +190,7 @@ class Interface(Ui_batch_media_file_converter):
         self.window.resize(*kwargs.get("window_size", (313, 438)))
 
         # Set the theme to Fusion Dark
-        window_theme = kwargs.get("window_theme")
+        window_theme = kwargs.get("window_theme", self.window_theme)
 
         if window_theme:
             self.window_theme = window_theme
