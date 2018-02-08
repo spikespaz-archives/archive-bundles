@@ -3,6 +3,7 @@
 import sys
 import utils
 
+from os import path
 from PyQt5 import QtWidgets
 from json import load, dump
 from darkstyle import QDarkPalette
@@ -39,6 +40,15 @@ class Application:
         """Lock the interface and close the application cleanly and safely."""
         self.interface.set_locked(True)
         exit()
+
+    def set_window_theme(self, theme="custom"):
+        """Set the window theme based on a string, defaulting to the custom dark fusion theme."""
+        self.window_theme = theme
+
+        if theme != "custom":
+            self.app.setStyle(theme)
+        else:
+            QDarkPalette().set_app(self.app)
 
     @staticmethod
     def _read_state():
@@ -105,14 +115,13 @@ class Application:
 
         self.interface.exit_button.clicked.connect(self.exit)
 
-    def set_window_theme(self, theme="custom"):
-        """Set the window theme based on a string, defaulting to the custom dark fusion theme."""
-        self.window_theme = theme
+    def valid_input_directory(self):
+        """Return `True` if the current input directory value is a valid path and exists."""
+        return path.exists(self.interface.input_directory_edit.text())
 
-        if theme != "custom":
-            self.app.setStyle(theme)
-        else:
-            QDarkPalette().set_app(self.app)
+    def valid_output_directory(self):
+        """Return `True` if the current output directory is a valid path that exists or is creatable."""
+        return utils.path_exists_or_creatable(self.interface.output_directory_edit.text())
 
 
 class Interface(Ui_batch_media_file_converter):
