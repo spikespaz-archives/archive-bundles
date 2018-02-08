@@ -60,6 +60,10 @@ class Application:
 
     def get_state(self):
         config = self.interface.get_state()
+
+        window_size = self.window.size()
+
+        config["window_size"] = (window_size.width(), window_size.height())
         config["window_theme"] = self.window_theme
 
         return config
