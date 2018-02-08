@@ -4,6 +4,7 @@ import sys
 
 from PyQt5 import QtWidgets
 from json import load, dump
+from darkstyle import QDarkPalette
 from interface import Ui_batch_media_file_converter
 from utils import is_path_exists, is_path_exists_or_creatable, open_directory_picker
 
@@ -66,6 +67,11 @@ class Interface(Ui_batch_media_file_converter):
         self.exit_button.clicked.connect(self.save_state)
 
         self.window.resizeEvent = lambda _: self.save_state()
+
+        # Set the theme to Fusion Dark
+        self.app.setStyle("Fusion")
+        self.app.setPalette(QDarkPalette())
+        QDarkPalette.set_stylesheet(self.app)
 
     def exit(self):
         """Simple exit function to say "Exit." when the button is pushed."""
