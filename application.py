@@ -29,7 +29,14 @@ class Application:
         self._bind_actions()
         self._bind_changes()
 
-        self.set_state(**self.read_state())
+        fetched_state = self.read_state()
+
+        if fetched_state:
+            self.interface.push_console_message("Loaded options from save state file.")
+        else:
+            self.interface.push_console_message("Couldn't load save state data. Is this the first run?")
+
+        self.set_state(**fetched_state)
 
         self.interface.push_status_message("Interface loaded.", 5000)
 
@@ -230,7 +237,6 @@ class Interface(Ui_batch_media_file_converter):
 
     def push_console_message(self, message, force=False):
         """Push a message to the information console if there is no duplicate (or `force` is `True`)."""
-
         if force:  # Push regardless of any duplicate
             list_item = QtWidgets.QListWidgetItem()
             list_item.setText(message)
