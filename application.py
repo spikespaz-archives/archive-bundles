@@ -179,6 +179,38 @@ class Interface(Ui_batch_media_file_converter):
 
         self.thread_count_spinbox.setValue(kwargs.get("thread_count", 4))
 
+    def push_status_message(self, message="", duration=0):
+        """Push a status to the status bar for X milliseconds."""
+        # Show it on the status bar for the time specified if any (by default infinite)
+        self.statusbar.showMessage(message, duration)
+
+    def push_console_message(self, message, force=False):
+        """Push a message to the information console if there is no duplicate (or `force` is `True`)."""
+
+        if force:  # Push regardless of any duplicate
+            list_item = QtWidgets.QListWidgetItem()
+            list_item.setText(message)
+
+            self.information_console_list.addItem(list_item)
+            self.information_console_list.scrollToBottom()
+
+        else:  # Run the duplicate checking logic here so it isn't done if it isn't needed
+            message_count = self.information_console_list.count()  # Get the number of messages in information console
+
+            if message_count:
+                last_message = self.information_console_list.item(message_count - 1)
+
+                if message != last_message.text():  # Don't send a duplicate
+                    self.push_console_message(message, force=True)
+            else:
+                self.push_console_message(message, force=True)
+
+    def push_status_and_console_message(self, message, msecs=0, force=False):
+        """Push a message to both the status bar and information console."""
+        self.push_status_message(message, msecs)
+        self.push_console_message(message, force)
+
+
 
 if __name__ == "__main__":
     Application().start()
