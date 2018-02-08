@@ -36,6 +36,12 @@ class Interface(Ui_batch_media_file_converter):
         self.is_active = False
         self.window_theme = None
 
+        # Set the theme to Fusion Dark
+        if self.window_theme:
+            self.app.setStyle(self.window_theme)
+        else:
+            QDarkPalette().set_app(self.app)
+
         self.setupUi(window, *args, **kwargs)  # Call the setup
 
     def setupUi(self, *args, **kwargs):
@@ -189,14 +195,7 @@ class Interface(Ui_batch_media_file_converter):
 
         self.window.resize(*kwargs.get("window_size", (313, 438)))
 
-        # Set the theme to Fusion Dark
-        window_theme = kwargs.get("window_theme", self.window_theme)
-
-        if window_theme:
-            self.window_theme = window_theme
-            self.app.setStyle(window_theme)
-        else:
-            QDarkPalette().set_app(self.app)
+        self.window_theme = kwargs.get("window_theme", self.window_theme)
 
     def allow_changes(self, boolean):
         """Unlock all of the state values of the interface and allow the user to change them."""
