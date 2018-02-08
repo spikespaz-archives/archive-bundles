@@ -28,6 +28,10 @@ class Application:
 
         self.set_state(**self.read_state())
 
+    def start(self):
+        self.window.show()
+        sys.exit(self.app.exec_())
+
     def exit(self):
         self.interface.set_locked(True)
         exit()
@@ -153,7 +157,4 @@ class Interface(Ui_batch_media_file_converter):
 
 
 if __name__ == "__main__":
-    app = Application()
-    app.window.show()
-
-    sys.exit(app.app.exec_())
+    Application().start()
