@@ -205,11 +205,10 @@ class Interface(Ui_batch_media_file_converter):
             else:
                 self.push_console_message(message, force=True)
 
-    def push_status_and_console_message(self, message, msecs=0, force=False):
+    def push_status_and_console_message(self, message, **kwargs):
         """Push a message to both the status bar and information console."""
-        self.push_status_message(message, msecs)
-        self.push_console_message(message, force)
-
+        self.push_status_message(message, **kwargs)
+        self.push_console_message(message, **kwargs)
 
 
 if __name__ == "__main__":
