@@ -3,7 +3,7 @@
 import os
 
 from multiprocessing import Pool
-from utils import glob_from
+from utilities import glob_from
 from subprocess import Popen, PIPE
 from re import findall, MULTILINE
 

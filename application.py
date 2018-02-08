@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys
-import utils
+import utilities as utils
 
 from os import path
 from PyQt5 import QtWidgets
