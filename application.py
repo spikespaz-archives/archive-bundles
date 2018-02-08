@@ -122,14 +122,14 @@ class Application:
         special_themed = utils.str_matches(self.window_theme, "custom", "fusion")
 
         def pick_input_directory():
-            dir_name = utils.open_directory_picker(self.window, native=special_themed, title="Select Input Directory")
+            dir_name = utils.open_directory_picker(self.window, native=not special_themed, title="Select Input Directory")
 
             if dir_name:
                 self.interface.input_directory_edit.setText(dir_name)
                 self.interface.push_console_message("Set input directory: " + dir_name)
 
         def pick_output_directory():
-            dir_name = utils.open_directory_picker(self.window, native=special_themed, title="Select Output Directory")
+            dir_name = utils.open_directory_picker(self.window, native=not special_themed, title="Select Output Directory")
 
             if dir_name:
                 self.interface.output_directory_edit.setText(dir_name)
