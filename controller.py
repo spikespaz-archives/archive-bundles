@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 import os
 
+from json import loads
 from multiprocessing import Pool
 from utilities import glob_from
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, check_output, DEVNULL
 from re import findall, MULTILINE
 
 
@@ -47,13 +48,17 @@ def async_convert_file(input_path, output_path, overwrite=False):
             yield time, speed  # Return a tuple of the extracted data of time (h, m, s, ms) and speed
 
 
-def get_metadata(file_path):
+def get_metadata(file_path, *args, **kwargs):
     """Use FFPROBE to get information about a media file."""
-    stderr = Popen(("ffprobe", file_path), shell=True, stderr=PIPE).communicate()[1].decode()
+    kwargs["show_format"] = kwargs.get("show_format", True)
 
-    metadata = {}
+    args = list(args)
 
-    for match in findall(r"(\w+)\s+:\s(.+)\r$", stderr, MULTILINE):
-        metadata[match[0].lower()] = match[1]
+    for arg, val in kwargs.items():
+        if isinstance(val, bool):
+            if val:
+                args.append("-" + arg)
+        else:
+            args.extend(("-" + arg, val))
 
-    return metadata
+    return loads(check_output(("ffprobe", *args, "-of", "json", file_path), shell=True, stderr=DEVNULL))
