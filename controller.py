@@ -8,7 +8,7 @@ from subprocess import Popen, PIPE
 from re import findall, MULTILINE
 
 
-def convert_file_function(input_path, output_path, overwrite=False):
+def async_convert_file(input_path, output_path, overwrite=False):
     """Convert a file (and maybe overwrite) with FFMPEG and yield `(time, speed)` periodically."""
     ffmpeg = Popen(("ffmpeg", "-i", input_path, output_path, "-y" if overwrite else "-n"),
                    shell=True, stderr=PIPE)
@@ -47,7 +47,7 @@ def convert_file_function(input_path, output_path, overwrite=False):
             yield time, speed  # Return a tuple of the extracted data of time (h, m, s, ms) and speed
 
 
-def media_metadata(file_path):
+def get_metadata(file_path):
     """Use FFPROBE to get information about a media file."""
     stderr = Popen(("ffprobe", file_path), shell=True, stderr=PIPE).communicate()[1].decode()
 
