@@ -89,3 +89,10 @@ def glob_from(path, ext):
     os.chdir(working_dir)
 
     return file_paths
+
+
+def set_combo(combo, string):
+    """Set a `QtWidgets.QComboBox` index by a matching string value."""
+    if string:
+        items = [combo.itemText(item).lower() for item in range(combo.count())]
+        combo.setCurrentIndex(items.index(string.lower()))
