@@ -69,9 +69,7 @@ class Interface(Ui_batch_media_file_converter):
         self.window.resizeEvent = lambda _: self.save_state()
 
         # Set the theme to Fusion Dark
-        self.app.setStyle("Fusion")
-        self.app.setPalette(QDarkPalette())
-        QDarkPalette.set_stylesheet(self.app)
+        QDarkPalette().set_app(self.app)
 
     def exit(self):
         """Simple exit function to say "Exit." when the button is pushed."""

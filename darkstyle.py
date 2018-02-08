@@ -14,7 +14,7 @@ TERTIARY =  QColor(42, 130, 218)
 
 def css_rgb(color, a=False):
     """Get a CSS `rgb` or `rgba` string from a `QtGui.QColor`."""
-    return ("rgba(%s, %s, %s, %s)" if a else "rgb(%s, %s, %s)") % color.getRgb()
+    return ("rgba({}, {}, {}, {})" if a else "rgb({}, {}, {})").format(*color.getRgb())
 
 
 class QDarkPalette(QPalette):
@@ -49,5 +49,5 @@ class QDarkPalette(QPalette):
     def set_app(self, app):
         """Set the Fusion theme and this palette to a `QtWidgets.QApplication`."""
         app.setStyle("Fusion")
-        app.setStyleSheet(self)
+        app.setPalette(self)
         self.set_stylesheet(app)
