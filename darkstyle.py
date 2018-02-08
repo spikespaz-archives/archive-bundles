@@ -8,7 +8,7 @@ WHITE =     QColor(255, 255, 255)
 BLACK =     QColor(0, 0, 0)
 RED =       QColor(255, 0, 0)
 PRIMARY =   QColor(53, 53, 53)
-SECONDARY = QColor(25, 25, 25)
+SECONDARY = QColor(35, 35, 35)
 TERTIARY =  QColor(42, 130, 218)
 
 

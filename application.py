@@ -41,6 +41,9 @@ class Interface(Ui_batch_media_file_converter):
         """Extended interface setup, does initial prep of Qt interface."""
         super().setupUi(*args, **kwargs)  # Call the super of this object and do the setup in the original interface
 
+        # Set the theme to Fusion Dark
+        QDarkPalette().set_app(self.app)
+
         # Connect actions to update functions
         self.input_directory_picker.clicked.connect(self.pick_input_directory)
         self.output_directory_picker.clicked.connect(self.pick_output_directory)
@@ -67,9 +70,6 @@ class Interface(Ui_batch_media_file_converter):
         self.exit_button.clicked.connect(self.save_state)
 
         self.window.resizeEvent = lambda _: self.save_state()
-
-        # Set the theme to Fusion Dark
-        QDarkPalette().set_app(self.app)
 
     def exit(self):
         """Simple exit function to say "Exit." when the button is pushed."""
