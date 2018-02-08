@@ -16,7 +16,7 @@ SAVE_STATE_FILE = "bmfc_state.json"
 def save_state(state):
     """Save application json state to the `SAVE_STATE_FILE`."""
     with open(SAVE_STATE_FILE, "w") as save_state_file:
-        dump(state, save_state_file)
+        dump(state, save_state_file, indent=2)
 
 
 def load_state():
@@ -34,15 +34,13 @@ class Interface(Ui_batch_media_file_converter):
 
         self.changes_allowed = True  # Define some read-only info
         self.is_active = False
+        self.window_theme = None
 
         self.setupUi(window, *args, **kwargs)  # Call the setup
 
     def setupUi(self, *args, **kwargs):
         """Extended interface setup, does initial prep of Qt interface."""
         super().setupUi(*args, **kwargs)  # Call the super of this object and do the setup in the original interface
-
-        # Set the theme to Fusion Dark
-        QDarkPalette().set_app(self.app)
 
         # Connect actions to update functions
         self.input_directory_picker.clicked.connect(self.pick_input_directory)
@@ -162,7 +160,8 @@ class Interface(Ui_batch_media_file_converter):
             "output_format": self.output_format_combo.currentText(),
             "overwrite_output": self.overwrite_output_checkbox.checkState(),
             "thread_count": self.thread_count_spinbox.value(),
-            "window_size": (self.window.width(), self.window.height())
+            "window_size": (self.window.width(), self.window.height()),
+            "window_theme": self.window_theme
         }
 
     def set_state(self, **kwargs):
@@ -189,6 +188,15 @@ class Interface(Ui_batch_media_file_converter):
         self.thread_count_spinbox.setValue(kwargs.get("thread_count", 4))
 
         self.window.resize(*kwargs.get("window_size", (313, 438)))
+
+        # Set the theme to Fusion Dark
+        window_theme = kwargs.get("window_theme")
+
+        if window_theme:
+            self.window_theme = window_theme
+            self.app.setStyle(window_theme)
+        else:
+            QDarkPalette().set_app(self.app)
 
     def allow_changes(self, boolean):
         """Unlock all of the state values of the interface and allow the user to change them."""
