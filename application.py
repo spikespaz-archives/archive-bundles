@@ -9,7 +9,7 @@ from darkstyle import QDarkPalette
 from interface import Ui_batch_media_file_converter
 
 
-#: Name of the file to write saved interface values
+#: Name of the file to write saved interface values.
 SAVE_STATE_FILE = "bmfc_state.json"
 
 
