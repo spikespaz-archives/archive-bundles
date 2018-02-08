@@ -47,13 +47,13 @@ def convert_file_function(input_path, output_path, overwrite=False):
             yield time, speed  # Return a tuple of the extracted data of time (h, m, s, ms) and speed
 
 
-def get_media_file_info(file_path):
+def media_metadata(file_path):
     """Use FFPROBE to get information about a media file."""
-    stderr = Popen(("ffprobe", file_path), shell=True, stderr=PIPE, universal_newlines=True).communicate()[1]
+    stderr = Popen(("ffprobe", file_path), shell=True, stderr=PIPE).communicate()[1].decode()
 
     metadata = {}
 
-    for match in findall(r"(\w+)\s+:\s(.+)$", stderr, MULTILINE):
+    for match in findall(r"(\w+)\s+:\s(.+)\r$", stderr, MULTILINE):
         metadata[match[0].lower()] = match[1]
 
     return metadata
