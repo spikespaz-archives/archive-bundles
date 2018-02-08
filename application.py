@@ -9,13 +9,13 @@ from json import load, dump
 from darkstyle import QDarkPalette
 from interface import Ui_batch_media_file_converter
 
-
 #: Name of the file to write saved interface values.
 SAVE_STATE_FILE = "bmfc_state.json"
 
 
 class Application:
     """Utility wrapper around all application functionality and interface control."""
+
     def __init__(self, app=QtWidgets.QApplication([]), window=QtWidgets.QMainWindow()):
         """Self initialize the application and interface and prepare for start."""
         self.app = app
@@ -30,6 +30,8 @@ class Application:
         self._bind_changes()
 
         self.set_state(**self.read_state())
+
+        self.interface.push_status_message("Interface loaded.", 5000)
 
     def start(self):
         """Start and show the application."""
@@ -142,9 +144,32 @@ class Application:
         """Return `True` if the current output directory is a valid path that exists or is creatable."""
         return utils.path_exists_or_creatable(self.interface.output_directory_edit.text())
 
+    def update_ready(self):
+        """Check all input fields for validity and enable or disable the start and cancel buttons."""
+        if (self.valid_input_directory() and self.valid_output_directory()
+                and self.interface.input_format_combo.currentText()
+                and self.interface.output_format_combo.currentText()):
+            self.interface.start_button.setEnabled(True)
+            self.interface.push_status_message("Ready.")
+            return True
+        else:
+            self.interface.start_button.setEnabled(False)
+            self.interface.push_status_message("Not ready.")
+            return False
+
+    def set_active(self, state=True):
+        """Set the application active state and enable or disable corresponding interface elements."""
+        self.active = state
+
+        self.interface.set_locked(state)
+
+        self.interface.start_button.setEnabled(not state)
+        self.interface.cancel_button.setEnabled(state)
+
 
 class Interface(Ui_batch_media_file_converter):
     """Interface wrapper around the pre-generated Qt interface with added utility methods and fields."""
+
     def __init__(self, *args, **kwargs):
         """Wrapped interface initializer around `self.setupUi()` that also sets initial field values."""
         self.locked = False
