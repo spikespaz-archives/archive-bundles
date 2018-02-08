@@ -6,6 +6,7 @@ import sys
 
 from PyQt5.QtWidgets import QFileDialog
 from glob import glob
+from darkstyle import QDarkPalette
 
 
 ERROR_INVALID_NAME = 123
@@ -66,13 +67,16 @@ def is_path_exists_or_creatable(pathname: str) -> bool:
         return False
 
 
-def open_directory_picker(parent, path=""):
+def open_directory_picker(parent, path="", native=True):
     """Opens a directory selection dialogue based on the parent window at the specified path.
     If the path specified is blank (default) just use the current directory."""
     picker = QFileDialog()
     picker.setDirectory(path)
 
-    return str(picker.getExistingDirectory(parent, "Select Directory"))
+    if native:
+        return str(picker.getExistingDirectory(parent, "Select Directory"))
+    else:
+        return str(picker.getExistingDirectory(parent, "Select Directory", options=QFileDialog.DontUseNativeDialog))
 
 
 def glob_from(path, ext):
