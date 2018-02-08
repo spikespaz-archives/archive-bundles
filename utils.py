@@ -63,16 +63,23 @@ def path_exists_or_creatable(pathname):
         return False
 
 
-def open_directory_picker(parent, path="", native=True):
+def open_directory_picker(parent, path="", title="Select Directory", native=True):
     """Opens a directory selection dialogue based on the parent window at the specified path.
     If the path specified is blank (default) just use the current directory."""
     picker = QFileDialog()
     picker.setDirectory(path)
 
     if native:
-        return str(picker.getExistingDirectory(parent, "Select Directory"))
+        return str(picker.getExistingDirectory(parent, title))
     else:
-        return str(picker.getExistingDirectory(parent, "Select Directory", options=QFileDialog.DontUseNativeDialog))
+        return str(picker.getExistingDirectory(parent, title, options=QFileDialog.DontUseNativeDialog))
+
+
+def set_combo(combo, string):
+    """Set a `QtWidgets.QComboBox` index by a matching string value."""
+    if string:
+        items = [combo.itemText(item).lower() for item in range(combo.count())]
+        combo.setCurrentIndex(items.index(string.lower()))
 
 
 def glob_from(path, ext):
@@ -87,8 +94,6 @@ def glob_from(path, ext):
     return file_paths
 
 
-def set_combo(combo, string):
-    """Set a `QtWidgets.QComboBox` index by a matching string value."""
-    if string:
-        items = [combo.itemText(item).lower() for item in range(combo.count())]
-        combo.setCurrentIndex(items.index(string.lower()))
+def str_matches(string, *matches):
+    """Return `True` if the lowercase version of a string matches any of the following lowercase strings."""
+    return string.lower() in (match.lower() for match in matches)
