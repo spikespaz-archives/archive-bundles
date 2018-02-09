@@ -63,3 +63,33 @@ def batch_ffprobe_async(file_paths, workers=4, callback=None):
     with Pool(workers) as pool:
         pool.map_async(run_ffprobe, file_paths, callback=callback)
         return pool
+
+
+class BatchMediaConverter:
+    def __init__(self, input_dir, output_dir, input_fmt="flac", output_fmt="mp3", workers=4):
+        self.input_dir = input_dir
+        self.output_dir = output_dir
+
+        self.input_fmt = input_fmt
+        self.output_fmt = output_fmt
+
+        self.workers = workers
+
+        self.files_callback = self._callback
+        self.data_callback = self._callback
+        self.speed_callback = self._callback
+
+        self.meta_callback = None
+
+        self.batch_meta = []
+        self.active_pool = None
+
+    @staticmethod
+    def _callback(value):
+        pass
+
+    def start(self):
+        pass
+
+    def cancel(self):
+        pass
