@@ -1,5 +1,8 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
+
+from glob import glob
 from json import loads
 from multiprocessing import Pool
 from subprocess import Popen, check_output, DEVNULL, PIPE
@@ -61,7 +64,9 @@ def batch_ffprobe(file_paths, workers=4):
 
 def batch_ffprobe_async(file_paths, workers=4, callback=None):
     with Pool(workers) as pool:
-        pool.map_async(run_ffprobe, file_paths, callback=callback)
+        for file_path in file_paths:
+            pool.apply_async(run_ffprobe, (file_path,), callback=callback)
+
         return pool
 
 
@@ -75,21 +80,30 @@ class BatchMediaConverter:
 
         self.workers = workers
 
-        self.files_callback = self._callback
-        self.data_callback = self._callback
-        self.speed_callback = self._callback
-
-        self.meta_callback = None
+        self.callbacks = {}
 
         self.batch_meta = []
-        self.active_pool = None
+        self.last_pool = None
 
-    @staticmethod
-    def _callback(value):
-        pass
+        self.file_paths = glob(os.path.join(input_dir, "**/*." + input_fmt.lower()))
+
+    def retrieve_batch_meta(self):
+        with Pool(self.workers) as pool:
+            self.last_pool = pool
+
+            return pool.map_async(run_ffprobe, self.file_paths, callback=self.callbacks.get("batch_meta"))
+
+    def retrieve_batch_meta_async(self):
+        with Pool(self.workers) as pool:
+            self.last_pool = pool
+
+            for file_path in self.file_paths:
+                pool.apply_async(run_ffprobe, (file_path,), callback=self.callbacks.get("batch_meta_async"))
+
+            return pool
 
     def start(self):
-        pass
+        self.retrieve_batch_meta()
 
     def cancel(self):
         pass
