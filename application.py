@@ -52,6 +52,10 @@ class Application:
     def exit(self):
         """Lock the interface and close the application cleanly and safely."""
         self.interface.set_locked(True)
+
+        self.interface.set_files_progress_undetermined(True)
+        self.interface.set_data_progress_undetermined(True)
+
         exit()
 
     def set_window_theme(self, theme="custom"):
@@ -146,8 +150,8 @@ class Application:
         self.interface.input_directory_picker.clicked.connect(pick_input_directory)
         self.interface.output_directory_picker.clicked.connect(pick_output_directory)
 
-        self.interface.start_button.clicked.connect(lambda: self.interface.files_completed_progress.setRange(0, 0))
-        self.interface.cancel_button.clicked.connect(lambda: self.interface.set_locked(False))
+        self.interface.start_button.clicked.connect(lambda: (self.interface.set_data_progress_undetermined(True), self.set_active(True)))
+        self.interface.cancel_button.clicked.connect(lambda: (self.interface.set_data_progress_undetermined(False), self.set_active(False)))
 
         self.interface.exit_button.clicked.connect(self.exit)
 
@@ -277,6 +281,12 @@ class Interface(Ui_batch_media_file_converter):
         """Push a message to both the status bar and information console."""
         self.push_status_message(message, **kwargs)
         self.push_console_message(message, **kwargs)
+
+    def set_files_progress_undetermined(self, state=True):
+        self.files_completed_progress.setRange(0, int(not state))
+
+    def set_data_progress_undetermined(self, state=True):
+        self.data_completed_progress.setRange(0, int(not state))
 
     @contextmanager
     def files_progress_bar(self, maximum=0, fmt="%p% (%v / %m)"):
