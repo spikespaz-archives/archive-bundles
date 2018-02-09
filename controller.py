@@ -4,9 +4,10 @@ from json import loads
 from subprocess import Popen, check_output, DEVNULL, PIPE
 
 
-def run_ffmpeg(input_file, output_file, async=True, *args, **kwargs):
-    """Use FFMPEG to convert a media file."""
-    kwargs["y"] = kwargs.get("y", True)
+def arg_builder(args, kwargs, defaults={}):
+    """Build arguments from `args` and `kwargs` in a shell-lexical manner."""
+    for key, val in defaults.items():
+        kwargs[key] = kwargs.get(key, val)
 
     args = list(args)
 
@@ -17,40 +18,36 @@ def run_ffmpeg(input_file, output_file, async=True, *args, **kwargs):
         else:
             args.extend(("-" + arg, val))
 
-    ffmpeg = Popen(("ffmpeg", *args, "-progress", "-", "-i", input_file, output_file),
-                   shell=True, stderr=DEVNULL, stdout=PIPE)
+    return args
 
-    if not async:
-        return ffmpeg.wait()
-    else:
-        data = {}
 
-        while True:
-            line = ffmpeg.stdout.readline().decode().split("=")
+def run_ffmpeg(input_file, output_file, async=True, *args, **kwargs):
+    """Use FFMPEG to convert a media file."""
+    with Popen(("ffmpeg", arg_builder(args, kwargs, defaults={"y": True}),
+                "-progress", "-", "-i", input_file, output_file),
+               shell=True, stderr=DEVNULL, stdout=PIPE) as ffmpeg:
+        if async:
+            progress = {}
 
-            if ffmpeg.poll() is not None:
-                break
+            while True:
+                line = ffmpeg.stdout.readline().decode().split("=")
 
-            key = line[0].strip()
+                if ffmpeg.poll() is not None:
+                    break
 
-            if key == "progress":
-                yield data
+                key = line[0].strip()
 
-            if len(line) == 2:
-                data[key] = line[1].strip()
+                if key == "progress":
+                    yield progress
+
+                if len(line) == 2:
+                    progress[key] = line[1].strip()
+
+        else:
+            return ffmpeg.wait()
 
 
 def run_ffprobe(file_path, *args, **kwargs):
     """Use FFPROBE to get information about a media file."""
-    kwargs["show_format"] = kwargs.get("show_format", True)
-
-    args = list(args)
-
-    for arg, val in kwargs.items():
-        if isinstance(val, bool):
-            if val:
-                args.append("-" + arg)
-        else:
-            args.extend(("-" + arg, val))
-
-    return loads(check_output(("ffprobe", *args, "-of", "json", file_path), shell=True, stderr=DEVNULL))
+    return loads(check_output(("ffprobe", arg_builder(args, kwargs, defaults={"show_format": True}),
+                               "-of", "json", file_path), shell=True, stderr=DEVNULL))
