@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 import os
 
+from utilities import glob_from
 from glob import glob
 from json import loads
 from multiprocessing import Pool
+from multiprocessing.queues import Empty
 from subprocess import Popen, check_output, DEVNULL, PIPE
 
 
@@ -63,15 +65,16 @@ def batch_ffprobe(file_paths, workers=4):
 
 
 def batch_ffprobe_async(file_paths, workers=4, callback=None):
-    with Pool(workers) as pool:
-        for file_path in file_paths:
-            pool.apply_async(run_ffprobe, (file_path,), callback=callback)
+    pool = Pool(workers)
 
-        return pool
+    for file_path in file_paths:
+        pool.apply_async(run_ffprobe, (file_path,), callback=callback)
+
+    return pool
 
 
 class BatchMediaConverter:
-    def __init__(self, input_dir, output_dir, input_fmt="flac", output_fmt="mp3", workers=4):
+    def __init__(self, input_dir, output_dir, input_fmt="flac", output_fmt="mp3", workers=4, callbacks={}):
         self.input_dir = input_dir
         self.output_dir = output_dir
 
@@ -80,7 +83,7 @@ class BatchMediaConverter:
 
         self.workers = workers
 
-        self.callbacks = {}
+        self.callbacks = callbacks
 
         self.batch_meta = []
         self.last_pool = None
@@ -94,16 +97,46 @@ class BatchMediaConverter:
             return pool.map_async(run_ffprobe, self.file_paths, callback=self.callbacks.get("batch_meta"))
 
     def retrieve_batch_meta_async(self):
-        with Pool(self.workers) as pool:
-            self.last_pool = pool
+        self.last_pool = Pool(self.workers)
 
-            for file_path in self.file_paths:
-                pool.apply_async(run_ffprobe, (file_path,), callback=self.callbacks.get("batch_meta_async"))
+        for file_path in self.file_paths:
+            self.last_pool.apply_async(run_ffprobe, (file_path,), callback=self.callbacks.get("batch_meta_async"))
 
-            return pool
+        return self.last_pool
 
     def start(self):
         self.retrieve_batch_meta()
 
+    def start_async(self):
+        self.retrieve_batch_meta_async()
+
     def cancel(self):
-        pass
+        if self.last_pool:
+            queue = self.last_pool._taskqueue
+
+            with queue.mutex:
+                unfinished = queue.unfinished_tasks
+
+                if unfinished <= 0:
+                    if unfinished < 0:
+                        raise ValueError('task_done() called too many times')
+                    queue.all_tasks_done.notify_all()
+
+                queue.queue.clear()
+                queue.unfinished_tasks = unfinished
+
+                self.last_pool.close()
+
+        callback = self.callbacks.get("cancel")
+
+        if callback:
+            callback(self.last_pool)
+
+    def terminate(self):
+        if self.last_pool:
+            self.last_pool.terminate()
+
+            callback = self.callbacks.get("terminate")
+
+            if callback:
+                callback(self.last_pool)
