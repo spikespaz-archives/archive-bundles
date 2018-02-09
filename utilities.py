@@ -86,7 +86,7 @@ def set_combo(combo, string):
 def glob_from(path, ext):
     """Return glob from a directory."""
     with chdir(path):
-        glob("**/*." + ext)
+        return glob("**/*." + ext.lower())
 
 
 @contextmanager
