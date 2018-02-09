@@ -2,11 +2,9 @@
 # -*- coding: utf-8 -*-
 import os
 
-from utilities import glob_from
 from glob import glob
 from json import loads
-from multiprocessing import Pool, Queue
-from multiprocessing.queues import Empty
+from multiprocessing import Pool
 from subprocess import Popen, check_output, DEVNULL, PIPE
 
 
@@ -90,13 +88,24 @@ class BatchMediaConverter:
 
         self.file_paths = glob(os.path.join(input_dir, "**/*." + input_fmt.lower()))
 
+        self._incomplete = []
+
+    def _callback(self, callback, result):
+        callback = self.callbacks.get(callback)
+
+        if callback is not None:
+            callback(result)
+
+    def _task_queue(self):
+        return self.last_pool._taskqueue
+
     def _batch_ffprobe_callback(self, result):
         self.batch_meta = result
-        self.callbacks.get("batch_ffprobe")(result)
+        self._callback("batch_ffprobe", result)
 
     def _batch_ffprobe_callback_async(self, result):
         self.batch_meta.append(result)
-        self.callbacks.get("batch_ffprobe_async")(result)
+        self._callback("batch_ffprobe_async", result)
 
     def batch_ffprobe(self):
         with Pool(self.workers) as pool:
@@ -121,22 +130,41 @@ class BatchMediaConverter:
         self.last_pool.close()
         self.last_pool.join()
 
+    def pause(self):
+        if self.last_pool and not self._incomplete:
+            queue = self._task_queue()
+
+            with queue.mutex:
+                while not queue.empty():
+                    self._incomplete.append(queue.get())
+
+            self._callback("pause", self.last_pool)
+
+    def resume(self):
+        if self.last_pool and self._incomplete:
+            for task in self._incomplete:
+                self.last_pool.put(task)
+
+            self._incomplete = []
+
+            self.last_pool._maintain_pool()
+
+            self._callback("resume", self.last_pool)
+
     def cancel(self):
         if self.last_pool:
-            queue = self.last_pool._taskqueue
+            queue = self._task_queue()
 
             with queue.mutex:
                 queue.queue.clear()
                 self.last_pool.close()
 
-        callback = self.callbacks.get("cancel")
-
-        if callback:
-            callback(self.last_pool)
+            self._callback("cancel", self.last_pool)
 
     def terminate(self):
         if self.last_pool:
             self.last_pool.terminate()
+            self._incomplete = []
 
             callback = self.callbacks.get("terminate")
 
