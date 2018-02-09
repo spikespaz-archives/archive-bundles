@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 from json import loads
+from multiprocessing import Pool
 from subprocess import Popen, check_output, DEVNULL, PIPE
 
 
@@ -23,7 +24,7 @@ def arg_builder(args, kwargs, defaults={}):
 
 def run_ffmpeg(input_file, output_file, async=True, *args, **kwargs):
     """Use FFMPEG to convert a media file."""
-    with Popen(("ffmpeg", arg_builder(args, kwargs, defaults={"y": True}),
+    with Popen(("ffmpeg", *arg_builder(args, kwargs, defaults={"y": True}),
                 "-progress", "-", "-i", input_file, output_file),
                shell=True, stderr=DEVNULL, stdout=PIPE) as ffmpeg:
         if async:
@@ -49,5 +50,5 @@ def run_ffmpeg(input_file, output_file, async=True, *args, **kwargs):
 
 def run_ffprobe(file_path, *args, **kwargs):
     """Use FFPROBE to get information about a media file."""
-    return loads(check_output(("ffprobe", arg_builder(args, kwargs, defaults={"show_format": True}),
+    return loads(check_output(("ffprobe", *arg_builder(args, kwargs, defaults={"show_format": True}),
                                "-of", "json", file_path), shell=True, stderr=DEVNULL))
