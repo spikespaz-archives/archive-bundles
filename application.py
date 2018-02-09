@@ -227,11 +227,11 @@ class Interface(Ui_batch_media_file_converter):
         return {
             "locked": self.locked,
 
-            "input_directory": self.input_directory_edit.text(),
-            "output_directory": self.output_directory_edit.text(),
+            "input_dir": self.input_directory_edit.text(),
+            "output_dir": self.output_directory_edit.text(),
 
-            "input_format": self.input_format_combo.currentText(),
-            "output_format": self.output_format_combo.currentText(),
+            "input_fmt": self.input_format_combo.currentText(),
+            "output_fmt": self.output_format_combo.currentText(),
 
             "overwrite_output": self.overwrite_output_checkbox.checkState(),
 
@@ -242,11 +242,11 @@ class Interface(Ui_batch_media_file_converter):
         """Set the values of the configuration interface elements to the values specified by keyword arguments."""
         self.locked = kwargs.get("locked", False)
 
-        self.input_directory_edit.setText(kwargs.get("input_directory", ""))
-        self.output_directory_edit.setText(kwargs.get("output_directory", ""))
+        self.input_directory_edit.setText(kwargs.get("input_dir", ""))
+        self.output_directory_edit.setText(kwargs.get("output_dir", ""))
 
-        utils.set_combo(self.input_format_combo, kwargs.get("input_format", "flac"))
-        utils.set_combo(self.output_format_combo, kwargs.get("output_format", "mp3"))
+        utils.set_combo(self.input_format_combo, kwargs.get("input_fmt", "flac"))
+        utils.set_combo(self.output_format_combo, kwargs.get("output_fmt", "mp3"))
 
         self.overwrite_output_checkbox.setChecked(kwargs.get("overwrite_output", False))
 
