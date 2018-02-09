@@ -52,3 +52,14 @@ def run_ffprobe(file_path, *args, **kwargs):
     """Use FFPROBE to get information about a media file."""
     return loads(check_output(("ffprobe", *arg_builder(args, kwargs, defaults={"show_format": True}),
                                "-of", "json", file_path), shell=True, stderr=DEVNULL))
+
+
+def batch_ffprobe(file_paths, workers=4):
+    with Pool(workers) as pool:
+        return pool.map(run_ffprobe, file_paths)
+
+
+def batch_ffprobe_async(file_paths, workers=4, callback=None):
+    with Pool(workers) as pool:
+        pool.map_async(run_ffprobe, file_paths, callback=callback)
+        return pool
