@@ -5,6 +5,7 @@ import os
 import sys
 
 from PyQt5.QtWidgets import QFileDialog
+from contextlib import contextmanager
 from glob import glob
 
 
@@ -84,14 +85,19 @@ def set_combo(combo, string):
 
 def glob_from(path, ext):
     """Return glob from a directory."""
+    with chdir(path):
+        glob("**/*." + ext)
+
+
+@contextmanager
+def chdir(*args, **kwargs):
     working_dir = os.getcwd()
-    os.chdir(path)
+    os.chdir(*args, **kwargs)
 
-    file_paths = glob("**/*." + ext)
-
-    os.chdir(working_dir)
-
-    return file_paths
+    try:
+        yield
+    finally:
+        os.chdir(working_dir)
 
 
 def str_matches(string, *matches):
