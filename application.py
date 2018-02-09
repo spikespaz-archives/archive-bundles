@@ -7,6 +7,8 @@ from os import path
 from PyQt5 import QtWidgets
 from json import load, dump
 from darkstyle import QDarkPalette
+from contextlib import contextmanager
+from multiprocessing import freeze_support
 from interface import Ui_batch_media_file_converter
 
 #: Name of the file to write saved interface values.
@@ -22,6 +24,8 @@ class Application:
         self.window = window
 
         self.active = False
+        self.active_pool = None
+
         self.window_theme = "custom"
 
         self.interface = Interface(window)
@@ -104,10 +108,14 @@ class Application:
     def _bind_changes(self):
         """During initialization, bind `self.save_state()` to each element on change."""
         self.interface.input_directory_edit.textChanged.connect(self.save_state)
+        self.interface.input_directory_edit.textChanged.connect(self.update_ready)
         self.interface.output_directory_edit.textChanged.connect(self.save_state)
+        self.interface.output_directory_edit.textChanged.connect(self.update_ready)
 
         self.interface.input_format_combo.currentIndexChanged.connect(self.save_state)
+        self.interface.input_format_combo.currentIndexChanged.connect(self.update_ready)
         self.interface.output_format_combo.currentIndexChanged.connect(self.save_state)
+        self.interface.output_format_combo.currentIndexChanged.connect(self.update_ready)
 
         self.interface.overwrite_output_checkbox.stateChanged.connect(self.save_state)
         self.interface.thread_count_spinbox.valueChanged.connect(self.save_state)
@@ -138,7 +146,7 @@ class Application:
         self.interface.input_directory_picker.clicked.connect(pick_input_directory)
         self.interface.output_directory_picker.clicked.connect(pick_output_directory)
 
-        self.interface.start_button.clicked.connect(lambda: self.interface.set_locked(True))
+        self.interface.start_button.clicked.connect(lambda: self.interface.files_completed_progress.setRange(0, 0))
         self.interface.cancel_button.clicked.connect(lambda: self.interface.set_locked(False))
 
         self.interface.exit_button.clicked.connect(self.exit)
@@ -172,6 +180,16 @@ class Application:
 
         self.interface.start_button.setEnabled(not state)
         self.interface.cancel_button.setEnabled(state)
+
+    @contextmanager
+    def active_state(self):
+        """Set the interface as active so no changes can be made to values and yield the current state."""
+        self.set_active(True)
+
+        try:
+            yield self.get_state()
+        finally:
+            self.set_active(False)
 
 
 class Interface(Ui_batch_media_file_converter):
@@ -260,6 +278,46 @@ class Interface(Ui_batch_media_file_converter):
         self.push_status_message(message, **kwargs)
         self.push_console_message(message, **kwargs)
 
+    @contextmanager
+    def files_progress_bar(self, maximum=0, fmt="%p% (%v / %m)"):
+        """Set initial and final values for the files progress bar, and yield the `QtWidgets.QProgressBar` instance."""
+        self.files_completed_progress.setMaximum(maximum)
+        self.files_completed_progress.setFormat(fmt)
+
+        try:
+            yield self.files_completed_progress
+        finally:
+            self.files_completed_progress.format("%p%")
+            self.files_completed_progress.reset()
+
+    @contextmanager
+    def data_progress_bar(self, maximum=0, fmt="%p% ({}h {}m {}s)"):
+        """Set initial and final values for the data progress bar, and yield the `QtWidgets.QProgressBar` instance."""
+        self.files_completed_progress.setMaximum(maximum)
+        self.files_completed_progress.setFormat(fmt)
+
+        def set_value(value):
+            s = value // 100  # Get seconds, value is ms
+            m, s = divmod(s, 60)  # Get m and s once s is divided out
+            h, m = divmod(m, 60)  # Get h and m once m is divided out
+
+            self.files_completed_progress.setFormat(fmt.format(h, m, s))  # Qt doesn't support the values we want to
+            # display so we have to change the format every value update
+            self.files_completed_progress.setValue(value)  # Set the value, in ms
+
+        original_set_value = self.files_completed_progress.setValue  # Save the original setValue for later
+        self.files_completed_progress.setValue = set_value  # Overwrite the default setValue
+
+        try:
+            yield self.files_completed_progress
+        finally:
+            self.files_completed_progress.setValue = original_set_value  # Revert change
+
+            self.files_completed_progress.format("%p%")
+            self.files_completed_progress.reset()
+
 
 if __name__ == "__main__":
+    freeze_support()
+
     Application().start()

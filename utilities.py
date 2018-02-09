@@ -95,7 +95,7 @@ def chdir(*args, **kwargs):
     os.chdir(*args, **kwargs)
 
     try:
-        yield
+        yield os.getcwd()
     finally:
         os.chdir(working_dir)
 
