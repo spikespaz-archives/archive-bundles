@@ -5,7 +5,7 @@ import os
 from utilities import glob_from
 from glob import glob
 from json import loads
-from multiprocessing import Pool
+from multiprocessing import Pool, Queue
 from multiprocessing.queues import Empty
 from subprocess import Popen, check_output, DEVNULL, PIPE
 
@@ -90,41 +90,43 @@ class BatchMediaConverter:
 
         self.file_paths = glob(os.path.join(input_dir, "**/*." + input_fmt.lower()))
 
-    def retrieve_batch_meta(self):
+    def _batch_ffprobe_callback(self, result):
+        self.batch_meta = result
+        self.callbacks.get("batch_ffprobe")(result)
+
+    def _batch_ffprobe_callback_async(self, result):
+        self.batch_meta.append(result)
+        self.callbacks.get("batch_ffprobe_async")(result)
+
+    def batch_ffprobe(self):
         with Pool(self.workers) as pool:
             self.last_pool = pool
 
-            return pool.map_async(run_ffprobe, self.file_paths, callback=self.callbacks.get("batch_meta"))
+            return pool.map_async(run_ffprobe, self.file_paths, callback=self._batch_ffprobe_callback)
 
-    def retrieve_batch_meta_async(self):
+    def batch_ffprobe_async(self):
         self.last_pool = Pool(self.workers)
 
         for file_path in self.file_paths:
-            self.last_pool.apply_async(run_ffprobe, (file_path,), callback=self.callbacks.get("batch_meta_async"))
+            self.last_pool.apply_async(run_ffprobe, (file_path,), callback=self._batch_ffprobe_callback_async)
 
         return self.last_pool
 
     def start(self):
-        self.retrieve_batch_meta()
+        self.batch_ffprobe()
 
     def start_async(self):
-        self.retrieve_batch_meta_async()
+        self.batch_ffprobe_async()
+
+        self.last_pool.close()
+        self.last_pool.join()
 
     def cancel(self):
         if self.last_pool:
             queue = self.last_pool._taskqueue
 
             with queue.mutex:
-                unfinished = queue.unfinished_tasks
-
-                if unfinished <= 0:
-                    if unfinished < 0:
-                        raise ValueError('task_done() called too many times')
-                    queue.all_tasks_done.notify_all()
-
                 queue.queue.clear()
-                queue.unfinished_tasks = unfinished
-
                 self.last_pool.close()
 
         callback = self.callbacks.get("cancel")
