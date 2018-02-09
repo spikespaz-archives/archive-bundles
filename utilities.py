@@ -102,4 +102,7 @@ def chdir(*args, **kwargs):
 
 def str_matches(string, *matches):
     """Return `True` if the lowercase version of a string matches any of the following lowercase strings."""
+    if not isinstance(string, str):
+        return False
+
     return string.lower() in (match.lower() for match in matches)

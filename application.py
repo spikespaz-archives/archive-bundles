@@ -30,9 +30,6 @@ class Application:
 
         self.interface = Interface(window)
 
-        self._bind_actions()
-        self._bind_changes()
-
         fetched_state = self.read_state()
 
         if fetched_state:
@@ -41,6 +38,11 @@ class Application:
             self.interface.push_console_message("Couldn't load save state data. Is this the first run?")
 
         self.set_state(**fetched_state)
+
+        self.update_ready()
+
+        self._bind_actions()
+        self._bind_changes()
 
         self.interface.push_status_message("Interface loaded.", 5000)
 
@@ -131,17 +133,17 @@ class Application:
 
     def _bind_actions(self):
         """During initialization, bind specific actions to each element."""
-        special_themed = utils.str_matches(self.window_theme, "custom", "fusion")
-
         def pick_input_directory():
-            dir_name = utils.open_directory_picker(self.window, native=not special_themed, title="Select Input Directory")
+            dir_name = utils.open_directory_picker(self.window, native=self.window_theme is None,
+                                                   title="Select Input Directory")
 
             if dir_name:
                 self.interface.input_directory_edit.setText(dir_name)
                 self.interface.push_console_message("Set input directory: " + dir_name)
 
         def pick_output_directory():
-            dir_name = utils.open_directory_picker(self.window, native=not special_themed, title="Select Output Directory")
+            dir_name = utils.open_directory_picker(self.window, native=self.window_theme is None,
+                                                   title="Select Output Directory")
 
             if dir_name:
                 self.interface.output_directory_edit.setText(dir_name)
@@ -150,8 +152,10 @@ class Application:
         self.interface.input_directory_picker.clicked.connect(pick_input_directory)
         self.interface.output_directory_picker.clicked.connect(pick_output_directory)
 
-        self.interface.start_button.clicked.connect(lambda: (self.interface.set_data_progress_undetermined(True), self.set_active(True)))
-        self.interface.cancel_button.clicked.connect(lambda: (self.interface.set_data_progress_undetermined(False), self.set_active(False)))
+        self.interface.start_button.clicked.connect(lambda: (self.interface.set_data_progress_undetermined(True),
+                                                             self.set_active(True)))
+        self.interface.cancel_button.clicked.connect(lambda: (self.interface.set_data_progress_undetermined(False),
+                                                              self.set_active(False)))
 
         self.interface.exit_button.clicked.connect(self.exit)
 
