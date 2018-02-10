@@ -207,6 +207,8 @@ class BatchMediaConverter:
 
     def start(self):
         self.run_batch_ffprobe()
+        self.run_batch_ffmpeg()
+
         self._callback(self.last_pool)
 
     def start_async(self):
@@ -215,12 +217,32 @@ class BatchMediaConverter:
         self.last_pool.close()
         self.last_pool.join()
 
+        self.run_batch_ffmpeg_async()
+
+        self._callback(self.last_pool)
+
+    def start_gen(self):
+        self.run_batch_ffprobe()
+        self.run_batch_ffmpeg_gen()
+
+        self._callback(self.last_pool)
+
+    def start_gen_async(self):
+        self.run_batch_ffprobe_async()
+
+        self.last_pool.close()
+        self.last_pool.join()
+
+        self.run_batch_ffmpeg_gen_async()
+
         self._callback(self.last_pool)
 
     def wait(self):
         """Close and join `self.last_pool`."""
         self.last_pool.close()
         self.last_pool.join()
+
+        self._callback(self.last_pool)
 
     def pause(self):
         """Pause the batch operation in `self.last_pool` by adding all incomplete tasks to a protected internal field
