@@ -3,7 +3,6 @@
 import os
 import utilities as utils
 
-from glob import glob
 from json import loads
 from inspect import stack
 from multiprocessing import Pool, Lock
@@ -90,6 +89,8 @@ class BatchController:
         self.input_fmt = input_fmt.lower()
         self.output_fmt = output_fmt.lower()
 
+        self.overwrite_output = overwrite_output
+
         self.workers = workers
 
         self._callbacks = self._wrap_callbacks(**callbacks)
@@ -97,8 +98,8 @@ class BatchController:
         glob_paths = utils.glob_from(input_dir, "**/*." + input_fmt)
 
         self.input_paths = (os.path.join(input_dir, path_name) for path_name in glob_paths)
-        self.output_paths = (
-            os.path.join(input_dir, os.path.splitext(path_name)[0] + input_fmt) for path_name in glob_paths)
+        self.output_paths = (utils.replace_base(input_dir, output_dir, utils.replace_ext(path_name, output_fmt))
+                             for path_name in glob_paths)
 
         self._unfinished = []
         self.batch_meta = []
