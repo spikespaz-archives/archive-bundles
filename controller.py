@@ -88,29 +88,29 @@ class BatchController:
 
     def __init__(self, input_dir, output_dir, input_fmt="flac", output_fmt="mp3", overwrite_output=False, workers=4, callbacks={}):
         """Initialize the wrapper with all input and output parameters specified. Provide optional callbacks."""
-        self.input_dir = input_dir
-        self.output_dir = output_dir
+        self._input_dir = input_dir
+        self._output_dir = output_dir
 
-        self.input_fmt = input_fmt.lower()
-        self.output_fmt = output_fmt.lower()
+        self._input_fmt = input_fmt.lower()
+        self._output_fmt = output_fmt.lower()
 
-        self.overwrite_output = overwrite_output
+        self._overwrite_output = overwrite_output
 
-        self.workers = workers
+        self._workers = workers
 
         self._callbacks = self._wrap_callbacks(**callbacks)
 
         glob_paths = utils.glob_from(input_dir, "**/*." + input_fmt)
 
-        self.input_paths = (os.path.join(input_dir, path_name) for path_name in glob_paths)
-        self.output_paths = (utils.replace_base(input_dir, output_dir, utils.replace_ext(path_name, output_fmt))
-                             for path_name in glob_paths)
+        self._input_paths = [os.path.join(input_dir, path_name) for path_name in glob_paths]
+        self._output_paths = [utils.replace_base(input_dir, output_dir, utils.replace_ext(path_name, output_fmt))
+                              for path_name in glob_paths]
 
-        self._ow_args = get_ow_args(self.overwrite_output)
+        self._ow_args = get_ow_args(self._overwrite_output)
         self._unfinished = []
-        self.batch_meta = []
-        self.last_pool = None
-        self.mutex = Lock()
+        self._batch_meta = []
+        self._last_pool = None
+        self._mutex = Lock()
 
     def _callback(self, result, callback=stack()[1][3]):
         """Wrapper to retrieve a callback matching the parent method name from `self.callbacks` if it exists.
@@ -122,25 +122,25 @@ class BatchController:
 
     def _task_queue(self):
         """Get the protected task queue from within the `self.last_pool`. Will error if `self.last_pool` is None."""
-        return self.last_pool._taskqueue
+        return self._last_pool._taskqueue
 
     def _batch_ffprobe_callback(self, result):
         """Callback wrapper for a list of `run_ffprobe` results that sets the internal `self.batch_meta`
         field and wraps the optional callback."""
-        self.batch_meta = result
+        self._batch_meta = result
 
     def _batch_ffprobe_callback_async(self, result):
         """Callback wrapper for each asynchronous `run_ffprobe` result that adds to the internal `self.batch_meta`
         field and wraps the optional callback."""
-        self.batch_meta.append(result)
+        self._batch_meta.append(result)
 
     def _wrap_callbacks(self, **kwargs):
         """Initialization method to wrap callbacks with required code."""
         def _run_batch_ffprobe(result):
             callback = kwargs.get(stack()[0][3][1:])
 
-            with self.mutex:
-                self.batch_meta = result
+            with self._mutex:
+                self._batch_meta = result
 
             if callback:
                 callback(result)
@@ -148,8 +148,8 @@ class BatchController:
         def _run_batch_ffprobe_async(result):
             callback = kwargs.get(stack()[0][3][1:])
 
-            with self.mutex:
-                self.batch_meta.append(result)
+            with self._mutex:
+                self._batch_meta.append(result)
 
             if callback:
                 callback(result)
@@ -167,150 +167,150 @@ class BatchController:
 
     def run_batch_ffprobe(self):
         """Execute `run_ffprobe` on a batch of files synchronously, update `self.batch_meta`, and return the results."""
-        with Pool(self.workers) as pool:
-            self.last_pool = pool
+        with Pool(self._workers) as pool:
+            self._last_pool = pool
 
-            return pool.map_async(run_ffprobe, self.input_paths, callback=self._callback)
+            return pool.map_async(run_ffprobe, self._input_paths, callback=self._callback)
 
     def run_batch_ffprobe_async(self):
         """Execute `run_ffprobe` on a batch of files asynchronously while apppending to `self.batch_meta` and return
         the worker pool before all results are ready."""
-        self.last_pool = Pool(self.workers)
+        self._last_pool = Pool(self._workers)
 
-        for file_path in self.input_paths:
-            self.last_pool.apply_async(run_ffprobe, (file_path,), callback=self._callback)
+        for file_path in self._input_paths:
+            self._last_pool.apply_async(run_ffprobe, (file_path,), callback=self._callback)
 
-        return self.last_pool
+        return self._last_pool
 
     def run_batch_ffmpeg(self):
         """Execute `run_ffmpeg` on a batch of files synchronously and return the results."""
-        with Pool(self.workers) as pool:
-            self.last_pool = pool
+        with Pool(self._workers) as pool:
+            self._last_pool = pool
 
             return pool.map_async(utils.unzip_args(run_ffmpeg),
-                                  zip(self.input_paths, self._ow_args), callback=self._callback)
+                                  zip(self._input_paths, self._ow_args), callback=self._callback)
 
     def run_batch_ffmpeg_async(self):
         """Execute `run_ffmpeg` on a batch of files asynchronously and return
         the worker pool before all results are ready."""
-        self.last_pool = Pool(self.workers)
+        self._last_pool = Pool(self._workers)
 
-        for file_path in self.input_paths:
-            self.last_pool.apply_async(run_ffmpeg, args=(file_path,),
-                                       kwds=self._ow_args, callback=self._callback)
+        for file_path in self._input_paths:
+            self._last_pool.apply_async(run_ffmpeg, args=(file_path,),
+                                        kwds=self._ow_args, callback=self._callback)
 
-        return self.last_pool
+        return self._last_pool
 
     def run_batch_ffmpeg_gen(self):
         """Execute `run_ffmpeg_async` on a batch of files synchronously and return the results.
         Callback must be able to handle a generator."""
-        with Pool(self.workers) as pool:
-            self.last_pool = pool
+        with Pool(self._workers) as pool:
+            self._last_pool = pool
 
             return pool.map_async(utils.unzip_args(run_ffmpeg_async),
-                                  zip(self.input_paths, self._ow_args), callback=self._callback)
+                                  zip(self._input_paths, self._ow_args), callback=self._callback)
 
     def run_batch_ffmpeg_gen_async(self):
         """Execute `run_ffmpeg_async` on a batch of files asynchronously and return
         the worker pool before all results are ready. Callback must be able to handle a generator."""
-        self.last_pool = Pool(self.workers)
+        self._last_pool = Pool(self._workers)
 
-        for file_path in self.input_paths:
-            self.last_pool.apply_async(run_ffmpeg_async, args=(file_path,),
-                                       kwds=self._ow_args, callback=self._callback)
+        for file_path in self._input_paths:
+            self._last_pool.apply_async(run_ffmpeg_async, args=(file_path,),
+                                        kwds=self._ow_args, callback=self._callback)
 
-        return self.last_pool
+        return self._last_pool
 
     def start(self):
         self.run_batch_ffprobe()
         self.run_batch_ffmpeg()
 
-        self._callback(self.last_pool)
+        self._callback(self._last_pool)
 
     def start_async(self):
         self.run_batch_ffprobe_async()
 
-        self.last_pool.close()
-        self.last_pool.join()
+        self._last_pool.close()
+        self._last_pool.join()
 
         self.run_batch_ffmpeg_async()
 
-        self._callback(self.last_pool)
+        self._callback(self._last_pool)
 
     def start_gen(self):
         self.run_batch_ffprobe()
         self.run_batch_ffmpeg_gen()
 
-        self._callback(self.last_pool)
+        self._callback(self._last_pool)
 
     def start_gen_async(self):
         self.run_batch_ffprobe_async()
 
-        self.last_pool.close()
-        self.last_pool.join()
+        self._last_pool.close()
+        self._last_pool.join()
 
         self.run_batch_ffmpeg_gen_async()
 
-        self._callback(self.last_pool)
+        self._callback(self._last_pool)
 
     def wait(self):
         """Close and join `self.last_pool`."""
-        self.last_pool.close()
-        self.last_pool.join()
+        self._last_pool.close()
+        self._last_pool.join()
 
-        self._callback(self.last_pool)
+        self._callback(self._last_pool)
 
     def pause(self):
         """Pause the batch operation in `self.last_pool` by adding all incomplete tasks to a protected internal field
         and empty the protected queue. Run the callback matching the name of this method. Non blocking."""
-        if self.last_pool and not self._unfinished:
+        if self._last_pool and not self._unfinished:
             queue = self._task_queue()
 
             with queue.mutex:
                 while len(queue.queue) <= 0:
                     self._unfinished.append(queue.get())
 
-            self._callback(self.last_pool)
+            self._callback(self._last_pool)
 
     def resume(self):
         """Move all internally saved incomplete processes back into the protected queue,
         and restart and maintain workers if needed. Run the callback matching the name of this method."""
-        if self.last_pool and self._unfinished:
+        if self._last_pool and self._unfinished:
             for task in self._unfinished:
-                self.last_pool.put(task)
+                self._last_pool.put(task)
 
             self._unfinished = []
 
-            self.last_pool._maintain_pool()
+            self._last_pool._maintain_pool()
 
-            self._callback(self.last_pool)
+            self._callback(self._last_pool)
 
     def cancel(self):
         """Completely lock, clear, and close the internal protected queue of `self.last_queue` while allowing current
         workers to finish while blocking. Run the callback matching the name of this method."""
-        if self.last_pool:
+        if self._last_pool:
             queue = self._task_queue()
 
             with queue.mutex:
                 queue.queue.clear()
-                self.last_pool.close()
+                self._last_pool.close()
 
-            self.last_pool.join()
+            self._last_pool.join()
 
-            self._callback(self.last_pool)
+            self._callback(self._last_pool)
 
     def terminate(self):
         """Terminate all workers and clear the internal incomplete list if paused."""
-        if self.last_pool:
-            self.last_pool.terminate()
+        if self._last_pool:
+            self._last_pool.terminate()
             self._unfinished = []
 
-            self._callback(self.last_pool)
+            self._callback(self._last_pool)
 
     def get_finished(self):
         """The count of finished conversion processes."""
-        return len(self.batch_meta)
+        return len(self._batch_meta)
 
     def get_unfinished(self):
         """The count of unfinished conversion processes."""
-        return len(self.input_paths) - self.get_finished()
+        return len(self._input_paths) - self.get_finished()
