@@ -1,12 +1,13 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
-import errno
 import os
 import sys
+import errno
 
-from PyQt5.QtWidgets import QFileDialog
-from contextlib import contextmanager
 from glob import glob
+from functools import wraps
+from contextlib import contextmanager
+from PyQt5.QtWidgets import QFileDialog
 
 
 #: Constant for the invalid path name OS error code.
@@ -101,6 +102,7 @@ def replace_ext(path, ext):
 
 @contextmanager
 def chdir(*args, **kwargs):
+    """Context manager for acting within a new working directory temporarily."""
     working_dir = os.getcwd()
     os.chdir(*args, **kwargs)
 
@@ -116,3 +118,12 @@ def str_matches(string, *matches):
         return False
 
     return string.lower() in (match.lower() for match in matches)
+
+
+def unzip_args(func):
+    """Wrapper to make args and kwargs passable to map."""
+    @wraps(func)
+    def wrapper(args_kwargs):
+        args, kwargs = args_kwargs
+        return func(*args, **kwargs)
+    return wrapper
