@@ -101,7 +101,8 @@ class BatchMediaConverter:
         self.mutex = Lock()
 
     def _callback(self, result, callback=stack()[1][3]):
-        """Wrapper to retrieve a callback from `self.callbacks` if it exists."""
+        """Wrapper to retrieve a callback matching the parent method name from `self.callbacks` if it exists.
+        This is very metaprogrammed and bad practice. May be removed."""
         callback = self._callbacks.get(callback)
 
         if callback is not None:
@@ -166,6 +167,41 @@ class BatchMediaConverter:
 
         for file_path in self.file_paths:
             self.last_pool.apply_async(run_ffprobe, (file_path,), callback=self._callback)
+
+        return self.last_pool
+
+    def run_batch_ffmpeg(self):
+        """Execute `run_ffmpeg` on a batch of files synchronously and return the results."""
+        with Pool(self.workers) as pool:
+            self.last_pool = pool
+
+            return pool.map_async(run_ffmpeg, self.file_paths, callback=self._callback)
+
+    def run_batch_ffmpeg_async(self):
+        """Execute `run_ffmpeg` on a batch of files asynchronously and return
+        the worker pool before all results are ready."""
+        self.last_pool = Pool(self.workers)
+
+        for file_path in self.file_paths:
+            self.last_pool.apply_async(run_ffmpeg, (file_path,), callback=self._callback)
+
+        return self.last_pool
+
+    def run_batch_ffmpeg_gen(self):
+        """Execute `run_ffmpeg_async` on a batch of files synchronously and return the results.
+        Callback must be able to handle a generator."""
+        with Pool(self.workers) as pool:
+            self.last_pool = pool
+
+            return pool.map_async(run_ffmpeg_async, self.file_paths, callback=self._callback)
+
+    def run_batch_ffmpeg_gen_async(self):
+        """Execute `run_ffmpeg_async` on a batch of files asynchronously and return
+        the worker pool before all results are ready. Callback must be able to handle a generator."""
+        self.last_pool = Pool(self.workers)
+
+        for file_path in self.file_paths:
+            self.last_pool.apply_async(run_ffmpeg_async, (file_path,), callback=self._callback)
 
         return self.last_pool
 
