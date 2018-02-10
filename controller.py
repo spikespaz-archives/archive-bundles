@@ -234,7 +234,9 @@ class BatchMediaConverter:
             self._callback(self.last_pool)
 
     def get_finished(self):
+        """The count of finished conversion processes."""
         return len(self.batch_meta)
 
     def get_unfinished(self):
+        """The count of unfinished conversion processes."""
         return len(self.file_paths) - self.get_finished()
