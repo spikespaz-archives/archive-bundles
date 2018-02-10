@@ -52,6 +52,11 @@ def run_ffmpeg(input_file, output_file, async=False, *args, **kwargs):
             return ffmpeg.wait()
 
 
+def get_ow_args(overwrite=False):
+    """Return a dictionary that can be passed as args to FFMPEG telling it to overwrite or not."""
+    return {"y": overwrite, "n": not overwrite}
+
+
 def run_ffmpeg_async(*args, **kwargs):
     """Run FFMPEG and yield updates. Alias for `run_ffmpeg(*args, **kwargs, async=True)`."""
     yield from run_ffmpeg(*args, **kwargs, async=True)
@@ -101,6 +106,7 @@ class BatchController:
         self.output_paths = (utils.replace_base(input_dir, output_dir, utils.replace_ext(path_name, output_fmt))
                              for path_name in glob_paths)
 
+        self._ow_args = get_ow_args(self.overwrite_output)
         self._unfinished = []
         self.batch_meta = []
         self.last_pool = None
@@ -181,7 +187,8 @@ class BatchController:
         with Pool(self.workers) as pool:
             self.last_pool = pool
 
-            return pool.map_async(run_ffmpeg, self.input_paths, callback=self._callback)
+            return pool.map_async(utils.unzip_args(run_ffmpeg),
+                                  zip(self.input_paths, self._ow_args), callback=self._callback)
 
     def run_batch_ffmpeg_async(self):
         """Execute `run_ffmpeg` on a batch of files asynchronously and return
@@ -189,7 +196,8 @@ class BatchController:
         self.last_pool = Pool(self.workers)
 
         for file_path in self.input_paths:
-            self.last_pool.apply_async(run_ffmpeg, (file_path,), callback=self._callback)
+            self.last_pool.apply_async(run_ffmpeg, args=(file_path,),
+                                       kwds=self._ow_args, callback=self._callback)
 
         return self.last_pool
 
@@ -199,7 +207,8 @@ class BatchController:
         with Pool(self.workers) as pool:
             self.last_pool = pool
 
-            return pool.map_async(run_ffmpeg_async, self.input_paths, callback=self._callback)
+            return pool.map_async(utils.unzip_args(run_ffmpeg_async),
+                                  zip(self.input_paths, self._ow_args), callback=self._callback)
 
     def run_batch_ffmpeg_gen_async(self):
         """Execute `run_ffmpeg_async` on a batch of files asynchronously and return
@@ -207,7 +216,8 @@ class BatchController:
         self.last_pool = Pool(self.workers)
 
         for file_path in self.input_paths:
-            self.last_pool.apply_async(run_ffmpeg_async, (file_path,), callback=self._callback)
+            self.last_pool.apply_async(run_ffmpeg_async, args=(file_path,),
+                                       kwds=self._ow_args, callback=self._callback)
 
         return self.last_pool
 
