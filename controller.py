@@ -5,6 +5,7 @@ import utilities as utils
 
 from json import loads
 from inspect import stack
+from functools import wraps
 from multiprocessing import Pool, Lock
 from subprocess import Popen, check_output, DEVNULL, PIPE
 
@@ -109,6 +110,7 @@ class BatchController:
         self._ow_args = get_ow_args(self._overwrite_output)
         self._unfinished = []
         self._batch_meta = []
+        self._batch_results = []
         self._last_pool = None
         self._mutex = Lock()
 
@@ -129,8 +131,9 @@ class BatchController:
 
     def _wrap_callbacks(self, **kwargs):
         """Initialization method to wrap callbacks with required code."""
+        @wraps(kwargs.get("ffprobe"))
         def _batch_ffprobe(result):
-            callback = kwargs.get(stack()[0][3][1:])
+            callback = kwargs.get("ffprobe")
 
             with self._mutex:
                 self._batch_meta = result
@@ -138,8 +141,49 @@ class BatchController:
             if callback:
                 callback(result)
 
+        @wraps(kwargs.get("ffprobe_async"))
         def _batch_ffprobe_async(result):
-            callback = kwargs.get(stack()[0][3][1:])
+            callback = kwargs.get("ffprobe_async")
+
+            with self._mutex:
+                self._batch_meta.append(result)
+
+            if callback:
+                callback(result)
+
+        @wraps(kwargs.get("ffmpeg"))
+        def _batch_ffmpeg(result):
+            callback = kwargs.get("ffmpeg")
+
+            with self._mutex:
+                self._batch_results = result
+
+            if callback:
+                callback(result)
+
+        @wraps(kwargs.get("ffmpeg_async"))
+        def _batch_ffmpeg_async(result):
+            callback = kwargs.get("ffmpeg_async")
+
+            with self._mutex:
+                self._batch_meta.append(result)
+
+            if callback:
+                callback(result)
+
+        @wraps(kwargs.get("ffmpeg_gen"))
+        def _batch_ffmpeg_gen(result):
+            callback = kwargs.get("ffmpeg_gen")
+
+            with self._mutex:
+                self._batch_meta = result
+
+            if callback:
+                callback(result)
+
+        @wraps(kwargs.get("ffmpeg_gen_async"))
+        def _batch_ffmpeg_gen_async(result):
+            callback = kwargs.get("ffmpeg_gen_async")
 
             with self._mutex:
                 self._batch_meta.append(result)
@@ -149,7 +193,11 @@ class BatchController:
 
         kwargs.update(
             ffprobe=_batch_ffprobe,
-            ffprobe_async=_batch_ffprobe_async
+            ffprobe_async=_batch_ffprobe_async,
+            ffmpeg=_batch_ffmpeg,
+            ffmpeg_async=_batch_ffmpeg_async,
+            ffmpeg_gen=_batch_ffmpeg_gen,
+            ffmpeg_gen_async=_batch_ffmpeg_gen_async
         )
 
         return kwargs
