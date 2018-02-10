@@ -94,6 +94,11 @@ def replace_base(input_dir, output_dir, input_path):
     return os.path.join(output_dir, os.path.relpath(input_dir, input_path))
 
 
+def replace_ext(path, ext):
+    """Replace the extension of a path."""
+    return os.path.splitext(path)[1] + "." + ext.lower
+
+
 @contextmanager
 def chdir(*args, **kwargs):
     working_dir = os.getcwd()

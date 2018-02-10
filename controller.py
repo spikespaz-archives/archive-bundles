@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
+import utilities as utils
 
 from glob import glob
 from json import loads
@@ -81,19 +82,23 @@ class BatchController:
     """Wrapper around `run_ffprobe` and `run_ffmpeg` that can perform a batch conversion
     on files and output to a mirror directory."""
 
-    def __init__(self, input_dir, output_dir, input_fmt="flac", output_fmt="mp3", workers=4, callbacks={}):
+    def __init__(self, input_dir, output_dir, input_fmt="flac", output_fmt="mp3", overwrite_output=False, workers=4, callbacks={}):
         """Initialize the wrapper with all input and output parameters specified. Provide optional callbacks."""
         self.input_dir = input_dir
         self.output_dir = output_dir
 
-        self.input_fmt = input_fmt
-        self.output_fmt = output_fmt
+        self.input_fmt = input_fmt.lower()
+        self.output_fmt = output_fmt.lower()
 
         self.workers = workers
 
         self._callbacks = self._wrap_callbacks(**callbacks)
 
-        self.file_paths = glob(os.path.join(input_dir, "**/*." + input_fmt.lower()))
+        glob_paths = utils.glob_from(input_dir, "**/*." + input_fmt)
+
+        self.input_paths = (os.path.join(input_dir, path_name) for path_name in glob_paths)
+        self.output_paths = (
+            os.path.join(input_dir, os.path.splitext(path_name)[0] + input_fmt) for path_name in glob_paths)
 
         self._unfinished = []
         self.batch_meta = []
@@ -158,14 +163,14 @@ class BatchController:
         with Pool(self.workers) as pool:
             self.last_pool = pool
 
-            return pool.map_async(run_ffprobe, self.file_paths, callback=self._callback)
+            return pool.map_async(run_ffprobe, self.input_paths, callback=self._callback)
 
     def run_batch_ffprobe_async(self):
         """Execute `run_ffprobe` on a batch of files asynchronously while apppending to `self.batch_meta` and return
         the worker pool before all results are ready."""
         self.last_pool = Pool(self.workers)
 
-        for file_path in self.file_paths:
+        for file_path in self.input_paths:
             self.last_pool.apply_async(run_ffprobe, (file_path,), callback=self._callback)
 
         return self.last_pool
@@ -175,14 +180,14 @@ class BatchController:
         with Pool(self.workers) as pool:
             self.last_pool = pool
 
-            return pool.map_async(run_ffmpeg, self.file_paths, callback=self._callback)
+            return pool.map_async(run_ffmpeg, self.input_paths, callback=self._callback)
 
     def run_batch_ffmpeg_async(self):
         """Execute `run_ffmpeg` on a batch of files asynchronously and return
         the worker pool before all results are ready."""
         self.last_pool = Pool(self.workers)
 
-        for file_path in self.file_paths:
+        for file_path in self.input_paths:
             self.last_pool.apply_async(run_ffmpeg, (file_path,), callback=self._callback)
 
         return self.last_pool
@@ -193,14 +198,14 @@ class BatchController:
         with Pool(self.workers) as pool:
             self.last_pool = pool
 
-            return pool.map_async(run_ffmpeg_async, self.file_paths, callback=self._callback)
+            return pool.map_async(run_ffmpeg_async, self.input_paths, callback=self._callback)
 
     def run_batch_ffmpeg_gen_async(self):
         """Execute `run_ffmpeg_async` on a batch of files asynchronously and return
         the worker pool before all results are ready. Callback must be able to handle a generator."""
         self.last_pool = Pool(self.workers)
 
-        for file_path in self.file_paths:
+        for file_path in self.input_paths:
             self.last_pool.apply_async(run_ffmpeg_async, (file_path,), callback=self._callback)
 
         return self.last_pool
@@ -297,4 +302,4 @@ class BatchController:
 
     def get_unfinished(self):
         """The count of unfinished conversion processes."""
-        return len(self.file_paths) - self.get_finished()
+        return len(self.input_paths) - self.get_finished()
