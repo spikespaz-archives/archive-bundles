@@ -115,6 +115,9 @@ class BatchController:
     def _callback(self, result, callback=stack()[1][3]):
         """Wrapper to retrieve a callback matching the parent method name from `self.callbacks` if it exists.
         This is very metaprogrammed and bad practice. May be removed."""
+        if callback.startswith("run_"):
+            callback = callback[4:]
+
         callback = self._callbacks.get(callback)
 
         if callback is not None:
@@ -124,19 +127,9 @@ class BatchController:
         """Get the protected task queue from within the `self.last_pool`. Will error if `self.last_pool` is None."""
         return self._last_pool._taskqueue
 
-    def _batch_ffprobe_callback(self, result):
-        """Callback wrapper for a list of `run_ffprobe` results that sets the internal `self.batch_meta`
-        field and wraps the optional callback."""
-        self._batch_meta = result
-
-    def _batch_ffprobe_callback_async(self, result):
-        """Callback wrapper for each asynchronous `run_ffprobe` result that adds to the internal `self.batch_meta`
-        field and wraps the optional callback."""
-        self._batch_meta.append(result)
-
     def _wrap_callbacks(self, **kwargs):
         """Initialization method to wrap callbacks with required code."""
-        def _run_batch_ffprobe(result):
+        def _batch_ffprobe(result):
             callback = kwargs.get(stack()[0][3][1:])
 
             with self._mutex:
@@ -145,7 +138,7 @@ class BatchController:
             if callback:
                 callback(result)
 
-        def _run_batch_ffprobe_async(result):
+        def _batch_ffprobe_async(result):
             callback = kwargs.get(stack()[0][3][1:])
 
             with self._mutex:
@@ -155,8 +148,8 @@ class BatchController:
                 callback(result)
 
         kwargs.update(
-            run_batch_ffprobe=_run_batch_ffprobe,
-            run_batch_ffprobe_async=_run_batch_ffprobe_async
+            batch_ffprobe=_batch_ffprobe,
+            batch_ffprobe_async=_batch_ffprobe_async
         )
 
         return kwargs
