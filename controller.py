@@ -220,6 +220,11 @@ class BatchMediaConverter:
 
             self._callback(self.last_pool)
 
+    def wait(self):
+        """Close and join `self.last_pool`."""
+        self.last_pool.close()
+        self.last_pool.join()
+
     def terminate(self):
         """Terminate all workers and clear the internal incomplete list if paused."""
         if self.last_pool:
