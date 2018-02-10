@@ -72,7 +72,11 @@ def batch_ffprobe_async(file_paths, workers=4, callback=None):
 
 
 class BatchMediaConverter:
+    """Wrapper around `run_ffprobe` and `run_ffmpeg` that can perform a batch conversion
+    on files and output to a mirror directory."""
+
     def __init__(self, input_dir, output_dir, input_fmt="flac", output_fmt="mp3", workers=4, callbacks={}):
+        """Initialize the wrapper with all input and output parameters specified. Provide optional callbacks."""
         self.input_dir = input_dir
         self.output_dir = output_dir
 
@@ -91,29 +95,38 @@ class BatchMediaConverter:
         self._incomplete = []
 
     def _callback(self, callback, result):
+        """Wrapper to retrieve a callback from `self.callbacks` if it exists."""
         callback = self.callbacks.get(callback)
 
         if callback is not None:
             callback(result)
 
     def _task_queue(self):
+        """Get the protected task queue from within the `self.last_pool`. Will error if `self.last_pool` is None."""
         return self.last_pool._taskqueue
 
     def _batch_ffprobe_callback(self, result):
+        """Callback wrapper for a list of `run_ffprobe` results that sets the internal `self.batch_meta`
+        field and wraps the optional callback."""
         self.batch_meta = result
         self._callback("batch_ffprobe", result)
 
     def _batch_ffprobe_callback_async(self, result):
+        """Callback wrapper for each asynchronous `run_ffprobe` result that adds to the internal `self.batch_meta`
+        field and wraps the optional callback."""
         self.batch_meta.append(result)
         self._callback("batch_ffprobe_async", result)
 
-    def batch_ffprobe(self):
+    def run_batch_ffprobe(self):
+        """Execute `run_ffprobe` on a batch of files synchronously, update `self.batch_meta`, and return the results."""
         with Pool(self.workers) as pool:
             self.last_pool = pool
 
             return pool.map_async(run_ffprobe, self.file_paths, callback=self._batch_ffprobe_callback)
 
-    def batch_ffprobe_async(self):
+    def run_batch_ffprobe_async(self):
+        """Execute `run_ffprobe` on a batch of files asynchronously while apppending to `self.batch_meta` and return
+        the worker pool before all results are ready."""
         self.last_pool = Pool(self.workers)
 
         for file_path in self.file_paths:
@@ -122,15 +135,17 @@ class BatchMediaConverter:
         return self.last_pool
 
     def start(self):
-        self.batch_ffprobe()
+        self.run_batch_ffprobe()
 
     def start_async(self):
-        self.batch_ffprobe_async()
+        self.run_batch_ffprobe_async()
 
         self.last_pool.close()
         self.last_pool.join()
 
     def pause(self):
+        """Pause the batch operation in `self.last_pool` by adding all incomplete tasks to a protected internal field
+        and empty the protected queue. Run the callback matching the name of this method. Non blocking."""
         if self.last_pool and not self._incomplete:
             queue = self._task_queue()
 
@@ -141,6 +156,8 @@ class BatchMediaConverter:
             self._callback("pause", self.last_pool)
 
     def resume(self):
+        """Move all internally saved incomplete processes back into the protected queue,
+        and restart and maintain workers if needed. Run the callback matching the name of this method."""
         if self.last_pool and self._incomplete:
             for task in self._incomplete:
                 self.last_pool.put(task)
@@ -152,6 +169,8 @@ class BatchMediaConverter:
             self._callback("resume", self.last_pool)
 
     def cancel(self):
+        """Completely lock, clear, and close the internal protected queue of `self.last_queue` while allowing current
+        workers to finish while blocking. Run the callback matching the name of this method."""
         if self.last_pool:
             queue = self._task_queue()
 
@@ -159,9 +178,12 @@ class BatchMediaConverter:
                 queue.queue.clear()
                 self.last_pool.close()
 
+            self.last_pool.join()
+
             self._callback("cancel", self.last_pool)
 
     def terminate(self):
+        """Terminate all workers and clear the internal incomplete list if paused."""
         if self.last_pool:
             self.last_pool.terminate()
             self._incomplete = []
