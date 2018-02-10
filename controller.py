@@ -112,20 +112,20 @@ class BatchController:
         self._last_pool = None
         self._mutex = Lock()
 
+    def _task_queue(self):
+        """Get the protected task queue from within the `self.last_pool`. Will error if `self.last_pool` is None."""
+        return self._last_pool._taskqueue
+
     def _callback(self, result, callback=stack()[1][3]):
         """Wrapper to retrieve a callback matching the parent method name from `self.callbacks` if it exists.
         This is very metaprogrammed and bad practice. May be removed."""
-        if callback.startswith("run_"):
+        if callback.startswith("run_batch_"):
             callback = callback[4:]
 
         callback = self._callbacks.get(callback)
 
         if callback is not None:
             callback(result)
-
-    def _task_queue(self):
-        """Get the protected task queue from within the `self.last_pool`. Will error if `self.last_pool` is None."""
-        return self._last_pool._taskqueue
 
     def _wrap_callbacks(self, **kwargs):
         """Initialization method to wrap callbacks with required code."""
@@ -148,8 +148,8 @@ class BatchController:
                 callback(result)
 
         kwargs.update(
-            batch_ffprobe=_batch_ffprobe,
-            batch_ffprobe_async=_batch_ffprobe_async
+            ffprobe=_batch_ffprobe,
+            ffprobe_async=_batch_ffprobe_async
         )
 
         return kwargs
@@ -214,7 +214,27 @@ class BatchController:
 
         return self._last_pool
 
-    def start(self):
+    def start(self, mode=7):
+        def _ffprobe_block():
+            self.run_batch_ffprobe_async()
+
+            self._last_pool.close()
+            self._last_pool.join()
+
+        {
+            0: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg())),
+            1: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg_async())),
+            2: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg_gen())),
+            3: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg_gen_async())),
+            4: (lambda: (_ffprobe_block(), self.run_batch_ffmpeg())),
+            5: (lambda: (_ffprobe_block(), self.run_batch_ffmpeg_async())),
+            6: (lambda: (_ffprobe_block(), self.run_batch_ffmpeg_gen())),
+            7: (lambda: (_ffprobe_block(), self.run_batch_ffmpeg_gen_async())),
+        }[utils.clamp(mode, 0, 7)]()
+
+        self._callback(self._last_pool)
+
+    def start_(self):
         self.run_batch_ffprobe()
         self.run_batch_ffmpeg()
 
