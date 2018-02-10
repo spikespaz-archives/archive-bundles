@@ -83,10 +83,15 @@ def set_combo(combo, string):
         combo.setCurrentIndex(items.index(string.lower()))
 
 
-def glob_from(path, ext):
+def glob_from(path, pattern):
     """Return glob from a directory."""
     with chdir(path):
-        return glob("**/*." + ext.lower())
+        return glob(pattern)
+
+
+def replace_base(input_dir, output_dir, input_path):
+    """Replace the base directory path relative to an input directory and replace it with another directory path."""
+    return os.path.join(output_dir, os.path.relpath(input_dir, input_path))
 
 
 @contextmanager
