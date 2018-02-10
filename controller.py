@@ -25,7 +25,7 @@ def arg_builder(args, kwargs, defaults={}):
     return args
 
 
-def run_ffmpeg(input_file, output_file, async=True, *args, **kwargs):
+def run_ffmpeg(input_file, output_file, async=False, *args, **kwargs):
     """Use FFMPEG to convert a media file."""
     with Popen(("ffmpeg", *arg_builder(args, kwargs, defaults={"y": True}),
                 "-progress", "-", "-i", input_file, output_file),
@@ -49,6 +49,11 @@ def run_ffmpeg(input_file, output_file, async=True, *args, **kwargs):
 
         else:
             return ffmpeg.wait()
+
+
+def run_ffmpeg_async(*args, **kwargs):
+    """Run FFMPEG and yield updates. Alias for `run_ffmpeg(*args, **kwargs, async=True)`."""
+    yield from run_ffmpeg(*args, **kwargs, async=True)
 
 
 def run_ffprobe(file_path, *args, **kwargs):
