@@ -77,7 +77,7 @@ def batch_ffprobe_async(file_paths, workers=4, callback=None):
     return pool
 
 
-class BatchMediaConverter:
+class BatchController:
     """Wrapper around `run_ffprobe` and `run_ffmpeg` that can perform a batch conversion
     on files and output to a mirror directory."""
 
