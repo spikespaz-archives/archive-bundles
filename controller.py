@@ -4,7 +4,8 @@ import os
 
 from glob import glob
 from json import loads
-from multiprocessing import Pool
+from inspect import stack
+from multiprocessing import Pool, Lock
 from subprocess import Popen, check_output, DEVNULL, PIPE
 
 
@@ -90,18 +91,18 @@ class BatchMediaConverter:
 
         self.workers = workers
 
-        self.callbacks = callbacks
-
-        self.batch_meta = []
-        self.last_pool = None
+        self._callbacks = self._wrap_callbacks(**callbacks)
 
         self.file_paths = glob(os.path.join(input_dir, "**/*." + input_fmt.lower()))
 
         self._incomplete = []
+        self.batch_meta = []
+        self.last_pool = None
+        self.mutex = Lock()
 
-    def _callback(self, callback, result):
+    def _callback(self, result, callback=stack()[1][3]):
         """Wrapper to retrieve a callback from `self.callbacks` if it exists."""
-        callback = self.callbacks.get(callback)
+        callback = self._callbacks.get(callback)
 
         if callback is not None:
             callback(result)
@@ -114,20 +115,49 @@ class BatchMediaConverter:
         """Callback wrapper for a list of `run_ffprobe` results that sets the internal `self.batch_meta`
         field and wraps the optional callback."""
         self.batch_meta = result
-        self._callback("batch_ffprobe", result)
 
     def _batch_ffprobe_callback_async(self, result):
         """Callback wrapper for each asynchronous `run_ffprobe` result that adds to the internal `self.batch_meta`
         field and wraps the optional callback."""
         self.batch_meta.append(result)
-        self._callback("batch_ffprobe_async", result)
+
+    def _wrap_callbacks(self, **kwargs):
+        """Initialization method to wrap callbacks with required code."""
+        def _run_batch_ffprobe(result):
+            callback = kwargs.get(stack()[0][3][1:])
+
+            with self.mutex:
+                self.batch_meta = result
+
+            if callback:
+                callback(result)
+
+        def _run_batch_ffprobe_async(result):
+            callback = kwargs.get(stack()[0][3][1:])
+
+            with self.mutex:
+                self.batch_meta.append(result)
+
+            if callback:
+                callback(result)
+
+        kwargs.update(
+            run_batch_ffprobe=_run_batch_ffprobe,
+            run_batch_ffprobe_async=_run_batch_ffprobe_async
+        )
+
+        return kwargs
+
+    def set_callbacks(self, **kwargs):
+        """Set the callbacks by keyword arguments."""
+        self._callbacks = self._wrap_callbacks(**kwargs)
 
     def run_batch_ffprobe(self):
         """Execute `run_ffprobe` on a batch of files synchronously, update `self.batch_meta`, and return the results."""
         with Pool(self.workers) as pool:
             self.last_pool = pool
 
-            return pool.map_async(run_ffprobe, self.file_paths, callback=self._batch_ffprobe_callback)
+            return pool.map_async(run_ffprobe, self.file_paths, callback=self._callback)
 
     def run_batch_ffprobe_async(self):
         """Execute `run_ffprobe` on a batch of files asynchronously while apppending to `self.batch_meta` and return
@@ -135,18 +165,21 @@ class BatchMediaConverter:
         self.last_pool = Pool(self.workers)
 
         for file_path in self.file_paths:
-            self.last_pool.apply_async(run_ffprobe, (file_path,), callback=self._batch_ffprobe_callback_async)
+            self.last_pool.apply_async(run_ffprobe, (file_path,), callback=self._callback)
 
         return self.last_pool
 
     def start(self):
         self.run_batch_ffprobe()
+        self._callback(self.last_pool)
 
     def start_async(self):
         self.run_batch_ffprobe_async()
 
         self.last_pool.close()
         self.last_pool.join()
+
+        self._callback(self.last_pool)
 
     def pause(self):
         """Pause the batch operation in `self.last_pool` by adding all incomplete tasks to a protected internal field
@@ -155,10 +188,10 @@ class BatchMediaConverter:
             queue = self._task_queue()
 
             with queue.mutex:
-                while not queue.empty():
+                while len(queue.queue) <= 0:
                     self._incomplete.append(queue.get())
 
-            self._callback("pause", self.last_pool)
+            self._callback(self.last_pool)
 
     def resume(self):
         """Move all internally saved incomplete processes back into the protected queue,
@@ -171,7 +204,7 @@ class BatchMediaConverter:
 
             self.last_pool._maintain_pool()
 
-            self._callback("resume", self.last_pool)
+            self._callback(self.last_pool)
 
     def cancel(self):
         """Completely lock, clear, and close the internal protected queue of `self.last_queue` while allowing current
@@ -185,7 +218,7 @@ class BatchMediaConverter:
 
             self.last_pool.join()
 
-            self._callback("cancel", self.last_pool)
+            self._callback(self.last_pool)
 
     def terminate(self):
         """Terminate all workers and clear the internal incomplete list if paused."""
@@ -193,7 +226,4 @@ class BatchMediaConverter:
             self.last_pool.terminate()
             self._incomplete = []
 
-            callback = self.callbacks.get("terminate")
-
-            if callback:
-                callback(self.last_pool)
+            self._callback(self.last_pool)
