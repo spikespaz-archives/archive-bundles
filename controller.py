@@ -95,7 +95,7 @@ class BatchMediaConverter:
 
         self.file_paths = glob(os.path.join(input_dir, "**/*." + input_fmt.lower()))
 
-        self._incomplete = []
+        self._unfinished = []
         self.batch_meta = []
         self.last_pool = None
         self.mutex = Lock()
@@ -181,26 +181,31 @@ class BatchMediaConverter:
 
         self._callback(self.last_pool)
 
+    def wait(self):
+        """Close and join `self.last_pool`."""
+        self.last_pool.close()
+        self.last_pool.join()
+
     def pause(self):
         """Pause the batch operation in `self.last_pool` by adding all incomplete tasks to a protected internal field
         and empty the protected queue. Run the callback matching the name of this method. Non blocking."""
-        if self.last_pool and not self._incomplete:
+        if self.last_pool and not self._unfinished:
             queue = self._task_queue()
 
             with queue.mutex:
                 while len(queue.queue) <= 0:
-                    self._incomplete.append(queue.get())
+                    self._unfinished.append(queue.get())
 
             self._callback(self.last_pool)
 
     def resume(self):
         """Move all internally saved incomplete processes back into the protected queue,
         and restart and maintain workers if needed. Run the callback matching the name of this method."""
-        if self.last_pool and self._incomplete:
-            for task in self._incomplete:
+        if self.last_pool and self._unfinished:
+            for task in self._unfinished:
                 self.last_pool.put(task)
 
-            self._incomplete = []
+            self._unfinished = []
 
             self.last_pool._maintain_pool()
 
@@ -220,15 +225,16 @@ class BatchMediaConverter:
 
             self._callback(self.last_pool)
 
-    def wait(self):
-        """Close and join `self.last_pool`."""
-        self.last_pool.close()
-        self.last_pool.join()
-
     def terminate(self):
         """Terminate all workers and clear the internal incomplete list if paused."""
         if self.last_pool:
             self.last_pool.terminate()
-            self._incomplete = []
+            self._unfinished = []
 
             self._callback(self.last_pool)
+
+    def get_finished(self):
+        return len(self.batch_meta)
+
+    def get_unfinished(self):
+        return len(self.file_paths) - self.get_finished()
