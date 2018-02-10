@@ -127,3 +127,8 @@ def unzip_args(func):
         args, kwargs = args_kwargs
         return func(*args, **kwargs)
     return wrapper
+
+
+def clamp(value, minimum=0, maximum=1):
+    """Return a numeral clamped between a min and a max value."""
+    return sorted((minimum, value, maximum))[1]
