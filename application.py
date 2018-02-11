@@ -8,6 +8,7 @@ from PyQt5 import QtWidgets
 from json import load, dump
 from darkstyle import QDarkPalette
 from contextlib import contextmanager
+from controller import BatchController
 from multiprocessing import freeze_support
 from interface import Ui_batch_media_file_converter
 
@@ -33,9 +34,9 @@ class Application:
         fetched_state = self.read_state()
 
         if fetched_state:
-            self.interface.push_console_message("Loaded options from save state file.")
+            self.interface.push_console("Loaded options from save state file.")
         else:
-            self.interface.push_console_message("Couldn't load save state data. Is this the first run?")
+            self.interface.push_console("Couldn't load save state data. Is this the first run?")
 
         self.set_state(**fetched_state)
 
@@ -44,7 +45,9 @@ class Application:
         self._bind_actions()
         self._bind_changes()
 
-        self.interface.push_status_message("Interface loaded.", 5000)
+        self._batch_controller = None
+
+        self.interface.push_status("Interface loaded.", 5000)
 
     def start(self):
         """Start and show the application."""
@@ -139,7 +142,7 @@ class Application:
 
             if dir_name:
                 self.interface.input_directory_edit.setText(dir_name)
-                self.interface.push_console_message("Set input directory: " + dir_name)
+                self.interface.push_console("Set input directory: " + dir_name)
 
         def pick_output_directory():
             dir_name = utils.open_directory_picker(self.window, native=self.window_theme is None,
@@ -147,15 +150,15 @@ class Application:
 
             if dir_name:
                 self.interface.output_directory_edit.setText(dir_name)
-                self.interface.push_console_message("Set output directory: " + dir_name)
+                self.interface.push_console("Set output directory: " + dir_name)
 
         self.interface.input_directory_picker.clicked.connect(pick_input_directory)
         self.interface.output_directory_picker.clicked.connect(pick_output_directory)
 
         self.interface.start_button.clicked.connect(lambda: (self.interface.set_data_progress_undetermined(True),
-                                                             self.set_active(True)))
+                                                             self.start_conversion()))
         self.interface.cancel_button.clicked.connect(lambda: (self.interface.set_data_progress_undetermined(False),
-                                                              self.set_active(False)))
+                                                              self.cancel_conversion()))
 
         self.interface.exit_button.clicked.connect(self.exit)
 
@@ -169,15 +172,15 @@ class Application:
 
     def update_ready(self):
         """Check all input fields for validity and enable or disable the start and cancel buttons."""
-        if (self.valid_input_directory() and self.valid_output_directory()
-                and self.interface.input_format_combo.currentText()
-                and self.interface.output_format_combo.currentText()):
+        if (self.valid_input_directory() and self.valid_output_directory() and
+                self.interface.input_format_combo.currentText() and
+                self.interface.output_format_combo.currentText()):
             self.interface.start_button.setEnabled(True)
-            self.interface.push_status_message("Ready.")
+            self.interface.push_status("Ready.")
             return True
         else:
             self.interface.start_button.setEnabled(False)
-            self.interface.push_status_message("Not ready.")
+            self.interface.push_status("Not ready.")
             return False
 
     def set_active(self, state=True):
@@ -256,12 +259,12 @@ class Interface(Ui_batch_media_file_converter):
 
         self.thread_count_spinbox.setValue(kwargs.get("thread_count", 4))
 
-    def push_status_message(self, message="", duration=0):
+    def push_status(self, message="", duration=0):
         """Push a status to the status bar for X milliseconds."""
         # Show it on the status bar for the time specified if any (by default infinite)
         self.statusbar.showMessage(message, duration)
 
-    def push_console_message(self, message, force=False):
+    def push_console(self, message, force=False):
         """Push a message to the information console if there is no duplicate (or `force` is `True`)."""
         if force:  # Push regardless of any duplicate
             list_item = QtWidgets.QListWidgetItem()
@@ -277,14 +280,14 @@ class Interface(Ui_batch_media_file_converter):
                 last_message = self.information_console_list.item(message_count - 1)
 
                 if message != last_message.text():  # Don't send a duplicate
-                    self.push_console_message(message, force=True)
+                    self.push_console(message, force=True)
             else:
-                self.push_console_message(message, force=True)
+                self.push_console(message, force=True)
 
-    def push_status_and_console_message(self, message, **kwargs):
+    def push_both(self, message, duration=0, force=False):
         """Push a message to both the status bar and information console."""
-        self.push_status_message(message, **kwargs)
-        self.push_console_message(message, **kwargs)
+        self.push_status(message, duration=duration)
+        self.push_console(message, force=force)
 
     def set_files_progress_undetermined(self, state=True):
         self.files_completed_progress.setRange(0, int(not state))
