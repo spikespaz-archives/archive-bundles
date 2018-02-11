@@ -130,9 +130,6 @@ class BatchController:
 
         return self._callbacks.get(callback)
 
-    def _pass(self, *args, **kwargs):
-        pass
-
     def _wrap_callbacks(self, **kwargs):
         """Initialization method to wrap callbacks with required code that updates internal protected values."""
         @wraps(kwargs.get("ffprobe"))
@@ -140,42 +137,42 @@ class BatchController:
             with self._mutex:
                 self._batch_meta = result
 
-            kwargs.get(stack()[0][3][7:], self._pass)(result)
+            kwargs.get(stack()[0][3][7:], utils._pass)(result)
 
         @wraps(kwargs.get("ffprobe_async"))
         def _batch_ffprobe_async(result):
             with self._mutex:
                 self._batch_meta.append(result)
 
-            kwargs.get(stack()[0][3][7:], self._pass)(result)
+            kwargs.get(stack()[0][3][7:], utils._pass)(result)
 
         @wraps(kwargs.get("ffmpeg"))
         def _batch_ffmpeg(result):
             with self._mutex:
                 self._batch_results = result
 
-            kwargs.get(stack()[0][3][7:], self._pass)(result)
+            kwargs.get(stack()[0][3][7:], utils._pass)(result)
 
         @wraps(kwargs.get("ffmpeg_async"))
         def _batch_ffmpeg_async(result):
             with self._mutex:
                 self._batch_meta.append(result)
 
-            kwargs.get(stack()[0][3][7:], self._pass)(result)
+            kwargs.get(stack()[0][3][7:], utils._pass)(result)
 
         @wraps(kwargs.get("ffmpeg_gen"))
         def _batch_ffmpeg_gen(result):
             with self._mutex:
                 self._batch_meta = result
 
-            kwargs.get(stack()[0][3][7:], self._pass)(result)
+            kwargs.get(stack()[0][3][7:], utils._pass)(result)
 
         @wraps(kwargs.get("ffmpeg_gen_async"))
         def _batch_ffmpeg_gen_async(result):
             with self._mutex:
                 self._batch_meta.append(result)
 
-            kwargs.get(stack()[0][3][7:], self._pass)(result)
+            kwargs.get(stack()[0][3][7:], utils._pass)(result)
 
         return {
             "ffprobe": _batch_ffprobe,
