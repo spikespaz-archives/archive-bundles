@@ -134,6 +134,6 @@ def clamp(value, minimum=0, maximum=1):
     return sorted((minimum, value, maximum))[1]
 
 
-def _pass(self, *args, **kwargs):
+def _pass(*args, **kwargs):
     """Do nothing."""
     pass

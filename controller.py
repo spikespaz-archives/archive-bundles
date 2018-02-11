@@ -120,7 +120,7 @@ class BatchController:
         """Get the protected task queue from within the `self.last_pool`. Will error if `self.last_pool` is None."""
         return self._last_pool._taskqueue
 
-    def _callback(self, callback=None, prefix=False):
+    def _callback(self, callback=None, prefix=""):
         """Wrapper to retrieve a callback matching the parent method name from `self.callbacks` if it exists.
         This is very meta-programmed and bad practice. May be removed."""
         if callback is None:
@@ -129,7 +129,7 @@ class BatchController:
             if not prefix and callback.startswith("run_batch_"):
                 callback = callback[10:]
 
-        return self._callbacks.get(callback, utils._pass)
+        return self._callbacks.get(prefix + callback, utils._pass)
 
     def _wrap_callbacks(self, **kwargs):
         """Initialization method to wrap callbacks with required code that updates internal protected values."""
@@ -193,7 +193,7 @@ class BatchController:
         with Pool(self._workers) as pool:
             self._last_pool = pool
 
-            self._callback()
+            self._callback(prefix="_run")()
             return pool.map_async(run_ffprobe, self._input_paths, callback=self._callback())
 
     def run_batch_ffprobe_async(self):
@@ -204,7 +204,7 @@ class BatchController:
         for file_path in self._input_paths:
             self._last_pool.apply_async(run_ffprobe, (file_path,), callback=self._callback())
 
-        self._callback()
+        self._callback(prefix="_run")()
         return self._last_pool
 
     def run_batch_ffmpeg(self):
@@ -212,7 +212,7 @@ class BatchController:
         with Pool(self._workers) as pool:
             self._last_pool = pool
 
-            self._callback()
+            self._callback(prefix="_run")()
             return pool.map_async(utils.unzip_args(run_ffmpeg),
                                   zip(self._input_paths, self._ow_args), callback=self._callback())
 
@@ -225,7 +225,7 @@ class BatchController:
             self._last_pool.apply_async(run_ffmpeg, args=(file_path,),
                                         kwds=self._ow_args, callback=self._callback())
 
-        self._callback()
+        self._callback(prefix="_run")()
         return self._last_pool
 
     def run_batch_ffmpeg_gen(self):
@@ -234,7 +234,7 @@ class BatchController:
         with Pool(self._workers) as pool:
             self._last_pool = pool
 
-            self._callback()
+            self._callback(prefix="_run")()
             return pool.map_async(utils.unzip_args(run_ffmpeg_async),
                                   zip(self._input_paths, self._ow_args), callback=self._callback())
 
@@ -247,7 +247,7 @@ class BatchController:
             self._last_pool.apply_async(run_ffmpeg_async, args=(file_path,),
                                         kwds=self._ow_args, callback=self._callback())
 
-        self._callback()
+        self._callback(prefix="_run")()
         return self._last_pool
 
     def start(self, mode=7, async=False):
