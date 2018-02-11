@@ -119,11 +119,14 @@ class BatchController:
         """Get the protected task queue from within the `self.last_pool`. Will error if `self.last_pool` is None."""
         return self._last_pool._taskqueue
 
-    def _callback(self, callback=stack()[1][3]):
+    def _callback(self, callback=None):
         """Wrapper to retrieve a callback matching the parent method name from `self.callbacks` if it exists.
         This is very meta-programmed and bad practice. May be removed."""
-        if callback.startswith("run_batch_"):
-            callback = callback[4:]
+        if callback is None:
+            callback = stack()[1][3]
+
+            if callback.startswith("run_batch_"):
+                callback = callback[10:]
 
         return self._callbacks.get(callback)
 
