@@ -4,9 +4,9 @@ import os
 import utilities as utils
 
 from json import loads
-from inspect import stack, getsource
+from inspect import stack
 from functools import wraps
-from multiprocessing import Pool, Lock
+from multiprocessing import Pool, Process, Lock
 from subprocess import Popen, check_output, DEVNULL, PIPE
 
 
@@ -243,7 +243,7 @@ class BatchController:
 
         return self._last_pool
 
-    def start(self, mode=7):
+    def start(self, mode=7, async=False):
         """Start the conversion (collect metadata and run FFMPEG) with the callbacks specified."""
         def _ffprobe_block():
             self.run_batch_ffprobe_async()
@@ -251,76 +251,83 @@ class BatchController:
             self._last_pool.close()
             self._last_pool.join()
 
+        modes = {
+            0: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg())),
+            1: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg_async())),
+            2: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg_gen())),
+            3: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg_gen_async())),
+            4: (lambda: (_ffprobe_block(), self.run_batch_ffmpeg())),
+            5: (lambda: (_ffprobe_block(), self.run_batch_ffmpeg_async())),
+            6: (lambda: (_ffprobe_block(), self.run_batch_ffmpeg_gen())),
+            7: (lambda: (_ffprobe_block(), self.run_batch_ffmpeg_gen_async())),
+        }
+
         try:
-            {
-                0: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg())),
-                1: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg_async())),
-                2: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg_gen())),
-                3: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg_gen_async())),
-                4: (lambda: (_ffprobe_block(), self.run_batch_ffmpeg())),
-                5: (lambda: (_ffprobe_block(), self.run_batch_ffmpeg_async())),
-                6: (lambda: (_ffprobe_block(), self.run_batch_ffmpeg_gen())),
-                7: (lambda: (_ffprobe_block(), self.run_batch_ffmpeg_gen_async())),
-            }[mode]()
+            process = Process(target=modes[mode], name=self.__name__)
         except KeyError:
             raise KeyError("Mode {} does not exist. Argument 'mode' must be between 0 and 7.".format(mode))
 
+        process.start()
+
+        if not async:
+            process.join()
+
         self._callback()(self)
 
-    def start_0(self):
+    def start_0(self, async=False):
         """Start with mode 0, blocking metadata collection and blocking conversion process. Uses callback keys
         `ffprobe`, `ffmpeg`, `start`, and `start_0`.
         Equivalent to `lambda: (self.start(mode=0), self._callbacks.get("start")(), self._callbacks.get("start_0")()`"""
-        self.start(mode=0)
+        self.start(mode=0, async=async)
         self._callback()(self)
 
-    def start_1(self):
+    def start_1(self, async=False):
         """Start with mode 1, blocking metadata collection and non-blocking conversion process. Uses callback keys
         `ffprobe`, `ffmpeg`, `start`, and `start_1`.
         Equivalent to `lambda: (self.start(mode=1), self._callbacks.get("start")(), self._callbacks.get("start_1")()`"""
-        self.start(mode=1)
+        self.start(mode=1, async=async)
         self._callback()(self)
 
-    def start_2(self):
+    def start_2(self, async=False):
         """Start with mode 2, blocking metadata collection and blocking conversion process with generator results.
         Uses callback keys `ffprobe`, `ffmpeg`, `start`, and `start_0`.
         Equivalent to `lambda: (self.start(mode=2), self._callbacks.get("start")(), self._callbacks.get("start_2")()`"""
-        self.start(mode=2)
+        self.start(mode=2, async=async)
         self._callback()(self)
 
-    def start_3(self):
+    def start_3(self, async=False):
         """Start with mode 3, blocking metadata collection and non-blocking conversion process with generator results.
         Uses callback keys `ffprobe`, `ffmpeg`, `start`, and `start_0`.
         Equivalent to `lambda: (self.start(mode=3), self._callbacks.get("start")(), self._callbacks.get("start_3")()`"""
-        self.start(mode=3)
+        self.start(mode=3, async=async)
         self._callback()(self)
 
-    def start_4(self):
+    def start_4(self, async=False):
         """Start with mode 0, blocking metadata collection and blocking conversion process. Uses callback keys
         `ffprobe`, `ffmpeg`, `start`, and `start_0`. Metadata collection is not internally blocking.
         Equivalent to `lambda: (self.start(mode=0), self._callbacks.get("start")(), self._callbacks.get("start_0")()`"""
-        self.start(mode=4)
+        self.start(mode=4, async=async)
         self._callback()(self)
 
-    def start_5(self):
+    def start_5(self, async=False):
         """Start with mode 1, blocking metadata collection and non-blocking conversion process. Uses callback keys
         `ffprobe`, `ffmpeg`, `start`, and `start_1`. Metadata collection is not internally blocking.
         Equivalent to `lambda: (self.start(mode=1), self._callbacks.get("start")(), self._callbacks.get("start_1")()`"""
-        self.start(mode=5)
+        self.start(mode=5, async=async)
         self._callback()(self)
 
-    def start_6(self):
+    def start_6(self, async=False):
         """Start with mode 2, blocking metadata collection and blocking conversion process with generator results.
         Uses callback keys `ffprobe`, `ffmpeg`, `start`, and `start_0`. Metadata collection is not internally blocking.
         Equivalent to `lambda: (self.start(mode=2), self._callbacks.get("start")(), self._callbacks.get("start_2")()`"""
-        self.start(mode=6)
+        self.start(mode=6, async=async)
         self._callback()(self)
 
-    def start_7(self):
+    def start_7(self, async=False):
         """Start with mode 3, blocking metadata collection and non-blocking conversion process with generator results.
         Uses callback keys `ffprobe`, `ffmpeg`, `start`, and `start_0`. Metadata collection is not internally blocking.
         Equivalent to `lambda: (self.start(mode=3), self._callbacks.get("start")(), self._callbacks.get("start_3")()`"""
-        self.start(mode=7)
+        self.start(mode=7, async=async)
         self._callback()(self)
 
     def wait(self):
