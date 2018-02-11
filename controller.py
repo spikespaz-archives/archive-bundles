@@ -116,10 +116,6 @@ class BatchController:
         self._last_pool = None
         self._mutex = Lock()
 
-    def _task_queue(self):
-        """Get the protected task queue from within the `self.last_pool`. Will error if `self.last_pool` is None."""
-        return self._last_pool._taskqueue
-
     def _callback(self, callback=None, prefix=""):
         """Wrapper to retrieve a callback matching the parent method name from `self.callbacks` if it exists.
         This is very meta-programmed and bad practice. May be removed."""
@@ -349,7 +345,7 @@ class BatchController:
         """Pause the batch operation in `self.last_pool` by adding all incomplete tasks to a protected internal field
         and empty the protected queue. Run the callback matching the name of this method. Non blocking."""
         if self._last_pool and not self._unfinished:
-            queue = self._task_queue()
+            queue = self._last_pool._taskqueue
 
             with queue.mutex:
                 while len(queue.queue) <= 0:
@@ -374,7 +370,7 @@ class BatchController:
         """Completely lock, clear, and close the internal protected queue of `self.last_queue` while allowing current
         workers to finish while blocking. Run the callback matching the name of this method."""
         if self._last_pool:
-            queue = self._task_queue()
+            queue = self._last_pool._taskqueue
 
             with queue.mutex:
                 queue.queue.clear()
