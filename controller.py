@@ -129,6 +129,24 @@ class BatchController:
 
     def _wrap_callbacks(self, **kwargs):
         """Initialization method to wrap callbacks with required code that updates internal protected values."""
+        def _ffmpeg_generator(result):
+            @wraps(result)
+            def _generator():
+                progress = {}
+
+                for line in result.decode().splitlines():
+                    line = line.split("=")
+
+                    key = line[0].strip()
+
+                    if key == "progress":
+                        yield progress
+
+                    if len(line) == 2:
+                        progress[key] = line[1].strip()
+
+            return _generator()
+
         @wraps(kwargs.get("ffprobe"))
         def _batch_ffprobe(result):
             with self._mutex:
@@ -146,14 +164,14 @@ class BatchController:
         @wraps(kwargs.get("ffmpeg"))
         def _batch_ffmpeg(result):
             with self._mutex:
-                self._batch_results = result
+                self._batch_results = [_ffmpeg_generator(item) for item in result]
 
             kwargs.get(stack()[0][3][7:], utils._pass)(result)
 
         @wraps(kwargs.get("ffmpeg_async"))
         def _batch_ffmpeg_async(result):
             with self._mutex:
-                self._batch_meta.append(result)
+                self._batch_meta.append(_ffmpeg_generator(result))
 
             kwargs.get(stack()[0][3][7:], utils._pass)(result)
 
