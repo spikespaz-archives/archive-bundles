@@ -87,7 +87,8 @@ class BatchController:
     """Wrapper around `run_ffprobe` and `run_ffmpeg` that can perform a batch conversion
     on files and output to a mirror directory."""
 
-    def __init__(self, input_dir, output_dir, input_fmt="flac", output_fmt="mp3", overwrite_output=False, workers=4, callbacks={}):
+    def __init__(self, input_dir, output_dir, input_fmt="flac", output_fmt="mp3",
+                 overwrite_output=False, workers=4, callbacks={}):
         """Initialize the wrapper with all input and output parameters specified. Provide optional callbacks."""
         self._input_dir = input_dir
         self._output_dir = output_dir
@@ -118,16 +119,13 @@ class BatchController:
         """Get the protected task queue from within the `self.last_pool`. Will error if `self.last_pool` is None."""
         return self._last_pool._taskqueue
 
-    def _callback(self, result, callback=stack()[1][3]):
+    def _callback(self, callback=stack()[1][3]):
         """Wrapper to retrieve a callback matching the parent method name from `self.callbacks` if it exists.
-        This is very metaprogrammed and bad practice. May be removed."""
+        This is very meta-programmed and bad practice. May be removed."""
         if callback.startswith("run_batch_"):
             callback = callback[4:]
 
-        callback = self._callbacks.get(callback)
-
-        if callback is not None:
-            callback(result)
+        return self._callbacks.get(callback)
 
     def _wrap_callbacks(self, **kwargs):
         """Initialization method to wrap callbacks with required code that updates internal protected values."""
@@ -211,15 +209,15 @@ class BatchController:
         with Pool(self._workers) as pool:
             self._last_pool = pool
 
-            return pool.map_async(run_ffprobe, self._input_paths, callback=self._callback)
+            return pool.map_async(run_ffprobe, self._input_paths, callback=self._callback())
 
     def run_batch_ffprobe_async(self):
-        """Execute `run_ffprobe` on a batch of files asynchronously while apppending to `self.batch_meta` and return
+        """Execute `run_ffprobe` on a batch of files asynchronously while appending to `self.batch_meta` and return
         the worker pool before all results are ready."""
         self._last_pool = Pool(self._workers)
 
         for file_path in self._input_paths:
-            self._last_pool.apply_async(run_ffprobe, (file_path,), callback=self._callback)
+            self._last_pool.apply_async(run_ffprobe, (file_path,), callback=self._callback())
 
         return self._last_pool
 
@@ -229,7 +227,7 @@ class BatchController:
             self._last_pool = pool
 
             return pool.map_async(utils.unzip_args(run_ffmpeg),
-                                  zip(self._input_paths, self._ow_args), callback=self._callback)
+                                  zip(self._input_paths, self._ow_args), callback=self._callback())
 
     def run_batch_ffmpeg_async(self):
         """Execute `run_ffmpeg` on a batch of files asynchronously and return
@@ -238,7 +236,7 @@ class BatchController:
 
         for file_path in self._input_paths:
             self._last_pool.apply_async(run_ffmpeg, args=(file_path,),
-                                        kwds=self._ow_args, callback=self._callback)
+                                        kwds=self._ow_args, callback=self._callback())
 
         return self._last_pool
 
@@ -249,7 +247,7 @@ class BatchController:
             self._last_pool = pool
 
             return pool.map_async(utils.unzip_args(run_ffmpeg_async),
-                                  zip(self._input_paths, self._ow_args), callback=self._callback)
+                                  zip(self._input_paths, self._ow_args), callback=self._callback())
 
     def run_batch_ffmpeg_gen_async(self):
         """Execute `run_ffmpeg_async` on a batch of files asynchronously and return
@@ -258,7 +256,7 @@ class BatchController:
 
         for file_path in self._input_paths:
             self._last_pool.apply_async(run_ffmpeg_async, args=(file_path,),
-                                        kwds=self._ow_args, callback=self._callback)
+                                        kwds=self._ow_args, callback=self._callback())
 
         return self._last_pool
 
@@ -284,70 +282,70 @@ class BatchController:
         except KeyError:
             raise KeyError("Mode {} does not exist. Argument 'mode' must be between 0 and 7.".format(mode))
 
-        self._callback(self)
+        self._callback()(self)
 
     def start_0(self):
         """Start with mode 0, blocking metadata collection and blocking conversion process. Uses callback keys
         `ffprobe`, `ffmpeg`, `start`, and `start_0`.
         Equivalent to `lambda: (self.start(mode=0), self._callbacks.get("start")(), self._callbacks.get("start_0")()`"""
         self.start(mode=0)
-        self._callback(self)
+        self._callback()(self)
 
     def start_1(self):
         """Start with mode 1, blocking metadata collection and non-blocking conversion process. Uses callback keys
         `ffprobe`, `ffmpeg`, `start`, and `start_1`.
         Equivalent to `lambda: (self.start(mode=1), self._callbacks.get("start")(), self._callbacks.get("start_1")()`"""
         self.start(mode=1)
-        self._callback(self)
+        self._callback()(self)
 
     def start_2(self):
         """Start with mode 2, blocking metadata collection and blocking conversion process with generator results.
         Uses callback keys `ffprobe`, `ffmpeg`, `start`, and `start_0`.
         Equivalent to `lambda: (self.start(mode=2), self._callbacks.get("start")(), self._callbacks.get("start_2")()`"""
         self.start(mode=2)
-        self._callback(self)
+        self._callback()(self)
 
     def start_3(self):
         """Start with mode 3, blocking metadata collection and non-blocking conversion process with generator results.
         Uses callback keys `ffprobe`, `ffmpeg`, `start`, and `start_0`.
         Equivalent to `lambda: (self.start(mode=3), self._callbacks.get("start")(), self._callbacks.get("start_3")()`"""
         self.start(mode=3)
-        self._callback(self)
+        self._callback()(self)
 
     def start_4(self):
         """Start with mode 0, blocking metadata collection and blocking conversion process. Uses callback keys
         `ffprobe`, `ffmpeg`, `start`, and `start_0`. Metadata collection is not internally blocking.
         Equivalent to `lambda: (self.start(mode=0), self._callbacks.get("start")(), self._callbacks.get("start_0")()`"""
         self.start(mode=4)
-        self._callback(self)
+        self._callback()(self)
 
     def start_5(self):
         """Start with mode 1, blocking metadata collection and non-blocking conversion process. Uses callback keys
         `ffprobe`, `ffmpeg`, `start`, and `start_1`. Metadata collection is not internally blocking.
         Equivalent to `lambda: (self.start(mode=1), self._callbacks.get("start")(), self._callbacks.get("start_1")()`"""
         self.start(mode=5)
-        self._callback(self)
+        self._callback()(self)
 
     def start_6(self):
         """Start with mode 2, blocking metadata collection and blocking conversion process with generator results.
         Uses callback keys `ffprobe`, `ffmpeg`, `start`, and `start_0`. Metadata collection is not internally blocking.
         Equivalent to `lambda: (self.start(mode=2), self._callbacks.get("start")(), self._callbacks.get("start_2")()`"""
         self.start(mode=6)
-        self._callback(self)
+        self._callback()(self)
 
     def start_7(self):
         """Start with mode 3, blocking metadata collection and non-blocking conversion process with generator results.
         Uses callback keys `ffprobe`, `ffmpeg`, `start`, and `start_0`. Metadata collection is not internally blocking.
         Equivalent to `lambda: (self.start(mode=3), self._callbacks.get("start")(), self._callbacks.get("start_3")()`"""
         self.start(mode=7)
-        self._callback(self)
+        self._callback()(self)
 
     def wait(self):
         """Close and join `self.last_pool`."""
         self._last_pool.close()
         self._last_pool.join()
 
-        self._callback(self._last_pool)
+        self._callback()(self._last_pool)
 
     def pause(self):
         """Pause the batch operation in `self.last_pool` by adding all incomplete tasks to a protected internal field
@@ -359,7 +357,7 @@ class BatchController:
                 while len(queue.queue) <= 0:
                     self._unfinished.append(queue.get())
 
-            self._callback(self._last_pool)
+            self._callback()(self._last_pool)
 
     def resume(self):
         """Move all internally saved incomplete processes back into the protected queue,
@@ -372,7 +370,7 @@ class BatchController:
 
             self._last_pool._maintain_pool()
 
-            self._callback(self._last_pool)
+            self._callback()(self._last_pool)
 
     def cancel(self):
         """Completely lock, clear, and close the internal protected queue of `self.last_queue` while allowing current
@@ -386,7 +384,7 @@ class BatchController:
 
             self._last_pool.join()
 
-            self._callback(self._last_pool)
+            self._callback()(self._last_pool)
 
     def terminate(self):
         """Terminate all workers and clear the internal incomplete list if paused."""
@@ -394,7 +392,7 @@ class BatchController:
             self._last_pool.terminate()
             self._unfinished = []
 
-            self._callback(self._last_pool)
+            self._callback()(self._last_pool)
 
     def get_finished(self):
         """The count of finished conversion processes."""
