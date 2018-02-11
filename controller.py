@@ -252,23 +252,21 @@ class BatchController:
 
     def start(self, mode=7, async=False):
         """Start the conversion (collect metadata and run FFMPEG) with the callbacks specified."""
-        def _ffprobe_block(callback):
+        def _ffprobe_block():
             self.run_batch_ffprobe_async()
 
             self._last_pool.close()
             self._last_pool.join()
 
-            callback()
-
         modes = {
-            0: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg())),
-            1: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg_async())),
-            2: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg_gen())),
-            3: (lambda: (self.run_batch_ffprobe(), self.run_batch_ffmpeg_gen_async())),
-            4: (lambda: _ffprobe_block(self.run_batch_ffmpeg)),
-            5: (lambda: _ffprobe_block(self.run_batch_ffmpeg_async)),
-            6: (lambda: _ffprobe_block(self.run_batch_ffmpeg_gen)),
-            7: (lambda: _ffprobe_block(self.run_batch_ffmpeg_gen_async)),
+            0: (lambda: self.run_batch_ffprobe(), self.run_batch_ffmpeg()),
+            1: (lambda: self.run_batch_ffprobe(), self.run_batch_ffmpeg_async()),
+            2: (lambda: self.run_batch_ffprobe(), self.run_batch_ffmpeg_gen()),
+            3: (lambda: self.run_batch_ffprobe(), self.run_batch_ffmpeg_gen_async()),
+            4: (lambda: _ffprobe_block(), self.run_batch_ffmpeg()),
+            5: (lambda: _ffprobe_block(), self.run_batch_ffmpeg_async()),
+            6: (lambda: _ffprobe_block(), self.run_batch_ffmpeg_gen()),
+            7: (lambda: _ffprobe_block(), self.run_batch_ffmpeg_gen_async()),
         }
 
         try:
