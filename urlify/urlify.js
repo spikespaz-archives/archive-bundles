@@ -66,10 +66,14 @@
                 OUTPUT_TEXTAREA.value = script;
 
                 resetStatus();
+
+                OUTPUT_TEXTAREA.click();
             });
         }
     };
 
-    // showStatus("Welcome! Paste code in the left, and get minified and URL-safe output on the right. Press CTRL + Enter to force recalculation.");
-    // resetStatus(5000);
+    OUTPUT_TEXTAREA.onclick = function() {
+        OUTPUT_TEXTAREA.focus();
+        OUTPUT_TEXTAREA.select();
+    };
 })(document);
