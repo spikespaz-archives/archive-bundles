@@ -1,0 +1,55 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 14px;
+    background: rgb(36, 36, 36);
+}
+
+.body-wrapper {
+    height: 100%;
+}
+
+.column-wrapper {
+    display: flex;
+    height: 100%;
+}
+
+#input-textarea, #output-textarea {
+    margin: 20px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    resize: none;
+}
+
+#input-textarea {
+    display: inline-block;
+    border: none;
+    resize: none;
+    white-space: pre-wrap;
+}
+
+#output-textarea {
+    display: inline-block;
+    overflow: hidden;
+    white-space: pre-wrap;
+    margin-left: 0;
+}
+
+#status-message {
+    position: absolute;
+    bottom: 50%;
+    color: #ffffff;
+    width: 100%;
+    background: rgb(36, 36, 36);
+    display: none;
+}
+
+#status-content {
+    margin: 10px auto;
+    color: #ffffff;
+    width: 90%;
+    text-align: center;
+}
