@@ -63,9 +63,9 @@ export class Ajax {
 
             if (value instanceof Array && typeof value.join === "function") {
                 value = listPrefix + value.join(listDelim) + listSuffix;
+            } else if (value === "") {} else {
+                buffer.push(key + "=" + encodeURIComponent(value));
             }
-
-            buffer.push(key + "=" + encodeURIComponent(value));
         });
 
         return "?" + buffer.join("&");
