@@ -8,7 +8,7 @@ export class Ajax {
 
     GET(url, params={}, data=null, async=true) {
         let request = this.request("GET", params, data, async, this.user, this.password);
-        request.responseJSON = () => { return JSON.parse(request.responseText); };
+        request.responseJSON = JSON.parse(request.responseText);
 
         this.requests.push(request);
 
@@ -17,7 +17,7 @@ export class Ajax {
 
     POST(url, params={}, data=null, async=true) {
         let request = this.request("POST", params, data, async, this.user, this.password);
-        request.responseJSON = () => { return JSON.parse(request.responseText); };
+        request.responseJSON = JSON.parse(request.responseText);
 
         this.requests.push(request);
 
@@ -26,7 +26,7 @@ export class Ajax {
 
     PUT(url, params={}, data=null, async=true) {
         let request = this.request("PUT", params, data, async, this.user, this.password);
-        request.responseJSON = () => { return JSON.parse(request.responseText); };
+        request.responseJSON = JSON.parse(request.responseText);
 
         this.requests.push(request);
 
@@ -35,7 +35,7 @@ export class Ajax {
 
     DELETE(url, params={}, data=null, async=true) {
         let request = this.request("DELETE", params, data, async, this.user, this.password);
-        request.responseJSON = () => { return JSON.parse(request.responseText); };
+        request.responseJSON = JSON.parse(request.responseText);
 
         this.requests.push(request);
 
