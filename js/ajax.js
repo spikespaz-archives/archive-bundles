@@ -1,5 +1,5 @@
 export class Ajax {
-    constructor(user=null, password=null) {
+    constructor(user, password) {
         this.user = user;
         this.password = password;
 
@@ -42,7 +42,7 @@ export class Ajax {
         return request;
     }
 
-    static request(method, url, params={}, data=null, async=true, user=this.user, password=this.password) {
+    static request(method, url, params={}, data=null, async=true, user=undefined, password=undefined) {
         let request = new XMLHttpRequest();
 
         request.onreadystatechange = function () {
@@ -55,11 +55,17 @@ export class Ajax {
         request.send(data);
     }
 
-    static buildQuery(params) {
+    static buildQuery(params, listPrefix="", listDelim=";", listSuffix="") {
         let buffer = [];
 
         Object.keys(params).forEach(function(key) {
-            buffer.push(key + "=" + encodeURIComponent(params[key]));
+            let value = params[key];
+
+            if (value instanceof Array && typeof value.join === "function") {
+                value = listPrefix + value.join(listDelim) + listSuffix;
+            }
+
+            buffer.push(key + "=" + encodeURIComponent(value));
         });
 
         return "?" + buffer.join("&");
