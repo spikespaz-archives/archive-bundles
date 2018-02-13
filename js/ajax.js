@@ -6,8 +6,8 @@ export class Ajax {
         this.requests = [];
     }
 
-    GET(url, params={}, data=null, async=true, user=this.user, password=this.password) {
-        let request = this.request("GET", params, data, async, user, password);
+    GET(url, params={}, data=null, async=true) {
+        let request = this.request("GET", params, data, async, this.user, this.password);
         request.responseJSON = () => { return JSON.parse(request.responseText); };
 
         this.requests.push(request);
@@ -15,8 +15,8 @@ export class Ajax {
         return request;
     }
 
-    POST(url, params={}, data=null, async=true, user=this.user, password=this.password) {
-        let request = this.request("POST", params, data, async, user, password);
+    POST(url, params={}, data=null, async=true) {
+        let request = this.request("POST", params, data, async, this.user, this.password);
         request.responseJSON = () => { return JSON.parse(request.responseText); };
 
         this.requests.push(request);
@@ -24,8 +24,8 @@ export class Ajax {
         return request;
     }
 
-    PUT(url, params={}, data=null, async=true, user=this.user, password=this.password) {
-        let request = this.request("PUT", params, data, async, user, password);
+    PUT(url, params={}, data=null, async=true) {
+        let request = this.request("PUT", params, data, async, this.user, this.password);
         request.responseJSON = () => { return JSON.parse(request.responseText); };
 
         this.requests.push(request);
@@ -33,8 +33,8 @@ export class Ajax {
         return request;
     }
 
-    DELETE(url, params={}, data=null, async=true, user=this.user, password=this.password) {
-        let request = this.request("DELETE", params, data, async, user, password);
+    DELETE(url, params={}, data=null, async=true) {
+        let request = this.request("DELETE", params, data, async, this.user, this.password);
         request.responseJSON = () => { return JSON.parse(request.responseText); };
 
         this.requests.push(request);
