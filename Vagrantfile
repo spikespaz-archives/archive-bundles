@@ -49,13 +49,13 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  # config.vm.provider "virtualbox" do |vb|
+  config.vm.provider "virtualbox" do |vb|
   #   # Display the VirtualBox GUI when booting the machine
   #   vb.gui = true
   #
   #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
-  # end
+    vb.memory = "2048"
+  end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
@@ -63,8 +63,21 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y apache2
-  # SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+    apt-get install -y quilt
+    apt-get install -y parted
+    apt-get install -y realpath
+    apt-get install -y qemu-user-static
+    apt-get install -y debootstrap
+    apt-get install -y zerofree
+    apt-get install -y pxz
+    apt-get install -y zip
+    apt-get install -y dosfstools
+    apt-get install -y bsdtar
+    apt-get install -y libcap2-bin
+    apt-get install -y grep
+    apt-get install -y rsync
+    apt-get install -y xz-utils
+  SHELL
 end
