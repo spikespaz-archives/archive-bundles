@@ -25,7 +25,7 @@
 #hdmi_force_hotplug=1
 
 # uncomment to force a specific HDMI mode (this will force VGA)
-#hdmi_group=1
+hdmi_group=1
 #hdmi_mode=1
 
 # uncomment to force a HDMI mode rather than DVI. This can make audio work in
@@ -54,3 +54,8 @@
 
 # Enable audio (loads snd_bcm2835)
 dtparam=audio=on
+
+# minimal install options
+gpu_mem=16
+initial_turbo=10
+max_usb_current=1
