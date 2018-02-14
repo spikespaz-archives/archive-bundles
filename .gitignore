@@ -2,7 +2,6 @@
 deploy/
 work/
 apt-cacher-ng/
-config
 postrun.sh
 SKIP
 SKIP_IMAGES
