@@ -1,0 +1,2 @@
+NOOBS_NAME="Docker Pi"
+NOOBS_DESCRIPTION="A minimal version of Raspbian Stretch focused on Docker"
