@@ -55,7 +55,7 @@ hdmi_group=1
 # Enable audio (loads snd_bcm2835)
 dtparam=audio=on
 
-# minimal install options
+# minimal install options, sourced from https://elinux.org/RPiconfig
 gpu_mem=16
 initial_turbo=10
 max_usb_current=1
