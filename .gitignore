@@ -7,7 +7,12 @@ SKIP
 SKIP_IMAGES
 .pc
 *-pc
+config
 
 # Vagrant
 .vagrant/
 *.log
+
+# Python
+__pycache__/
+*.pyc
