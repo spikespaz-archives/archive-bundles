@@ -65,6 +65,7 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
+    apt-get install -y curl
     apt-get install -y quilt
     apt-get install -y parted
     apt-get install -y realpath
@@ -79,5 +80,6 @@ Vagrant.configure("2") do |config|
     apt-get install -y grep
     apt-get install -y rsync
     apt-get install -y xz-utils
+    apt-get install -y dos2unix
   SHELL
 end
