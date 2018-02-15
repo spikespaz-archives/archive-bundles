@@ -30,7 +30,6 @@ class QThemePalette(QPalette):
         self.accent2 = QColor(*theme_dict["accent2"])
         self.tooltip = theme_dict["tooltip"]
 
-        # Set all the colors based on the constants in globals
         self.setColor(QPalette.Window,          self.background)
         self.setColor(QPalette.WindowText,      self.foreground)
         self.setColor(QPalette.Base,            self.background2)
@@ -48,12 +47,12 @@ class QThemePalette(QPalette):
     def set_stylesheet(self, app):
         """Static method to set the tooltip stylesheet to a `QtWidgets.QApplication`."""
         app.setStyleSheet(self.tooltip.format(
-            foreground=self.foreground,
-            foreground2=self.foreground2,
-            background=self.background,
-            background2=self.background2,
-            accent=self.accent,
-            accent2=self.accent2))
+            foreground=_css_rgb(self.foreground),
+            foreground2=_css_rgb(self.foreground2),
+            background=_css_rgb(self.background),
+            background2=_css_rgb(self.background2),
+            accent=_css_rgb(self.accent),
+            accent2=_css_rgb(self.accent2)))
 
     def set_app(self, app):
         """Set the theme and this palette to a `QtWidgets.QApplication`."""
