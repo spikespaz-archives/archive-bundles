@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-sh ${BASE_DIR}/get-docker.sh
+sh ${BASE_DIR}/scripts/get-docker.sh
 
 apt-get update
 
