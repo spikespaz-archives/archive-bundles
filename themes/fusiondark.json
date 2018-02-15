@@ -1,0 +1,10 @@
+{
+  "basetheme": "Fusion",
+  "foreground": [255, 255, 255],
+  "foreground2": [35, 35, 35],
+  "background": [53, 53, 53],
+  "background2": [0, 0, 0],
+  "accent": [42, 230, 218],
+  "accent2": [255, 0, 0],
+  "tooltip": "QToolTip {{ color: {foreground};background-color: {accent};border: 1px solid {background}; }}"
+}
