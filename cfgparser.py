@@ -9,18 +9,18 @@ def _reads(string):
     content = []
 
     for line in string.strip().splitlines():
-            line = line.split("=", 1)
-            line = [line[0].strip(), line[1].strip()]
+        line = line.split("=", 1)
+        line = [line[0].strip(), line[1].strip()]
 
-            if line[1].lower() in ("", "none"):
-                line[1] = None
-            else:
-                try:
-                    line[1] = literal_eval(line[1])
-                except ValueError:
-                    pass
+        if line[1].lower() in ("", "none"):
+            line[1] = None
+        else:
+            try:
+                line[1] = literal_eval(line[1])
+            except ValueError:
+                pass
 
-            content.append(line)
+        content.append(line)
 
     return content
 
@@ -33,7 +33,7 @@ def reads(string):
 def read(file_path):
     """Read a configuration file. Returns a dictionary."""
     with open(file_path, "r") as config_file:
-        return reads(config_file)
+        return reads(config_file.read())
 
 
 def dumps(config, padding=0):
