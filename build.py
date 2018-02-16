@@ -41,6 +41,8 @@ parser.add_argument("--fix-lines", dest="fix_lines", action="store_true",
                     help="fix the line endings of all files")
 parser.add_argument("--skip-stages", dest="skip_stages", nargs="+", default=[], type=int,
                     help="list of stages to skip, by names of directory or stage number")
+parser.add_argument("-r", "--reset", dest="reset", action="store_true",
+                    help="run reset.sh first, before build remove work/ and deploy/")
 
 
 # If this script is called directly from shell
@@ -51,6 +53,10 @@ if __name__ == "__main__":
         parser.print_usage()
         print(parser.prog + ": error: config mode and skip files cannot be used together")
         exit()
+
+    if args.reset:
+        print("Resetting before build...")
+        system("sudo ./reset.sh")
 
     try:
         print("Reading config file...")
