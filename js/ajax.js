@@ -7,7 +7,7 @@ export class Ajax {
     }
 
     GET(url, params={}, data=null, async=true) {
-        let request = this.request("GET", params, data, async, this.user, this.password);
+        let request = Ajax.request("GET", url, params, data, async, this.user, this.password);
         request.responseJSON = JSON.parse(request.responseText);
 
         this.requests.push(request);
@@ -16,7 +16,7 @@ export class Ajax {
     }
 
     POST(url, params={}, data=null, async=true) {
-        let request = this.request("POST", params, data, async, this.user, this.password);
+        let request = Ajax.request("POST", url, params, data, async, this.user, this.password);
         request.responseJSON = JSON.parse(request.responseText);
 
         this.requests.push(request);
@@ -25,7 +25,7 @@ export class Ajax {
     }
 
     PUT(url, params={}, data=null, async=true) {
-        let request = this.request("PUT", params, data, async, this.user, this.password);
+        let request = Ajax.request("PUT", url, params, data, async, this.user, this.password);
         request.responseJSON = JSON.parse(request.responseText);
 
         this.requests.push(request);
@@ -34,7 +34,7 @@ export class Ajax {
     }
 
     DELETE(url, params={}, data=null, async=true) {
-        let request = this.request("DELETE", params, data, async, this.user, this.password);
+        let request = Ajax.request("DELETE", url, params, data, async, this.user, this.password);
         request.responseJSON = JSON.parse(request.responseText);
 
         this.requests.push(request);
@@ -51,7 +51,7 @@ export class Ajax {
             }
         };
         
-        request.open("POST", url + this.buildQuery(params), async, user, password);
+        request.open(method, url + this.buildQuery(params), async, user, password);
         request.send(data);
     }
 
@@ -63,9 +63,9 @@ export class Ajax {
 
             if (value instanceof Array && typeof value.join === "function") {
                 value = listPrefix + value.join(listDelim) + listSuffix;
-            } else if (value === "") {} else {
-                buffer.push(key + "=" + encodeURIComponent(value));
             }
+
+            buffer.push(key + "=" + encodeURIComponent(value));
         });
 
         return "?" + buffer.join("&");
