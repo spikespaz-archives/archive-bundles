@@ -30,7 +30,6 @@ def _reads(string):
                 pass
 
         content.append(line)
-        print(line)
 
     return content
 
