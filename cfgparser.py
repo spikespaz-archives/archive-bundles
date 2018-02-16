@@ -4,6 +4,13 @@
 from ast import literal_eval
 
 
+class RawString(str):
+    """Wrapper around the `str` class to specify that it is a raw string."""
+
+    def __repr__(self):
+        return "\"" + self + "\""
+
+
 def _reads(string):
     """Read a configuration string. Returns a list of (key, value) pairs."""
     content = []
@@ -14,6 +21,8 @@ def _reads(string):
 
         if line[1].lower() in ("", "none"):
             line[1] = None
+        elif line[1].startswith("'") and line[1].endswith("'"):
+            line[1] = RawString(literal_eval(line[1]))
         else:
             try:
                 line[1] = literal_eval(line[1])
@@ -21,6 +30,7 @@ def _reads(string):
                 pass
 
         content.append(line)
+        print(line)
 
     return content
 
@@ -41,11 +51,19 @@ def dumps(config, padding=0):
     content = ""
 
     for (key, value) in config.items():
-        content += "{key}{padding}={padding}{value}\n".format(
-            key=str(key).strip(),
-            value="" if value is None else repr(value),
-            padding=" " * padding
-        )
+        if value is None:
+            value = ""
+        elif type(value) is RawString:
+            value = "'" + str(value) + "'"
+        else:
+            value = repr(value)
+
+            if value.startswith("'") and value.endswith("'"):
+                value = "\"" + value[1:-1] + "\""
+
+        content += "{key}{padding}={padding}{value}\n".format(key=str(key).strip(),
+                                                              value=value,
+                                                              padding=" " * padding)
 
     return content
 
