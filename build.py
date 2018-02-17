@@ -81,7 +81,7 @@ if __name__ == "__main__":
     # Start code, make files based on variables
     if args.fix_lines:
         print("Fixing all line endings...")
-        system("find . -type f -print0 | xargs -0 dos2unix")
+        system("fix-lines.sh")
 
     if args.skip_stages:
         print("Adding stage SKIP files...")
