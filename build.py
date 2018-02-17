@@ -32,7 +32,7 @@ parser.add_argument("--base-dir", dest="base_dir", default=".",
                          " and by default both work and deployment directories.")
 
 # Arguments added by this build script
-parser.add_argument("-m", "--mode", choices=("build", "clean", "docker", "docker-continue", "config"), default="build",
+parser.add_argument("-m", "--mode", choices=("build", "build-clean", "docker", "docker-continue", "config"), default="build",
                     help="build/rebuild all, clean and rebuild just the last stage,"
                           " build using Docker, continue from a failed build with Docker, or just generate config")
 parser.add_argument("-s", "--save-config", dest="save_config", action="store_true",
@@ -42,16 +42,16 @@ parser.add_argument("--fix-lines", dest="fix_lines", action="store_true",
 parser.add_argument("--skip-stages", dest="skip_stages", nargs="+", default=[], type=int,
                     help="list of stages to skip, by names of directory or stage number")
 parser.add_argument("-r", "--reset", dest="reset", action="store_true",
-                    help="run reset.sh first, before build remove work/ and deploy/")
+                    help="run reset.sh first to remove work and deploy directories as well as stage SKIP files")
 
 
 # If this script is called directly from shell
 if __name__ == "__main__":
-    if getuid() != 0:
-        print("Script must be run as root.")
-        exit()
-
     args = parser.parse_args()
+
+    if not args.mode == "config" and getuid() != 0:
+        print("Script must be run as root to build images.")
+        exit()
 
     if args.skip_stages and args.mode == "config":
         parser.print_usage()
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     if args.mode == "build":
         print("Running normal build...")
         system("./build.sh")
-    elif args.mode == "clean":
+    elif args.mode == "build-clean":
         print("Running clean build...")
         system("CLEAN=1 ./build.sh")
     elif args.mode == "docker":
