@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
-from os import system, remove, path
 from argparse import ArgumentParser
+from os import system, remove, path, getuid
 from cfgparser import read as cfgread, dump as cfgwrite, RawString
 
 
@@ -47,6 +47,10 @@ parser.add_argument("-r", "--reset", dest="reset", action="store_true",
 
 # If this script is called directly from shell
 if __name__ == "__main__":
+    if getuid() != 0:
+        print("Script must be run as root.")
+        exit()
+
     args = parser.parse_args()
 
     if args.skip_stages and args.mode == "config":
@@ -56,7 +60,7 @@ if __name__ == "__main__":
 
     if args.reset:
         print("Resetting before build...")
-        system("sudo ./reset.sh")
+        system("./reset.sh")
 
     try:
         print("Reading config file...")
@@ -81,7 +85,7 @@ if __name__ == "__main__":
     # Start code, make files based on variables
     if args.fix_lines:
         print("Fixing all line endings...")
-        system("fix-lines.sh")
+        system("./fix-lines.sh")
 
     if args.skip_stages:
         print("Adding stage SKIP files...")
@@ -96,16 +100,16 @@ if __name__ == "__main__":
     # Build code, run build.sh based on arguments
     if args.mode == "build":
         print("Running normal build...")
-        system("sudo ./build.sh")
+        system("./build.sh")
     elif args.mode == "clean":
         print("Running clean build...")
-        system("sudo CLEAN=1 ./build.sh")
+        system("CLEAN=1 ./build.sh")
     elif args.mode == "docker":
         print("Running docker build...")
-        system("sudo ./build-docker.sh")
+        system("./build-docker.sh")
     elif args.mode == "docker-continue":
         print("Running docker continued build...")
-        system("sudo CONTINUE=1 ./build-docker.sh")
+        system("CONTINUE=1 ./build-docker.sh")
     elif args.mode == "config":
         print("Not running any build...")
         save_config = True
