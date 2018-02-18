@@ -10,6 +10,7 @@ class Pool(pool.Pool):
         super().__reduce__()
 
     _unfinished = Queue()
+    _historical_length = 0
 
     def wait(self):
         """Close and join the pool."""
@@ -42,3 +43,34 @@ class Pool(pool.Pool):
             self._unfinished.get()
 
         self.wait()
+
+    def unfinished(self):
+        """Return the count of unfinished tasks from the queue."""
+        if self._state == PAUSE:
+            return self._unfinished.qsize()
+        else:
+            return self._taskqueue.unfinished_tasks
+
+    def finished(self):
+        """Return the count of finished tasks from the queue."""
+        return self._historical_length - self.unfinished()
+
+    def imap(self, *args, **kwargs):
+        super().imap(*args, **kwargs)
+
+        self._historical_length += 1
+
+    def imap_unordered(self, *args, **kwargs):
+        super().imap_unordered(*args, **kwargs)
+
+        self._historical_length += 1
+
+    def apply_async(self, *args, **kwargs):
+        super().apply_async(*args, **kwargs)
+
+        self._historical_length += 1
+
+    def _map_async(self, *args, **kwargs):
+        super()._map_async(*args, **kwargs)
+
+        self._historical_length += 1
