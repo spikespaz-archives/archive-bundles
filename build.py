@@ -27,12 +27,13 @@ parser.add_argument("-d", "--deploy-dir", dest="deploy_dir",
 parser.add_argument("-q", "--use-qemu", dest="use_qemu", action="store_true",
                     help="This enable the Qemu mode and set filesystem and image suffix if set to 1.")
 # This is at the end because it probably shouldn't be changed
-parser.add_argument("--base-dir", dest="base_dir", default=".",
+parser.add_argument("--base-dir", dest="base_dir",
                     help="Top-level directory for pi-gen. Contains stage directories, build scripts,"
                          " and by default both work and deployment directories.")
 
 # Arguments added by this build script
-parser.add_argument("-m", "--mode", choices=("build", "build-clean", "docker", "docker-continue", "config"), default="build",
+parser.add_argument("-m", "--mode", default="build",
+                    choices=("build", "build-clean", "docker", "docker-continue", "config"),
                     help="build/rebuild all, clean and rebuild just the last stage,"
                           " build using Docker, continue from a failed build with Docker, or just generate config")
 parser.add_argument("-s", "--save-config", dest="save_config", action="store_true",
@@ -73,11 +74,11 @@ if __name__ == "__main__":
 
     config = {
         "IMG_NAME": args.img_name or "Raspbian",
-        "APT_PROXY": args.apt_proxy,
-        "BASE_DIR": RawString(args.base_dir),
-        "WORK_DIR": args.work_dir or "$BASE_DIR/work",
-        "DEPLOY_DIR": args.deploy_dir or "$BASE_DIR/deploy",
-        "USE_QEMU": int(args.use_qemu) or 0
+        "APT_PROXY": args.apt_proxy or defaults.get("APT_PROXY"),
+        "BASE_DIR": args.base_dir or defaults.get("BASE_DIR", ""),
+        "WORK_DIR": args.work_dir or defaults.get("WORK_DIR"),
+        "DEPLOY_DIR": args.deploy_dir or defaults.get("DEPLOY_DIR"),
+        "USE_QEMU": args.use_qemu or defaults.get("USE_QEMU")
     }
 
     cfgwrite(config, "config")
