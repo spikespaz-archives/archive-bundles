@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 from multiprocessing import pool
 from multiprocessing import Queue
 
