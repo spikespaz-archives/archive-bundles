@@ -1,0 +1,11 @@
+# IDE
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+
+# Project
+
+# Testing
+_music/
