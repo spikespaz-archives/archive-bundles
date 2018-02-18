@@ -6,7 +6,7 @@ import utilities as utils
 from os import path
 from PyQt5 import QtWidgets
 from json import load, dump
-from darkstyle import QDarkPalette
+from pyqt5themes import FusionDark
 from contextlib import contextmanager
 from controller import BatchController
 from multiprocessing import freeze_support
@@ -70,7 +70,7 @@ class Application:
         if theme != "custom":
             self.app.setStyle(theme)
         else:
-            QDarkPalette().set_app(self.app)
+            FusionDark().set_app(self.app)
 
     @staticmethod
     def _read_state():
