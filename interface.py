@@ -124,7 +124,7 @@ class Ui_batch_media_file_converter(object):
 
     def retranslateUi(self, batch_media_file_converter):
         _translate = QtCore.QCoreApplication.translate
-        batch_media_file_converter.setWindowTitle(_translate("batch_media_file_converter", "Batch Media File Converter"))
+        batch_media_file_converter.setWindowTitle(_translate("batch_media_file_converter", "FFbatcher GUI"))
         self.input_directory_label.setText(_translate("batch_media_file_converter", "Input Directory"))
         self.input_directory_edit.setToolTip(_translate("batch_media_file_converter", "The path of the input directory. All matching files in this folder and subfolders will be converted."))
         self.input_directory_picker.setToolTip(_translate("batch_media_file_converter", "Select the input directory to recurse from."))

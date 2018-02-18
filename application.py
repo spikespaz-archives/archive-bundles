@@ -5,6 +5,7 @@ import utilities as utils
 
 from os import path
 from PyQt5 import QtWidgets
+from PyQt5.QtGui import QIcon
 from json import load, dump
 from pyqt5themes import FusionDark
 from contextlib import contextmanager
@@ -23,6 +24,8 @@ class Application:
         """Self initialize the application and interface and prepare for start."""
         self.app = app
         self.window = window
+
+        window.setWindowIcon(QIcon(path.abspath("ffmpeg.png")))
 
         self.active = False
         self.active_pool = None
