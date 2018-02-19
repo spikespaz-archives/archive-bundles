@@ -1,5 +1,6 @@
 # IDE
 .idea/
+.vscode/
 
 # Python
 __pycache__/
@@ -9,3 +10,9 @@ __pycache__/
 
 # Testing
 _music/
+tests.py
+
+# FFmpeg
+ffprobe.exe
+ffmpeg.exe
+ffplay.exe
