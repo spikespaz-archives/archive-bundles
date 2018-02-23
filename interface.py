@@ -8,6 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_MarkerWindow(object):
     def setupUi(self, MarkerWindow):
         MarkerWindow.setObjectName("MarkerWindow")
@@ -120,13 +121,17 @@ class Ui_MarkerWindow(object):
         self.action_unordered_list = QtWidgets.QAction(MarkerWindow)
         self.action_unordered_list.setObjectName("action_unordered_list")
         self.action_insert_link_inline = QtWidgets.QAction(MarkerWindow)
-        self.action_insert_link_inline.setObjectName("action_insert_link_inline")
+        self.action_insert_link_inline.setObjectName(
+            "action_insert_link_inline")
         self.action_insert_link_reference = QtWidgets.QAction(MarkerWindow)
-        self.action_insert_link_reference.setObjectName("action_insert_link_reference")
+        self.action_insert_link_reference.setObjectName(
+            "action_insert_link_reference")
         self.action_insert_image_inline = QtWidgets.QAction(MarkerWindow)
-        self.action_insert_image_inline.setObjectName("action_insert_image_inline")
+        self.action_insert_image_inline.setObjectName(
+            "action_insert_image_inline")
         self.action_insert_image_reference = QtWidgets.QAction(MarkerWindow)
-        self.action_insert_image_reference.setObjectName("action_insert_image_reference")
+        self.action_insert_image_reference.setObjectName(
+            "action_insert_image_reference")
         self.menu_file.addAction(self.action_new_file)
         self.menu_file.addAction(self.action_new_window)
         self.menu_file.addSeparator()
@@ -195,20 +200,27 @@ class Ui_MarkerWindow(object):
         self.menu_edit.setTitle(_translate("MarkerWindow", "Edit"))
         self.menu_selection.setTitle(_translate("MarkerWindow", "Selection"))
         self.menu_list.setTitle(_translate("MarkerWindow", "Format List"))
-        self.menu_Insert_link.setTitle(_translate("MarkerWindow", "Insert Link"))
-        self.menu_Insert_image.setTitle(_translate("MarkerWindow", "Insert Image"))
+        self.menu_Insert_link.setTitle(
+            _translate("MarkerWindow", "Insert Link"))
+        self.menu_Insert_image.setTitle(
+            _translate("MarkerWindow", "Insert Image"))
         self.menu_view.setTitle(_translate("MarkerWindow", "View"))
         self.action_new_file.setText(_translate("MarkerWindow", "New File..."))
         self.action_new_file.setShortcut(_translate("MarkerWindow", "Ctrl+N"))
-        self.action_new_window.setText(_translate("MarkerWindow", "New Window"))
-        self.action_new_window.setShortcut(_translate("MarkerWindow", "Ctrl+W"))
-        self.action_open_file.setText(_translate("MarkerWindow", "Open File..."))
+        self.action_new_window.setText(
+            _translate("MarkerWindow", "New Window"))
+        self.action_new_window.setShortcut(
+            _translate("MarkerWindow", "Ctrl+W"))
+        self.action_open_file.setText(
+            _translate("MarkerWindow", "Open File..."))
         self.action_open_file.setShortcut(_translate("MarkerWindow", "Ctrl+O"))
-        self.action_open_recent.setText(_translate("MarkerWindow", "Open Recent"))
+        self.action_open_recent.setText(
+            _translate("MarkerWindow", "Open Recent"))
         self.action_save.setText(_translate("MarkerWindow", "Save"))
         self.action_save.setShortcut(_translate("MarkerWindow", "Ctrl+S"))
         self.action_save_as.setText(_translate("MarkerWindow", "Save As..."))
-        self.action_save_as.setShortcut(_translate("MarkerWindow", "Ctrl+Shift+S"))
+        self.action_save_as.setShortcut(
+            _translate("MarkerWindow", "Ctrl+Shift+S"))
         self.action_auto_save.setText(_translate("MarkerWindow", "Auto Save"))
         self.action_undo.setText(_translate("MarkerWindow", "Undo"))
         self.action_undo.setShortcut(_translate("MarkerWindow", "Ctrl+Z"))
@@ -224,42 +236,68 @@ class Ui_MarkerWindow(object):
         self.action_find.setShortcut(_translate("MarkerWindow", "Ctrl+F"))
         self.action_replace.setText(_translate("MarkerWindow", "Replace"))
         self.action_replace.setShortcut(_translate("MarkerWindow", "Ctrl+R"))
-        self.action_select_all.setText(_translate("MarkerWindow", "Select All"))
-        self.action_select_all.setShortcut(_translate("MarkerWindow", "Ctrl+A"))
+        self.action_select_all.setText(
+            _translate("MarkerWindow", "Select All"))
+        self.action_select_all.setShortcut(
+            _translate("MarkerWindow", "Ctrl+A"))
         self.action_word_wrap.setText(_translate("MarkerWindow", "Word Wrap"))
-        self.action_increase_zoom.setText(_translate("MarkerWindow", "Zoom In"))
-        self.action_increase_zoom.setShortcut(_translate("MarkerWindow", "Ctrl+="))
-        self.action_decrease_zoom.setText(_translate("MarkerWindow", "Zoom Out"))
-        self.action_decrease_zoom.setShortcut(_translate("MarkerWindow", "Ctrl+-"))
-        self.action_reset_zoom.setText(_translate("MarkerWindow", "Reset Zoom"))
-        self.action_reset_zoom.setShortcut(_translate("MarkerWindow", "Ctrl+0"))
-        self.action_expand_editor.setText(_translate("MarkerWindow", "Expand Editor"))
-        self.action_expand_preview.setText(_translate("MarkerWindow", "Expand Preview"))
-        self.action_preferences.setText(_translate("MarkerWindow", "Preferences"))
-        self.action_preferences.setShortcut(_translate("MarkerWindow", "Ctrl+Shift+."))
-        self.action_increase_indent.setText(_translate("MarkerWindow", "Increase Indent"))
-        self.action_increase_indent.setShortcut(_translate("MarkerWindow", "Alt+Shift+Right"))
-        self.action_decrease_indent.setText(_translate("MarkerWindow", "Decrease Indent"))
-        self.action_decrease_indent.setShortcut(_translate("MarkerWindow", "Alt+Shift+Left"))
+        self.action_increase_zoom.setText(
+            _translate("MarkerWindow", "Zoom In"))
+        self.action_increase_zoom.setShortcut(
+            _translate("MarkerWindow", "Ctrl+="))
+        self.action_decrease_zoom.setText(
+            _translate("MarkerWindow", "Zoom Out"))
+        self.action_decrease_zoom.setShortcut(
+            _translate("MarkerWindow", "Ctrl+-"))
+        self.action_reset_zoom.setText(
+            _translate("MarkerWindow", "Reset Zoom"))
+        self.action_reset_zoom.setShortcut(
+            _translate("MarkerWindow", "Ctrl+0"))
+        self.action_expand_editor.setText(
+            _translate("MarkerWindow", "Expand Editor"))
+        self.action_expand_preview.setText(
+            _translate("MarkerWindow", "Expand Preview"))
+        self.action_preferences.setText(
+            _translate("MarkerWindow", "Preferences"))
+        self.action_preferences.setShortcut(
+            _translate("MarkerWindow", "Ctrl+Shift+."))
+        self.action_increase_indent.setText(
+            _translate("MarkerWindow", "Increase Indent"))
+        self.action_increase_indent.setShortcut(
+            _translate("MarkerWindow", "Alt+Shift+Right"))
+        self.action_decrease_indent.setText(
+            _translate("MarkerWindow", "Decrease Indent"))
+        self.action_decrease_indent.setShortcut(
+            _translate("MarkerWindow", "Alt+Shift+Left"))
         self.action_close.setText(_translate("MarkerWindow", "Close"))
-        self.action_close.setShortcut(_translate("MarkerWindow", "Ctrl+Shift+Q"))
+        self.action_close.setShortcut(
+            _translate("MarkerWindow", "Ctrl+Shift+Q"))
         self.action_bold.setText(_translate("MarkerWindow", "Bold"))
         self.action_bold.setShortcut(_translate("MarkerWindow", "Ctrl+B"))
         self.action_italic.setText(_translate("MarkerWindow", "Italic"))
         self.action_italic.setShortcut(_translate("MarkerWindow", "Ctrl+I"))
         self.action_underline.setText(_translate("MarkerWindow", "Underline"))
         self.action_underline.setShortcut(_translate("MarkerWindow", "Ctrl+U"))
-        self.action_strikethrough.setText(_translate("MarkerWindow", "Strikethrough"))
-        self.action_strikethrough.setShortcut(_translate("MarkerWindow", "Alt+Shift+5"))
-        self.action_superscript.setText(_translate("MarkerWindow", "Superscript"))
-        self.action_superscript.setShortcut(_translate("MarkerWindow", "Ctrl+."))
+        self.action_strikethrough.setText(
+            _translate("MarkerWindow", "Strikethrough"))
+        self.action_strikethrough.setShortcut(
+            _translate("MarkerWindow", "Alt+Shift+5"))
+        self.action_superscript.setText(
+            _translate("MarkerWindow", "Superscript"))
+        self.action_superscript.setShortcut(
+            _translate("MarkerWindow", "Ctrl+."))
         self.action_subscript.setText(_translate("MarkerWindow", "Subscript"))
         self.action_subscript.setShortcut(_translate("MarkerWindow", "Ctrl+,"))
         self.action_ordered_list.setText(_translate("MarkerWindow", "Ordered"))
-        self.action_unordered_list.setText(_translate("MarkerWindow", "Unordered"))
-        self.action_insert_link_inline.setText(_translate("MarkerWindow", "Inline"))
-        self.action_insert_link_inline.setShortcut(_translate("MarkerWindow", "Ctrl+K"))
-        self.action_insert_link_reference.setText(_translate("MarkerWindow", "Reference"))
-        self.action_insert_image_inline.setText(_translate("MarkerWindow", "Inline"))
-        self.action_insert_image_reference.setText(_translate("MarkerWindow", "Reference"))
-
+        self.action_unordered_list.setText(
+            _translate("MarkerWindow", "Unordered"))
+        self.action_insert_link_inline.setText(
+            _translate("MarkerWindow", "Inline"))
+        self.action_insert_link_inline.setShortcut(
+            _translate("MarkerWindow", "Ctrl+K"))
+        self.action_insert_link_reference.setText(
+            _translate("MarkerWindow", "Reference"))
+        self.action_insert_image_inline.setText(
+            _translate("MarkerWindow", "Inline"))
+        self.action_insert_image_reference.setText(
+            _translate("MarkerWindow", "Reference"))
