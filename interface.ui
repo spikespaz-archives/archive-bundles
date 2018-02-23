@@ -53,7 +53,7 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
+   <widget class="QMenu" name="menu_file">
     <property name="title">
      <string>File</string>
     </property>
@@ -71,7 +71,7 @@
     <addaction name="action_preferences"/>
     <addaction name="action_close"/>
    </widget>
-   <widget class="QMenu" name="menuEdit">
+   <widget class="QMenu" name="menu_edit">
     <property name="title">
      <string>Edit</string>
     </property>
@@ -85,16 +85,50 @@
     <addaction name="action_find"/>
     <addaction name="action_replace"/>
    </widget>
-   <widget class="QMenu" name="menuSelection">
+   <widget class="QMenu" name="menu_selection">
     <property name="title">
      <string>Selection</string>
     </property>
+    <widget class="QMenu" name="menu_list">
+     <property name="title">
+      <string>Format List</string>
+     </property>
+     <addaction name="action_ordered_list"/>
+     <addaction name="action_unordered_list"/>
+    </widget>
+    <widget class="QMenu" name="menu_Insert_link">
+     <property name="title">
+      <string>Insert Link</string>
+     </property>
+     <addaction name="action_insert_link_inline"/>
+     <addaction name="action_insert_link_reference"/>
+    </widget>
+    <widget class="QMenu" name="menu_Insert_image">
+     <property name="title">
+      <string>Insert Image</string>
+     </property>
+     <addaction name="action_insert_image_inline"/>
+     <addaction name="action_insert_image_reference"/>
+    </widget>
     <addaction name="action_select_all"/>
     <addaction name="separator"/>
     <addaction name="action_increase_indent"/>
     <addaction name="action_decrease_indent"/>
+    <addaction name="separator"/>
+    <addaction name="action_bold"/>
+    <addaction name="action_italic"/>
+    <addaction name="action_underline"/>
+    <addaction name="action_strikethrough"/>
+    <addaction name="separator"/>
+    <addaction name="action_superscript"/>
+    <addaction name="action_subscript"/>
+    <addaction name="separator"/>
+    <addaction name="menu_Insert_link"/>
+    <addaction name="menu_Insert_image"/>
+    <addaction name="separator"/>
+    <addaction name="menu_list"/>
    </widget>
-   <widget class="QMenu" name="menuView">
+   <widget class="QMenu" name="menu_view">
     <property name="title">
      <string>View</string>
     </property>
@@ -107,10 +141,10 @@
     <addaction name="action_expand_editor"/>
     <addaction name="action_expand_preview"/>
    </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
-   <addaction name="menuSelection"/>
-   <addaction name="menuView"/>
+   <addaction name="menu_file"/>
+   <addaction name="menu_edit"/>
+   <addaction name="menu_selection"/>
+   <addaction name="menu_view"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_new_file">
@@ -284,10 +318,16 @@
    <property name="text">
     <string>Increase Indent</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+Shift+Right</string>
+   </property>
   </action>
   <action name="action_decrease_indent">
    <property name="text">
     <string>Decrease Indent</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Shift+Left</string>
    </property>
   </action>
   <action name="action_close">
@@ -296,6 +336,87 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+Q</string>
+   </property>
+  </action>
+  <action name="action_bold">
+   <property name="text">
+    <string>Bold</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="action_italic">
+   <property name="text">
+    <string>Italic</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="action_underline">
+   <property name="text">
+    <string>Underline</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="action_strikethrough">
+   <property name="text">
+    <string>Strikethrough</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Shift+5</string>
+   </property>
+  </action>
+  <action name="action_superscript">
+   <property name="text">
+    <string>Superscript</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+.</string>
+   </property>
+  </action>
+  <action name="action_subscript">
+   <property name="text">
+    <string>Subscript</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+,</string>
+   </property>
+  </action>
+  <action name="action_ordered_list">
+   <property name="text">
+    <string>Ordered</string>
+   </property>
+  </action>
+  <action name="action_unordered_list">
+   <property name="text">
+    <string>Unordered</string>
+   </property>
+  </action>
+  <action name="action_insert_link_inline">
+   <property name="text">
+    <string>Inline</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+K</string>
+   </property>
+  </action>
+  <action name="action_insert_link_reference">
+   <property name="text">
+    <string>Reference</string>
+   </property>
+  </action>
+  <action name="action_insert_image_inline">
+   <property name="text">
+    <string>Inline</string>
+   </property>
+  </action>
+  <action name="action_insert_image_reference">
+   <property name="text">
+    <string>Reference</string>
    </property>
   </action>
  </widget>
