@@ -2,8 +2,28 @@
 # -*- coding: utf-8 -*-
 
 from interface import Ui_MarkerWindow
+from time import time
 from markdown2 import Markdown
+from threading import Thread
 from PyQt5.QtWidgets import QApplication, QMainWindow
+
+
+class UpdateHandler:
+    def __init__(self, runner, callback):
+        self.runner = runner
+        self.callback = callback
+        self._thread = None
+        self._last_update = 0
+
+    def _runner(self, newinput):
+        output = self.runner(newinput)
+
+        if self._last_update <= time():
+            self.callback(output)
+
+    def run(self, newinput):
+        self._thread = Thread(target=self._runner(newinput), daemon=True)
+        self._last_update = time()
 
 
 class MarkerWindow(Ui_MarkerWindow):
@@ -19,6 +39,7 @@ class MarkerWindow(Ui_MarkerWindow):
         ]
 
         self.renderer = Markdown(extras=self.extras)
+        self.render_handler = UpdateHandler(self.renderer.convert, self.markup_preview.setText)
 
         self.markup_editor.textChanged.connect(self.update_preview)
 
@@ -28,7 +49,7 @@ class MarkerWindow(Ui_MarkerWindow):
             lambda: self.sync_scroll(self.markup_preview, self.markup_editor))
 
     def update_preview(self):
-        self.markup_preview.setText(self.renderer.convert(self.markup_editor.toPlainText()))
+        self.render_handler.run(self.markup_editor.toPlainText())
 
     def sync_scroll(self, master, slave):
         if master.underMouse():
