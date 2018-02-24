@@ -13,9 +13,8 @@ class MarkerWindow(Ui_MarkerWindow):
         self.setupUi(window)
 
         self.extras = [
-            "code-friendly", "cuddled-lists", "fenced-code-blocks",
-            "footnotes", "header-ids", "markdown-in-html", "metadata",
-            "pyshell", "smarty-pants", "target-blank-links", "toc", "tables",
+            "code-friendly", "cuddled-lists", "fenced-code-blocks", "footnotes", "header-ids",
+            "markdown-in-html", "metadata", "pyshell", "smarty-pants", "target-blank-links", "toc", "tables",
             "use-file-vars", "wiki-tables", "tag-friendly"
         ]
 
@@ -29,8 +28,7 @@ class MarkerWindow(Ui_MarkerWindow):
             lambda: self.sync_scroll(self.markup_preview, self.markup_editor))
 
     def update_preview(self):
-        self.markup_preview.setText(
-            self.renderer.convert(self.markup_editor.toPlainText()))
+        self.markup_preview.setText(self.renderer.convert(self.markup_editor.toPlainText()))
 
     def sync_scroll(self, master, slave):
         if master.underMouse():
@@ -39,8 +37,7 @@ class MarkerWindow(Ui_MarkerWindow):
             master_maximum = master_scroll.maximum()
 
             if master_maximum:
-                slave_scroll.setValue(slave_scroll.maximum() *
-                                    (master_scroll.value() / master_maximum))
+                slave_scroll.setValue(slave_scroll.maximum() * (master_scroll.value() / master_maximum))
 
     def show(self):
         self.window.show()

@@ -4,3 +4,7 @@ __pycache__/
 
 # Application
 *.save.*
+
+# IDEs
+.vscode/
+.idea/
