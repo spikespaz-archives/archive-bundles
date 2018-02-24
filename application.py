@@ -16,8 +16,24 @@ class MarkerWindow(Ui_MarkerWindow):
 
         self.markup_editor.textChanged.connect(self.update_preview)
 
+        self.markup_editor.verticalScrollBar().valueChanged.connect(
+            lambda: self.sync_scroll(self.markup_editor, self.markup_preview))
+        self.markup_preview.verticalScrollBar().valueChanged.connect(
+            lambda: self.sync_scroll(self.markup_preview, self.markup_editor))
+
     def update_preview(self):
-        self.markup_preview.setText(self.renderer.convert(self.markup_editor.toPlainText()))
+        self.markup_preview.setText(
+            self.renderer.convert(self.markup_editor.toPlainText()))
+
+    def sync_scroll(self, master, slave):
+        if master.underMouse():
+            master_scroll = master.verticalScrollBar()
+            slave_scroll = slave.verticalScrollBar()
+            master_maximum = master_scroll.maximum()
+
+            if master_maximum:
+                slave_scroll.setValue(slave_scroll.maximum() *
+                                    (master_scroll.value() / master_maximum))
 
     def show(self):
         self.window.show()
