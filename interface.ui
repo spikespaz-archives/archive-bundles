@@ -38,8 +38,15 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QPlainTextEdit" name="markup_editor"/>
-      <widget class="QTextBrowser" name="markup_preview"/>
+      <widget class="QTextEdit" name="markup_editor"/>
+      <widget class="QTextBrowser" name="markup_preview">
+       <property name="openExternalLinks">
+        <bool>true</bool>
+       </property>
+       <property name="openLinks">
+        <bool>true</bool>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
