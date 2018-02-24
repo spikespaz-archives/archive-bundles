@@ -12,7 +12,14 @@ class MarkerWindow(Ui_MarkerWindow):
         self.app = app
         self.setupUi(window)
 
-        self.renderer = Markdown()
+        self.extras = [
+            "code-friendly", "cuddled-lists", "fenced-code-blocks",
+            "footnotes", "header-ids", "markdown-in-html", "metadata",
+            "pyshell", "smarty-pants", "target-blank-links", "toc", "tables",
+            "use-file-vars", "wiki-tables", "tag-friendly"
+        ]
+
+        self.renderer = Markdown(extras=self.extras)
 
         self.markup_editor.textChanged.connect(self.update_preview)
 
