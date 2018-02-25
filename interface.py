@@ -204,6 +204,13 @@ class Ui_MarkerWindow(object):
         self.menubar.addAction(self.menu_view.menuAction())
 
         self.retranslateUi(MarkerWindow)
+        self.action_cut.triggered.connect(self.markup_editor.cut)
+        self.action_copy.triggered.connect(self.markup_editor.copy)
+        self.action_paste.triggered.connect(self.markup_editor.paste)
+        self.action_close.triggered.connect(MarkerWindow.close)
+        self.action_undo.triggered.connect(self.markup_editor.undo)
+        self.action_redo.triggered.connect(self.markup_editor.redo)
+        self.action_select_all.triggered.connect(self.markup_editor.selectAll)
         QtCore.QMetaObject.connectSlotsByName(MarkerWindow)
 
     def retranslateUi(self, MarkerWindow):
