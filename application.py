@@ -46,16 +46,18 @@ class MarkerWindow(Ui_MarkerWindow):
         self.app = app
         self.setupUi(window)
 
-        self.extras = [
+        self.current_zoom = 0
+
+        self.bind_actions()
+        self.bind_sync_scrolling()
+
+        self.renderer_extras = [
             "code-friendly", "cuddled-lists", "fenced-code-blocks", "footnotes", "header-ids", "markdown-in-html",
             "metadata", "pyshell", "smarty-pants", "target-blank-links", "toc", "tables", "use-file-vars",
             "wiki-tables", "tag-friendly"
         ]
 
-        self.bind_actions()
-        self.bind_sync_scrolling()
-
-        self.renderer = Markdown(extras=self.extras)
+        self.renderer = Markdown(extras=self.renderer_extras)
         self.render_handler = UpdateHandler(self.renderer.convert, self.markup_preview.setText)
 
         self.markup_editor.textChanged.connect(self.update_preview)
@@ -85,9 +87,11 @@ class MarkerWindow(Ui_MarkerWindow):
         # # Edit menu
         # self.action_undo.triggered.connect()
         # self.action_redo.triggered.connect()
+
         # self.action_cut.triggered.connect()
         # self.action_copy.triggered.connect()
         # self.action_paste.triggered.connect()
+
         # self.action_find.triggered.connect()
         # self.action_replace.triggered.connect()
 
@@ -118,17 +122,32 @@ class MarkerWindow(Ui_MarkerWindow):
         # self.action_wrap_editor.toggled.connect()
         # self.action_wrap_preview.toggled.connect()
 
-        # self.action_increase_zoom.triggered.connect()
-        # self.action_decrease_zoom.triggered.connect()
-        # self.action_reset_zoom.triggered.connect()
+        self.action_increase_zoom.triggered.connect(self.increase_zoom)
+        self.action_decrease_zoom.triggered.connect(self.decrease_zoom)
+        self.action_reset_zoom.triggered.connect(self.reset_zoom)
 
-        self.action_expand_editor.triggered.connect(self.expand_markup_editor)
-        self.action_expand_preview.triggered.connect(self.expand_markup_preview)
+        self.action_expand_editor.triggered.connect(self.expand_editor)
+        self.action_expand_preview.triggered.connect(self.expand_preview)
 
-    def expand_markup_editor(self):
+    def increase_zoom(self):
+        self.markup_editor.zoomIn()
+        self.markup_preview.zoomIn()
+        self.current_zoom += 1
+
+    def decrease_zoom(self):
+        self.markup_editor.zoomOut()
+        self.markup_preview.zoomOut()
+        self.current_zoom -= 1
+
+    def reset_zoom(self):
+        self.markup_editor.zoomIn(-self.current_zoom)
+        self.markup_preview.zoomIn(-self.current_zoom)
+        self.current_zoom = 0
+
+    def expand_editor(self):
         self.splitter.setSizes([1, int(self.markup_editor.width() == 0)])
 
-    def expand_markup_preview(self):
+    def expand_preview(self):
         self.splitter.setSizes([int(self.markup_preview.width() == 0), 1])
 
     def update_preview(self):
