@@ -280,7 +280,7 @@
     <string>Replace</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+R</string>
+    <string>Ctrl+H</string>
    </property>
   </action>
   <action name="action_select_all">

@@ -242,7 +242,7 @@ class Ui_MarkerWindow(object):
         self.action_find.setText(_translate("MarkerWindow", "Find"))
         self.action_find.setShortcut(_translate("MarkerWindow", "Ctrl+F"))
         self.action_replace.setText(_translate("MarkerWindow", "Replace"))
-        self.action_replace.setShortcut(_translate("MarkerWindow", "Ctrl+R"))
+        self.action_replace.setShortcut(_translate("MarkerWindow", "Ctrl+H"))
         self.action_select_all.setText(_translate("MarkerWindow", "Select All"))
         self.action_select_all.setShortcut(_translate("MarkerWindow", "Ctrl+A"))
         self.action_increase_zoom.setText(_translate("MarkerWindow", "Zoom In"))
