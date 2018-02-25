@@ -26,6 +26,20 @@ class UpdateHandler:
         self._last_update = time()
 
 
+class MarkerApplication(QApplication):
+    def __init__(self):
+        super().__init__([])
+
+        self.window = MarkerWindow(self)
+
+    def start(self):
+        from sys import exit as sys_exit
+
+        self.window.show()
+
+        sys_exit(self.exec_())
+
+
 class MarkerWindow(Ui_MarkerWindow):
     def __init__(self, app=QApplication([]), window=QMainWindow()):
         self.window = window
@@ -39,12 +53,14 @@ class MarkerWindow(Ui_MarkerWindow):
         ]
 
         self.bind_actions()
+        self.bind_sync_scrolling()
 
         self.renderer = Markdown(extras=self.extras)
         self.render_handler = UpdateHandler(self.renderer.convert, self.markup_preview.setText)
 
         self.markup_editor.textChanged.connect(self.update_preview)
 
+    def bind_sync_scrolling(self):
         self.markup_editor.verticalScrollBar().valueChanged.connect(
             lambda: self.sync_scroll(self.markup_editor, self.markup_preview))
         self.markup_preview.verticalScrollBar().valueChanged.connect(
@@ -132,9 +148,4 @@ class MarkerWindow(Ui_MarkerWindow):
 
 
 if __name__ == "__main__":
-    from sys import exit as sys_exit
-
-    marker = MarkerWindow()
-    marker.show()
-
-    sys_exit(marker.app.exec_())
+    MarkerApplication().start()
