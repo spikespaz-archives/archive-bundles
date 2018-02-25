@@ -12,12 +12,11 @@
   </property>
   <property name="font">
    <font>
-    <family>Segoe UI</family>
-    <pointsize>11</pointsize>
+    <pointsize>10</pointsize>
    </font>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Marker</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -38,8 +37,22 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTextEdit" name="markup_editor"/>
+      <widget class="QTextEdit" name="markup_editor">
+       <property name="font">
+        <font>
+         <family>Consolas</family>
+        </font>
+       </property>
+       <property name="acceptRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
       <widget class="QTextBrowser" name="markup_preview">
+       <property name="font">
+        <font>
+         <family>Segoe UI</family>
+        </font>
+       </property>
        <property name="openExternalLinks">
         <bool>true</bool>
        </property>
@@ -139,7 +152,14 @@
     <property name="title">
      <string>View</string>
     </property>
-    <addaction name="action_word_wrap"/>
+    <widget class="QMenu" name="menu_wrap">
+     <property name="title">
+      <string>Word Wrap</string>
+     </property>
+     <addaction name="action_wrap_editor"/>
+     <addaction name="action_wrap_preview"/>
+    </widget>
+    <addaction name="menu_wrap"/>
     <addaction name="separator"/>
     <addaction name="action_increase_zoom"/>
     <addaction name="action_decrease_zoom"/>
@@ -269,14 +289,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
-   </property>
-  </action>
-  <action name="action_word_wrap">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Word Wrap</string>
    </property>
   </action>
   <action name="action_increase_zoom">
@@ -424,6 +436,28 @@
   <action name="action_insert_image_reference">
    <property name="text">
     <string>Reference</string>
+   </property>
+  </action>
+  <action name="action_wrap_editor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Editor</string>
+   </property>
+  </action>
+  <action name="action_wrap_preview">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Preview</string>
    </property>
   </action>
  </widget>
