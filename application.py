@@ -36,6 +36,7 @@ class MarkerApplication(QApplication):
         from sys import exit as sys_exit
 
         self.window.show()
+        self.window.markup_editor.setFocus()
 
         sys_exit(self.exec_())
 
