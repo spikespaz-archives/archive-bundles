@@ -19,19 +19,7 @@
    <string>Marker</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <property name="leftMargin">
-     <number>6</number>
-    </property>
-    <property name="topMargin">
-     <number>6</number>
-    </property>
-    <property name="rightMargin">
-     <number>6</number>
-    </property>
-    <property name="bottomMargin">
-     <number>6</number>
-    </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
@@ -47,18 +35,36 @@
         <bool>false</bool>
        </property>
       </widget>
-      <widget class="QTextBrowser" name="markup_preview">
-       <property name="font">
-        <font>
-         <family>Segoe UI</family>
-        </font>
+      <widget class="QFrame" name="markup_preview_frame">
+       <property name="styleSheet">
+        <string notr="true">background: #fff;</string>
        </property>
-       <property name="openExternalLinks">
-        <bool>true</bool>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
        </property>
-       <property name="openLinks">
-        <bool>true</bool>
+       <property name="frameShadow">
+        <enum>QFrame::Sunken</enum>
        </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QWebEngineView" name="markup_preview" native="true"/>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -461,6 +467,14 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header>qwebengineview.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
