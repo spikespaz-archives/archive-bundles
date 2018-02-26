@@ -72,6 +72,7 @@ class MarkerWindow(Ui_MarkerWindow):
 
         with open("modest.css") as stylesheet:
             self.preview_style = stylesheet.read()
+            # self.preview_style += "\nhtml, body { overflow: hidden; height: 100% }"
 
         self.renderer = Markdown(extras=self.renderer_extras)
         self.render_handler = UpdateHandler(
@@ -152,19 +153,19 @@ class MarkerWindow(Ui_MarkerWindow):
         self.action_expand_preview.triggered.connect(self.expand_preview)
 
     def increase_zoom(self):
-        self.markup_editor.zoomIn()
-        self.markup_preview.zoomIn()
-        self.current_zoom += 1
+        # self.markup_editor.zoomIn()
+        self.current_zoom += 0.1
+        self.markup_preview.setZoomFactor(self.current_zoom)
 
     def decrease_zoom(self):
-        self.markup_editor.zoomOut()
-        self.markup_preview.zoomOut()
-        self.current_zoom -= 1
+        # self.markup_editor.zoomOut()
+        self.current_zoom -= 0.1
+        self.markup_preview.setZoomFactor(self.current_zoom)
 
     def reset_zoom(self):
-        self.markup_editor.zoomIn(-self.current_zoom)
-        self.markup_preview.zoomIn(-self.current_zoom)
-        self.current_zoom = 0
+        # self.markup_editor.zoomIn(-self.current_zoom)
+        self.current_zoom = 1
+        self.markup_preview.setZoomFactor(1)
 
     def expand_editor(self):
         self.splitter.setSizes([1, int(self.markup_editor.width() == 0)])
