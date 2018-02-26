@@ -7,6 +7,17 @@ from markdown2 import Markdown
 from threading import Thread
 from PyQt5.QtWidgets import QApplication, QMainWindow
 
+wrapper_html = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>{style}</style>
+</head>
+<body>{markup}</body>
+</html>
+"""
+
 
 class UpdateHandler:
     def __init__(self, runner, callback):
@@ -49,8 +60,9 @@ class MarkerWindow(Ui_MarkerWindow):
 
         self.current_zoom = 0
 
+        self.prepare_panels()
         self.bind_actions()
-        self.bind_sync_scrolling()
+        # self.bind_sync_scrolling()
 
         self.renderer_extras = [
             "code-friendly", "cuddled-lists", "fenced-code-blocks", "footnotes", "header-ids", "markdown-in-html",
@@ -58,10 +70,19 @@ class MarkerWindow(Ui_MarkerWindow):
             "wiki-tables", "tag-friendly"
         ]
 
+        with open("modest.css") as stylesheet:
+            self.preview_style = stylesheet.read()
+
         self.renderer = Markdown(extras=self.renderer_extras)
-        self.render_handler = UpdateHandler(self.renderer.convert, self.markup_preview.setText)
+        self.render_handler = UpdateHandler(
+            self.renderer.convert,
+            lambda markup: self.markup_preview.setHtml(wrapper_html.format(style=self.preview_style, markup=markup)))
 
         self.markup_editor.textChanged.connect(self.update_preview)
+
+    def prepare_panels(self):
+        self.markup_preview_frame.setMinimumWidth(self.markup_editor.minimumSizeHint().width())
+        self.splitter.setSizes([1, 1])
 
     def bind_sync_scrolling(self):
         self.markup_editor.verticalScrollBar().valueChanged.connect(
