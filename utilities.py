@@ -36,8 +36,28 @@ class Reporter:
     def report_str(self, *args):
         percent, current_size, total_size, download_speed = self.report_int(*args)
 
-        return "{:>{}}/{}mb - {:>3}% - ~{:0<4}mb/s".format(current_size, len(str(total_size)),
+        return "{:>{}}/{}mb | {:>3}% | ~{:0<4}mb/s".format(current_size, len(str(total_size)),
                                                            total_size, percent, download_speed)
 
     def __call__(self, *args):
         print(self.report_str(*args), end="\r")
+
+
+class ChainedContext:
+    def __init__(self, *managers):
+        self.managers = managers
+
+    def __enter__(self):
+        self.contexts = []
+        self.entrances = []
+
+        for manager in self.managers:
+            context = manager(self.entrances[-1]) if self.entrances else manager()
+            self.contexts.append(context)
+            self.entrances.append(context.__enter__())
+
+        return self.entrances[-1]
+
+    def __exit__(self, *_):
+        for context in self.contexts:
+            context.__exit__()
