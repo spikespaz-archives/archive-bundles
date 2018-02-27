@@ -1,6 +1,21 @@
 #! /usr/bin/env python3
 
 from time import clock
+from os import getcwd, chdir
+
+
+class WithDir:
+    def __init__(self, work_dir):
+        self.work_dir = work_dir
+
+    def __enter__(self):
+        self.real_dir = getcwd()
+        chdir(self.work_dir)
+        return self.work_dir
+
+    def __exit__(self, *_):
+        chdir(self.real_dir)
+        del self.real_dir
 
 
 class Reporter:

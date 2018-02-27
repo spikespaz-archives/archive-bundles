@@ -1,25 +1,12 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from os import system
 from pyquery import PyQuery
 from platform import machine
-from os import system, chdir, getcwd
 from urllib.request import urlretrieve
+from utilities import Reporter, WithDir
 from tempfile import TemporaryDirectory
-
-
-class WithDir:
-    def __init__(self, work_dir):
-        self.work_dir = work_dir
-
-    def __enter__(self):
-        self.real_dir = getcwd()
-        chdir(self.work_dir)
-        return self.work_dir
-
-    def __exit__(self, *_):
-        chdir(self.real_dir)
-        del self.real_dir
 
 
 ITUNES_URL = "https://www.apple.com/itunes/download/"
@@ -42,7 +29,7 @@ print("Download URL:", download_url)
 with TemporaryDirectory() as extract_path:
     with WithDir(extract_path):
         print("Downloading iTunes installer...")
-        urlretrieve(download_url, filename="iTunesSetup.exe")
+        urlretrieve(download_url, filename="iTunesSetup.exe", reporthook=Reporter())
         print()
 
         print("Extracting iTunes install files...")
