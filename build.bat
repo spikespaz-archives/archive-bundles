@@ -6,5 +6,5 @@ python -OO -m PyInstaller --ascii ^
                           --console ^
                           --onefile ^
                           --name BonjourInstaller ^
-                          -icon bonjour.ico ^
+                          --icon bonjour.ico ^
                           install.py
