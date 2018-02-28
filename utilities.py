@@ -41,23 +41,3 @@ class Reporter:
 
     def __call__(self, *args):
         print(self.report_str(*args), end="\r")
-
-
-class ChainedContext:
-    def __init__(self, *managers):
-        self.managers = managers
-
-    def __enter__(self):
-        self.contexts = []
-        self.entrances = []
-
-        for manager in self.managers:
-            context = manager(self.entrances[-1]) if self.entrances else manager()
-            self.contexts.append(context)
-            self.entrances.append(context.__enter__())
-
-        return self.entrances[-1]
-
-    def __exit__(self, *_):
-        for context in self.contexts:
-            context.__exit__()
