@@ -22,11 +22,10 @@ architecture = "64" if machine() == "AMD64" else ""
 
 with ChainedContext(TemporaryDirectory, WorkingDirectory):
     print("Downloading iTunes installer...")
-    urlretrieve(download_urls[1] if architecture else download_urls[0],
+    urlretrieve(download_urls[2] if architecture else download_urls[1],
                 filename="iTunesSetup.exe", reporthook=Reporter())
-    print()
 
-    print("Extracting iTunes install files...")
+    print("\nExtracting iTunes install files...")
     system("iTunesSetup.exe /extract")
 
     print("Starting Bonjour installer...")
