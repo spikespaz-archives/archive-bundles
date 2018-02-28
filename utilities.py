@@ -4,7 +4,7 @@ from time import clock
 from os import getcwd, chdir
 
 
-class WithDir:
+class WorkingDirectory:
     def __init__(self, work_dir):
         self.work_dir = work_dir
 

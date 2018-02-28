@@ -6,7 +6,7 @@ from pyquery import PyQuery
 from platform import machine
 from urllib.request import urlretrieve
 from tempfile import TemporaryDirectory
-from utilities import Reporter, WithDir, ChainedContext
+from utilities import Reporter, WorkingDirectory, ChainedContext
 
 ITUNES_URL = "https://www.apple.com/itunes/download/"
 LINK_SELECTOR = "div.download>a.button.button-download"
@@ -20,7 +20,7 @@ download_urls = [anchor.attrib["href"] for anchor in document(LINK_SELECTOR)]
 print("Determining machine architecture...")
 architecture = "64" if machine() == "AMD64" else ""
 
-with ChainedContext(TemporaryDirectory, WithDir):
+with ChainedContext(TemporaryDirectory, WorkingDirectory):
     print("Downloading iTunes installer...")
     urlretrieve(download_urls[1] if architecture else download_urls[0],
                 filename="iTunesSetup.exe", reporthook=Reporter())
