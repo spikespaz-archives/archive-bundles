@@ -20,14 +20,13 @@ download_urls = [anchor.attrib["href"] for anchor in document(LINK_SELECTOR)]
 print("Determining machine architecture...")
 architecture = "64" if machine() == "AMD64" else ""
 
-with TemporaryDirectory() as itunes_dir:
-    with WorkingDirectory(itunes_dir):
-        print("Downloading iTunes installer...")
-        urlretrieve(download_urls[2] if architecture else download_urls[1],
-                    filename="iTunesSetup.exe", reporthook=Reporter())
+with TemporaryDirectory() as itunes_dir, WorkingDirectory(itunes_dir):
+    print("Downloading iTunes installer...")
+    urlretrieve(download_urls[2] if architecture else download_urls[1],
+                filename="iTunesSetup.exe", reporthook=Reporter())
 
-        print("\nExtracting iTunes install files...")
-        system("iTunesSetup.exe /extract")
+    print("\nExtracting iTunes install files...")
+    system("iTunesSetup.exe /extract")
 
-        print("Starting Bonjour installer...")
-        system("Bonjour" + architecture + ".msi")
+    print("Starting Bonjour installer...")
+    system("Bonjour" + architecture + ".msi")
