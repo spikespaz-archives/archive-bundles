@@ -20,7 +20,7 @@ class QThemePalette(QPalette):
         self.setColor(QPalette.Link,            QColor(*self.c_link_text))
         self.setColor(QPalette.Highlight,       QColor(*self.c_highlight))
         self.setColor(QPalette.HighlightedText, QColor(*self.c_highlight_text))
-        
+
     def set_stylesheet(self, app):
         """Set the tooltip stylesheet to a `QtWidgets.QApplication`."""
         app.setStyleSheet("QToolTip {{" +
