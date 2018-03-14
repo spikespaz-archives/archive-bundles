@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
 import os
-import common
 
 hosts_header = """
 # Copyright (c) 1993-2009 Microsoft Corp.
@@ -26,17 +25,32 @@ hosts_header = """
 #       ::1             localhost
 """
 
-hosts_path = os.environ["SYSTEMROOT"] + r"\System32\Drivers\etc\hosts"
-
-with open(hosts_path, "r") as hosts_file:
-    print(hosts_file.read())
+# hosts_path = os.environ["SYSTEMROOT"] + r"\System32\Drivers\etc\hosts"
+hosts_path = r".\hosts"
 
 
 def read():
     with open(hosts_path, "r") as hosts_file:
-        return common.str_to_list(hosts_file.read())
+        hosts_list = []
+
+        for host_line in hosts_file.readlines():
+            host_line = host_line.strip()
+
+            if host_line and not host_line.startswith("#"):
+                hosts_list.append(host_line.split(" ", 1)[1].strip())
+
+        return hosts_list
 
 
 def write(in_list, redirect="0.0.0.0"):
-    with open(hosts_path, "w") as hosts_file:
-        hosts_file.write(hosts_header + common.list_to_str([redirect + " " + host for host in in_list]))
+    with open(hosts_path, "a") as hosts_file:
+        hosts_file.seek(0)
+        hosts_file.truncate()
+
+        hosts_file.write(hosts_header)
+
+        for host in in_list:
+            hosts_file.write(redirect + " " + host.strip() + "\n")
+
+
+write(["test.com", "test2.com"])
