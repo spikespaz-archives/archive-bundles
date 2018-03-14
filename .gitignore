@@ -5,6 +5,7 @@
 # project
 *.exe
 _interface.py
+hosts
 
 # python
 __pycache__/
