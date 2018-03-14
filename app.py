@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 import sys
 import common
+from themes.fusion_dark import FusionDark
 
 from PyQt5 import QtWidgets
 
@@ -11,6 +12,8 @@ class AdwinApplication:
     def __init__(self, app=QtWidgets.QApplication(sys.argv), interface=AdwinInterface(QtWidgets.QMainWindow())):
         self.app = app
         self.interface = interface
+
+        FusionDark().set_app(self.app)
 
     def start(self):
         self.interface.window.show()
