@@ -37,7 +37,7 @@ def read():
             host_line = host_line.strip()
 
             if host_line and not host_line.startswith("#"):
-                hosts_list.append(host_line.split(" ", 1)[1].strip())
+                hosts_list.append(host_line.split(" ", 1)[1].split("#", 1)[0].strip())
 
         return hosts_list
 
