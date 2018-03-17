@@ -62,3 +62,14 @@ def write(hosts_list, local=False):
                                  ("\n::1 " if local else"\n:: ") + host + "\n")
         else:
             hosts_file.write(default_header)
+
+
+def append(host, local=False):
+    with open(hosts_path, "a") as hosts_file:
+        hosts_file.write(("127.0.0.1 " if local else "0.0.0.0 ") + host +
+                         ("\n::1 " if local else "\n:: ") + host + "\n")
+
+
+def clear():
+    with open(hosts_path, "w") as hosts_file:
+        hosts_file.write(default_header)
