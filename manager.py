@@ -11,6 +11,7 @@ class HostsManager:
             "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext"
         ])
         self.host_ipv4 = kwargs.get("host_ipv4", "127.0.0.2")
+        self.host_ipv6 = kwargs.get("host_ipv6", "::1")
         self.whitelist = kwargs.get("whitelist", [])
         self.blacklist = kwargs.get("blacklist", [])
         self.redirects = kwargs.get("redirects", [])
@@ -47,6 +48,7 @@ class HostsManager:
 
         for host_domain in host_domains:
             host_list.append(self.host_ipv4 + " " + host_domain)
+            host_list.append(self.host_ipv6 + " " + host_domain)
 
         for redirect in self.redirects:
             host_list.append("{} {}".format(*redirect))
