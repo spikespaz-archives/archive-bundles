@@ -45,10 +45,11 @@ class HostsManager:
     def build(self):
         host_domains = self.merge()
         host_list = []
+        host_length = max(len(self.host_ipv4), len(self.host_ipv6)) + 2
 
         for host_domain in host_domains:
-            host_list.append(self.host_ipv4 + " " + host_domain)
-            host_list.append(self.host_ipv6 + " " + host_domain)
+            host_list.append(self.host_ipv4.ljust(host_length) + host_domain)
+            host_list.append(self.host_ipv6.ljust(host_length) + host_domain)
 
         for redirect in self.redirects:
             host_list.append("{} {}".format(*redirect))
