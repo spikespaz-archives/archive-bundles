@@ -79,14 +79,47 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <widget class="QPlainTextEdit" name="edit_sources"/>
+         <widget class="QListWidget" name="list_sources">
+          <property name="dragDropMode">
+           <enum>QAbstractItemView::InternalMove</enum>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <item>
+           <property name="text">
+            <string>https://adaway.org/hosts.txt</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>https://hosts-file.net/ad_servers.txt</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&amp;showintro=0&amp;mimetype=plaintext</string>
+           </property>
+          </item>
+         </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="button_add_defaults">
-          <property name="text">
-           <string>Add default sources</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>Add Source</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="text">
+             <string>Remove Selected</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
