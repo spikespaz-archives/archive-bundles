@@ -27,7 +27,7 @@ class HostsManager:
                 host_line = host_line.strip()
 
                 if host_line and not host_line.startswith(b"#"):
-                    host_domains.add(re.split(r"\s+", host_line.decode(), 2)[1])
+                    host_domains.add(self.parse_line(host_line))
 
         return host_domains
 
@@ -54,3 +54,7 @@ class HostsManager:
             host_list.append("{} {}".format(*redirect))
 
         return host_list
+
+    @staticmethod
+    def parse_line(host_line):
+        return re.split(r"\s+", host_line.decode(), 2)[1]
