@@ -27,7 +27,7 @@ class HostsManager:
                 host_line = host_line.strip()
 
                 if host_line and not host_line.startswith(b"#"):
-                    host_domains.add(self.parse_line(host_line))
+                    host_domains.add(self.parse_line(host_line.decode()))
 
         return host_domains
 
@@ -45,17 +45,18 @@ class HostsManager:
     def build(self):
         host_domains = self.merge()
         host_list = []
-        host_length = max(len(self.host_ipv4), len(self.host_ipv6)) + 2
+        host_length = len(max(self.host_ipv4, self.host_ipv6,
+                          *map(lambda redirect: redirect[0], self.redirects), key=len)) + 2
 
         for host_domain in host_domains:
             host_list.append(self.host_ipv4.ljust(host_length) + host_domain)
             host_list.append(self.host_ipv6.ljust(host_length) + host_domain)
 
         for redirect in self.redirects:
-            host_list.append("{} {}".format(*redirect))
+            host_list.append(redirect[0].ljust(host_length) + redirect[1])
 
         return host_list
 
     @staticmethod
     def parse_line(host_line):
-        return re.split(r"\s+", host_line.decode(), 2)[1]
+        return re.split(r"\s+", host_line, 2)[1]
