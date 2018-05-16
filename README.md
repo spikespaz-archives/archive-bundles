@@ -62,6 +62,12 @@ I'm a Junior computer science student in a specialty school in Arizona. I spend 
    - Finish [Adwin](https://github.com/spikespaz-old/windows-adwin)
    - Make it fast (Adwin is slow because hosts files in Windows don't match patterns)
    - Possibly use [Acrylic](http://mayakron.altervista.org) or use existing server implimentation in language
+ - Automatic commit markup
+   - Add a psuedo-syntax for source-code comments
+   - Parses at every commit, and automatically makes message
+   - Split file changes or diff sections into different commits
+   - Basically adds the ability to create commits as you go, part of the file
+   - Annotations removed before push
 
 # Milestones
 
