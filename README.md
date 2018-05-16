@@ -2,10 +2,10 @@
 I'm a Junior computer science student in a specialty school in Arizona. I spend most of my personal time programming, and occasionally playing games with friends. I love new technology and software breakthroughs. I hate JavaScript with a passion, and will usually prefer to transpile another language into it.
 
 ### Social
- - Twitter: https://twitter.com/spikespaz
- - Reddit: https://reddit.com/u/spikespaz
- - GitHub: https://github.com/spikespaz
- - Teknik: https://git.teknik.io/spikespaz
+ - Twitter: [twitter.com/spikespaz](https://twitter.com/spikespaz)
+ - Reddit: [reddit.com/u/spikespaz](https://reddit.com/u/spikespaz)
+ - GitHub: [github.com/spikespaz](https://github.com/spikespaz)
+ - Teknik: [git.teknik.io/spikespaz](https://git.teknik.io/spikespaz)
 
 # Projects
 ## Complete
