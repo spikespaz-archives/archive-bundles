@@ -44,11 +44,11 @@ I'm a Junior computer science student in a specialty school in Arizona. I spend 
    - Use a fast systems language (probably D)
    - Inspired by bspwm
    - Configurable hotkeys
-   - May support ReStructuredText and BB script
  - Faster open forum server
    - Write in Go or vibe.d
    - Add context menu item
    - Should impliment markdown
+   - May support ReStructuredText and BB script
  - Better extension for Instapaper
    - Instaread is the official plugin, but it sucks
    - Read window action
