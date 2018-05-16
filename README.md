@@ -10,6 +10,14 @@
  - [Search Deflector](https://github.com/spikespaz/search-deflector)
    - An alternative to EdgeDeflector and SearchWithMyBrowser that redirects searches to any search engine of your choice. 
 
+## Soon<sup>TM</sup>
+ - [spikespaz.com](https://github.com/spikespaz/spikespaz.github.io)
+   - Make this site pretty and stuff, ready for presentation
+ - [Deezloaded](https://git.teknik.io/spikespaz/deezloaded)
+   - Revive Deezloader Reborn (rewrite)
+   - Better language, not JavaScript (Either Go or D)
+   - Use Sciter for web frontend
+
 ## Ideas
  - Better Notepad
    - Recreate Windows Notepad but better
@@ -41,3 +49,8 @@
    - Finish [Adwin](https://github.com/spikespaz-old/windows-adwin)
    - Make it fast (Adwin is slow because hosts files in Windows don't match patterns)
    - Possibly use [Acrylic](http://mayakron.altervista.org) or use existing server implimentation in language
+
+# Milestones
+| Project              | Date           | Description                                                       |
+| -------------------- | -------------- | ----------------------------------------------------------------- |
+| Native Dark          | 06-26-2018     | Rewrite the entire extension and make a polished v2.0             |
