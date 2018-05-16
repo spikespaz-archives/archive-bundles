@@ -1,5 +1,5 @@
 # About Me
-I'm a Junior computer science student in a specialty school in Arizona. I spend most of my personal time programming, and occasionally playing games with friends. I love new technology and software breakthroughs. I hate JavaScript with a passion, and will usually prefer to transpile another language into it.
+I'm a Junior computer science student in a specialty school in Arizona. I spend most of my personal time programming, and occasionally playing games with friends. I love new technology and software breakthroughs. I highly value aesthetics, user experience, perfoemance, and especially, maintainablilty and quality of code. I try by best to make clean, concise source code that will subsequently be maintainable in the future.
 
 ### Social
  - Twitter: [twitter.com/spikespaz](https://twitter.com/spikespaz)
