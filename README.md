@@ -1,5 +1,4 @@
-# spikespaz's website
-
+# Projects
 ## Ideas
  - [ ] Better Notepad
    - Recreate Windows Notepad but better
