@@ -1,4 +1,15 @@
 # Projects
+## Complete
+ - [Clone by Path](https://github.com/spikespaz/clone-by-path)
+   - A simple command that, when invoked, attempts to parse a repository path from your current working directory path.
+
+## Active
+ - [Native Dark](https://github.com/spikespaz/firefox-nativedark)
+   - Theme for Firefox Quantum that was originally intended to match your Windows accent color and style the browser appropriately. It has since grown into a much larger cross-platform WebExtension.
+   - Second-place winner of the [Firefox Quantum Extensions Challenge](https://extensionschallenge.com).
+ - [Search Deflector](https://github.com/spikespaz/search-deflector)
+   - An alternative to EdgeDeflector and SearchWithMyBrowser that redirects searches to any search engine of your choice. 
+
 ## Ideas
  - [ ] Better Notepad
    - Recreate Windows Notepad but better
