@@ -1,5 +1,5 @@
 # About Me
-I'm a Junior computer science student in a specialty school in Arizona. I spend most of my personal time programming, and occasionally playing games with friends. I love new technology and software breakthroughs. I highly value aesthetics, user experience, perfoemance, and especially, maintainablilty and quality of code. I try by best to make clean, concise source code that will subsequently be maintainable in the future.
+I'm a Junior computer science student in a specialty school in Arizona. I spend most of my personal time programming, and occasionally playing games with friends. I love new technology and software breakthroughs. I highly value aesthetics, user experience, performance, and especially, maintainablilty and quality of code. I try by best to make clean, concise source code that will subsequently be maintainable in the future.
 
 ### Social
  - Twitter: [twitter.com/spikespaz](https://twitter.com/spikespaz)
@@ -32,6 +32,11 @@ I'm a Junior computer science student in a specialty school in Arizona. I spend 
 
 ## Ideas
 
+ - DeNoise
+   - Create a virtual audio input device in Windows
+   - Re-route audio in from microphone to this virtual device
+   - Noise gate, noise suppression, other effect options
+   - KISS (Keep it Simple Stupid)
  - Better Notepad
    - Recreate Windows Notepad but better
    - Smooth typing animation like MS Word
@@ -68,6 +73,18 @@ I'm a Junior computer science student in a specialty school in Arizona. I spend 
    - Split file changes or diff sections into different commits
    - Basically adds the ability to create commits as you go, part of the file
    - Annotations removed before push
+ - Neural network powered text scaling
+   - Netural network that is trained to scale up low-res text
+ - Office music server
+   - Plays music in an office environment
+   - Web interface that users can log into
+   - Vote for tracks, or dislike them
+   - Suggest tracks to be played
+   - Option to anonymously request tracks
+ - Super fast key/value file format
+   - Statically typed
+   - Insane parsing speed
+   - Good for serializing some basic data
 
 # Milestones
 
