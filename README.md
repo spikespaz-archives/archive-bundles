@@ -36,6 +36,7 @@ I'm a Junior computer science student in a specialty school in Arizona. I spend 
    - Create a virtual audio input device in Windows
    - Re-route audio in from microphone to this virtual device
    - Noise gate, noise suppression, other effect options
+   - Train a neural nework on the user's background noise to eliminate background static
    - KISS (Keep it Simple Stupid)
  - Better Notepad
    - Recreate Windows Notepad but better
@@ -63,6 +64,9 @@ I'm a Junior computer science student in a specialty school in Arizona. I spend 
    - Support DirectX 11/12, OpenGL 4, and Vulkan
    - Support other cool new stuff
    - Compatibility is not a priority
+ - Advanced 3D Sound Engine
+   - Simulates latency between ears for surround sound
+   - Computes based on environment variables (direction, volume, location, etc.)
  - Windows system-wide adblocker
    - Finish [Adwin](https://github.com/spikespaz-old/windows-adwin)
    - Make it fast (Adwin is slow because hosts files in Windows don't match patterns)
@@ -85,6 +89,44 @@ I'm a Junior computer science student in a specialty school in Arizona. I spend 
    - Statically typed
    - Insane parsing speed
    - Good for serializing some basic data
+ - Elite Commander
+   - Voice Attack specifically tailored to Elite Dangerous
+   - Reads stats from log files
+   - Reads event data from log files
+   - Does everything based on user keymaps
+ - Quizlet API Wrapper
+   - Complete wrapper around Quizlet API
+   - Some docs are outdataed, find proper endpoints
+   - Object Oriented
+ - FFbatcher
+   - Uses FFmpeg to batch transcode files
+   - GUI for FFmpeg with all exposed settings
+   - Support for custom commands
+ - Yet Another Static Blog Generator
+   - Super fast
+   - Supports multiple markup languages
+   - KISS
+ - Clipboard Share apps
+   - Similar to Samsung Flow
+   - Send clipboard and other useful data between devices
+   - Android, Windows, Linux
+   - Native Shell integration, seamless with OS
+ - JavaScript tool to make runnable links
+   - Click a link to load external script in sites that don't support it
+   - Insert content into GitHub README files and etc.
+ - Updater tool for GitHub projects
+   - Simplified package manager
+   - Auto-updates programs from GitHub releases
+   - Support for multiple release channels (branches)
+ - Redesign [Linked2 Website](https://linked-2.com)
+   - Eliminate PHP usage
+ - Web Window Manager
+   - Like ImGui
+   - Suport for windows to be iframe objects
+ - Better version of Sonarr and Radarr
+   - Only supports torrent clients
+   - Better quality management and searching
+   - Jackett, Cardigann support
 
 # Milestones
 
