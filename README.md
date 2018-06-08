@@ -12,6 +12,9 @@ I'm a Junior computer science student in a specialty school in Arizona. I spend 
 
  - [Clone by Path](https://github.com/spikespaz/clone-by-path)
    - A simple command that, when invoked, attempts to parse a repository path from your current working directory path.
+ - [VS Code SmoothType](https://github.com/spikespaz/vscode-smoothtype)
+   - An extension to add a smooth typing animation to Visual Studio Code, similar to Microsoft Office and the Windows 10 Mail app.
+   - See it on the [Marketplace](https://marketplace.visualstudio.com/items?itemName=spikespaz.vscode-smoothtype).
 
 ## Active
 
