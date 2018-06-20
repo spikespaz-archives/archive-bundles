@@ -7,6 +7,16 @@ I'm a Junior computer science student in a specialty school in Arizona. I spend 
  - GitHub: [github.com/spikespaz](https://github.com/spikespaz)
  - Teknik: [git.teknik.io/spikespaz](https://git.teknik.io/spikespaz)
 
+## Donations
+
+If you would like to show appreciation for my work, I would gladly accept a small donation!
+
+I will accept donations through PayPal.Me, Buy Me a Coffee, or Patreon.
+
+[![Buy Me a Coffee](https://i.imgur.com/fN422E7.png)](https://buymeacoffee.com/spikespaz)
+[![PayPal.Me](https://i.imgur.com/JWkunGi.png)](https://paypal.me/spikespaz)
+[![Patreon](https://i.imgur.com/K05b2RO.png)](https://patreon.com/spikespaz)
+
 # Projects
 ## Complete
 
