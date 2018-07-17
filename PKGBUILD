@@ -4,14 +4,14 @@
 # This pkgbuild provide Maia and Breath variant of Arc Theme 
 # New soft fork at https://github.com/NicoHood/arc-theme
 
-pkgbase=arc-themes
+pkgbase=arc-theme
 pkgname=('arc-themes-solid-maia'
 		 'arc-themes-maia'
 		 'arc-themes-breath'
 		 'arc-themes-solid-breath')
-_pkgname=arc-theme
+_pkgname=$pkgbase
 _pkgbase=arc-themes-maia
-pkgver=20180114
+pkgver=20180715
 pkgrel=1
 #_commit=4b75f33ff2cfedb6ba0809cf877deb2d2831e6c3
 #_gnomever=3.22
@@ -21,13 +21,16 @@ url='https://github.com/NicoHood/arc-theme' #soft fork
 license=('GPL3')
 depends=('sassc' 'gtk3')
 makedepends=('optipng' 'inkscape' 'autoconf' 'automake' 'pkg-config' 'libcanberra')
+optdepends=('arc-maia-icon-theme: recommended icon theme'
+            'gtk-engine-murrine: for gtk2 themes'
+            'gnome-themes-standard: for gtk2 themes')
 #source=("${pkgbase}-${pkgver}.tar.gz::https://github.com/horst3180/${_pkgname}/archive/${pkgver}.tar.gz")
 #source=("${pkgbase}-${pkgver}.tar.gz::https://github.com/horst3180/${_pkgname}/archive/${_commit}.tar.gz")
-source=("${pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz"
-        "${pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc")
-sha256sums=('a804222b7088b5f691f778612aeda89f1c0fe4226c4622aeb87770853903773e'
+source=("${_pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz"
+        "${_pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc")
+sha256sums=('a8119f6afa91628a73d8d6d68a953522b8ebe1efee303f9bc15d1ba4b5108f35'
             'SKIP')
-validpgpkeys=('97312D5EB9D7AE7D0BD4307351DAE9B7C1AE9161')
+validpgpkeys=('97312D5EB9D7AE7D0BD4307351DAE9B7C1AE9161') #Nicohood key
 
 #ALL arc color
 _blue=5294e2 
@@ -126,6 +129,13 @@ find . -type f -name '*.*' -exec sed -i \
    "s/Arc/Arc-Maia/g;\
    s/Arc-Darker/Arc-Darker-Maia/g;\
   s/Arc-Dark/Arc-Dark-Maia/g" {} \;
+  
+cd $srcdir/arc-themes-maia-$pkgver/common/openbox
+mv Arc Arc-Maia 
+mv Arc-Dark Arc-Maia-Dark 
+mv Arc-Darker Arc-Maia-Darker 
+
+cd $srcdir/arc-themes-maia-$pkgver
 
 #Change the color Blue > Maia
 msg "Manjarification : Change all arc color to green maia"
@@ -213,42 +223,8 @@ find . -type f -name '*.*' -exec sed -i "s|$_BLUE15|$_maia15|g" {} \;
 msg "done32"
 echo
 
-#Deleting all assets i.e. png in the common folder
 msg "Rebuild png file : waiting"
 echo
-
-cd $srcdir/arc-themes-maia-$pkgver
-rm -rf common/gtk-2.0/assets/*
-rm -rf common/gtk-2.0/assets-dark/*
-rm -rf common/gtk-3.0/3.14/assets/*
-rm -rf common/gtk-3.0/3.16/assets/*
-rm -rf common/gtk-3.0/3.18/assets/*
-rm -rf common/gtk-3.0/3.20/assets/*
-rm -rf common/gtk-3.0/3.22/assets/*
-rm -rf common/xfwm4/assets/*
-rm -rf common/xfwm4/assets-dark/*
-
-#Make new assets
-msg "making the assets of gtk-2.0"
-echo
-cd common/gtk-2.0
-msg "making the assets of gtk-2.0/render-assets"
-echo
-sh render-assets.sh
-msg "making the assets of gtk-3.0"
-echo
-#cd ../gtk-3.0/3.18/
-#msg "making the assets of gtk-3.0/3.18"
-#echo
-#sh render-assets.sh
-cd ../gtk-3.0/3.20/
-msg "making the assets of gtk-3.0/3.20"
-echo
-sh render-assets.sh
-cd ../../xfwm4
-msg "making the assets of xfwm4"
-echo
-sh render-assets.sh
 
 msg "Building maia-theme"
 echo
@@ -271,6 +247,13 @@ find . -type f -name '*.*' -exec sed -i \
    "s/Arc/Arc-Breath/g;\
    s/Arc-Darker/Arc-Darker-Breath/g;\
   s/Arc-Dark/Arc-Dark-Breath/g" {} \;
+  
+cd $srcdir/arc-themes-breath-$pkgver/common/openbox
+mv Arc Arc-Breath
+mv Arc-Dark Arc-Breath-Dark
+mv Arc-Darker Arc-Breath-Darker 
+
+cd $srcdir/arc-themes-breath-$pkgver
 
 #Change the color Blue > Breath
 msg "Manjarification : Change all arc color to green breath"
@@ -357,43 +340,8 @@ msg "done31"
 find . -type f -name '*.*' -exec sed -i "s|$_BLUE15|$_breath15|g" {} \;
 msg "done32"
 echo
-
-#Deleting all assets i.e. png in the common folder
 msg "Rebuild png file : waiting"
 echo
-
-cd $srcdir/arc-themes-breath-$pkgver
-rm -rf common/gtk-2.0/assets/*
-rm -rf common/gtk-2.0/assets-dark/*
-rm -rf common/gtk-3.0/3.14/assets/*
-rm -rf common/gtk-3.0/3.16/assets/*
-rm -rf common/gtk-3.0/3.18/assets/*
-rm -rf common/gtk-3.0/3.20/assets/*
-rm -rf common/gtk-3.0/3.22/assets/*
-rm -rf common/xfwm4/assets/*
-rm -rf common/xfwm4/assets-dark/*
-
-#Make new assets
-msg "making the assets of gtk-2.0"
-echo
-cd common/gtk-2.0
-msg "making the assets of gtk-2.0/render-assets"
-echo
-sh render-assets.sh
-msg "making the assets of gtk-3.0"
-echo
-#cd ../gtk-3.0/3.18/
-#msg "making the assets of gtk-3.0/3.18"
-#echo
-#sh render-assets.sh
-cd ../gtk-3.0/3.20/
-msg "making the assets of gtk-3.0/3.20"
-echo
-sh render-assets.sh
-cd ../../xfwm4
-msg "making the assets of xfwm4"
-echo
-sh render-assets.sh
 
 msg "Building breath-theme"
 echo
@@ -417,9 +365,6 @@ cd $srcdir/arc-themes-maia-$pkgver
 #Change folder name for solid version 
 
 cd $pkgdir/usr/share/themes
-#mv Arc-Maia Arc-Maia-Solid
-#mv Arc-Maia-Dark Arc-Dark-Maia-Solid
-#mv Arc-Maia-Darker Arc-Darker-Maia-Solid
 
 #Add Maia-Solid suffix (don't change this order)
 find . -type f -name '*.*' -exec sed -i \
@@ -429,9 +374,7 @@ find . -type f -name '*.*' -exec sed -i \
 }
 
 package_arc-themes-maia() {
-pkgdesc="A flat theme with transparent elements Manjaro Maia variant"
-#optdepends=('arc-firefox-theme: Firefox theme to complete arc-theme-maia experience')
-#cd $srcdir  
+pkgdesc="A flat theme with transparent elements Manjaro Maia variant"  
 cd $srcdir/arc-themes-maia-$pkgver
   ./configure --prefix=/usr --disable-unity --disable-plank
   make DESTDIR="${pkgdir}" install
@@ -446,9 +389,6 @@ cd $srcdir/arc-themes-breath-$pkgver
 #Change folder name for solid version
 
 cd $pkgdir/usr/share/themes
-#mv Arc-Breath Arc-Breath-Solid
-#mv Arc-Breath-Dark Arc-Dark-Breath-Solid
-#mv Arc-Breath-Darker Arc-Darker-Breath-Solid
 
 #Add Breath-Solid suffix (don't change this order)
 find . -type f -name '*.*' -exec sed -i \
