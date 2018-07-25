@@ -2,22 +2,16 @@
 I'm a Junior computer science student in a specialty school in Arizona. I spend most of my personal time programming, and occasionally playing games with friends. I love new technology and software breakthroughs. I highly value aesthetics, user experience, performance, and especially, maintainablilty and quality of code. I try by best to make clean, concise source code that will subsequently be maintainable in the future.
 
 ### Social
+
  - Twitter: [twitter.com/spikespaz](https://twitter.com/spikespaz)
  - Reddit: [reddit.com/u/spikespaz](https://reddit.com/u/spikespaz)
  - GitHub: [github.com/spikespaz](https://github.com/spikespaz)
  - Teknik: [git.teknik.io/spikespaz](https://git.teknik.io/spikespaz)
 
-## Donations
-
-If you would like to show appreciation for my work, I would gladly accept a small donation!
-
-I will accept donations through PayPal.Me, Buy Me a Coffee, or Patreon.
-
-[![Buy Me a Coffee](https://i.imgur.com/fN422E7.png)](https://buymeacoffee.com/spikespaz)
-[![PayPal.Me](https://i.imgur.com/JWkunGi.png)](https://paypal.me/spikespaz)
-[![Patreon](https://i.imgur.com/K05b2RO.png)](https://patreon.com/spikespaz)
-
 # Projects
+
+No project is ever truly complete. If there are bugs, or important features that need to be fixed or added, I will do so. Many projects marked as "complete" are simply in a functioning state, which I would personally consider to be ready for public release.
+
 ## Complete
 
  - [Clone by Path](https://github.com/spikespaz/clone-by-path)
@@ -25,14 +19,22 @@ I will accept donations through PayPal.Me, Buy Me a Coffee, or Patreon.
  - [VS Code SmoothType](https://github.com/spikespaz/vscode-smoothtype)
    - An extension to add a smooth typing animation to Visual Studio Code, similar to Microsoft Office and the Windows 10 Mail app.
    - See it on the [Marketplace](https://marketplace.visualstudio.com/items?itemName=spikespaz.vscode-smoothtype).
-
-## Active
-
  - [Native Dark](https://github.com/spikespaz/firefox-nativedark)
    - Theme for Firefox Quantum that was originally intended to match your Windows accent color and style the browser appropriately. It has since grown into a much larger cross-platform WebExtension.
    - Second-place winner of the [Firefox Quantum Extensions Challenge](https://extensionschallenge.com).
  - [Search Deflector](https://github.com/spikespaz/search-deflector)
    - An alternative to EdgeDeflector and SearchWithMyBrowser that redirects searches to any search engine of your choice. 
+
+## Active
+
+ - [TileDWM](https://github.com/spikespaz/windows-tiledwm)
+   - Tiling psuedo-window manager on Windows.
+   - A simple and to-the-point program to imitate the functionality of tiling window managers on Linux, such as bspwm and i3wm.
+   - Full control over hotkeys to manage the positioning of windows.
+ - [Firefox PageInverter](https://github.com/spikespaz/firefox-pageinverter)
+   - Forked Firefox extension to invert page colors except images
+   - Persistent across domains, configurable patterns to match URLs
+   - Not made to be perfect like UserStyles, but good enough to be useful.
 
 ## Soon<sup>TM</sup>
 
@@ -59,10 +61,6 @@ I will accept donations through PayPal.Me, Buy Me a Coffee, or Patreon.
  - Terminal file explorer
    - Cross platform
    - Drag & Drop shell integration
- - Tiling window manager for Windows
-   - Use a fast systems language (probably D)
-   - Inspired by bspwm
-   - Configurable hotkeys
  - Faster open forum server
    - Write in Go or vibe.d
    - Add context menu item
