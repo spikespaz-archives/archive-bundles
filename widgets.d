@@ -4,16 +4,21 @@ public import themes;
 public import utilities;
 
 public enum : ubyte {
+    /// Draw a checkable widget as if it were unchecked. (default)
     UNCHECKED = 0,
+    /// Draw a checkable widget as if it were checked.
     CHECKED = 1,
+    /// Draw a widget as if the mouse was hovered over it.
     HOVERED = 2,
+    /// Draw a widget as if it was actively selected or being clicked.
     ACTIVE = 4
 }
 
-public void drawCheckBox(NVGContext nvgc, PointF pos, SizeF size = SizeF(14f, 14f), ubyte flags = 0) {
+/// Draw a check box to a NanoVega context, according to the active theme at `CHECK_BOX_THEME`.
+public void drawCheckBox(NVGContext nvgc, PointF pos, SizeF size = SizeF(14f, 14f), ubyte state = 0) {
     nvgc.beginPath();
 
-    final switch (flags) {
+    final switch (state) {
     case ACTIVE:
         nvgc.fillColor = CHECK_BOX_THEME.activeFillColor;
         nvgc.strokeColor = CHECK_BOX_THEME.activeBorderColor;

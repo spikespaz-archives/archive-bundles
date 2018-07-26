@@ -4,6 +4,7 @@ import arsd.color;
 import widgets;
 import std.stdio: writeln;
 
+/// Function to draw all implimented widgets to the NanoVega context.
 void drawWindow(SimpleWindow swnd, NVGContext nvgc) {
     nvgc.drawCheckBox(PointF(16f, 16f), SizeF(14f, 14f), UNCHECKED);
     nvgc.drawCheckBox(PointF(48f, 16f), SizeF(14f, 14f), CHECKED);
