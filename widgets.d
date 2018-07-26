@@ -3,17 +3,6 @@ import arsd.color;
 public import themes;
 public import utilities;
 
-public enum : ubyte {
-    /// Draw a checkable widget as if it were unchecked. (default)
-    UNCHECKED = 0,
-    /// Draw a checkable widget as if it were checked.
-    CHECKED = 1,
-    /// Draw a widget as if the mouse was hovered over it.
-    HOVERED = 2,
-    /// Draw a widget as if it was actively selected or being clicked.
-    ACTIVE = 4
-}
-
 /// Draw a simple rectangle the color of `BACKGROUND_COLOR` on the NanoVega context.
 public void drawBackground(NVGContext nvgc, PointF pos, SizeF size) {
     nvgc.beginPath();
@@ -23,7 +12,7 @@ public void drawBackground(NVGContext nvgc, PointF pos, SizeF size) {
 }
 
 /// Draw a check box to a NanoVega context, according to the active theme at `CHECK_BOX_THEME`.
-public void drawCheckBox(NVGContext nvgc, PointF pos, SizeF size = SizeF(14f, 14f), ubyte state = 0) {
+public void drawCheckBox(NVGContext nvgc, const PointF pos, const SizeF size = const SizeF(14f, 14f), const ushort state = ZEROFLAG) {
     nvgc.beginPath();
 
     final switch (state) {
@@ -39,7 +28,7 @@ public void drawCheckBox(NVGContext nvgc, PointF pos, SizeF size = SizeF(14f, 14
         nvgc.fillColor = CHECK_BOX_THEME.checkedFillColor;
         nvgc.strokeColor = CHECK_BOX_THEME.checkedBorderColor;
         break;
-    case UNCHECKED:
+    case UNCHECKED, ZEROFLAG:
         nvgc.fillColor = CHECK_BOX_THEME.uncheckedFillColor;
         nvgc.strokeColor = CHECK_BOX_THEME.uncheckedBorderColor;
     }
@@ -52,5 +41,36 @@ public void drawCheckBox(NVGContext nvgc, PointF pos, SizeF size = SizeF(14f, 14
         nvgc.roundedRect(pos.x, pos.y, size.width, size.height, CHECK_BOX_THEME.borderRadius);
 
     nvgc.fill();
-    nvgc.stroke();
+
+    if (CHECK_BOX_THEME.borderWidth)
+        nvgc.stroke();
+}
+
+/// Draw a text button to the NanoVega context, according to the theme at `TEXT_BUTTON_THEME`.
+public void drawButton(NVGContext nvgc, const string text, const PointF pos, const SizeF size = SizeF(50f, 26f),
+        const ushort state = CENTER_HORIZONTAL) {
+    nvgc.beginPath();
+
+    if ((state & ACTIVE) == ACTIVE) {
+        nvgc.fillColor = TEXT_BUTTON_THEME.activeFillColor;
+        nvgc.strokeColor = TEXT_BUTTON_THEME.activeBorderColor;
+    } else if ((state & HOVERED) == HOVERED) {
+        nvgc.fillColor = TEXT_BUTTON_THEME.hoveredFillColor;
+        nvgc.strokeColor = TEXT_BUTTON_THEME.hoveredBorderColor;
+    } else if ((state & ZEROFLAG) == ZEROFLAG) {
+        nvgc.fillColor = TEXT_BUTTON_THEME.defaultFillColor;
+        nvgc.strokeColor = TEXT_BUTTON_THEME.defaultBorderColor;
+    }
+
+    nvgc.strokeWidth = TEXT_BUTTON_THEME.borderWidth;
+
+    if (!TEXT_BUTTON_THEME.borderRadius)
+        nvgc.rect(pos.x, pos.y, size.width, size.height);
+    else
+        nvgc.roundedRect(pos.x, pos.y, size.width, size.height, TEXT_BUTTON_THEME.borderRadius);
+
+    nvgc.fill();
+
+    if (TEXT_BUTTON_THEME.borderWidth)
+        nvgc.stroke();
 }

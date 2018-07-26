@@ -10,10 +10,13 @@ void drawWindow(SimpleWindow swnd, NVGContext nvgc) {
     nvgc.drawBackground(PointF(4f, 4f), SizeF(swnd.width - 8f, swnd.height - 8f));
 
     // Draw all checkbox states.
-    nvgc.drawCheckBox(PointF(16f, 16f), SizeF(14f, 14f), UNCHECKED);
+    nvgc.drawCheckBox(PointF(16f, 16f), SizeF(14f, 14f), ZEROFLAG);
     nvgc.drawCheckBox(PointF(48f, 16f), SizeF(14f, 14f), CHECKED);
     nvgc.drawCheckBox(PointF(80f, 16f), SizeF(14f, 14f), HOVERED);
     nvgc.drawCheckBox(PointF(112f, 16f), SizeF(14f, 14f), ACTIVE);
+
+    // Draw all button states.
+    nvgc.drawButton("Button", PointF(16f, 46f), SizeF(112f, 26f), CENTER_HORIZONTAL);
 }
 
 void main() {
