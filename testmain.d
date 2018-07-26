@@ -23,6 +23,9 @@ void main() {
 
     auto swnd = new SimpleWindow(1280, 720, "NewStyle Widgets", OpenGlOptions.yes, Resizability.allowResizing);
 
+    swnd.minWidth = 768;
+    swnd.minHeight = 432;
+
     swnd.onClosing = delegate() { nvgc.kill(); };
 
     swnd.visibleForTheFirstTime = delegate() {
