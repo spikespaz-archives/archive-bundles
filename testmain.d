@@ -6,6 +6,10 @@ import std.stdio: writeln;
 
 /// Function to draw all implimented widgets to the NanoVega context.
 void drawWindow(SimpleWindow swnd, NVGContext nvgc) {
+    // Draw the background.
+    nvgc.drawBackground(PointF(4f, 4f), SizeF(swnd.width - 8f, swnd.height - 8f));
+
+    // Draw all checkbox states.
     nvgc.drawCheckBox(PointF(16f, 16f), SizeF(14f, 14f), UNCHECKED);
     nvgc.drawCheckBox(PointF(48f, 16f), SizeF(14f, 14f), CHECKED);
     nvgc.drawCheckBox(PointF(80f, 16f), SizeF(14f, 14f), HOVERED);
@@ -30,7 +34,7 @@ void main() {
 
     swnd.redrawOpenGlScene = delegate() {
         glViewport(0, 0, swnd.width, swnd.height);
-        glClearColor(1, 1, 1, 1);
+        glClearColor(0, 0, 0, 0);
         glClear(glNVGClearFlags);
 
         nvgc.beginFrame(swnd.width, swnd.height);

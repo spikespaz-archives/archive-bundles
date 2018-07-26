@@ -2,6 +2,8 @@ import arsd.nanovega: NVGColor;
 import arsd.color;
 import utilities;
 
+/// Global variable containing the color of the background widget.
+public Color BACKGROUND_COLOR = Color.white();
 /// Global variable containing the active `CheckBoxTheme`.
 public CheckBoxTheme CHECK_BOX_THEME = CheckBoxTheme(0);
 

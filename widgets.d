@@ -14,6 +14,14 @@ public enum : ubyte {
     ACTIVE = 4
 }
 
+/// Draw a simple rectangle the color of `BACKGROUND_COLOR` on the NanoVega context.
+public void drawBackground(NVGContext nvgc, PointF pos, SizeF size) {
+    nvgc.beginPath();
+    nvgc.fillColor = BACKGROUND_COLOR.getNVGColor();
+    nvgc.rect(pos.x, pos.y, size.width, size.height);
+    nvgc.fill();
+}
+
 /// Draw a check box to a NanoVega context, according to the active theme at `CHECK_BOX_THEME`.
 public void drawCheckBox(NVGContext nvgc, PointF pos, SizeF size = SizeF(14f, 14f), ubyte state = 0) {
     nvgc.beginPath();
