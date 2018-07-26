@@ -75,6 +75,8 @@ public struct ButtonTheme {
     float borderRadius;
     /// The width of the border of a button. Set to 0 to disable.
     float borderWidth;
+    /// The padding on every side of the text.
+    float textPadding;
 
     /// The fill color of a button when the state is default or `ZEROFLAG`.
     NVGColor defaultFillColor;
@@ -98,13 +100,14 @@ public struct ButtonTheme {
     NVGColor activeBorderColor;
 
     /// Construct a theme by passing `arsd.color.Color` objects. Parameter `id` is unused, but required.
-    this(ubyte id, float borderRadius = 3, float borderWidth = 1, Color defaultFillColor = Color.white(),
+    this(ubyte id, float borderRadius = 3, float borderWidth = 1, float textPadding = 2, Color defaultFillColor = Color.white(),
             Color hoveredFillColor = Color.gray(), Color activeFillColor = Color.gray(),
             Color defaultTextColor = Color.black(), Color hoveredTextColor = Color.black(),
             Color activeTextColor = Color.black(), Color defaultBorderColor = Color.black(),
             Color hoveredBorderColor = Color.black(), Color activeBorderColor = Color.black()) {
         this.borderRadius = borderRadius;
         this.borderWidth = borderWidth;
+        this.textPadding = textPadding;
 
         this.defaultFillColor = defaultFillColor.getNVGColor();
         this.hoveredFillColor = hoveredFillColor.getNVGColor();

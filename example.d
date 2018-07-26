@@ -16,20 +16,20 @@ void drawWindow(SimpleWindow swnd, NVGContext nvgc) {
     nvgc.drawCheckBox(PointF(98f, 14f), SizeF(14f, 14f), ACTIVE);
 
     // Draw all button states.
-    nvgc.drawButton("Button", PointF(14f, 54f), SizeF(112f, 26f), CENTER_HORIZONTAL);
-    nvgc.drawButton("Button", PointF(14f, 106f), SizeF(112f, 26f), CENTER_HORIZONTAL | HOVERED);
-    nvgc.drawButton("Button", PointF(14f, 158f), SizeF(112f, 26f), CENTER_HORIZONTAL | ACTIVE);
+    nvgc.drawButton("Button", PointF(14f, 54f), SizeF(112f, 26f));
+    nvgc.drawButton("Button", PointF(14f, 106f), SizeF(112f, 26f), CENTER_VERTICAL | HOVERED);
+    nvgc.drawButton("Button", PointF(14f, 158f), SizeF(112f, 26f), CENTER_VERTICAL | ALIGN_RIGHT | ACTIVE);
 
     // Draw all alignments of text labels.
-    nvgc.drawTextLabel("Top Left", PointF(350f, 100), SizeF(150f, 50f), ALIGN_TOP | ALIGN_LEFT);
-    nvgc.drawTextLabel("Top Right", PointF(500f, 100), SizeF(150f, 50f), ALIGN_TOP | ALIGN_RIGHT);
-    nvgc.drawTextLabel("Middle Left", PointF(350f, 150), SizeF(150f, 50f), CENTER_VERTICAL | ALIGN_LEFT);
-    nvgc.drawTextLabel("Middle Right", PointF(500f, 150), SizeF(150f, 50f), CENTER_VERTICAL | ALIGN_RIGHT);
-    nvgc.drawTextLabel("Bottom Left", PointF(350f, 200), SizeF(150f, 50f), ALIGN_BOTTOM | ALIGN_LEFT);
-    nvgc.drawTextLabel("Bottom Right", PointF(500f, 200), SizeF(150f, 50f), ALIGN_BOTTOM | ALIGN_RIGHT);
-    nvgc.drawTextLabel("Top Middle", PointF(350f, 250), SizeF(150f, 50f), ALIGN_TOP | CENTER_HORIZONTAL);
-    nvgc.drawTextLabel("Bottom Middle", PointF(500f, 250), SizeF(150f, 50f), ALIGN_BOTTOM | CENTER_HORIZONTAL);
-    nvgc.drawTextLabel("Center", PointF(425f, 300), SizeF(150f, 50f), CENTER_VERTICAL | CENTER_HORIZONTAL);
+    nvgc.drawTextLabel("Top Left", PointF(350f, 100), SizeF(150f, 30f), ALIGN_TOP | ALIGN_LEFT);
+    nvgc.drawTextLabel("Top Right", PointF(500f, 100), SizeF(150f, 30f), ALIGN_TOP | ALIGN_RIGHT);
+    nvgc.drawTextLabel("Middle Left", PointF(350f, 150), SizeF(150f, 30f), CENTER_VERTICAL | ALIGN_LEFT);
+    nvgc.drawTextLabel("Middle Right", PointF(500f, 150), SizeF(150f, 30f), CENTER_VERTICAL | ALIGN_RIGHT);
+    nvgc.drawTextLabel("Bottom Left", PointF(350f, 200), SizeF(150f, 30f), ALIGN_BOTTOM | ALIGN_LEFT);
+    nvgc.drawTextLabel("Bottom Right", PointF(500f, 200), SizeF(150f, 30f), ALIGN_BOTTOM | ALIGN_RIGHT);
+    nvgc.drawTextLabel("Top Middle", PointF(350f, 250), SizeF(150f, 30f), ALIGN_TOP | CENTER_HORIZONTAL);
+    nvgc.drawTextLabel("Bottom Middle", PointF(500f, 250), SizeF(150f, 30f), ALIGN_BOTTOM | CENTER_HORIZONTAL);
+    nvgc.drawTextLabel("Center", PointF(425f, 300), SizeF(150f, 30f), CENTER_VERTICAL | CENTER_HORIZONTAL);
 
 }
 

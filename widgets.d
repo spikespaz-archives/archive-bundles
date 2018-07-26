@@ -45,7 +45,7 @@ public void drawCheckBox(NVGContext nvgc, const PointF pos, const SizeF size = c
 
 /// Draw a text button to the NanoVega context, according to the theme at `TEXT_BUTTON_THEME`.
 public void drawButton(NVGContext nvgc, const string text, const PointF pos, const SizeF size = SizeF(70f, 26f),
-        const ushort state = CENTER_HORIZONTAL) {
+        const ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
     nvgc.beginPath();
 
     if (checkFlag(state, ACTIVE)) {
@@ -70,11 +70,17 @@ public void drawButton(NVGContext nvgc, const string text, const PointF pos, con
 
     if (TEXT_BUTTON_THEME.borderWidth)
         nvgc.stroke();
+
+    PointF textPos = PointF(pos.x + TEXT_BUTTON_THEME.textPadding, pos.y + TEXT_BUTTON_THEME.textPadding);
+    SizeF textSize = SizeF(size.width - TEXT_BUTTON_THEME.textPadding * 2, size.height - TEXT_BUTTON_THEME
+            .textPadding * 2);
+
+    nvgc.drawTextLabel(text, textPos, textSize, state);
 }
 
 /// Draw a text label to the NanoVega context, according to the theme at `TEXT_LABEL_THEME`.
 public void drawTextLabel(NVGContext nvgc, const string text, const PointF pos, const SizeF size = SizeF(70f, 26f),
-        const ushort state = CENTER_HORIZONTAL | CENTER_VERTICAL) {
+        const ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
     if (nvgc.findFont(TEXT_LABEL_THEME.textFont) == -1)
         nvgc.createFont(TEXT_LABEL_THEME.textFont, "fonts/" ~ TEXT_LABEL_THEME.textFont ~ ".ttf");
 
@@ -109,4 +115,25 @@ public void drawTextLabel(NVGContext nvgc, const string text, const PointF pos, 
 
     nvgc.textAlign(verticalAlign, horizontalAlign);
     nvgc.textBox(pos.x, posY, size.width, text);
+
+    // // Debug
+    // float[4] textBounds;
+    // nvgc.textBoxBounds(pos.x, pos.y, size.width, text, textBounds);
+
+    // float textHeight = textBounds[3] - textBounds[1];
+    // float textWidth = textBounds[2] - textBounds[0];
+
+    // // Debug text bounds
+    // nvgc.beginPath();
+    // nvgc.strokeWidth = 1;
+    // nvgc.strokeColor = NVGColor.red;
+    // nvgc.rect(pos.x, posY - textHeight, textWidth, textHeight);
+    // nvgc.stroke();
+
+    // // Debug bounding box
+    // nvgc.beginPath();
+    // nvgc.strokeWidth = 1;
+    // nvgc.strokeColor = NVGColor.blue;
+    // nvgc.rect(pos.x, pos.y, size.width, size.height);
+    // nvgc.stroke();
 }

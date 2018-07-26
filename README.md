@@ -17,8 +17,8 @@ This is a list of widgets I plan to impliment, in no particular order. I will ad
 - [ ] Choice Button
 - [ ] Color Picker
 - [ ] Images
-- [ ] Buttons
-- [ ] Text Label
+- [X] Buttons
+- [X] Text Label
 - [ ] Group Box
 - [ ] Radio Buttons
 - [ ] Scroll Bars
