@@ -15,20 +15,17 @@ public void drawBackground(NVGContext nvgc, PointF pos, SizeF size) {
 public void drawCheckBox(NVGContext nvgc, const PointF pos, const SizeF size = const SizeF(14f, 14f), const ushort state = ZEROFLAG) {
     nvgc.beginPath();
 
-    final switch (state) {
-    case ACTIVE:
+    if ((state & ACTIVE) == ACTIVE) {
         nvgc.fillColor = CHECK_BOX_THEME.activeFillColor;
         nvgc.strokeColor = CHECK_BOX_THEME.activeBorderColor;
-        break;
-    case HOVERED:
+    } else if ((state & HOVERED) == HOVERED) {
         nvgc.fillColor = CHECK_BOX_THEME.hoveredFillColor;
         nvgc.strokeColor = CHECK_BOX_THEME.hoveredBorderColor;
-        break;
-    case CHECKED:
+
+    } else if ((state & CHECKED) == CHECKED) {
         nvgc.fillColor = CHECK_BOX_THEME.checkedFillColor;
         nvgc.strokeColor = CHECK_BOX_THEME.checkedBorderColor;
-        break;
-    case UNCHECKED, ZEROFLAG:
+    } else if (((state & UNCHECKED) == UNCHECKED) || ((state & ZEROFLAG) == ZEROFLAG)) {
         nvgc.fillColor = CHECK_BOX_THEME.uncheckedFillColor;
         nvgc.strokeColor = CHECK_BOX_THEME.uncheckedBorderColor;
     }
