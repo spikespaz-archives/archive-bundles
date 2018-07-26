@@ -8,6 +8,8 @@ public Color BACKGROUND_COLOR = Color.white();
 public CheckBoxTheme CHECK_BOX_THEME = CheckBoxTheme(0);
 /// Global variable containing the active `ButtonTheme`.
 public ButtonTheme TEXT_BUTTON_THEME = ButtonTheme(0);
+/// Global variable containing the active `TextLabelTheme`.
+public TextLabelTheme TEXT_LABEL_THEME = TextLabelTheme(0);
 
 /// Struct representing the theme for drawable check box widgets.
 public struct CheckBoxTheme {
@@ -115,5 +117,29 @@ public struct ButtonTheme {
         this.defaultBorderColor = defaultBorderColor.getNVGColor();
         this.hoveredBorderColor = hoveredBorderColor.getNVGColor();
         this.activeBorderColor = activeBorderColor.getNVGColor();
+    }
+}
+
+/// Struct representing the theme for drawable text label widgets.
+struct TextLabelTheme {
+    /// The size of the text.
+    float textSize;
+    /// The intensity of the blur effect.
+    float textBlur;
+    /// The spacing between characters.
+    float textSpacing;
+    /// The string representing the font, will be searched for in 'fonts/' if not registered.
+    string textFont;
+    /// The color of the text.
+    NVGColor textColor;
+
+    /// Construct a theme by passing `arsd.color.Color` objects. Parameter `id` is unused, but required.
+    this(ubyte id, float textSize = 18, float textBlur = 0, float textSpacing = 0, string textFont = "Arial", Color textColor = Color
+            .black()) {
+        this.textSize = textSize;
+        this.textBlur = textBlur;
+        this.textSpacing = textSpacing;
+        this.textFont = textFont;
+        this.textColor = textColor.getNVGColor();
     }
 }
