@@ -12,20 +12,20 @@ public void drawBackground(NVGContext nvgc, PointF pos, SizeF size) {
 }
 
 /// Draw a check box to a NanoVega context, according to the active theme at `CHECK_BOX_THEME`.
-public void drawCheckBox(NVGContext nvgc, const PointF pos, const SizeF size = const SizeF(14f, 14f), const ushort state = ZEROFLAG) {
+public void drawCheckBox(NVGContext nvgc, const PointF pos, const SizeF size = const SizeF(14f, 14f), const ushort state = UNCHECKED) {
     nvgc.beginPath();
 
-    if ((state & ACTIVE) == ACTIVE) {
+    if (checkFlag(state, ACTIVE)) {
         nvgc.fillColor = CHECK_BOX_THEME.activeFillColor;
         nvgc.strokeColor = CHECK_BOX_THEME.activeBorderColor;
-    } else if ((state & HOVERED) == HOVERED) {
+    } else if (checkFlag(state, HOVERED)) {
         nvgc.fillColor = CHECK_BOX_THEME.hoveredFillColor;
         nvgc.strokeColor = CHECK_BOX_THEME.hoveredBorderColor;
 
-    } else if ((state & CHECKED) == CHECKED) {
+    } else if (checkFlag(state, CHECKED)) {
         nvgc.fillColor = CHECK_BOX_THEME.checkedFillColor;
         nvgc.strokeColor = CHECK_BOX_THEME.checkedBorderColor;
-    } else if (((state & UNCHECKED) == UNCHECKED) || ((state & ZEROFLAG) == ZEROFLAG)) {
+    } else if (checkFlag(state, UNCHECKED) || checkFlag(state, ZEROFLAG)) {
         nvgc.fillColor = CHECK_BOX_THEME.uncheckedFillColor;
         nvgc.strokeColor = CHECK_BOX_THEME.uncheckedBorderColor;
     }
@@ -48,13 +48,13 @@ public void drawButton(NVGContext nvgc, const string text, const PointF pos, con
         const ushort state = CENTER_HORIZONTAL) {
     nvgc.beginPath();
 
-    if ((state & ACTIVE) == ACTIVE) {
+    if (checkFlag(state, ACTIVE)) {
         nvgc.fillColor = TEXT_BUTTON_THEME.activeFillColor;
         nvgc.strokeColor = TEXT_BUTTON_THEME.activeBorderColor;
-    } else if ((state & HOVERED) == HOVERED) {
+    } else if (checkFlag(state, HOVERED)) {
         nvgc.fillColor = TEXT_BUTTON_THEME.hoveredFillColor;
         nvgc.strokeColor = TEXT_BUTTON_THEME.hoveredBorderColor;
-    } else if ((state & ZEROFLAG) == ZEROFLAG) {
+    } else if (checkFlag(state, ZEROFLAG)) {
         nvgc.fillColor = TEXT_BUTTON_THEME.defaultFillColor;
         nvgc.strokeColor = TEXT_BUTTON_THEME.defaultBorderColor;
     }
@@ -70,4 +70,10 @@ public void drawButton(NVGContext nvgc, const string text, const PointF pos, con
 
     if (TEXT_BUTTON_THEME.borderWidth)
         nvgc.stroke();
+}
+
+/// Draw a text label to the NanoVega context. There is no theme for text labels.
+public void drawTextLabel(NVGContext nvgc, const string text, const PointF pos, const SizeF size = SizeF(50f, 26f),
+        const ushort state = CENTER_HORIZONTAL) {
+
 }

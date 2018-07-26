@@ -46,3 +46,8 @@ public struct SizeF {
 public NVGColor getNVGColor(Color color) {
     return nvgRGBA(color.r, color.g, color.b, color.a);
 }
+
+/// Compare a bitfield and check if a flag is present.
+public bool checkFlag(const ushort field, const ushort flag) {
+    return ((field & flag) == flag);
+}
