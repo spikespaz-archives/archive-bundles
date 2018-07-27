@@ -1,15 +1,30 @@
 import arsd.nanovega: NVGColor;
 import arsd.color;
 import utilities;
+import std.stdio: writeln;
 
 /// Global variable containing the color of the background widget.
-public Color BACKGROUND_COLOR = Color.white();
+public Color BACKGROUND_COLOR;
 /// Global variable containing the active `CheckBoxTheme`.
-public CheckBoxTheme CHECK_BOX_THEME = CheckBoxTheme(0);
+public CheckBoxTheme CHECK_BOX_THEME;
 /// Global variable containing the active `ButtonTheme`.
-public ButtonTheme TEXT_BUTTON_THEME = ButtonTheme(0);
+public ButtonTheme TEXT_BUTTON_THEME;
 /// Global variable containing the active `TextLabelTheme`.
-public TextLabelTheme TEXT_LABEL_THEME = TextLabelTheme(0);
+public TextLabelTheme TEXT_LABEL_THEME;
+/// Global variable containing the active `TextLabelTheme` for button labels.
+public TextLabelTheme BUTTON_LABEL_THEME;
+
+/// Initialize the values of all the global theme variables.
+/// This must be called in order for anything to be drawn
+/// on the NanoVega canvas, unless you create your own themes.
+void initGlobalThemes() {
+    BACKGROUND_COLOR = Color.white();
+    CHECK_BOX_THEME = CheckBoxTheme(0);
+    TEXT_LABEL_THEME = TextLabelTheme(0);
+    BUTTON_LABEL_THEME = TextLabelTheme(0);
+    BUTTON_LABEL_THEME.textSize = 16f;
+    TEXT_BUTTON_THEME = ButtonTheme(0);
+}
 
 /// Struct representing the theme for drawable check box widgets.
 public struct CheckBoxTheme {
@@ -85,12 +100,12 @@ public struct ButtonTheme {
     /// The fill color of a button when the state is `ACTIVE`.
     NVGColor activeFillColor;
 
-    /// The text color of a button when the state is default or `ZEROFLAG`.
-    NVGColor defaultTextColor;
-    /// The text color of a button when the state is `HOVERED`.
-    NVGColor hoveredTextColor;
-    /// The text color of a button when the state is `ACTIVE`.
-    NVGColor activeTextColor;
+    /// The theme for the label when the state is default or `ZEROFLAG`.
+    TextLabelTheme defaultTextTheme;
+    /// The theme for the label when the state is `HOVERED`.
+    TextLabelTheme hoveredTextTheme;
+    /// The theme for the label when the state is `ACTIVE`.
+    TextLabelTheme activeTextTheme;
 
     /// The outline or border color of a button when the state is default or `ZEROFLAG`.
     NVGColor defaultBorderColor;
@@ -100,10 +115,12 @@ public struct ButtonTheme {
     NVGColor activeBorderColor;
 
     /// Construct a theme by passing `arsd.color.Color` objects. Parameter `id` is unused, but required.
-    this(ubyte id, float borderRadius = 3, float borderWidth = 1, float textPadding = 2, Color defaultFillColor = Color.white(),
-            Color hoveredFillColor = Color.gray(), Color activeFillColor = Color.gray(),
-            Color defaultTextColor = Color.black(), Color hoveredTextColor = Color.black(),
-            Color activeTextColor = Color.black(), Color defaultBorderColor = Color.black(),
+    this(ubyte id, float borderRadius = 3, float borderWidth = 1, float textPadding = 4,
+            Color defaultFillColor = Color.white(), Color hoveredFillColor = Color.gray(),
+            Color activeFillColor = Color.gray(),
+            TextLabelTheme defaultTextTheme = BUTTON_LABEL_THEME,
+            TextLabelTheme hoveredTextTheme = BUTTON_LABEL_THEME,
+            TextLabelTheme activeTextTheme = BUTTON_LABEL_THEME, Color defaultBorderColor = Color.black(),
             Color hoveredBorderColor = Color.black(), Color activeBorderColor = Color.black()) {
         this.borderRadius = borderRadius;
         this.borderWidth = borderWidth;
@@ -113,9 +130,9 @@ public struct ButtonTheme {
         this.hoveredFillColor = hoveredFillColor.getNVGColor();
         this.activeFillColor = hoveredFillColor.getNVGColor();
 
-        this.defaultTextColor = defaultTextColor.getNVGColor();
-        this.hoveredTextColor = hoveredTextColor.getNVGColor();
-        this.activeTextColor = activeTextColor.getNVGColor();
+        this.defaultTextTheme = activeTextTheme;
+        this.hoveredTextTheme = activeTextTheme;
+        this.activeTextTheme = activeTextTheme;
 
         this.defaultBorderColor = defaultBorderColor.getNVGColor();
         this.hoveredBorderColor = hoveredBorderColor.getNVGColor();
