@@ -26,15 +26,18 @@ No project is ever truly complete. If there are bugs, or important features that
    - An alternative to EdgeDeflector and SearchWithMyBrowser that redirects searches to any search engine of your choice. 
 
 ## Active
-
+ - [New Style Widgets](https://github.com/spikespaz/newstyle-widgets)
+   - Fast and lightweight GUI library built on top of modules drom Adam's [arsd](https://github.com/adamdruppe/arsd).
+ - [FastIRC](https://github.com/spikespaz/fastirc)
+   - Yet another IRC client, but this one is made to look great.
+   - Very similar design to Discord's interface.
+   - Renders markdown from messages.
+   - Image, video, GIF, and link embeds.
+   - Built on New Style Widgets.
  - [TileDWM](https://github.com/spikespaz/windows-tiledwm)
    - Tiling psuedo-window manager on Windows.
    - A simple and to-the-point program to imitate the functionality of tiling window managers on Linux, such as bspwm and i3wm.
    - Full control over hotkeys to manage the positioning of windows.
- - [Firefox PageInverter](https://github.com/spikespaz/firefox-pageinverter)
-   - Forked Firefox extension to invert page colors except images
-   - Persistent across domains, configurable patterns to match URLs
-   - Not made to be perfect like UserStyles, but good enough to be useful.
 
 ## Soon<sup>TM</sup>
 
@@ -47,6 +50,10 @@ No project is ever truly complete. If there are bugs, or important features that
 
 ## Ideas
 
+ - [Firefox PageInverter](https://github.com/spikespaz/firefox-pageinverter)
+   - Forked Firefox extension to invert page colors except images
+   - Persistent across domains, configurable patterns to match URLs
+   - Not made to be perfect like UserStyles, but good enough to be useful.
  - DeNoise
    - Create a virtual audio input device in Windows
    - Re-route audio in from microphone to this virtual device
