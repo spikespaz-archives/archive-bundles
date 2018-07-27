@@ -20,6 +20,21 @@ void drawWindow(SimpleWindow swnd, NVGContext nvgc) {
     nvgc.drawButton("Button", PointF(14f, 106f), SizeF(112f, 26f), CENTER_VERTICAL | HOVERED);
     nvgc.drawButton("Button", PointF(14f, 158f), SizeF(112f, 26f), CENTER_VERTICAL | ALIGN_RIGHT | ACTIVE);
 
+    // Draw boxes to show the alignment of text.
+    nvgc.beginPath();
+    nvgc.strokeColor = NVGColor.black;
+    nvgc.strokeWidth = 1;
+    nvgc.rect(350f, 100, 150f, 30f);
+    nvgc.rect(500f, 100, 150f, 30f);
+    nvgc.rect(350f, 150, 150f, 30f);
+    nvgc.rect(500f, 150, 150f, 30f);
+    nvgc.rect(350f, 200, 150f, 30f);
+    nvgc.rect(500f, 200, 150f, 30f);
+    nvgc.rect(350f, 250, 150f, 30f);
+    nvgc.rect(500f, 250, 150f, 30f);
+    nvgc.rect(425f, 300, 150f, 30f);
+    nvgc.stroke();
+
     // Draw all alignments of text labels.
     nvgc.drawTextLabel("Top Left", PointF(350f, 100), SizeF(150f, 30f), ALIGN_TOP | ALIGN_LEFT);
     nvgc.drawTextLabel("Top Right", PointF(500f, 100), SizeF(150f, 30f), ALIGN_TOP | ALIGN_RIGHT);
@@ -37,6 +52,7 @@ void main() {
     NVGContext nvgc;
 
     setOpenGLContextVersion(3, 0);
+    initGlobalThemes();
 
     auto swnd = new SimpleWindow(1280, 720, "New Style Widgets", OpenGlOptions.yes, Resizability.allowResizing);
 
