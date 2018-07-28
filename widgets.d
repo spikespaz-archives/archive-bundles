@@ -12,8 +12,7 @@ public void drawBackground(NVGContext nvgc, const PointF pos, const SizeF size) 
 }
 
 /// Draw a check box to a NanoVega context.
-public void drawCheckBox(NVGContext nvgc, CheckBoxTheme theme, const PointF pos, const SizeF size = const SizeF(14f,
-        14f), const ushort state = UNCHECKED) {
+public void drawCheckBox(NVGContext nvgc, CheckBoxTheme theme, const PointF pos, const float size = 15, const ushort state = UNCHECKED) {
     nvgc.beginPath();
 
     if (checkFlag(state, ACTIVE)) {
@@ -34,9 +33,9 @@ public void drawCheckBox(NVGContext nvgc, CheckBoxTheme theme, const PointF pos,
     nvgc.strokeWidth = theme.borderWidth;
 
     if (!theme.borderRadius)
-        nvgc.rect(pos.x, pos.y, size.width, size.height);
+        nvgc.rect(pos.x, pos.y, size, size);
     else
-        nvgc.roundedRect(pos.x, pos.y, size.width, size.height, theme.borderRadius);
+        nvgc.roundedRect(pos.x, pos.y, size, size, theme.borderRadius);
 
     nvgc.fill();
 
@@ -44,9 +43,14 @@ public void drawCheckBox(NVGContext nvgc, CheckBoxTheme theme, const PointF pos,
         nvgc.stroke();
 }
 
+/// Draw a check box to a NanoVega context, according to the active theme global `theme`.
+public void drawCheckBox(NVGContext nvgc, const PointF pos, const float size = 15, const ushort state = UNCHECKED) {
+    nvgc.drawCheckBox(CHECK_BOX_THEME, pos, size, state);
+}
+
 /// Draw a text button to the NanoVega context.
 public void drawButton(NVGContext nvgc, ButtonTheme theme, const string text, const PointF pos,
-        const SizeF size = SizeF(70f, 26f), const ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
+        const SizeF size = SizeF(70, 26), const ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
     nvgc.beginPath();
 
     TextLabelTheme textTheme;
@@ -83,9 +87,15 @@ public void drawButton(NVGContext nvgc, ButtonTheme theme, const string text, co
     nvgc.drawTextLabel(textTheme, text, textPos, textSize, state);
 }
 
+/// Draw a text button to the NanoVega context, according to the theme global `TEXT_BUTTON_THEME`.
+public void drawButton(NVGContext nvgc, const string text, const PointF pos, const SizeF size = SizeF(70, 26),
+        const ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
+    nvgc.drawButton(TEXT_BUTTON_THEME, text, pos, size, state);
+}
+
 /// Draw a text label to the NanoVega context.
 public void drawTextLabel(NVGContext nvgc, TextLabelTheme theme, const string text, const PointF pos,
-        const SizeF size = SizeF(70f, 26f), const ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
+        const SizeF size = SizeF(70, 26), const ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
     if (nvgc.findFont(theme.textFont) == -1)
         nvgc.createFont(theme.textFont, "fonts/" ~ theme.textFont ~ ".ttf");
 
@@ -122,19 +132,8 @@ public void drawTextLabel(NVGContext nvgc, TextLabelTheme theme, const string te
     nvgc.textBox(pos.x, posY, size.width, text);
 }
 
-/// Draw a check box to a NanoVega context, according to the active theme global `theme`.
-public void drawCheckBox(NVGContext nvgc, const PointF pos, const SizeF size = const SizeF(14f, 14f), const ushort state = UNCHECKED) {
-    nvgc.drawCheckBox(CHECK_BOX_THEME, pos, size, state);
-}
-
-/// Draw a text button to the NanoVega context, according to the theme global `TEXT_BUTTON_THEME`.
-public void drawButton(NVGContext nvgc, const string text, const PointF pos, const SizeF size = SizeF(70f, 26f),
-        const ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
-    nvgc.drawButton(TEXT_BUTTON_THEME, text, pos, size, state);
-}
-
 /// Draw a text label to the NanoVega context, according to the theme global `TEXT_LABEL_THEME`.
-public void drawTextLabel(NVGContext nvgc, const string text, const PointF pos, const SizeF size = SizeF(70f, 26f),
+public void drawTextLabel(NVGContext nvgc, const string text, const PointF pos, const SizeF size = SizeF(70, 26),
         const ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
     nvgc.drawTextLabel(TEXT_LABEL_THEME, text, pos, size, state);
 

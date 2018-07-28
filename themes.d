@@ -22,7 +22,7 @@ void initGlobalThemes() {
     CHECK_BOX_THEME = CheckBoxTheme(0);
     TEXT_LABEL_THEME = TextLabelTheme(0);
     BUTTON_LABEL_THEME = TextLabelTheme(0);
-    BUTTON_LABEL_THEME.textSize = 16f;
+    BUTTON_LABEL_THEME.textSize = 14;
     TEXT_BUTTON_THEME = ButtonTheme(0);
 }
 
@@ -59,7 +59,7 @@ public struct CheckBoxTheme {
     NVGColor activeIconColor;
 
     /// Construct a theme by passing `arsd.color.Color` objects. Parameter `id` is unused, but required.
-    this(ubyte id, float borderRadius = 0, float borderWidth = 1, Color uncheckedFillColor = Color.white(),
+    this(ubyte id, float borderRadius = 2, float borderWidth = 1, Color uncheckedFillColor = Color.white(),
             Color checkedFillColor = Color.white(), Color hoveredFillColor = Color.gray(),
             Color activeFillColor = Color.gray(), Color uncheckedBorderColor = Color.black(),
             Color checkedBorderColor = Color.black(), Color hoveredBorderColor = Color.black(),
@@ -115,7 +115,7 @@ public struct ButtonTheme {
     NVGColor activeBorderColor;
 
     /// Construct a theme by passing `arsd.color.Color` objects. Parameter `id` is unused, but required.
-    this(ubyte id, float borderRadius = 3, float borderWidth = 1, float textPadding = 4,
+    this(ubyte id, float borderRadius = 2, float borderWidth = 1, float textPadding = 4,
             Color defaultFillColor = Color.white(), Color hoveredFillColor = Color.gray(),
             Color activeFillColor = Color.gray(),
             TextLabelTheme defaultTextTheme = BUTTON_LABEL_THEME,
@@ -154,7 +154,7 @@ struct TextLabelTheme {
     NVGColor textColor;
 
     /// Construct a theme by passing `arsd.color.Color` objects. Parameter `id` is unused, but required.
-    this(ubyte id, float textSize = 18, float textBlur = 0, float textSpacing = 0, string textFont = "Arial", Color textColor = Color
+    this(ubyte id, float textSize = 16, float textBlur = 0, float textSpacing = 0, string textFont = "Arial", Color textColor = Color
             .black()) {
         this.textSize = textSize;
         this.textBlur = textBlur;
