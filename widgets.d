@@ -1,3 +1,5 @@
+module widgets;
+
 import arsd.nanovega;
 import arsd.color;
 public import themes;

@@ -1,3 +1,5 @@
+module utilities;
+
 import arsd.nanovega: NVGColor, nvgRGBA;
 import arsd.color: Color;
 
