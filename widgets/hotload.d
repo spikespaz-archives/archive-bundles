@@ -1,4 +1,4 @@
-module hotload;
+module widgets.hotload;
 
 import core.sys.windows.windows;
 import std.stdio;

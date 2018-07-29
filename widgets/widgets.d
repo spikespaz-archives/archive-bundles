@@ -1,9 +1,9 @@
-module widgets;
+module widgets.widgets;
 
 import arsd.nanovega;
 import arsd.color;
-public import themes;
-public import utilities;
+public import widgets.themes;
+public import widgets.utilities;
 
 /// Draw a simple rectangle the color of `BACKGROUND_COLOR` on the NanoVega context.
 public void drawBackground(NVGContext nvgc, const PointF pos, const SizeF size) {

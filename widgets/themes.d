@@ -1,9 +1,8 @@
-module themes;
+module widgets.themes;
 
 import arsd.nanovega: NVGColor;
 import arsd.color;
-import utilities;
-import std.stdio: writeln;
+import widgets.utilities;
 
 /// Global variable containing the color of the background widget.
 public Color BACKGROUND_COLOR;

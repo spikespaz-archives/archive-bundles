@@ -1,9 +1,8 @@
 import arsd.simpledisplay;
 import arsd.nanovega;
 import arsd.color;
-import widgets;
-import hotload;
-import std.stdio: writeln;
+import widgets.widgets;
+import widgets.hotload;
 
 void main() {
     NVGContext nvgc;

@@ -1,4 +1,4 @@
-module utilities;
+module widgets.utilities;
 
 import arsd.nanovega: NVGColor, nvgRGBA;
 import arsd.color: Color;
