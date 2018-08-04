@@ -1,9 +1,11 @@
 module widgets.themes;
 
-import arsd.nanovega: NVGColor;
+import arsd.nanovega;
 import arsd.color;
 import widgets.utilities;
 
+/// Private variable containing the current NanoVega context.
+private NVGContext NANOVEGA_CONTEXT;
 /// Global variable containing the color of the background widget.
 public Color BACKGROUND_COLOR;
 /// Global variable containing the active `CheckBoxTheme`.
@@ -18,7 +20,8 @@ public TextLabelTheme BUTTON_LABEL_THEME;
 /// Initialize the values of all the global theme variables.
 /// This must be called in order for anything to be drawn
 /// on the NanoVega canvas, unless you create your own themes.
-void initGlobalThemes() {
+void initGlobalThemes(NVGContext nvgc) {
+    NANOVEGA_CONTEXT = nvgc;
     BACKGROUND_COLOR = Color.white();
     CHECK_BOX_THEME = CheckBoxTheme(0);
     TEXT_LABEL_THEME = TextLabelTheme(0);
@@ -33,6 +36,8 @@ public struct CheckBoxTheme {
     float borderRadius;
     /// The width of the border of a checkbox. Set to 0 to disable.
     float borderWidth;
+    /// The image to fill the checkbox with, if state is `CHECKED`.
+    NVGImage checkImage;
 
     /// The fill color of a checkbox when the state is `UNCHECKED` or `ZEROFLAG`.
     NVGColor uncheckedFillColor;
@@ -60,14 +65,16 @@ public struct CheckBoxTheme {
     NVGColor activeIconColor;
 
     /// Construct a theme by passing `arsd.color.Color` objects. Parameter `id` is unused, but required.
-    this(ubyte id, float borderRadius = 2, float borderWidth = 1, Color uncheckedFillColor = Color.white(),
-            Color checkedFillColor = Color.white(), Color hoveredFillColor = Color.gray(),
-            Color activeFillColor = Color.gray(), Color uncheckedBorderColor = Color.black(),
-            Color checkedBorderColor = Color.black(), Color hoveredBorderColor = Color.black(),
-            Color activeBorderColor = Color.black(), Color checkedIconColor = Color.black(),
-            Color hoveredIconColor = Color.black(), Color activeIconColor = Color.black()) {
+    this(ubyte id, float borderRadius = 2, float borderWidth = 1, NVGImage checkImage = NANOVEGA_CONTEXT.createImage(
+            "icons/check.png"), Color uncheckedFillColor = Color.white(), Color checkedFillColor = Color.white(),
+            Color hoveredFillColor = Color.gray(), Color activeFillColor = Color.gray(),
+            Color uncheckedBorderColor = Color.black(), Color checkedBorderColor = Color.black(),
+            Color hoveredBorderColor = Color.black(), Color activeBorderColor = Color.black(),
+            Color checkedIconColor = Color.black(), Color hoveredIconColor = Color.black(), Color activeIconColor = Color
+            .black()) {
         this.borderRadius = borderRadius;
         this.borderWidth = borderWidth;
+        this.checkImage = checkImage;
 
         this.uncheckedFillColor = uncheckedFillColor.getNVGColor();
         this.checkedFillColor = checkedFillColor.getNVGColor();

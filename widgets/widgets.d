@@ -43,6 +43,13 @@ public void drawCheckBox(NVGContext nvgc, CheckBoxTheme theme, const PointF pos,
 
     if (theme.borderWidth)
         nvgc.stroke();
+
+    if (checkFlag(state, CHECKED)) {
+        nvgc.beginPath();
+        nvgc.rect(pos.x, pos.y, size, size);
+        nvgc.fillPaint(nvgc.imagePattern(pos.x, pos.y, size, size, 0, theme.checkImage));
+        nvgc.fill();
+    }
 }
 
 /// Draw a check box to a NanoVega context, according to the active theme global `theme`.
