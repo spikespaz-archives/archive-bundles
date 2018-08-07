@@ -130,7 +130,8 @@ public void drawTextLabel(NVGContext nvgc, TextLabelTheme theme, const string te
     nvgc.textBox(pos.x, posY, size.width, text);
 }
 
-public void drawScrollBar(NVGContext nvgc, ScrollBarTheme theme, const PointF pos, const float height, float viewHeight, float viewPos, float contentHeight, ushort state = ZEROFLAG) {
+public void drawScrollBar(NVGContext nvgc, ScrollBarTheme theme, const PointF pos, const float height,
+        float viewHeight, float viewPos, float contentHeight, ushort state = ZEROFLAG) {
     float handleHeight = (height / contentHeight) * viewHeight;
     float handlePos = ((height - handleHeight) / contentHeight) * viewPos;
 
@@ -165,16 +166,11 @@ public void drawScrollBar(NVGContext nvgc, ScrollBarTheme theme, const PointF po
     nvgc.fillColor = handleColor;
 
     if (theme.radius)
-        nvgc.roundedRect(pos.x + theme.borderPadding,
-                         pos.y + theme.borderPadding + handlePos,
-                         theme.width - theme.borderPadding * 2,
-                         handleHeight - theme.borderPadding * 2,
-                         theme.radius);
+        nvgc.roundedRect(pos.x + theme.borderPadding, pos.y + theme.borderPadding + handlePos,
+                theme.width - theme.borderPadding * 2, handleHeight - theme.borderPadding * 2, theme.radius);
     else
-        nvgc.rect(pos.x + theme.borderPadding,
-                  pos.y + theme.borderPadding + handlePos,
-                  theme.width - theme.borderPadding * 2,
-                  handleHeight - theme.borderPadding * 2);
+        nvgc.rect(pos.x + theme.borderPadding, pos.y + theme.borderPadding + handlePos,
+                theme.width - theme.borderPadding * 2, handleHeight - theme.borderPadding * 2);
 
     nvgc.fill();
 }
@@ -182,21 +178,23 @@ public void drawScrollBar(NVGContext nvgc, ScrollBarTheme theme, const PointF po
 /// Draw a text input to the NanoVega context.
 public void drawTextInput(NVGContext nvgc, TextInputTheme theme, const string text, const PointF pos,
         const SizeF size = SizeF(100, 26), ushort state = CENTER_VERTICAL | ALIGN_LEFT) {
-    if (nvgc.findFont(theme.textFont) == -1)
-        nvgc.createFont(theme.textFont, "fonts/" ~ theme.textFont ~ ".ttf");
-
     nvgc.beginPath();
     nvgc.strokeWidth = theme.borderWidth;
+
+    TextLabelTheme textTheme;
 
     if (checkFlag(state, ACTIVE)) {
         nvgc.strokeColor = theme.activeBorderColor;
         nvgc.fillColor = theme.activeBackgroundColor;
+        textTheme = theme.activeTextTheme;
     } else if (checkFlag(state, HOVERED)) {
         nvgc.strokeColor = theme.hoveredBorderColor;
         nvgc.fillColor = theme.hoveredBackgroundColor;
+        textTheme = theme.hoveredTextTheme;
     } else {
         nvgc.strokeColor = theme.defaultBorderColor;
         nvgc.fillColor = theme.defaultBackgroundColor;
+        textTheme = theme.defaultTextTheme;
     }
 
     if (theme.borderRadius)
@@ -207,45 +205,9 @@ public void drawTextInput(NVGContext nvgc, TextInputTheme theme, const string te
     nvgc.fill();
     nvgc.stroke();
 
-    nvgc.fontSize = theme.textSize;
-    nvgc.fontBlur = theme.textBlur;
-    nvgc.textLetterSpacing = theme.textSpacing;
-    nvgc.fontFace(theme.textFont);
+    const float textPosX = pos.x + theme.borderPadding;
+    const float textPosY = pos.y + theme.borderPadding;
+    const SizeF textSize = SizeF(size.width - theme.borderPadding * 2, size.height - theme.borderPadding * 2);
 
-    if (checkFlag(state, ACTIVE))
-        nvgc.fillColor = theme.activeTextColor;
-    else if (checkFlag(state, HOVERED))
-        nvgc.fillColor = theme.hoveredTextColor;
-    else
-        nvgc.fillColor = theme.defaultTextColor;
-
-    float posY = pos.y;
-    float posX = pos.x;
-
-    NVGTextAlign.H horizontalAlign = NVGTextAlign.H.Left;
-    NVGTextAlign.V verticalAlign = NVGTextAlign.V.Top;
-
-    if (checkFlag(state, CENTER_VERTICAL)) {
-        posY += size.height / 2;
-        verticalAlign = NVGTextAlign.V.Middle;
-    } else if (checkFlag(state, ALIGN_TOP)) {
-        posY += theme.borderPadding / 2;
-        verticalAlign = NVGTextAlign.V.Top;
-    } else if (checkFlag(state, ALIGN_BOTTOM)) {
-        posY += size.height - theme.borderPadding / 2;
-        verticalAlign = NVGTextAlign.V.Bottom;
-    }
-
-    if (checkFlag(state, CENTER_HORIZONTAL)) {
-        horizontalAlign = NVGTextAlign.H.Center;
-    } else if (checkFlag(state, ALIGN_LEFT)) {
-        posX += theme.borderPadding / 2;
-        horizontalAlign = NVGTextAlign.H.Left;
-    } else if (checkFlag(state, ALIGN_RIGHT)) {
-        posX -= theme.borderPadding / 2;
-        horizontalAlign = NVGTextAlign.H.Right;
-    }
-
-    nvgc.textAlign(verticalAlign, horizontalAlign);
-    nvgc.textBox(posX, posY, size.width - theme.borderPadding, text);
+    nvgc.drawTextLabel(textTheme, text, PointF(textPosX, textPosY), textSize, state);
 }

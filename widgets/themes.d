@@ -18,6 +18,12 @@ public TextLabelTheme TEXT_LABEL_THEME;
 public TextLabelTheme BUTTON_LABEL_THEME;
 /// Global variable containing the active `ScrollBarTheme`.
 public ScrollBarTheme SCROLL_BAR_THEME;
+/// Global variable containing the `TextLabelTheme` used by text input when the state is default or `ZEROFLAG`.
+public TextLabelTheme DEFAULT_TEXT_INPUT_LABEL_THEME;
+/// Global variable containing the `TextLabelTheme` used by text input when the state is `HOVERED`.
+public TextLabelTheme HOVERED_TEXT_INPUT_LABEL_THEME;
+/// Global variable containing the `TextLabelTheme` used by text input when the state is `ACTIVE`.
+public TextLabelTheme ACTIVE_TEXT_INPUT_LABEL_THEME;
 /// Global variable containing the active `TextInputTheme`.
 public TextInputTheme TEXT_INPUT_THEME;
 
@@ -25,14 +31,29 @@ public TextInputTheme TEXT_INPUT_THEME;
 /// This must be called in order for anything to be drawn
 /// on the NanoVega canvas, unless you create your own themes.
 void initGlobalThemes(NVGContext nvgc) {
+    // Private NVGContext.
     NANOVEGA_CONTEXT = nvgc;
+    // Public background color default.
     BACKGROUND_COLOR = Color.white();
+    // Public check box theme default.
     CHECK_BOX_THEME = CheckBoxTheme(0);
+    // Public text label theme default.
     TEXT_LABEL_THEME = TextLabelTheme(0);
+    // Public text label theme default for labeled text bottons.
     BUTTON_LABEL_THEME = TextLabelTheme(0);
     BUTTON_LABEL_THEME.textSize = 14;
+    // Public text button theme default.
     TEXT_BUTTON_THEME = ButtonTheme(0);
+    // Public scroll bar theme default.
     SCROLL_BAR_THEME = ScrollBarTheme(0);
+    // Public text label theme defaults for the three activity states of text input.
+    DEFAULT_TEXT_INPUT_LABEL_THEME = TextLabelTheme(0);
+    DEFAULT_TEXT_INPUT_LABEL_THEME.textColor = Color.gray().getNVGColor();
+    HOVERED_TEXT_INPUT_LABEL_THEME = TextLabelTheme(0);
+    HOVERED_TEXT_INPUT_LABEL_THEME.textColor = Color.gray().getNVGColor();
+    ACTIVE_TEXT_INPUT_LABEL_THEME = TextLabelTheme(0);
+    ACTIVE_TEXT_INPUT_LABEL_THEME.textColor = Color.black().getNVGColor();
+    // Public text input theme default.
     TEXT_INPUT_THEME = TextInputTheme(0);
 }
 
@@ -238,15 +259,6 @@ struct ScrollBarTheme {
 
 /// Struct representing the theme for drawable text input widgets.
 struct TextInputTheme {
-    /// The size of the text.
-    float textSize;
-    /// The intensity of the blur effect.
-    float textBlur;
-    /// The spacing between characters.
-    float textSpacing;
-    /// The string representing the font, will be searched for in 'fonts/' if not registered.
-    string textFont;
-
     /// The radius of the border corners.
     float borderRadius;
     /// The stroke width of the border.
@@ -255,11 +267,11 @@ struct TextInputTheme {
     float borderPadding;
 
     /// The color of the text when the state is default or `ZEROFLAG`.
-    NVGColor defaultTextColor;
+    TextLabelTheme defaultTextTheme;
     /// The color of the text when the state is `HOVERED`.
-    NVGColor hoveredTextColor;
+    TextLabelTheme hoveredTextTheme;
     /// The color of the text when the state is `ACTIVE`.
-    NVGColor activeTextColor;
+    TextLabelTheme activeTextTheme;
 
     /// The color of the input box background when the state is default or `ZEROFLAG`.
     NVGColor defaultBackgroundColor;
@@ -277,24 +289,21 @@ struct TextInputTheme {
     NVGColor activeBorderColor;
 
     /// Construct a theme by passing `arsd.color.Color` objects. Parameter `id` is unused, but required.
-    this(ubyte id, float textSize = 16, float textBlur = 0, float textSpacing = 0, string textFont = "Arial",
-            float borderRadius = 3, float borderWidth = 2, float borderPadding = 4, Color defaultTextColor = Color.gray(),
-            Color hoveredTextColor = Color.gray(), Color activeTextColor = Color.black(),
-            Color defaultBackgroundColor = Color.white(), Color defaultBorderColor = Color.gray(),
-            Color hoveredBackgroundColor = Color.white(), Color hoveredBorderColor = Color.black(),
-            Color activeBackgroundColor = Color.white(), Color activeBorderColor = Color.black()) {
-        this.textSize = textSize;
-        this.textBlur = textBlur;
-        this.textSpacing = textSpacing;
-        this.textFont = textFont;
-
+    this(ubyte id, float borderRadius = 3, float borderWidth = 2, float borderPadding = 4,
+            TextLabelTheme defaultTextTheme = DEFAULT_TEXT_INPUT_LABEL_THEME,
+            TextLabelTheme hoveredTextTheme = HOVERED_TEXT_INPUT_LABEL_THEME,
+            TextLabelTheme activeTextTheme = ACTIVE_TEXT_INPUT_LABEL_THEME,
+            Color defaultBackgroundColor = Color.white(),
+            Color defaultBorderColor = Color.gray(), Color hoveredBackgroundColor = Color.white(),
+            Color hoveredBorderColor = Color.black(), Color activeBackgroundColor = Color.white(), Color activeBorderColor = Color
+            .black()) {
         this.borderRadius = borderRadius;
         this.borderWidth = borderWidth;
         this.borderPadding = borderPadding;
 
-        this.defaultTextColor = defaultTextColor.getNVGColor();
-        this.hoveredTextColor = hoveredTextColor.getNVGColor();
-        this.activeTextColor = activeTextColor.getNVGColor();
+        this.defaultTextTheme = defaultTextTheme;
+        this.hoveredTextTheme = hoveredTextTheme;
+        this.activeTextTheme = activeTextTheme;
 
         this.defaultBackgroundColor = defaultBackgroundColor.getNVGColor();
         this.defaultBorderColor = defaultBorderColor.getNVGColor();

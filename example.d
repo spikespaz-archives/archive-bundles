@@ -52,13 +52,14 @@ void drawWindow(SimpleWindow swnd, NVGContext nvgc) {
 
     // Draw all scrollbars.
     nvgc.drawScrollBar(SCROLL_BAR_THEME, PointF(300, 0), swnd.height - 50, swnd.height, scrollPosition, 2000, ZEROFLAG);
-    nvgc.drawScrollBar(SCROLL_BAR_THEME, PointF(315, 0), swnd.height - 50, swnd.height, 2000 - scrollPosition, 2000, HOVERED);
+    nvgc.drawScrollBar(SCROLL_BAR_THEME, PointF(315, 0), swnd.height - 50, swnd.height, 2000 - scrollPosition, 2000,
+            HOVERED);
     nvgc.drawScrollBar(SCROLL_BAR_THEME, PointF(330, 0), swnd.height - 50, swnd.height, scrollPosition, 2000, ACTIVE);
 
     // Draw text inputs.
-    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(0, 200), SizeF(200, 60), CENTER_VERTICAL | ALIGN_LEFT);
-    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(0, 265), SizeF(200, 60), CENTER_VERTICAL | ALIGN_LEFT | HOVERED);
-    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(0, 330), SizeF(200, 60), CENTER_VERTICAL | ALIGN_LEFT | ACTIVE);
+    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(0, 200), SizeF(200, 60), ALIGN_LEFT | CENTER_VERTICAL);
+    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(0, 265), SizeF(200, 60), CENTER_HORIZONTAL | CENTER_VERTICAL | HOVERED);
+    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(0, 330), SizeF(200, 60), ALIGN_LEFT | CENTER_VERTICAL | ACTIVE);
 }
 
 void main() {
