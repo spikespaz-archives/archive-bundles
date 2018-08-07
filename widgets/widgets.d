@@ -85,8 +85,8 @@ public void drawButton(NVGContext nvgc, ButtonTheme theme, const string text, co
     if (theme.borderWidth)
         nvgc.stroke();
 
-    PointF textPos = PointF(pos.x + theme.textPadding, pos.y + theme.textPadding);
-    SizeF textSize = SizeF(size.width - theme.textPadding * 2, size.height - theme.textPadding * 2);
+    const PointF textPos = PointF(pos.x + theme.textPadding, pos.y + theme.textPadding);
+    const SizeF textSize = SizeF(size.width - theme.textPadding * 2, size.height - theme.textPadding * 2);
 
     nvgc.drawTextLabel(textTheme, text, textPos, textSize, state);
 }
@@ -165,12 +165,13 @@ public void drawScrollBar(NVGContext nvgc, ScrollBarTheme theme, const PointF po
     nvgc.beginPath();
     nvgc.fillColor = handleColor;
 
+    const PointF trackPos = PointF(pos.x + theme.borderPadding, pos.y + theme.borderPadding + handlePos);
+    const SizeF trackSize = SizeF(theme.width - theme.borderPadding * 2, handleHeight - theme.borderPadding * 2);
+
     if (theme.radius)
-        nvgc.roundedRect(pos.x + theme.borderPadding, pos.y + theme.borderPadding + handlePos,
-                theme.width - theme.borderPadding * 2, handleHeight - theme.borderPadding * 2, theme.radius);
+        nvgc.roundedRect(trackPos.x, trackPos.y, trackSize.width, trackSize.height, theme.radius);
     else
-        nvgc.rect(pos.x + theme.borderPadding, pos.y + theme.borderPadding + handlePos,
-                theme.width - theme.borderPadding * 2, handleHeight - theme.borderPadding * 2);
+        nvgc.rect(trackPos.x, trackPos.y, trackSize.width, trackSize.height);
 
     nvgc.fill();
 }
@@ -205,9 +206,8 @@ public void drawTextInput(NVGContext nvgc, TextInputTheme theme, const string te
     nvgc.fill();
     nvgc.stroke();
 
-    const float textPosX = pos.x + theme.borderPadding;
-    const float textPosY = pos.y + theme.borderPadding;
+    const PointF textPos = PointF(pos.x + theme.borderPadding, pos.y + theme.borderPadding);
     const SizeF textSize = SizeF(size.width - theme.borderPadding * 2, size.height - theme.borderPadding * 2);
 
-    nvgc.drawTextLabel(textTheme, text, PointF(textPosX, textPosY), textSize, state);
+    nvgc.drawTextLabel(textTheme, text, textPos, textSize, state);
 }
