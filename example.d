@@ -2,7 +2,8 @@ import arsd.simpledisplay;
 import arsd.nanovega;
 import arsd.color;
 import widgets.widgets;
-
+import std.stdio: writeln;
+import std.conv: to;
 
 float scrollPosition = 0;
 
@@ -49,15 +50,15 @@ void drawWindow(SimpleWindow swnd, NVGContext nvgc) {
     nvgc.drawTextLabel("Bottom Middle", PointF(swnd.width - 165, 165), SizeF(150, 50), ALIGN_BOTTOM | CENTER_HORIZONTAL);
     nvgc.drawTextLabel("Center", PointF(swnd.width - 240, 215), SizeF(150, 50), CENTER_VERTICAL | CENTER_HORIZONTAL);
 
-    if (scrollPosition >= 2000)
-        scrollPosition = 0;
-    else scrollPosition += 1;
-
     // Draw all scrollbars.
     nvgc.drawScrollBar(SCROLL_BAR_THEME, PointF(300, 0), swnd.height - 50, swnd.height, scrollPosition, 2000, ZEROFLAG);
-    nvgc.drawScrollBar(SCROLL_BAR_THEME, PointF(315, 0), swnd.height - 50, swnd.height, scrollPosition, 2000, HOVERED);
+    nvgc.drawScrollBar(SCROLL_BAR_THEME, PointF(315, 0), swnd.height - 50, swnd.height, 2000 - scrollPosition, 2000, HOVERED);
     nvgc.drawScrollBar(SCROLL_BAR_THEME, PointF(330, 0), swnd.height - 50, swnd.height, scrollPosition, 2000, ACTIVE);
 
+    // Draw text inputs.
+    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(0, 200), SizeF(200, 60), CENTER_VERTICAL | ALIGN_LEFT);
+    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(0, 265), SizeF(200, 60), CENTER_VERTICAL | ALIGN_LEFT | HOVERED);
+    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(0, 330), SizeF(200, 60), CENTER_VERTICAL | ALIGN_LEFT | ACTIVE);
 }
 
 void main() {
@@ -92,12 +93,31 @@ void main() {
         drawWindow(swnd, nvgc);
     };
 
-    swnd.eventLoop(0, delegate(KeyEvent event) {
-        if (event == "Escape") {
-            swnd.close();
-            return;
+    // dfmt off
+    swnd.eventLoop(60,
+        delegate() {
+            if (nvgc is null)
+                return;
+
+            if (scrollPosition >= 2000)
+                scrollPosition = 0;
+            else
+                scrollPosition += 2;
+
+            swnd.redrawOpenGlSceneNow();
+            writeln(scrollPosition);
+        },
+        delegate(KeyEvent event) {
+            writeln(to!string(event));
+        },
+        delegate(MouseEvent event) {
+            writeln(to!string(event));
+        },
+        delegate(dchar ch) {
+            writeln(to!string(ch));
         }
-    });
+    );
+    // dfmt on
 
     flushGui();
 }
