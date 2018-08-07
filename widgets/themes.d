@@ -18,6 +18,8 @@ public TextLabelTheme TEXT_LABEL_THEME;
 public TextLabelTheme BUTTON_LABEL_THEME;
 /// Global variable containing the active `ScrollBarTheme`.
 public ScrollBarTheme SCROLL_BAR_THEME;
+/// Global variable containing the active `TextInputTheme`.
+public TextInputTheme TEXT_INPUT_THEME;
 
 /// Initialize the values of all the global theme variables.
 /// This must be called in order for anything to be drawn
@@ -31,6 +33,7 @@ void initGlobalThemes(NVGContext nvgc) {
     BUTTON_LABEL_THEME.textSize = 14;
     TEXT_BUTTON_THEME = ButtonTheme(0);
     SCROLL_BAR_THEME = ScrollBarTheme(0);
+    TEXT_INPUT_THEME = TextInputTheme(0);
 }
 
 /// Struct representing the theme for drawable check box widgets.
@@ -229,6 +232,77 @@ struct ScrollBarTheme {
 
         this.activeTrackColor = activeTrackColor.getNVGColor();
         this.activeHandleColor = activeHandleColor.getNVGColor();
+        this.activeBorderColor = activeBorderColor.getNVGColor();
+    }
+}
+
+/// Struct representing the theme for drawable text input widgets.
+struct TextInputTheme {
+    /// The size of the text.
+    float textSize;
+    /// The intensity of the blur effect.
+    float textBlur;
+    /// The spacing between characters.
+    float textSpacing;
+    /// The string representing the font, will be searched for in 'fonts/' if not registered.
+    string textFont;
+
+    /// The radius of the border corners.
+    float borderRadius;
+    /// The stroke width of the border.
+    float borderWidth;
+    /// The padding between the border and the text.
+    float borderPadding;
+
+    /// The color of the text when the state is default or `ZEROFLAG`.
+    NVGColor defaultTextColor;
+    /// The color of the text when the state is `HOVERED`.
+    NVGColor hoveredTextColor;
+    /// The color of the text when the state is `ACTIVE`.
+    NVGColor activeTextColor;
+
+    /// The color of the input box background when the state is default or `ZEROFLAG`.
+    NVGColor defaultBackgroundColor;
+    /// The color of the input box background when the state is default or `ZEROFLAG`.
+    NVGColor defaultBorderColor;
+
+    /// The color of the input box background when the state is `HOVERED`.
+    NVGColor hoveredBackgroundColor;
+    /// The color of the input box background when the state is `HOVERED`.
+    NVGColor hoveredBorderColor;
+
+    /// The color of the input box background when the state is `ACTIVE`.
+    NVGColor activeBackgroundColor;
+    /// The color of the input box background when the state is `ACTIVE`.
+    NVGColor activeBorderColor;
+
+    /// Construct a theme by passing `arsd.color.Color` objects. Parameter `id` is unused, but required.
+    this(ubyte id, float textSize = 16, float textBlur = 0, float textSpacing = 0, string textFont = "Arial",
+            float borderRadius = 3, float borderWidth = 2, float borderPadding = 4, Color defaultTextColor = Color.gray(),
+            Color hoveredTextColor = Color.gray(), Color activeTextColor = Color.black(),
+            Color defaultBackgroundColor = Color.white(), Color defaultBorderColor = Color.gray(),
+            Color hoveredBackgroundColor = Color.white(), Color hoveredBorderColor = Color.black(),
+            Color activeBackgroundColor = Color.white(), Color activeBorderColor = Color.black()) {
+        this.textSize = textSize;
+        this.textBlur = textBlur;
+        this.textSpacing = textSpacing;
+        this.textFont = textFont;
+
+        this.borderRadius = borderRadius;
+        this.borderWidth = borderWidth;
+        this.borderPadding = borderPadding;
+
+        this.defaultTextColor = defaultTextColor.getNVGColor();
+        this.hoveredTextColor = hoveredTextColor.getNVGColor();
+        this.activeTextColor = activeTextColor.getNVGColor();
+
+        this.defaultBackgroundColor = defaultBackgroundColor.getNVGColor();
+        this.defaultBorderColor = defaultBorderColor.getNVGColor();
+
+        this.hoveredBackgroundColor = hoveredBackgroundColor.getNVGColor();
+        this.hoveredBorderColor = hoveredBorderColor.getNVGColor();
+
+        this.activeBackgroundColor = activeBackgroundColor.getNVGColor();
         this.activeBorderColor = activeBorderColor.getNVGColor();
     }
 }
