@@ -6,9 +6,9 @@ public import widgets.themes;
 public import widgets.utilities;
 
 /// Draw a simple rectangle the color of `BACKGROUND_COLOR` on the NanoVega context.
-public void drawBackground(NVGContext nvgc, const PointF pos, const SizeF size) {
+public void drawBackground(NVGContext nvgc, Color backgroundColor, const PointF pos, const SizeF size) {
     nvgc.beginPath();
-    nvgc.fillColor = BACKGROUND_COLOR.getNVGColor();
+    nvgc.fillColor = backgroundColor.getNVGColor();
     nvgc.rect(pos.x, pos.y, size.width, size.height);
     nvgc.fill();
 }
@@ -52,11 +52,6 @@ public void drawCheckBox(NVGContext nvgc, CheckBoxTheme theme, const PointF pos,
     }
 }
 
-/// Draw a check box to a NanoVega context, according to the active theme global `theme`.
-public void drawCheckBox(NVGContext nvgc, const PointF pos, const float size = 15, ushort state = UNCHECKED) {
-    nvgc.drawCheckBox(CHECK_BOX_THEME, pos, size, state);
-}
-
 /// Draw a text button to the NanoVega context.
 public void drawButton(NVGContext nvgc, ButtonTheme theme, const string text, const PointF pos,
         const SizeF size = SizeF(70, 26), ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
@@ -96,12 +91,6 @@ public void drawButton(NVGContext nvgc, ButtonTheme theme, const string text, co
     nvgc.drawTextLabel(textTheme, text, textPos, textSize, state);
 }
 
-/// Draw a text button to the NanoVega context, according to the theme global `TEXT_BUTTON_THEME`.
-public void drawButton(NVGContext nvgc, const string text, const PointF pos, const SizeF size = SizeF(70, 26),
-        ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
-    nvgc.drawButton(TEXT_BUTTON_THEME, text, pos, size, state);
-}
-
 /// Draw a text label to the NanoVega context.
 public void drawTextLabel(NVGContext nvgc, TextLabelTheme theme, const string text, const PointF pos,
         const SizeF size = SizeF(70, 26), ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
@@ -139,33 +128,6 @@ public void drawTextLabel(NVGContext nvgc, TextLabelTheme theme, const string te
 
     nvgc.textAlign(verticalAlign, horizontalAlign);
     nvgc.textBox(pos.x, posY, size.width, text);
-}
-
-/// Draw a text label to the NanoVega context, according to the theme global `TEXT_LABEL_THEME`.
-public void drawTextLabel(NVGContext nvgc, const string text, const PointF pos, const SizeF size = SizeF(70, 26),
-        ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
-    nvgc.drawTextLabel(TEXT_LABEL_THEME, text, pos, size, state);
-
-    // // Debug
-    // float[4] textBounds;
-    // nvgc.textBoxBounds(pos.x, pos.y, size.width, text, textBounds);
-
-    // float textHeight = textBounds[3] - textBounds[1];
-    // float textWidth = textBounds[2] - textBounds[0];
-
-    // // Debug text bounds
-    // nvgc.beginPath();
-    // nvgc.strokeWidth = 1;
-    // nvgc.strokeColor = NVGColor.red;
-    // nvgc.rect(pos.x, posY - textHeight, textWidth, textHeight);
-    // nvgc.stroke();
-
-    // // Debug bounding box
-    // nvgc.beginPath();
-    // nvgc.strokeWidth = 1;
-    // nvgc.strokeColor = NVGColor.blue;
-    // nvgc.rect(pos.x, pos.y, size.width, size.height);
-    // nvgc.stroke();
 }
 
 public void drawScrollBar(NVGContext nvgc, ScrollBarTheme theme, const PointF pos, const float height, float viewHeight, float viewPos, float contentHeight, ushort state = ZEROFLAG) {
