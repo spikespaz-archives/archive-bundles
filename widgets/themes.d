@@ -16,6 +16,8 @@ public ButtonTheme TEXT_BUTTON_THEME;
 public TextLabelTheme TEXT_LABEL_THEME;
 /// Global variable containing the active `TextLabelTheme` for button labels.
 public TextLabelTheme BUTTON_LABEL_THEME;
+/// Global variable containing the active `ScrollBarTheme`.
+public ScrollBarTheme SCROLL_BAR_THEME;
 
 /// Initialize the values of all the global theme variables.
 /// This must be called in order for anything to be drawn
@@ -28,6 +30,7 @@ void initGlobalThemes(NVGContext nvgc) {
     BUTTON_LABEL_THEME = TextLabelTheme(0);
     BUTTON_LABEL_THEME.textSize = 14;
     TEXT_BUTTON_THEME = ButtonTheme(0);
+    SCROLL_BAR_THEME = ScrollBarTheme(0);
 }
 
 /// Struct representing the theme for drawable check box widgets.
@@ -169,5 +172,63 @@ struct TextLabelTheme {
         this.textSpacing = textSpacing;
         this.textFont = textFont;
         this.textColor = textColor.getNVGColor();
+    }
+}
+
+/// Struct representing the theme for scroll bar widgets.
+struct ScrollBarTheme {
+    /// The radius of the handle.
+    float radius;
+    /// The width of the scroll bar.
+    float width;
+    /// The width of the scroll bar border.
+    float borderWidth;
+    /// The padding between the handle and the track border.
+    float borderPadding;
+
+    /// The color of the scroll bar track fill when the state is default or `ZEROFLAG`.
+    NVGColor defaultTrackColor;
+    /// The color of the scroll bar handle when the state is default or `ZEROFLAG`.
+    NVGColor defaultHandleColor;
+    /// The color of the scroll bar track outline when the state is default or `ZEROFLAG`.
+    NVGColor defaultBorderColor;
+
+    /// The color of the scroll bar track fill when the state is `HOVERED`.
+    NVGColor hoveredTrackColor;
+    /// The color of the scroll bar handle when the state is `HOVERED`.
+    NVGColor hoveredHandleColor;
+    /// The color of the scroll bar track outline when the state is `HOVERED`.
+    NVGColor hoveredBorderColor;
+
+    /// The color of the scroll bar track fill when the state is `ACTIVE`.
+    NVGColor activeTrackColor;
+    /// The color of the scroll bar handle when the state is `ACTIVE`.
+    NVGColor activeHandleColor;
+    /// The color of the scroll bar track outline when the state is `ACTIVE`.
+    NVGColor activeBorderColor;
+
+    /// Construct a theme by passing `arsd.color.Color` objects. Parameter `id` is unused, but required.
+    this(ubyte id, float radius = 5, float width = 10, float borderWidth = 2, float borderPadding = 2,
+            Color defaultTrackColor = Color.white(), Color defaultHandleColor = Color.gray(),
+            Color defaultBorderColor = Color.black(), Color hoveredTrackColor = Color.white(),
+            Color hoveredHandleColor = Color.black(), Color hoveredBorderColor = Color.black(),
+            Color activeTrackColor = Color.white(), Color activeHandleColor = Color.black(), Color activeBorderColor = Color
+            .black()) {
+        this.radius = radius;
+        this.width = width;
+        this.borderWidth = borderWidth;
+        this.borderPadding = borderPadding;
+
+        this.defaultTrackColor = defaultTrackColor.getNVGColor();
+        this.defaultHandleColor = defaultHandleColor.getNVGColor();
+        this.defaultBorderColor = defaultBorderColor.getNVGColor();
+
+        this.hoveredTrackColor = hoveredTrackColor.getNVGColor();
+        this.hoveredHandleColor = hoveredHandleColor.getNVGColor();
+        this.hoveredBorderColor = hoveredBorderColor.getNVGColor();
+
+        this.activeTrackColor = activeTrackColor.getNVGColor();
+        this.activeHandleColor = activeHandleColor.getNVGColor();
+        this.activeBorderColor = activeBorderColor.getNVGColor();
     }
 }

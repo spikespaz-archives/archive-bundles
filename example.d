@@ -3,6 +3,9 @@ import arsd.nanovega;
 import arsd.color;
 import widgets.widgets;
 
+
+float scrollPosition = 0;
+
 /// Function to draw all implimented widgets to the NanoVega context.
 void drawWindow(SimpleWindow swnd, NVGContext nvgc) {
     // Draw the background.
@@ -45,6 +48,16 @@ void drawWindow(SimpleWindow swnd, NVGContext nvgc) {
     nvgc.drawTextLabel("Top Middle", PointF(swnd.width - 315, 165), SizeF(150, 50), ALIGN_TOP | CENTER_HORIZONTAL);
     nvgc.drawTextLabel("Bottom Middle", PointF(swnd.width - 165, 165), SizeF(150, 50), ALIGN_BOTTOM | CENTER_HORIZONTAL);
     nvgc.drawTextLabel("Center", PointF(swnd.width - 240, 215), SizeF(150, 50), CENTER_VERTICAL | CENTER_HORIZONTAL);
+
+    if (scrollPosition >= 2000)
+        scrollPosition = 0;
+    else scrollPosition += 1;
+
+    // Draw all scrollbars.
+    nvgc.drawScrollBar(SCROLL_BAR_THEME, PointF(300, 0), swnd.height - 50, swnd.height, scrollPosition, 2000, ZEROFLAG);
+    nvgc.drawScrollBar(SCROLL_BAR_THEME, PointF(315, 0), swnd.height - 50, swnd.height, scrollPosition, 2000, HOVERED);
+    nvgc.drawScrollBar(SCROLL_BAR_THEME, PointF(330, 0), swnd.height - 50, swnd.height, scrollPosition, 2000, ACTIVE);
+
 }
 
 void main() {
