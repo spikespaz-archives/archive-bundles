@@ -18,10 +18,16 @@ void drawWindow(SimpleWindow swnd, NVGContext nvgc) {
     nvgc.drawCheckBox(CHECK_BOX_THEME, PointF(75, 15), 15, HOVERED);
     nvgc.drawCheckBox(CHECK_BOX_THEME, PointF(105, 15), 15, ACTIVE);
 
+    // Draw all radio button states.
+    nvgc.drawRadioButton(RADIO_BUTTON_THEME, PointF(15, 45), 15, UNCHECKED);
+    nvgc.drawRadioButton(RADIO_BUTTON_THEME, PointF(45, 45), 15, CHECKED);
+    nvgc.drawRadioButton(RADIO_BUTTON_THEME, PointF(75, 45), 15, HOVERED);
+    nvgc.drawRadioButton(RADIO_BUTTON_THEME, PointF(105, 45), 15, ACTIVE);
+
     // Draw all button states.
-    nvgc.drawButton(TEXT_BUTTON_THEME, "Button", PointF(15, 45), SizeF(105, 25));
-    nvgc.drawButton(TEXT_BUTTON_THEME, "HoveredButton", PointF(15, 80), SizeF(105, 25), CENTER_VERTICAL | CENTER_HORIZONTAL | HOVERED);
-    nvgc.drawButton(TEXT_BUTTON_THEME, "ActiveButton", PointF(15, 115), SizeF(105, 25), CENTER_VERTICAL | CENTER_HORIZONTAL | ACTIVE);
+    nvgc.drawButton(TEXT_BUTTON_THEME, "Button", PointF(15, 75), SizeF(105, 25));
+    nvgc.drawButton(TEXT_BUTTON_THEME, "HoveredButton", PointF(15, 110), SizeF(105, 25), CENTER_VERTICAL | CENTER_HORIZONTAL | HOVERED);
+    nvgc.drawButton(TEXT_BUTTON_THEME, "ActiveButton", PointF(15, 145), SizeF(105, 25), CENTER_VERTICAL | CENTER_HORIZONTAL | ACTIVE);
 
     // Draw boxes to show the alignment of text.
     nvgc.beginPath();
@@ -57,9 +63,9 @@ void drawWindow(SimpleWindow swnd, NVGContext nvgc) {
     nvgc.drawScrollBar(SCROLL_BAR_THEME, PointF(330, 0), swnd.height - 50, swnd.height, scrollPosition, 2000, ACTIVE);
 
     // Draw text inputs.
-    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(0, 200), SizeF(200, 60), ALIGN_LEFT | CENTER_VERTICAL);
-    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(0, 265), SizeF(200, 60), CENTER_HORIZONTAL | CENTER_VERTICAL | HOVERED);
-    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(0, 330), SizeF(200, 60), ALIGN_LEFT | CENTER_VERTICAL | ACTIVE);
+    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(15, 200), SizeF(200, 60), ALIGN_LEFT | CENTER_VERTICAL);
+    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(15, 265), SizeF(200, 60), CENTER_HORIZONTAL | CENTER_VERTICAL | HOVERED);
+    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(15, 330), SizeF(200, 60), ALIGN_LEFT | CENTER_VERTICAL | ACTIVE);
 }
 
 void main() {
