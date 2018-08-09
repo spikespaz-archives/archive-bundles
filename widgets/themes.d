@@ -10,6 +10,8 @@ private NVGContext NANOVEGA_CONTEXT;
 public Color BACKGROUND_COLOR;
 /// Global variable containing the active `CheckBoxTheme`.
 public CheckBoxTheme CHECK_BOX_THEME;
+/// Global variable containing the active `CheckBoxTheme` for the radio button.
+public CheckBoxTheme RADIO_BUTTON_THEME;
 /// Global variable containing the active `ButtonTheme`.
 public ButtonTheme TEXT_BUTTON_THEME;
 /// Global variable containing the active `TextLabelTheme`.
@@ -37,6 +39,9 @@ void initGlobalThemes(NVGContext nvgc) {
     BACKGROUND_COLOR = Color.white();
     // Public check box theme default.
     CHECK_BOX_THEME = CheckBoxTheme(0);
+    // Public radio button theme default.
+    RADIO_BUTTON_THEME = CheckBoxTheme(0);
+    RADIO_BUTTON_THEME.checkImage = NANOVEGA_CONTEXT.createImage("icons/check.png");
     // Public text label theme default.
     TEXT_LABEL_THEME = TextLabelTheme(0);
     // Public text label theme default for labeled text bottons.
@@ -58,6 +63,7 @@ void initGlobalThemes(NVGContext nvgc) {
 }
 
 /// Struct representing the theme for drawable check box widgets.
+/// This is also reused for the radio button themes, the only difference is that radius is ignored.
 public struct CheckBoxTheme {
     /// The radius of the corners of a checkbox.
     float borderRadius;
