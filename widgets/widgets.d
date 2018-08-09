@@ -52,6 +52,44 @@ public void drawCheckBox(NVGContext nvgc, CheckBoxTheme theme, const PointF pos,
     }
 }
 
+/// Draw a radio button to a NanoVega context.
+public void drawRadioButton(NVGContext nvgc, CheckBoxTheme theme, const PointF pos, const float size = 15, ushort state = UNCHECKED) {
+    nvgc.beginPath();
+
+    if (checkFlag(state, ACTIVE)) {
+        nvgc.fillColor = theme.activeFillColor;
+        nvgc.strokeColor = theme.activeBorderColor;
+    } else if (checkFlag(state, HOVERED)) {
+        nvgc.fillColor = theme.hoveredFillColor;
+        nvgc.strokeColor = theme.hoveredBorderColor;
+
+    } else if (checkFlag(state, CHECKED)) {
+        nvgc.fillColor = theme.checkedFillColor;
+        nvgc.strokeColor = theme.checkedBorderColor;
+    } else {
+        nvgc.fillColor = theme.uncheckedFillColor;
+        nvgc.strokeColor = theme.uncheckedBorderColor;
+    }
+
+    nvgc.strokeWidth = theme.borderWidth;
+
+    const float radius = size / 2;
+
+    nvgc.circle(pos.x + radius, pos.y + radius, radius);
+
+    nvgc.fill();
+
+    if (theme.borderWidth)
+        nvgc.stroke();
+
+    if (checkFlag(state, CHECKED)) {
+        nvgc.beginPath();
+        nvgc.rect(pos.x, pos.y, size, size);
+        nvgc.fillPaint(nvgc.imagePattern(pos.x, pos.y, size, size, 0, theme.checkImage));
+        nvgc.fill();
+    }
+}
+
 /// Draw a text button to the NanoVega context.
 public void drawButton(NVGContext nvgc, ButtonTheme theme, const string text, const PointF pos,
         const SizeF size = SizeF(70, 26), ushort state = CENTER_VERTICAL | CENTER_HORIZONTAL) {
