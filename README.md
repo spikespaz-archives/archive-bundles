@@ -20,11 +20,12 @@ This is a list of widgets I plan to impliment, in no particular order. I will ad
 - [X] Buttons
 - [X] Text Label
 - [ ] Group Box
-- [ ] Radio Buttons
-- [ ] Scroll Bars
+- [X] Radio Buttons
+- [X] Vertical Scroll Bars
+- [ ] Horizontal Scroll Bars
 - [ ] Sliders
 - [ ] Number Inputs
-- [ ] Text Input
+- [X] Text Input
 - [ ] List Box
 - [ ] Progress Bar
 - [ ] Tool Tip
