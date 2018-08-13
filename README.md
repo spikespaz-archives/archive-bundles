@@ -7,6 +7,8 @@ I'm a Junior computer science student in a specialty school in Arizona. I spend 
  - Reddit: [reddit.com/u/spikespaz](https://reddit.com/u/spikespaz)
  - GitHub: [github.com/spikespaz](https://github.com/spikespaz)
  - Teknik: [git.teknik.io/spikespaz](https://git.teknik.io/spikespaz)
+ - [StackOverflow](https://stackoverflow.com/users/2512078/spikespaz)
+ - [Email](mailto:support@spikespaz.com)
 
 # Projects
 
@@ -28,12 +30,6 @@ No project is ever truly complete. If there are bugs, or important features that
 ## Active
  - [New Style Widgets](https://github.com/spikespaz/newstyle-widgets)
    - Fast and lightweight GUI library built on top of modules drom Adam's [arsd](https://github.com/adamdruppe/arsd).
- - [FastIRC](https://github.com/spikespaz/fastirc)
-   - Yet another IRC client, but this one is made to look great.
-   - Very similar design to Discord's interface.
-   - Renders markdown from messages.
-   - Image, video, GIF, and link embeds.
-   - Built on New Style Widgets.
  - [TileDWM](https://github.com/spikespaz/windows-tiledwm)
    - Tiling psuedo-window manager on Windows.
    - A simple and to-the-point program to imitate the functionality of tiling window managers on Linux, such as bspwm and i3wm.
@@ -50,6 +46,15 @@ No project is ever truly complete. If there are bugs, or important features that
 
 ## Ideas
 
+ - [FastIRC](https://github.com/spikespaz/fastirc)
+   - Yet another IRC client, but this one is made to look great.
+   - Very similar design to Discord's interface.
+   - Renders markdown from messages.
+   - Image, video, GIF, and link embeds.
+   - Built on New Style Widgets.
+ - D for Discord
+   - An object orientred wrapper for the Discord API.
+   - Made for D language.
  - [Firefox PageInverter](https://github.com/spikespaz/firefox-pageinverter)
    - Forked Firefox extension to invert page colors except images
    - Persistent across domains, configurable patterns to match URLs
@@ -65,86 +70,70 @@ No project is ever truly complete. If there are bugs, or important features that
    - Smooth typing animation like MS Word
    - Markdown highlighting and preview
    - Maybe other markup languages
- - Terminal file explorer
+ - Terminal File Explorer
    - Cross platform
    - Drag & Drop shell integration
- - Faster open forum server
+ - Open Forum Server
    - Write in Go or vibe.d
    - Add context menu item
    - Should impliment markdown
    - May support ReStructuredText and BB script
- - Better extension for Instapaper
-   - Instaread is the official plugin, but it sucks
-   - Read window action
-   - Save page action
  - Euphoric Engine
    - Badass game engine in D language
    - Support DirectX 11/12, OpenGL 4, and Vulkan
    - Support other cool new stuff
    - Compatibility is not a priority
  - Advanced 3D Sound Engine
-   - Simulates latency between ears for surround sound
-   - Computes based on environment variables (direction, volume, location, etc.)
- - Windows system-wide adblocker
+   - Simulates latency between ears for surround sound.
+   - Computes based on environment variables (direction, volume, location, etc.).
+   - Stereo sound is calculated through the relative position of an item in 3D space.
+   - Aimed to be scientifically accurate, representing the real way sound travels.
+   - Most likely to be implimented into Euphitic engine.
+ - Windows System AdBlocker
    - Finish [Adwin](https://github.com/spikespaz-old/windows-adwin)
    - Make it fast (Adwin is slow because hosts files in Windows don't match patterns)
-   - Possibly use [Acrylic](http://mayakron.altervista.org) or use existing server implimentation in language
- - Automatic commit markup
-   - Add a psuedo-syntax for source-code comments
-   - Parses at every commit, and automatically makes message
-   - Split file changes or diff sections into different commits
-   - Basically adds the ability to create commits as you go, part of the file
-   - Annotations removed before push
+   - Possibly use [Acrylic](http://mayakron.altervista.org) or use existing server implimentation in language.
+   - Operating system-wide, applies ad filters  to all applications that make relevant requests.
  - Neural network powered text scaling
    - Netural network that is trained to scale up low-res text
- - Office music server
-   - Plays music in an office environment
-   - Web interface that users can log into
-   - Vote for tracks, or dislike them
-   - Suggest tracks to be played
-   - Option to anonymously request tracks
- - Super fast key/value file format
-   - Statically typed
-   - Insane parsing speed
-   - Good for serializing some basic data
+ - Office Music Server
+   - Plays music in an office environment.
+   - Web interface that users can log into.
+   - Vote for tracks, or dislike them.
+   - Suggest tracks to be played.
+   - Option to anonymously request tracks.
  - Elite Commander
-   - Voice Attack specifically tailored to Elite Dangerous
-   - Reads stats from log files
-   - Reads event data from log files
-   - Does everything based on user keymaps
- - Quizlet API Wrapper
-   - Complete wrapper around Quizlet API
-   - Some docs are outdataed, find proper endpoints
-   - Object Oriented
+   - Voice Attack clone specifically tailored to Elite Dangerous.
+   - Does everything based on user keymaps.
  - FFbatcher
-   - Uses FFmpeg to batch transcode files
-   - GUI for FFmpeg with all exposed settings
-   - Support for custom commands
- - Yet Another Static Blog Generator
-   - Super fast
-   - Supports multiple markup languages
-   - KISS
- - Clipboard Share apps
-   - Similar to Samsung Flow
-   - Send clipboard and other useful data between devices
-   - Android, Windows, Linux
-   - Native Shell integration, seamless with OS
- - JavaScript tool to make runnable links
-   - Click a link to load external script in sites that don't support it
-   - Insert content into GitHub README files and etc.
- - Updater tool for GitHub projects
-   - Simplified package manager
-   - Auto-updates programs from GitHub releases
-   - Support for multiple release channels (branches)
+   - Uses FFmpeg to batch transcode files.
+   - GUI for FFmpeg with all exposed settings.
+   - Support for custom commands.
+ - Clipboard Share
+   - Similar to Samsung Flow.
+   - Send clipboard and other useful data between devices.
+   - Android, Windows, Linux.
+   - Native Shell integration, seamless with OS.
+ - Script Injector
+   - JavaScript Injector to make links that run code.
+   - Click a link to load external script in sites that don't support it.
+   - Use for interactiev REPL embedded in *any* 3rd party page.
+   - Insert content into GitHub README files, etc.
+ - Git Based Package Manager
+   - Simplified package manager.
+   - Auto-updates programs from GitHub releases.
+   - Support for multiple release channels (branches).
+   - Support from tags and GitHub/GitTea releases.
+   - Central interface acts as a repository for all Git projects by hosting site.
+   - Finds appropriate binaries by playform.
  - Redesign [Linked2 Website](https://linked-2.com)
-   - Eliminate PHP usage
- - Web Window Manager
-   - Like ImGui
-   - Suport for windows to be iframe objects
- - Better version of Sonarr and Radarr
-   - Only supports torrent clients
-   - Better quality management and searching
-   - Jackett, Cardigann support
+   - Eliminate PHP usage.
+ - Captain
+   - Better than Sonarr and Radarr.
+   - Only supports torrent clients.
+   - Better quality management and searching.
+   - Jackett, Cardigann support.
+   - 1st party indexer support.
 
 # Milestones
 
