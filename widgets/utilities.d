@@ -53,3 +53,14 @@ public NVGColor getNVGColor(Color color) {
 public bool checkFlag(const ushort field, const ushort flag) {
     return ((field & flag) == flag);
 }
+
+
+/// Clamp a value between min and max.
+public float clampF(const float value, const float min, const float max) {
+    if (value > max)
+        return max;
+    else if (value < min)
+        return min;
+    else
+        return value;
+}
