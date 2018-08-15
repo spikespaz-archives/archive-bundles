@@ -28,6 +28,8 @@ public TextLabelTheme HOVERED_TEXT_INPUT_LABEL_THEME;
 public TextLabelTheme ACTIVE_TEXT_INPUT_LABEL_THEME;
 /// Global variable containing the active `TextInputTheme`.
 public TextInputTheme TEXT_INPUT_THEME;
+/// Global variable containing the active `ToolTipTheme`.
+public ToolTipTheme TOOL_TIP_THEME;
 
 /// Initialize the values of all the global theme variables.
 /// This must be called in order for anything to be drawn
@@ -60,6 +62,8 @@ void initGlobalThemes(NVGContext nvgc) {
     ACTIVE_TEXT_INPUT_LABEL_THEME.textColor = Color.black().getNVGColor();
     // Public text input theme default.
     TEXT_INPUT_THEME = TextInputTheme(0);
+    /// Public tool tip theme default.
+    TOOL_TIP_THEME = ToolTipTheme(0);
 }
 
 /// Struct representing the theme for drawable check box widgets.
@@ -319,5 +323,42 @@ struct TextInputTheme {
 
         this.activeBackgroundColor = activeBackgroundColor.getNVGColor();
         this.activeBorderColor = activeBorderColor.getNVGColor();
+    }
+}
+
+/// Struct representing the theme for tooltips.
+public struct ToolTipTheme {
+    /// The distance between the mouse cursor and the tooltip.
+    SizeF distance;
+    /// The radius of the border of the tooltip.
+    float borderRadius;
+    /// The width of the border of the tooltip.
+    float borderWidth;
+    /// The minimum width that the tooltip must occupy.
+    float minimumSize;
+    /// The maximum width that the tooltip is allowed to occupuy.
+    float maximumSize;
+    /// The padding on the sides of the text.
+    float borderPadding;
+    /// The color of the tooltip border.
+    NVGColor borderColor;
+    /// The color of the tooltip background.
+    NVGColor tooltipColor;
+    /// The theme of the text inside of the tooltip.
+    TextLabelTheme textTheme;
+
+    /// Construct a theme by passing `arsd.color.Color` objects. Parameter `id` is unused, but required.
+    this(ubyte id, SizeF distance = SizeF(10, 0), float borderRadius = 3, float borderWidth = 1, float minimumSize = 100, float maximumSize = 250,
+            float borderPadding = 4, Color borderColor = Color.black(), Color tooltipColor = Color.white(),
+            TextLabelTheme textTheme = TEXT_LABEL_THEME) {
+        this.distance = distance;
+        this.borderRadius = borderRadius;
+        this.borderWidth = borderWidth;
+        this.minimumSize = minimumSize;
+        this.maximumSize = maximumSize;
+        this.borderPadding = borderPadding;
+        this.borderColor = borderColor.getNVGColor();
+        this.tooltipColor = tooltipColor.getNVGColor();
+        this.textTheme = textTheme;
     }
 }
