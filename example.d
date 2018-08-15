@@ -5,6 +5,7 @@ import widgets.widgets;
 import std.stdio: writeln;
 import std.conv: to;
 
+PointF mousePosition;
 float scrollPosition = 0;
 
 /// Function to draw all implimented widgets to the NanoVega context.
@@ -64,8 +65,12 @@ void drawWindow(SimpleWindow swnd, NVGContext nvgc) {
 
     // Draw text inputs.
     nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(15, 200), SizeF(200, 60), ALIGN_LEFT | CENTER_VERTICAL);
-    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(15, 265), SizeF(200, 60), CENTER_HORIZONTAL | CENTER_VERTICAL | HOVERED);
+    nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(15, 265), SizeF(200, 60),
+            CENTER_HORIZONTAL | CENTER_VERTICAL | HOVERED);
     nvgc.drawTextInput(TEXT_INPUT_THEME, "Send a message...", PointF(15, 330), SizeF(200, 60), ALIGN_LEFT | CENTER_VERTICAL | ACTIVE);
+
+    // Draw tool tip under mouse position.
+    nvgc.drawToolTip(TOOL_TIP_THEME, "This is a tooltip!", mousePosition);
 }
 
 void main() {
@@ -101,27 +106,38 @@ void main() {
     };
 
     // dfmt off
-    swnd.eventLoop(60,
+    swnd.eventLoop(1000 / 60,
         delegate() {
             if (nvgc is null)
                 return;
 
-            if (scrollPosition >= 2000)
-                scrollPosition = 0;
-            else
-                scrollPosition += 2;
+            // if (scrollPosition >= 2000)
+            //     scrollPosition = 0;
+            // else
+            //     scrollPosition += 2;
 
             swnd.redrawOpenGlSceneNow();
-            writeln(scrollPosition);
         },
         delegate(KeyEvent event) {
-            writeln(to!string(event));
+            // writeln(to!string(event));
         },
         delegate(MouseEvent event) {
-            writeln(to!string(event));
+            if (event.type == MouseEventType.motion) {
+                mousePosition.x = event.x;
+                mousePosition.y = event.y;
+            }
+
+            if (event.type == MouseEventType.buttonPressed)
+                if (event.button == MouseButton.wheelUp)
+                    scrollPosition = clampF(scrollPosition - 20, 0, 2000);
+                else if (event.button == MouseButton.wheelDown)
+                    scrollPosition = clampF(scrollPosition + 20, 0, 2000);
+
+            // writeln(scrollPosition);
+            // writeln(to!string(event));
         },
         delegate(dchar ch) {
-            writeln(to!string(ch));
+            // writeln(to!string(ch));
         }
     );
     // dfmt on
