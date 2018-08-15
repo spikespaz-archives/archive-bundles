@@ -170,6 +170,9 @@ public void drawTextLabel(NVGContext nvgc, TextLabelTheme theme, const string te
 
 public void drawScrollBar(NVGContext nvgc, ScrollBarTheme theme, const PointF pos, const float height,
         float viewHeight, float viewPos, float contentHeight, ushort state = ZEROFLAG) {
+
+    viewPos = clampF(viewPos, 0, contentHeight);
+
     float handleHeight = (height / contentHeight) * viewHeight;
     float handlePos = ((height - handleHeight) / contentHeight) * viewPos;
 
@@ -248,4 +251,23 @@ public void drawTextInput(NVGContext nvgc, TextInputTheme theme, const string te
     const SizeF textSize = SizeF(size.width - theme.borderPadding * 2, size.height - theme.borderPadding * 2);
 
     nvgc.drawTextLabel(textTheme, text, textPos, textSize, state);
+}
+
+void drawToolTip(NVGContext nvgc, ToolTipTheme theme, const string text, const PointF pos) {
+    nvgc.beginPath();
+
+    nvgc.strokeColor = theme.borderColor;
+    nvgc.strokeWidth = theme.borderWidth;
+    nvgc.fillColor = theme.tooltipColor;
+
+    const float posX = pos.x + theme.distance.width;
+    const float posY = pos.y + theme.distance.height;
+
+    if (theme.borderRadius)
+        nvgc.roundedRect(posX, posY, theme.maximumSize, theme.textTheme.textSize, theme.borderRadius);
+    else
+        nvgc.rect(posX, posY, theme.maximumSize, theme.textTheme.textSize);
+
+    nvgc.fill();
+    nvgc.stroke();
 }
