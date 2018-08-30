@@ -39,7 +39,7 @@ function getSortedReleases(author, repository) {
 // Get and parse JSON for the specified URL, and return a promise.
 function getJson(url) {
     return new Promise((resolve, reject) => {
-        var request = new XMLHttpRequest();
+        let request = new XMLHttpRequest();
 
         request.open("GET", url, true);
         request.responseType = "json";
@@ -56,8 +56,8 @@ function getJson(url) {
 }
 
 function compareVersions(firstVer, secondVer) {
-    var first = firstVer.split(".");
-    var second = secondVer.split(".");
+    let first = firstVer.split(".");
+    let second = secondVer.split(".");
 
     while (first.length > second.length) {
         if (first[0] != 0)
