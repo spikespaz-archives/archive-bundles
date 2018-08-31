@@ -11,6 +11,6 @@
     scriptEl.onload = () => callback();
 
     document.body.appendChild(scriptEl);
-})(document, 'https://spikespaz.github.io/release-link/releases.js', () =>
+})(document, 'https://spikespaz.github.io/tool-scripts/release-link/releases.js', () =>
     downloadLatestRelease('spikespaz', 'search-deflector', 'SearchDeflector-Installer.exe')
 );
