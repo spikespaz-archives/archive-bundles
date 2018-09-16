@@ -23,8 +23,12 @@
         That doesn't appear to be a valid repository or file name.
     </p>
     <p id="message">
-        If the file doesn't download automatically within a few seconds, click
+        If the download doesn't start automatically within a few seconds, click
         <a id="download" href="https://github.com/spikespaz/search-deflector">this link</a>.
+    </p>
+
+    <p>
+        Click <a href="javascript:window.history.back()">here</a> to go back to the previous page.
     </p>
 
     <script src="releases.js"></script>
@@ -39,6 +43,8 @@
         if (author === null || repository === null || filename === null) {
             document.getElementById("warning").style.display = "block";
         } else {
+            document.title = "Download " + filename;
+
             getLatestRelease(author, repository).then((release) => {
                 for (asset of release["assets"])
                     if (asset["name"] == filename) {
