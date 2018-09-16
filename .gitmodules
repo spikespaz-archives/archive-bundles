@@ -1,0 +1,3 @@
+[submodule "tool-scripts"]
+	path = tool-scripts
+	url = https://github.com/spikespaz/tool-scripts
