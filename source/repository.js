@@ -1,5 +1,3 @@
-import { getSortedReleases } from "./github.js";
-
 function formatNum(num) {
     return num > 999 ? (num / 1000).toFixed(1) + "k" : num;
 }
@@ -31,10 +29,22 @@ function createDownloadButton(btnUrl, numUrl, count) {
     return buttonEl;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    let urlMatch = window.location.pathname.match(/\/([\w-]+)\/([\w-]+)/);
+function documentReady() {
+    return new Promise((resolve) => {
+        document.addEventListener("DOMContentLoaded", resolve);
+    });
+}
 
-    getSortedReleases(urlMatch[1], urlMatch[2]).then((releaseJson) => {
+function beginPreload() {
+    let urlMatch = window.location.pathname.match(/\/([\w-]+)\/([\w-]+)/);
+    console.log(urlMatch);
+
+    Promise.all([
+        getSortedReleases(urlMatch[1], urlMatch[2]),
+        documentReady()
+    ]).then((values) => {
+        let releaseJson = values[0];
+
         let actionsEl = document.getElementsByClassName("pagehead-actions")[0];
         let dlCount = 0;
 
@@ -43,11 +53,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 dlCount += asset.download_count;
 
         let buttonEl = createDownloadButton(
-            releaseJson.html_url,
+            releaseJson[0].html_url,
             window.location.pathname + "/releases",
             formatNum(dlCount)
         );
 
-        actionsEl.insertBefore(buttonEl, actionsEl.childNodes[2]);
+        actionsEl.appendChild(buttonEl);
     });
-});
+}
+
+beginPreload();
