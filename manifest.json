@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "GitHub Release Info",
+    "name": "GitHub Extended",
     "version": "0.0.1",
     "description": "Adds information to GitHub normally accessible only by the API.",
     "permissions": [
