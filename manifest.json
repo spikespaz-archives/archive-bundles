@@ -1,20 +1,21 @@
 {
+    "manifest_version": 2,
     "name": "GitHub Release Info",
     "version": "0.0.1",
-    "manifest_version": 2,
+    "description": "Adds information to GitHub normally accessible only by the API.",
     "permissions": [
         "https://github.com/*"
     ],
     "content_scripts": [
         {
+            "all_frames": true,
+            "run_at": "document_start",
             "matches": [
-                "https://github.com/*/*"
+                "https://github.com/*"
             ],
             "js": [
+                "source/github.js",
                 "source/repository.js"
-            ],
-            "css": [
-                "source/css/styles.css"
             ]
         }
     ]
