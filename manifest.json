@@ -11,11 +11,10 @@
             "all_frames": true,
             "run_at": "document_start",
             "matches": [
-                "https://github.com/*/*"
+                "https://github.com/*"
             ],
             "js": [
-                "source/github.js",
-                "source/repository.js"
+                "source/extension.js"
             ]
         }
     ]

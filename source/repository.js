@@ -35,25 +35,23 @@ function documentReady() {
     });
 }
 
-function beginPreload() {
+function showDownloadsButton() {
     let urlMatch = window.location.pathname.match(/\/([\w-]+)\/([\w-]+)/);
     console.log(urlMatch);
 
-    Promise.all([
-        getSortedReleases(urlMatch[1], urlMatch[2]),
-        documentReady()
-    ]).then((values) => {
-        let releaseJson = values[0];
+    getSortedReleases(urlMatch[1], urlMatch[2]).then((releases) => {
+        if (releases.length === 0)
+            return;
 
         let actionsEl = document.getElementsByClassName("pagehead-actions")[0];
         let dlCount = 0;
 
-        for (release of releaseJson)
+        for (release of releases)
             for (asset of release.assets)
                 dlCount += asset.download_count;
 
         let buttonEl = createDownloadButton(
-            releaseJson[0].html_url,
+            releases[0].html_url,
             window.location.pathname + "/releases",
             formatNum(dlCount)
         );
@@ -61,5 +59,3 @@ function beginPreload() {
         actionsEl.appendChild(buttonEl);
     });
 }
-
-beginPreload();
