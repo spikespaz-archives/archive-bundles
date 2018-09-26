@@ -1,7 +1,3 @@
-function formatNum(num) {
-    return num > 999 ? (num / 1000).toFixed(1) + "k" : num;
-}
-
 function createDownloadButton(btnUrl, numUrl, count) {
     let buttonEl = document.createElement("li");
 
@@ -17,12 +13,6 @@ function createDownloadButton(btnUrl, numUrl, count) {
     `;
 
     return buttonEl;
-}
-
-function documentReady() {
-    return new Promise((resolve) => {
-        document.addEventListener("DOMContentLoaded", resolve);
-    });
 }
 
 function showDownloadsButton() {
@@ -43,7 +33,7 @@ function showDownloadsButton() {
         let buttonEl = createDownloadButton(
             releases[0].html_url,
             window.location.pathname + "/releases",
-            formatNum(dlCount)
+            dlCount.toLocaleString()
         );
 
         actionsEl.appendChild(buttonEl);
