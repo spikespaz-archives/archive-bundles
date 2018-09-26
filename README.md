@@ -34,6 +34,13 @@ No project is ever truly complete. If there are bugs, or important features that
    - An alternative to EdgeDeflector and SearchWithMyBrowser that redirects searches to any search engine of your choice. 
 
 ## Active
+
+- [GitHub Extended](https://github.com/spikespaz/github-extended)
+  - A WebExtension to add metadata to GitHub's website, notmally only accessible through their API.
+  - Example: Download counts.
+
+## On-hold
+
  - [New Style Widgets](https://github.com/spikespaz/newstyle-widgets)
    - Fast and lightweight GUI library built on top of modules drom Adam's [arsd](https://github.com/adamdruppe/arsd).
  - [TileDWM](https://github.com/spikespaz/windows-tiledwm)
@@ -49,6 +56,10 @@ No project is ever truly complete. If there are bugs, or important features that
    - Revive Deezloader Reborn (rewrite)
    - Better language, not JavaScript (Either Go or D)
    - Use Sciter for web frontend
+ - [µTerm (Micro Term)](https://github.com/spikespaz/uterm)
+   - Micro Term (abbreviated µTerm or uTerm, `Alt`+`230`) is a very minimal terminal emulator written using [Ultralight](https://ultralig.ht) and [Xterm.js](https://xtermjs.org).
+   - Even though it uses a JavaScript frontend, it is very fast because of the minimal WebKit fork Ultralight.
+   - Currently waiting for Ultralight to support SWIG.
 
 ## Ideas
 
