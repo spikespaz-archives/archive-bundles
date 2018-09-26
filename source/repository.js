@@ -1,4 +1,29 @@
-function createDownloadButton(btnUrl, numUrl, count) {
+
+const github = new Octokat();
+
+function addDlButton() {
+    let urlMatch = window.location.pathname.match(/\/([\w-]+)\/([\w-]+)/);
+    let dlCount = 0;
+
+    github.repos(urlMatch[1], urlMatch[2]).releases.fetchAll().then(response => {
+        for (release of response)
+            for (asset of release.assets)
+                dlCount += asset.downloadCount;
+
+        return response;
+        // return response.reduce((a, b) => { !compareVersions(a.tag_name, b.tag_name) });
+    }).then(response => {
+        let buttonEl = createDlButton(
+            response[0].htmlUrl,
+            window.location.pathname + "/releases",
+            dlCount.toLocaleString()
+        );
+
+        document.getElementsByClassName("pagehead-actions")[0].appendChild(buttonEl);
+    });
+}
+
+function createDlButton(btnUrl, numUrl, count) {
     let buttonEl = document.createElement("li");
 
     buttonEl.id = "downloads-social-button";
@@ -15,29 +40,4 @@ function createDownloadButton(btnUrl, numUrl, count) {
     return buttonEl;
 }
 
-function showDownloadsButton() {
-    let urlMatch = window.location.pathname.match(/\/([\w-]+)\/([\w-]+)/);
-    console.log(urlMatch);
-
-    getSortedReleases(urlMatch[1], urlMatch[2]).then((releases) => {
-        if (releases.length === 0)
-            return;
-
-        let actionsEl = document.getElementsByClassName("pagehead-actions")[0];
-        let dlCount = 0;
-
-        for (release of releases)
-            for (asset of release.assets)
-                dlCount += asset.download_count;
-
-        let buttonEl = createDownloadButton(
-            releases[0].html_url,
-            window.location.pathname + "/releases",
-            dlCount.toLocaleString()
-        );
-
-        actionsEl.appendChild(buttonEl);
-    });
-}
-
-showDownloadsButton();
+addDlButton();
