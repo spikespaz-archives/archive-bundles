@@ -14,7 +14,8 @@
                 "https://github.com/*"
             ],
             "js": [
-                "source/extension.js"
+                "source/github.js",
+                "source/repository.js"
             ]
         }
     ]
