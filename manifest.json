@@ -3,11 +3,6 @@
     "name": "GitHub Extended",
     "version": "0.0.1",
     "description": "Adds information to GitHub normally accessible only by the API.",
-    "applications": {
-        "gecko": {
-            "id": "spikespaz.github-extended"
-        }
-    },
     "permissions": [
         "https://api.github.com/*",
         "storage"
@@ -27,7 +22,6 @@
         }
     ],
     "options_ui": {
-        "page": "html/options.html",
-        "open_in_tab": true
+        "page": "html/options.html"
     }
 }

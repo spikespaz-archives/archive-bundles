@@ -9,11 +9,13 @@
 </head>
 
 <body>
-    <h1>API Credentials</h1>
+    <h1>GitHub API Credentials</h1>
     <p>
         Authentication with GitHub is required to use 5000 API requests per hour instead of 60.
         This is highly recommended if you plan to browse GitHub wih the extension frequently.
-        You may optionally also use a token for the API. You can generate one in your user settings.
+        You may optionally also use a token for the API.
+        If one is specified, username and password will be ignored.
+        You can generate one in your user settings <a href="https://github.com/settings/tokens">here</a>.
     </p>
     <form id="credentials-form">
         <label for="username-field">Username</label>
@@ -32,6 +34,7 @@
         <input type="submit" value="Save" />
     </form>
 
+    <script src="../octokat/dist/octokat.js"></script>
     <script src="options.js"></script>
 </body>
 
