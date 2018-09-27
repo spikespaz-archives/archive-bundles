@@ -1,0 +1,38 @@
+h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+p {
+    font-size: 14px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="submit"] {
+    border: none;
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 1px #505050;
+    padding: 6px 8px;
+    transition: box-shadow 50ms ease,
+                background-color 200ms ease;
+}
+
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="submit"]:active {
+    box-shadow: inset 0 0 0 3px #7070ff;
+}
+
+label {
+    font-size: 16px;
+}
+
+.success {
+    background-color: #70ff70;
+}
+
+.failure {
+    background-color: #ff7070;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>GitHub Extended - Options</title>
+
+    <link rel="stylesheet" href="options.css">
+</head>
+
+<body>
+    <h1>API Credentials</h1>
+    <p>
+        Authentication with GitHub is required to use 5000 API requests per hour instead of 60.
+        This is highly recommended if you plan to browse GitHub wih the extension frequently.
+        You may optionally also use a token for the API. You can generate one in your user settings.
+    </p>
+    <form id="credentials-form">
+        <label for="username-field">Username</label>
+        <br />
+        <input type="text" name="username" id="username-field" />
+        <br />
+        <label for="password-field">Password</label>
+        <br />
+        <input type="password" name="password" id="password-field" />
+        <br />
+        <label for="token-field">Token</label>
+        <br />
+        <input type="text" name="token" id="token-field" />
+        <br />
+        <br />
+        <input type="submit" value="Save" />
+    </form>
+
+    <script src="options.js"></script>
+</body>
+
+</html>
