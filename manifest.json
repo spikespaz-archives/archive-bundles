@@ -4,7 +4,7 @@
     "version": "0.0.1",
     "description": "Adds information to GitHub normally accessible only by the API.",
     "permissions": [
-        "https://github.com/*"
+        "https://api.github.com/*"
     ],
     "content_scripts": [
         {
