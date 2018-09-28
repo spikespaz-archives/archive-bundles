@@ -1,4 +1,5 @@
 const formEl = document.getElementById("credentials-form");
+let resetTimer;
 
 formEl.addEventListener("submit", event => {
     event.preventDefault();
@@ -19,7 +20,7 @@ formEl.addEventListener("submit", event => {
         let github = new Octokat({ ...fieldData });
 
         github.rateLimit.fetch().then(result => {
-            if (result.rate.limit > 60)
+            if (result.resources.core.limit > 60)
                 resolve(result);
             reject(result);
         }).catch(reject);
@@ -31,7 +32,10 @@ formEl.addEventListener("submit", event => {
         submitEl.classList.remove("failure");
         submitEl.classList.add("success");
         submitEl.value = "Success!";
-    }).catch((reason) => {
+
+        clearInterval(resetTimer);
+        updateUI();
+    }).catch(() => {
         submitEl.classList.remove("success");
         submitEl.classList.add("failure");
         submitEl.value = "Failure!";
@@ -43,8 +47,51 @@ formEl.addEventListener("submit", event => {
     });
 });
 
-browser.storage.local.get().then(result => {
-    formEl.querySelector("input[name='username']").value = result.username || "";
-    formEl.querySelector("input[name='password']").value = result.password || "";
-    formEl.querySelector("input[name='token']").value = result.token || "";
-});
+function updateUI() {
+    browser.storage.local.get().then(result => {
+        formEl.querySelector("input[name='username']").value = result.username || "";
+        formEl.querySelector("input[name='password']").value = result.password || "";
+        formEl.querySelector("input[name='token']").value = result.token || "";
+
+        let github = new Octokat(result);
+        let displayEl = document.querySelector("#ratelimit-display>tbody");
+
+        function startResetTimer() {
+            github.rateLimit.fetch().then(result => {
+                displayEl.innerHTML = `
+                    <tr>
+                        <td>${result.resources.core.limit}</td>
+                        <td>${result.resources.core.remaining}</td>
+                        <td id="reset-timer"></td>
+                    </tr>
+                `;
+
+                let timerEl = document.getElementById("reset-timer");
+                let resetTime = new Date(result.resources.core.reset * 1000).getTime();
+
+                function updateTimer() {
+                    let delta = resetTime - Date.now();
+
+                    if (delta < 0) {
+                        clearInterval(resetTimer);
+                        startResetTimer();
+
+                        return;
+                    }
+
+                    let minutes = Math.floor((delta % 3600000) / 60000);
+                    let seconds = Math.floor((delta % 60000) / 1000);
+
+                    timerEl.innerText = `${minutes}m ${seconds}s`;
+                }
+
+                updateTimer();
+                resetTimer = setInterval(updateTimer, 1000);
+            });
+        }
+
+        startResetTimer();
+    });
+}
+
+updateUI();

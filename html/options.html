@@ -13,26 +13,41 @@
     <p>
         Authentication with GitHub is required to use 5000 API requests per hour instead of 60.
         This is highly recommended if you plan to browse GitHub wih the extension frequently.
-        You may optionally also use a token for the API.
+        You may optionally use a token for the API.
         If one is specified, username and password will be ignored.
         You can generate one in your user settings <a href="https://github.com/settings/tokens">here</a>.
     </p>
-    <form id="credentials-form">
-        <label for="username-field">Username</label>
+
+    <div class="wrapper">
+        <form id="credentials-form">
+            <label for="username-field">Username</label>
+            <br />
+            <input type="text" name="username" class="fill-wrapper" id="username-field" />
+            <br />
+            <label for="password-field">Password</label>
+            <br />
+            <input type="password" name="password" class="fill-wrapper" id="password-field" />
+            <br />
+            <label for="token-field">Token</label>
+            <br />
+            <input type="text" name="token" class="fill-wrapper" id="token-field" />
+            <br />
+            <br />
+            <input type="submit" class="fill-wrapper" value="Save" />
+        </form>
+
         <br />
-        <input type="text" name="username" id="username-field" />
-        <br />
-        <label for="password-field">Password</label>
-        <br />
-        <input type="password" name="password" id="password-field" />
-        <br />
-        <label for="token-field">Token</label>
-        <br />
-        <input type="text" name="token" id="token-field" />
-        <br />
-        <br />
-        <input type="submit" value="Save" />
-    </form>
+
+        <table class="fill-wrapper" id="ratelimit-display">
+            <thead>
+                <th>Limit</th>
+                <th>Remaining</th>
+                <th>Reset</th>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 
     <script src="../octokat/dist/octokat.js"></script>
     <script src="options.js"></script>
