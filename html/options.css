@@ -12,6 +12,7 @@ label {
 }
 
 table {
+    table-layout: fixed;
     border-style: none;
     border-collapse: collapse;
     border-radius: 3px;
