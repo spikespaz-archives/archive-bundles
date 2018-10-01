@@ -2,36 +2,34 @@ import core.sys.windows.windows;
 import core.thread: Thread;
 import std.datetime: msecs;
 
-void* worker;
-
 enum uint WM_SPAWNWORKER = 0x052C;
 
-extern (Windows) int enumWindowsCallback(void* hwnd, long) nothrow {
-    void* handle = FindWindowExW(hwnd, null, "SHELLDLL_DefView", null);
+void* createWorker() {
+    void* progman = FindWindowW("Progman", null);
+    void* worker;
 
-    if (handle !is null)
-        worker = FindWindowEx(null, hwnd, "WorkerW", null);
+    uint result;
+    SendMessageTimeout(progman, WM_SPAWNWORKER, 0, 0, SMTO_NORMAL, 1000, &result);
 
-    return true;
+    EnumWindows(cast(ENUMWINDOWSPROC)(void* hWnd, long lParam) {
+        void* handle = FindWindowExW(hWnd, null, "SHELLDLL_DefView", null);
+
+        if (handle !is null)
+            *(cast(void**) lParam) = FindWindowExW(null, hWnd, "WorkerW", null);
+
+        return true;
+    }, cast(long)&worker);
+
+    return worker;
 }
 
 void main() {
-    void* progman = FindWindowW("Progman", null);
-
-    uint result;
-    SendMessageTimeoutW(progman, WM_SPAWNWORKER, 0, 0, SMTO_NORMAL, 1000, &result);
-
-    EnumWindows(&enumWindowsCallback, 0);
-
-    HDC desktop;
+    void* worker = createWorker();
+    void* desktop = worker.GetDC();
 
     while (true) {
-        if (worker && !desktop)
-            desktop = GetDC(worker);
-
-        desktop.BeginPath();
-        desktop.EndPath();
         desktop.Arc(10, 10, 210, 210, 110, 10, 110, 10);
+
         Thread.sleep(msecs(16));
     }
 }
