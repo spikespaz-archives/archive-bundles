@@ -1,0 +1,21 @@
+
+//  * XFce4 Manjaro override *  //
+
+.XfdesktopIconView.view {
+  background-color: rgba(0,0,0,0.0);
+}
+
+.XfdesktopIconView.view:active {
+  background-color: rgba(0,0,0,0.3);
+  color: #16a085;
+  border-radius: 1px;
+}
+
+.XfdesktopIconView.rubberband {
+  background-color: rgba(0,0,0,0.3);
+}
+
+.XfdesktopIconView.label:active {
+  background-color: rgba(0,0,0,0.3);
+  color: white;
+}
