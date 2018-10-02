@@ -8,8 +8,7 @@ void* createWorker() {
     void* progman = FindWindowW("Progman", null);
     void* worker;
 
-    uint result;
-    SendMessageTimeout(progman, WM_SPAWNWORKER, 0, 0, SMTO_NORMAL, 1000, &result);
+    SendMessageW(progman, WM_SPAWNWORKER, 0, 0);
 
     EnumWindows(cast(ENUMWINDOWSPROC)(void* hWnd, long lParam) {
         void* handle = FindWindowExW(hWnd, null, "SHELLDLL_DefView", null);
