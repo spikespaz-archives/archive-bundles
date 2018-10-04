@@ -1,6 +1,7 @@
 import core.sys.windows.windows;
+import std.datetime.stopwatch: StopWatch;
+import std.datetime: Duration, nsecs;
 import core.thread: Thread;
-import std.datetime: nsecs;
 import std.stdio: writeln;
 
 /// Undocumented Windows message code that creates a new worker.
@@ -37,7 +38,7 @@ HWND createWorker() {
 
 void main() {
     const int framerate = queryFramerate(); // frames per second
-    const long frametime = 1000_000_000 / framerate; // nanoseconds
+    const long frametime = 1_000_000_000 / framerate; // nanoseconds
     writeln("Framerate (FPS): ", framerate, "\nFrametime (ms): ", frametime / 1_000_000.0);
 
     writeln("Creating worker...");
@@ -45,9 +46,23 @@ void main() {
     HDC desktop = worker.GetDC();
 
     writeln("Starting main loop...");
-    while (true) {
-        desktop.Arc(10, 10, 210, 210, 110, 10, 110, 10);
 
-        Thread.sleep(nsecs(frametime));
+    StopWatch timer;
+    Duration delta;
+
+    while (true) {
+        timer.reset();
+        timer.start();
+
+        { // Render code in this block
+            desktop.Arc(10, 10, 210, 210, 110, 10, 110, 10);
+        }
+
+        timer.stop();
+
+        delta = nsecs(frametime) - timer.peek();
+
+        if (delta > nsecs(0))
+            Thread.sleep(delta);
     }
 }
