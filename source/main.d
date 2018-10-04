@@ -1,6 +1,7 @@
 import core.sys.windows.windows;
 import core.thread: Thread;
-import std.datetime: msecs;
+import std.datetime: nsecs;
+import std.stdio: writeln;
 
 /// Undocumented Windows message code that creates a new worker.
 enum uint WM_SPAWNWORKER = 0x052C;
@@ -35,12 +36,18 @@ HWND createWorker() {
 }
 
 void main() {
+    const int framerate = queryFramerate(); // frames per second
+    const long frametime = 1000_000_000 / framerate; // nanoseconds
+    writeln("Framerate (FPS): ", framerate, "\nFrametime (ms): ", frametime / 1_000_000.0);
+
+    writeln("Creating worker...");
     HWND worker = createWorker();
     HDC desktop = worker.GetDC();
 
+    writeln("Starting main loop...");
     while (true) {
         desktop.Arc(10, 10, 210, 210, 110, 10, 110, 10);
 
-        Thread.sleep(msecs(1000 / queryFramerate()));
+        Thread.sleep(nsecs(frametime));
     }
 }
