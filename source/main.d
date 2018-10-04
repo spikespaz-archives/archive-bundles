@@ -7,6 +7,25 @@ import std.stdio: writeln;
 /// Undocumented Windows message code that creates a new worker.
 enum uint WM_SPAWNWORKER = 0x052C;
 
+void main() {
+    const int framerate = queryFramerate(); // frames per second
+    const long frametime = 1_000_000_000 / framerate; // nanoseconds
+    writeln("Framerate (FPS): ", framerate, "\nFrametime (ms): ", frametime / 1_000_000.0);
+
+    writeln("Creating worker...");
+    HWND worker = createWorker();
+    HDC desktop = worker.GetDC();
+
+    writeln("Starting main loop...");
+
+    renderLoop(&drawFrame, frametime, desktop);
+}
+
+/// Draw a new frame.
+void drawFrame(HDC ctx) {
+    ctx.Arc(10, 10, 210, 210, 110, 10, 110, 10);
+}
+
 /// Get the framerate of the display device.
 int queryFramerate() {
     DEVMODE deviceMode;
@@ -36,17 +55,8 @@ HWND createWorker() {
     return worker;
 }
 
-void main() {
-    const int framerate = queryFramerate(); // frames per second
-    const long frametime = 1_000_000_000 / framerate; // nanoseconds
-    writeln("Framerate (FPS): ", framerate, "\nFrametime (ms): ", frametime / 1_000_000.0);
-
-    writeln("Creating worker...");
-    HWND worker = createWorker();
-    HDC desktop = worker.GetDC();
-
-    writeln("Starting main loop...");
-
+/// Create a render loop to draw a frame when necessary.
+void renderLoop(void function(HDC) drawFrame, const long frametime, HDC context) {
     StopWatch timer;
     Duration delta;
 
@@ -54,9 +64,7 @@ void main() {
         timer.reset();
         timer.start();
 
-        { // Render code in this block
-            desktop.Arc(10, 10, 210, 210, 110, 10, 110, 10);
-        }
+        drawFrame(context);
 
         timer.stop();
 
