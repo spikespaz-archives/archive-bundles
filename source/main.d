@@ -16,27 +16,27 @@ int queryFramerate() {
 }
 
 /// Create a worker handle for drawing behind icons, on top of background.
-void* createWorker() {
-    void* progman = FindWindowW("Progman", null);
-    void* worker;
+HWND createWorker() {
+    HWND progman = FindWindowW("Progman", null);
+    HDC worker;
 
     SendMessageW(progman, WM_SPAWNWORKER, 0, 0);
 
-    EnumWindows(cast(ENUMWINDOWSPROC)(void* hWnd, long lParam) {
+    EnumWindows(cast(ENUMWINDOWSPROC)(HWND hWnd, LPARAM lParam) {
         void* handle = FindWindowExW(hWnd, null, "SHELLDLL_DefView", null);
 
         if (handle !is null)
-            *(cast(void**) lParam) = FindWindowExW(null, hWnd, "WorkerW", null);
+            *(cast(HWND*) lParam) = FindWindowExW(null, hWnd, "WorkerW", null);
 
         return true;
-    }, cast(long)&worker);
+    }, cast(LPARAM)&worker);
 
     return worker;
 }
 
 void main() {
-    void* worker = createWorker();
-    void* desktop = worker.GetDC();
+    HWND worker = createWorker();
+    HDC desktop = worker.GetDC();
 
     while (true) {
         desktop.Arc(10, 10, 210, 210, 110, 10, 110, 10);
