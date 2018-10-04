@@ -2,8 +2,20 @@ import core.sys.windows.windows;
 import core.thread: Thread;
 import std.datetime: msecs;
 
+/// Undocumented Windows message code that creates a new worker.
 enum uint WM_SPAWNWORKER = 0x052C;
 
+/// Get the framerate of the display device.
+int queryFramerate() {
+    DEVMODE deviceMode;
+    deviceMode.dmSize = DEVMODE.sizeof;
+
+    EnumDisplaySettingsW(null, ENUM_CURRENT_SETTINGS, &deviceMode);
+
+    return deviceMode.dmDisplayFrequency;
+}
+
+/// Create a worker handle for drawing behind icons, on top of background.
 void* createWorker() {
     void* progman = FindWindowW("Progman", null);
     void* worker;
@@ -29,6 +41,6 @@ void main() {
     while (true) {
         desktop.Arc(10, 10, 210, 210, 110, 10, 110, 10);
 
-        Thread.sleep(msecs(16));
+        Thread.sleep(msecs(1000 / queryFramerate()));
     }
 }
