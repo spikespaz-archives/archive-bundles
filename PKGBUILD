@@ -12,7 +12,7 @@ pkgname=('arc-themes-solid-maia'
 _pkgname=$pkgbase
 _pkgbase=arc-themes-maia
 pkgver=20180715
-pkgrel=2
+pkgrel=3
 _commit=07e618681f68dd84d4c1accce8a9c1e43af1a354
 #_gnomever=3.22
 arch=('any')
@@ -31,7 +31,7 @@ source=(#"${_pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pk
         "${_pkgname}-${pkgver}.tar.xz::${url}/archive/${_commit}.tar.gz"
         'xfce-desktop-view-manjaro')
 sha256sums=('86c706313c1f98ce7adcf4332c4eaacf7f42d8065b51b7af4ac67d4618164bfa'
-            '8b21830c306c56af0af8303641e8fcabe7ff9dcf20aaf436315b475544f9b9b8')
+            '4ae84306ba0a4acb2479fcd5d0e21fcdbea89ecde6f7bd9a0d1fbe6e02fa9435')
 validpgpkeys=('97312D5EB9D7AE7D0BD4307351DAE9B7C1AE9161') #Nicohood key
 
 #ALL arc color

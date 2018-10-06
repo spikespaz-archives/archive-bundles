@@ -2,20 +2,13 @@
 //  * XFce4 Manjaro override *  //
 
 .XfdesktopIconView.view {
-  background-color: rgba(0,0,0,0.0);
+  border-radius: 2px;
+  background: transparent;
+  color: #ffffff;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.26), 0 1px 2px rgba(0, 0, 0, 0.32), 0 2px 3px rgba(0, 0, 0, 0.12);
 }
 
-.XfdesktopIconView.view:active {
-  background-color: rgba(0,0,0,0.3);
-  color: #16a085;
-  border-radius: 1px;
-}
-
-.XfdesktopIconView.rubberband {
-  background-color: rgba(0,0,0,0.3);
-}
-
-.XfdesktopIconView.label:active {
-  background-color: rgba(0,0,0,0.3);
-  color: white;
+.XfdesktopIconView.view:active, XfdesktopIconView.view:checked {
+  background-color: #16a085;
+  text-shadow: none;
 }
