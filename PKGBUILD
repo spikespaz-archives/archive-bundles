@@ -13,24 +13,24 @@ _pkgname=$pkgbase
 _pkgbase=arc-themes-maia
 pkgver=20180715
 pkgrel=2
-#_commit=4b75f33ff2cfedb6ba0809cf877deb2d2831e6c3
+_commit=07e618681f68dd84d4c1accce8a9c1e43af1a354
 #_gnomever=3.22
 arch=('any')
 _url='https://github.com/horst3180/arc-theme' #original theme
 url='https://github.com/NicoHood/arc-theme' #soft fork
 license=('GPL3')
 depends=('sassc' 'gtk3')
-makedepends=('optipng' 'inkscape' 'autoconf' 'automake' 'pkg-config' 'libcanberra')
+makedepends=('optipng' 'inkscape' 'autoconf' 'automake' 'pkg-config' 'libcanberra' 'gnome-shell')
 optdepends=('arc-maia-icon-theme: recommended icon theme'
             'gtk-engine-murrine: for gtk2 themes'
             'gnome-themes-standard: for gtk2 themes')
 #source=("${pkgbase}-${pkgver}.tar.gz::https://github.com/horst3180/${_pkgname}/archive/${pkgver}.tar.gz")
 #source=("${pkgbase}-${pkgver}.tar.gz::https://github.com/horst3180/${_pkgname}/archive/${_commit}.tar.gz")
-source=("${_pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz"
-        "${_pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
+source=(#"${_pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz"
+        #"${_pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
+        "${_pkgname}-${pkgver}.tar.xz::${url}/archive/${_commit}.tar.gz"
         'xfce-desktop-view-manjaro')
-sha256sums=('a8119f6afa91628a73d8d6d68a953522b8ebe1efee303f9bc15d1ba4b5108f35'
-            'SKIP'
+sha256sums=('86c706313c1f98ce7adcf4332c4eaacf7f42d8065b51b7af4ac67d4618164bfa'
             '8b21830c306c56af0af8303641e8fcabe7ff9dcf20aaf436315b475544f9b9b8')
 validpgpkeys=('97312D5EB9D7AE7D0BD4307351DAE9B7C1AE9161') #Nicohood key
 
@@ -111,10 +111,10 @@ _breath17='11, 103, 57, 0.8'
 _breath18='26, 188, 156, 0.9' 
 
 prepare() {
+mv $srcdir/$_pkgname-$_commit $srcdir/$_pkgname-$pkgver
 cd $srcdir/$_pkgname-$pkgver/common/gtk-3.0
 	find . -type f -name 'gt*.scss' -exec sh -c "cat $srcdir/xfce-desktop-view-manjaro >> {}" \;
-cd $srcdir	
-	#cp -R "$_pkgname-$_commit" "$_pkgname-$pkgver"
+cd $srcdir
 	cp -R "$_pkgname-$pkgver" "arc-themes-maia-$pkgver"
 	cp -R "$_pkgname-$pkgver" "arc-themes-breath-$pkgver"
 }	
