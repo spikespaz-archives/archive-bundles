@@ -63,6 +63,12 @@ No project is ever truly complete. If there are bugs, or important features that
 
 ## Ideas
 
+ - DSymbolizer
+   - Use [libdparse](https://github.com/dlang-community/libdparse/) (or [alternative](https://wiki.dlang.org/Lexers_Parsers)) to parse symbols.
+   - Output valid D/DI code for use by IntelliSense autocompletion.
+   - Only function, class, struct, and method symbols, no implimentation.
+   - Add symbols that take type `T` as first param to the class or struct of type `T` (as a member).
+   - Fix Uniform Function Call Syntax in [DLS](https://github.com/d-language-server) or [code-d](https://github.com/Pure-D/code-d).
  - [FastIRC](https://github.com/spikespaz/fastirc)
    - Yet another IRC client, but this one is made to look great.
    - Very similar design to Discord's interface.
