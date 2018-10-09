@@ -22,6 +22,10 @@ No project is ever truly complete. If there are bugs, or important features that
 
 ## Complete
 
+ - [Search Deflector](https://github.com/spikespaz/search-deflector)
+   - An alternative to EdgeDeflector and SearchWithMyBrowser that redirects searches to any search engine of your choice.
+   - This is what I would consider to be my most successful project. It is additionally where I taught myself D.
+   - Maybe list on Microsoft Store, package as UWP (TODO).
  - [Clone by Path](https://github.com/spikespaz/clone-by-path)
    - A simple command that, when invoked, attempts to parse a repository path from your current working directory path.
  - [VS Code SmoothType](https://github.com/spikespaz/vscode-smoothtype)
@@ -30,9 +34,6 @@ No project is ever truly complete. If there are bugs, or important features that
  - [Native Dark](https://github.com/spikespaz/firefox-nativedark)
    - Theme for Firefox Quantum that was originally intended to match your Windows accent color and style the browser appropriately. It has since grown into a much larger cross-platform WebExtension.
    - Second-place winner of the [Firefox Quantum Extensions Challenge](https://extensionschallenge.com).
- - [Search Deflector](https://github.com/spikespaz/search-deflector)
-   - An alternative to EdgeDeflector and SearchWithMyBrowser that redirects searches to any search engine of your choice.
-   - Maybe list on Microsoft Store, package as UWP (TODO).
  - [Essential Additions](https://essentialmc.github.io/essentialadditions)
    - My very first ever experience programming (and in creating a semi-successful project). The original was for MC 1.7.10.
    - First experience with basic trigonometry was with the [Ender Eye block](https://github.com/EssentialMC/EssentialAdditions/blob/eae0c7a79a2d8bffe41bf2d42e257119c8479a99/src/main/java/com/spikespaz/essentialadditions/tileentity/TileEntityEyeOre.java#L23-L62), finding the player and watching them like an eyeball.
