@@ -31,13 +31,16 @@ No project is ever truly complete. If there are bugs, or important features that
    - Theme for Firefox Quantum that was originally intended to match your Windows accent color and style the browser appropriately. It has since grown into a much larger cross-platform WebExtension.
    - Second-place winner of the [Firefox Quantum Extensions Challenge](https://extensionschallenge.com).
  - [Search Deflector](https://github.com/spikespaz/search-deflector)
-   - An alternative to EdgeDeflector and SearchWithMyBrowser that redirects searches to any search engine of your choice. 
+   - An alternative to EdgeDeflector and SearchWithMyBrowser that redirects searches to any search engine of your choice.
+   - Maybe list on Microsoft Store, package as UWP (TODO).
 
 ## Active
 
-- [GitHub Extended](https://github.com/spikespaz/github-extended)
-  - A WebExtension to add metadata to GitHub's website, notmally only accessible through their API.
-  - Example: Download counts.
+ - [GitHub Extended](https://github.com/spikespaz/github-extended)
+   - A WebExtension to add metadata to GitHub's website, notmally only accessible through their API.
+   - Example: Download counts.
+ - [Litemeter](https://github.com/spikespaz/litemeter)
+   - Experimental lightweight alternative to Rainmeter, low system resources and high performance. 
 
 ## On-hold
 
@@ -51,11 +54,12 @@ No project is ever truly complete. If there are bugs, or important features that
 ## Soon<sup>TM</sup>
 
  - [spikespaz.com](https://github.com/spikespaz/spikespaz.github.io)
-   - Make this site pretty and stuff, ready for presentation
+   - Make this site pretty and stuff, ready for presentation.
+   - Possibly custom static site generator?
  - [Deezloaded](https://git.teknik.io/spikespaz/deezloaded)
-   - Revive Deezloader Reborn (rewrite)
-   - Better language, not JavaScript (Either Go or D)
-   - Use Sciter for web frontend
+   - Revive Deezloader Reborn (rewrite).
+   - Better language, not JavaScript (Either Go or D).
+   - Use Sciter for web frontend.
  - [µTerm (Micro Term)](https://github.com/spikespaz/uterm)
    - Micro Term (abbreviated µTerm or uTerm, `Alt`+`230`) is a very minimal terminal emulator written using [Ultralight](https://ultralig.ht) and [Xterm.js](https://xtermjs.org).
    - Even though it uses a JavaScript frontend, it is very fast because of the minimal WebKit fork Ultralight.
@@ -79,33 +83,32 @@ No project is ever truly complete. If there are bugs, or important features that
    - An object orientred wrapper for the Discord API.
    - Made for D language.
  - [Firefox PageInverter](https://github.com/spikespaz/firefox-pageinverter)
-   - Forked Firefox extension to invert page colors except images
-   - Persistent across domains, configurable patterns to match URLs
+   - Forked Firefox extension to invert page colors except images.
+   - Persistent across domains, configurable patterns to match URLs.
    - Not made to be perfect like UserStyles, but good enough to be useful.
  - DeNoise
-   - Create a virtual audio input device in Windows
-   - Re-route audio in from microphone to this virtual device
-   - Noise gate, noise suppression, other effect options
-   - Train a neural nework on the user's background noise to eliminate background static
-   - KISS (Keep it Simple Stupid)
+   - Create a virtual audio input device in Windows.
+   - Re-route audio in from microphone to this virtual device.
+   - Noise gate, noise suppression, other effect options.
+   - Train a neural nework on the user's background noise to eliminate background static.
  - Better Notepad
-   - Recreate Windows Notepad but better
-   - Smooth typing animation like MS Word
-   - Markdown highlighting and preview
-   - Maybe other markup languages
+   - Recreate Windows Notepad but better.
+   - Smooth typing animation like MS Word.
+   - Markdown highlighting and preview.
+   - Maybe other markup languages.
  - Terminal File Explorer
-   - Cross platform
-   - Drag & Drop shell integration
+   - Cross platform.
+   - Drag & Drop shell integration.
  - Open Forum Server
-   - Write in Go or vibe.d
-   - Add context menu item
-   - Should impliment markdown
-   - May support ReStructuredText and BB script
+   - Write in Go or vibe.d.
+   - Add context menu item.
+   - Should impliment markdown.
+   - May support ReStructuredText and BB script.
  - Euphoric Engine
-   - Badass game engine in D language
-   - Support DirectX 11/12, OpenGL 4, and Vulkan
-   - Support other cool new stuff
-   - Compatibility is not a priority
+   - Badass game engine in D language.
+   - Support DirectX 11/12, OpenGL 4, and Vulkan.
+   - Support other cool new stuff.
+   - Compatibility is not a priority.
  - Advanced 3D Sound Engine
    - Simulates latency between ears for surround sound.
    - Computes based on environment variables (direction, volume, location, etc.).
@@ -113,12 +116,11 @@ No project is ever truly complete. If there are bugs, or important features that
    - Aimed to be scientifically accurate, representing the real way sound travels.
    - Most likely to be implimented into Euphitic engine.
  - Windows System AdBlocker
-   - Finish [Adwin](https://github.com/spikespaz-old/windows-adwin)
-   - Make it fast (Adwin is slow because hosts files in Windows don't match patterns)
+   - Like AdGuard but FOSS.
+   - Finish [Adwin](https://github.com/spikespaz-old/windows-adwin).
+   - Make it fast (Adwin is slow because hosts files in Windows don't match patterns).
    - Possibly use [Acrylic](http://mayakron.altervista.org) or use existing server implimentation in language.
    - Operating system-wide, applies ad filters  to all applications that make relevant requests.
- - Neural network powered text scaling
-   - Netural network that is trained to scale up low-res text
  - Office Music Server
    - Plays music in an office environment.
    - Web interface that users can log into.
@@ -126,9 +128,10 @@ No project is ever truly complete. If there are bugs, or important features that
    - Suggest tracks to be played.
    - Option to anonymously request tracks.
  - Elite Commander
+   - Promised on [Reddit](https://www.reddit.com/r/EliteDangerous/comments/77jkri/would_this_community_enjoy_a_completely_free_and/) but I haven't had time to start.
    - Voice Attack clone specifically tailored to Elite Dangerous.
    - Does everything based on user keymaps.
- - FFbatcher
+ - [FFbatcher](https://github.com/spikespaz-old/ffbatcher)
    - Uses FFmpeg to batch transcode files.
    - GUI for FFmpeg with all exposed settings.
    - Support for custom commands.
@@ -136,19 +139,21 @@ No project is ever truly complete. If there are bugs, or important features that
    - Similar to Samsung Flow.
    - Send clipboard and other useful data between devices.
    - Android, Windows, Linux.
-   - Native Shell integration, seamless with OS.
- - Script Injector
+   - Native shell integration, seamless with OS.
+ - Script Injector Link
    - JavaScript Injector to make links that run code.
    - Click a link to load external script in sites that don't support it.
    - Use for interactiev REPL embedded in *any* 3rd party page.
    - Insert content into GitHub README files, etc.
- - Git Based Package Manager
+ - GitPak
    - Simplified package manager.
+   - No configuration, no registration. Config file in root of Git repo.
    - Auto-updates programs from GitHub releases.
    - Support for multiple release channels (branches).
    - Support from tags and GitHub/GitTea releases.
    - Central interface acts as a repository for all Git projects by hosting site.
    - Finds appropriate binaries by playform.
+   - CLI and GUI for Windows and Linux.
  - Redesign [Linked2 Website](https://linked-2.com)
    - Eliminate PHP usage.
  - Captain
