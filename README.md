@@ -3,7 +3,7 @@
 I’m a Junior computer science student in a specialty school in Arizona. I am nearly entirely self-taught, I spend most of my personal time programming, and occasionally playing games with friends. **I value user experience, performance, maintainability and quality of code. I always try my best to write software the best way I know how to.** I try by best to make clean, concise source code that will subsequently be maintainable in the future.
 
 My favorite languages are D and Python.
-I have a love/hate relationship with JavaScript/CSS/HTML.
+I have a love/hate relationship with JavaScript/CSS/HTML. I use preprocessors when it's convenient.
 
 My first real programming language was Java, with which I created my first Minecraft mod. I've since forgotten most of what I knew about it.
 
@@ -33,6 +33,14 @@ No project is ever truly complete. If there are bugs, or important features that
  - [Search Deflector](https://github.com/spikespaz/search-deflector)
    - An alternative to EdgeDeflector and SearchWithMyBrowser that redirects searches to any search engine of your choice.
    - Maybe list on Microsoft Store, package as UWP (TODO).
+ - [Essential Additions](https://essentialmc.github.io/essentialadditions)
+   - My very first ever experience programming (and in creating a semi-successful project). The original was for MC 1.7.10.
+   - First experience with basic trigonometry was with the [Ender Eye block](https://github.com/EssentialMC/EssentialAdditions/blob/eae0c7a79a2d8bffe41bf2d42e257119c8479a99/src/main/java/com/spikespaz/essentialadditions/tileentity/TileEntityEyeOre.java#L23-L62), finding the player and watching them like an eyeball.
+   - Now unmaintained. The website is broken, but I had some cool stuff on there, such as the Releases page.
+   - The website (almost) my first real experience using JavaScript and the GitHub API for something practical.
+   - I decompiled and demangled the sources manually, and updated the mod for all versions up to 1.11.2.
+   - The [original sources](https://github.com/EssentialMC/EssentialAdditions/tree/1.7.10-legacy) were written when I was approximately 9 years old, and I found a compiled archive on an old flash drive. For the sake of practice, I re-learned Java to rewrite the mod completely, in the [1.7.10](https://github.com/EssentialMC/EssentialAdditions/tree/1.7.10) branch.
+   - On the [CurseForge](https://minecraft.curseforge.com/projects/essential-additions) project page there is a lot more information about what this does, along with some nice screenshots.
 
 ## Active
 
