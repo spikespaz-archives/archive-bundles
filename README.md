@@ -51,6 +51,45 @@ No project is ever truly complete. If there are bugs, or important features that
    - A simple and to-the-point program to imitate the functionality of tiling window managers on Linux, such as bspwm and i3wm.
    - Full control over hotkeys to manage the positioning of windows.
 
+## Contributions
+
+Almost all of the forked repositories that I have contributed can be found in my ["Forked Repositories"](https://github.com/spikespaz-forks) organization on GitHub (namespace `spikespaz-forks`). If the fork is dramatic enough to be considered a spin-off project, they will be hosted in my normal user account, [spikespaz](https://github.com/spikespaz).
+
+Some of these are [Awesome Lists](https://github.com/sindresorhus/awesome) (curated lists of cool stuff relating to a topic). I try to add my projects (if they are worthy) to lists for visibility, to bring in more users and garner interest.
+
+ - [Augment Echo's Website](https://augmentecho.com)
+   - Styling fixes, content improvement, general help for my friend.
+   - Basically all of the [PRs](https://github.com/elliottedward327/AugmentEcho/pulls?q=is%3Apr+is%3Aclosed) for that repository are by me.
+ - [VS Code Fix Checksums](https://github.com/lehni/vscode-fix-checksums)
+   - Extension to fix Code's checksums after modifying core files, as [SmoothType](https://github.com/spikespaz/vscode-smoothtype) does.
+   - Improved by adding a UAC/Sudo prompt when requiring elevation in [PR #1](https://github.com/lehni/vscode-fix-checksums/pull/1).
+ - [Dawnlabs Carbon](https://github.com/dawnlabs/carbon)
+   - Added Windows 10 window style to settings in [PR #508](https://github.com/dawnlabs/carbon/pull/508).
+ - [Code Monkeys Organization](https://github.com/TheCodeMonkeys)
+   - This is my Discord server that I am the founder of.
+   - I created the GitHub organization to be the home of community projects.
+   - I contribute to most of these projects (if they are in a language that I know).
+ - [Surge](https://github.com/EssentialMC/Surge)
+   - Fork of the Minecraft Mod [Surge](https://github.com/Epoxide-Software/Surge). This is now being updated by the original author.
+   - The author was inactive to I took the initiative to fork the project and create an unofficial port to 1.11.2.
+   - Originally created for use in several of my mod packs.
+ - [iChunUtil](https://github.com/EssentialMC/iChunUtil)
+   - Like Surge, a fork of [iChun's coremod](https://github.com/ichttt/iChunUtil) to resolve outdated dependencies in Mob Dismemberment.
+   - Updated to Minecraft 1.11.2.
+ - [Mob Dismemberment](https://github.com/EssentialMC/Mob-Dismemberment)
+   - Another 1.11.2 port of a favorite Minecraft mod by iChun.
+   - Dependant on my iChunUtil 1.11.2 fork.
+   - [Original](https://github.com/iChun/Mob-Dismemberment) is now updated.
+ - [ForgeCreeperHeal](https://github.com/EssentialMC/ForgeCreeperHeal)
+   - Another fork of a Minecraft mod to update to 1.11.2.
+   - [Original](https://github.com/RedRelay/ForgeCreeperHeal) is now unmaintained.
+ - [Awesome VS Code](https://github.com/viatsko/awesome-vscode)
+   - Added my [SmoothType](https://github.com/spikespaz/vscode-smoothtype) extension as [PR #179](https://github.com/viatsko/awesome-vscode/pull/179).
+ - [Awesome Windows](https://github.com/Awesome-Windows/Awesome)
+   - Added my [Search Deflector](https://github.com/spikespaz/search-deflector) as [PR #190](https://github.com/Awesome-Windows/Awesome/pull/190).
+ - [Awesome Free Software](https://github.com/johnjago/awesome-free-software)
+   - Added my [Search Deflector](https://github.com/spikespaz/search-deflector) as [PR #21](https://github.com/johnjago/awesome-free-software/pull/21).
+
 ## Soon<sup>TM</sup>
 
  - [spikespaz.com](https://github.com/spikespaz/spikespaz.github.io)
