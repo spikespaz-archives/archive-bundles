@@ -12,7 +12,7 @@ pkgname=('arc-themes-solid-maia'
 _pkgname=$pkgbase
 _pkgbase=arc-themes-maia
 pkgver=20180715
-pkgrel=4
+pkgrel=5
 _commit=7ff5b36c287fd50a5910a67a255a3d6bec58b679
 #_gnomever=3.22
 arch=('any')
@@ -29,9 +29,8 @@ optdepends=('arc-maia-icon-theme: recommended icon theme'
 source=( #"${_pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz"
         #"${_pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
         "${_pkgname}-${pkgver}.tar.xz::${url}/archive/${_commit}.tar.gz"
-        'xfce-desktop-icons-view.patch')
-sha256sums=('1753590f404e5a09c051935067bfea4bb4a7fe6ca7951b303398a1e0eec5a9e6'
-            'e0010ad5890d77d5df2f1fd26ee21467a5787b1f9d0f737d18e054f3b25e2936')
+)
+sha256sums=('1753590f404e5a09c051935067bfea4bb4a7fe6ca7951b303398a1e0eec5a9e6')
 validpgpkeys=('97312D5EB9D7AE7D0BD4307351DAE9B7C1AE9161') #Nicohood key
 
 #ALL arc color
@@ -178,6 +177,28 @@ build() {
 build_arc-maia
 build_arc-breath
 }
+
+#https://github.com/NicoHood/arc-theme/issues/139#issuecomment-427616375
+
+patch_adressbar() {
+for i in *.css; do
+	echo '.nautilus-window .path-bar-box {
+  	  background-color: transparent;
+  	  border-color: transparent;
+	}' >> $i
+done
+}
+
+patch_adressbar_darker() {
+for i in *.css; do
+	echo '.nautilus-window .path-bar-box {
+  	  background-color: transparent;
+  	  border-color: transparent;
+  	  color: #D3DAE3;
+	}' >> $i
+done
+}
+
   
 package_arc-themes-solid-maia() {
 pkgdesc="A flat theme without transparent elements Manjaro Maia variant"
@@ -195,6 +216,14 @@ find . -type f -name '*.*' -exec sed -i \
    "s/Arc-Maia/Arc-Maia-Solid/g;\
    s/Arc-Darker-Maia/Arc-Darker-Maia-Solid/g;\
   s/Arc-Dark-Maia/Arc-Dark-Maia-Solid/g" {} \;
+
+for i in Arc-Maia-solid Arc-Maia-Dark-solid; do
+	cd $pkgdir/usr/share/themes/$i/gtk-3.0
+	patch_adressbar
+done
+
+cd $pkgdir/usr/share/themes/Arc-Maia-Darker-solid/gtk-3.0
+	patch_adressbar_darker
 }
 
 package_arc-themes-maia() {
@@ -202,6 +231,14 @@ pkgdesc="A flat theme with transparent elements Manjaro Maia variant"
 cd $srcdir/arc-themes-maia-$pkgver
   ./configure --prefix=/usr --disable-unity --disable-plank
   make DESTDIR="${pkgdir}" install
+  
+for i in Arc-Maia Arc-Maia-Dark; do
+	cd $pkgdir/usr/share/themes/$i/gtk-3.0
+	patch_adressbar
+done
+
+cd $pkgdir/usr/share/themes/Arc-Maia-Darker/gtk-3.0
+	patch_adressbar_darker
 }
 
 package_arc-themes-solid-breath() {
@@ -219,6 +256,14 @@ find . -type f -name '*.*' -exec sed -i \
    "s/Arc-Breath/Arc-Breath-Solid/g;\
    s/Arc-Darker-Breath/Arc-Darker-Breath-Solid/g;\
   s/Arc-Dark-Breath/Arc-Dark-Breath-Solid/g" {} \;
+  
+for i in Arc-Breath-solid Arc-Breath-Dark-solid; do
+	cd $pkgdir/usr/share/themes/$i/gtk-3.0
+	patch_adressbar
+done
+
+cd $pkgdir/usr/share/themes/Arc-Breath-Darker-solid/gtk-3.0
+	patch_adressbar_darker
 }
 
 package_arc-themes-breath() {
@@ -226,4 +271,12 @@ pkgdesc="A flat theme with transparent elements Manjaro Breath variant"
 cd $srcdir/arc-themes-breath-$pkgver
   ./configure --prefix=/usr --disable-unity --disable-plank
   make DESTDIR="${pkgdir}" install
+  
+for i in Arc-Breath Arc-Breath-Dark; do
+	cd $pkgdir/usr/share/themes/$i/gtk-3.0
+	patch_adressbar
+done
+
+cd $pkgdir/usr/share/themes/Arc-Breath-Darker/gtk-3.0
+	patch_adressbar_darker
 }
