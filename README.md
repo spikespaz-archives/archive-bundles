@@ -72,7 +72,7 @@ Some of these are [Awesome Lists](https://github.com/sindresorhus/awesome) (cura
  - [VS Code Fix Checksums](https://github.com/lehni/vscode-fix-checksums)
    - Extension to fix Code's checksums after modifying core files, as [SmoothType](https://github.com/spikespaz/vscode-smoothtype) does.
    - Improved by adding a UAC/Sudo prompt when requiring elevation in [PR #1](https://github.com/lehni/vscode-fix-checksums/pull/1).
- - [VS Code to Hastebin]
+ - [VS Code to Hastebin](https://github.com/HamzaAnis/vscode-to-hastebin)
    - Organize and refractor code.
    - Added some improvements to the notifications it sends.
    - Added file extension to Hastebin link so syntax highlighting works correctly.
