@@ -72,6 +72,11 @@ Some of these are [Awesome Lists](https://github.com/sindresorhus/awesome) (cura
  - [VS Code Fix Checksums](https://github.com/lehni/vscode-fix-checksums)
    - Extension to fix Code's checksums after modifying core files, as [SmoothType](https://github.com/spikespaz/vscode-smoothtype) does.
    - Improved by adding a UAC/Sudo prompt when requiring elevation in [PR #1](https://github.com/lehni/vscode-fix-checksums/pull/1).
+ - [VS Code to Hastebin]
+   - Organize and refractor code.
+   - Added some improvements to the notifications it sends.
+   - Added file extension to Hastebin link so syntax highlighting works correctly.
+   - Pull request [#1](https://github.com/HamzaAnis/vscode-to-hastebin/pull/1).
  - [Dawnlabs Carbon](https://github.com/dawnlabs/carbon)
    - Added Windows 10 window style to settings in [PR #508](https://github.com/dawnlabs/carbon/pull/508).
  - [Code Monkeys Organization](https://github.com/TheCodeMonkeys)
