@@ -11,9 +11,8 @@ pkgname=('arc-themes-solid-maia'
 		 'arc-themes-solid-breath')
 _pkgname=$pkgbase
 _pkgbase=arc-themes-maia
-pkgver=20180715
-pkgrel=5
-_commit=7ff5b36c287fd50a5910a67a255a3d6bec58b679
+pkgver=20181022
+pkgrel=1
 #_gnomever=3.22
 arch=('any')
 _url='https://github.com/horst3180/arc-theme' #original theme
@@ -24,18 +23,18 @@ makedepends=('optipng' 'inkscape' 'autoconf' 'automake' 'pkg-config' 'libcanberr
 optdepends=('arc-maia-icon-theme: recommended icon theme'
             'gtk-engine-murrine: for gtk2 themes'
             'gnome-themes-standard: for gtk2 themes')
-#source=("${pkgbase}-${pkgver}.tar.gz::https://github.com/horst3180/${_pkgname}/archive/${pkgver}.tar.gz")
-#source=("${pkgbase}-${pkgver}.tar.gz::https://github.com/horst3180/${_pkgname}/archive/${_commit}.tar.gz")
-source=( #"${_pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz"
-        #"${_pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
-        "${_pkgname}-${pkgver}.tar.xz::${url}/archive/${_commit}.tar.gz"
+            
+source=("${_pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz"
+        "${_pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
+        #"${_pkgname}-${pkgver}.tar.xz::${url}/archive/${_commit}.tar.gz"
 )
-sha256sums=('1753590f404e5a09c051935067bfea4bb4a7fe6ca7951b303398a1e0eec5a9e6')
+sha256sums=('7c9d7d326f3f017b8d2b64f0fc3cc4c82e8a2ee74a85fae52b8e4965906f4d0c'
+            'SKIP')
 validpgpkeys=('97312D5EB9D7AE7D0BD4307351DAE9B7C1AE9161') #Nicohood key
 
 #ALL arc color
-_BLUE=5294E2 #
-_BLUE3=4DADD4 #
+_BLUE=5294E2 
+_BLUE3=4DADD4 
 
 #All Maia color variation
 _maia=16A085
@@ -46,14 +45,9 @@ _breath=1abc9c
 _breath3=1ccdaa
 
 prepare() {
-#mv $srcdir/$_pkgname-$_commit $srcdir/$_pkgname-$pkgver
-#cd $srcdir/$_pkgname-$pkgver/common/gtk-3.0
-#	find . -type f -name 'gt*.scss' -exec sh -c "cat $srcdir/xfce-desktop-view-manjaro >> {}" \;
-#cd $srcdir/$_pkgname-$_commit
-# 	patch -p1 -i ../xfce-desktop-icons-view.patch
 cd $srcdir
-	cp -R "$_pkgname-$_commit" "arc-themes-maia-$pkgver"
-	cp -R "$_pkgname-$_commit" "arc-themes-breath-$pkgver"
+	cp -R "$_pkgname-$pkgver" "arc-themes-maia-$pkgver"
+	cp -R "$_pkgname-$pkgver" "arc-themes-breath-$pkgver"
 }	
 
 build_arc-maia() {
@@ -83,12 +77,12 @@ msg "Manjarification : Change all arc color to green maia"
 echo
 
 #override gtk2 schemas
-sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/gtkrc
-sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/gtkrc
-sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/gtkrc-dark
-sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/gtkrc-dark
-sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/gtkrc-darker
-sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/gtkrc-darker
+sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/light/gtkrc
+sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/light/gtkrc
+sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/dark/gtkrc
+sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/dark/gtkrc
+sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/darker/gtkrc
+sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/darker/gtkrc
 msg "Done override gtk2 schemas"
 echo
 msg "Change Hex format"
@@ -141,12 +135,12 @@ msg "Manjarification : Change all arc color to green breath"
 echo
 
 #override gtk2 schemas
-sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/gtkrc
-sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/gtkrc
-sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/gtkrc-dark
-sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/gtkrc-dark
-sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/gtkrc-darker
-sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/gtkrc-darker
+sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/light/gtkrc
+sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/light/gtkrc
+sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/dark/gtkrc
+sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/dark/gtkrc
+sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/darker/gtkrc
+sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/darker/gtkrc
 msg "Done override gtk2 schemas"
 echo
 msg "Change Hex format"
@@ -180,29 +174,9 @@ build_arc-breath
 
 #https://github.com/NicoHood/arc-theme/issues/139#issuecomment-427616375
 
-patch_adressbar() {
-for i in *.css; do
-	echo '.nautilus-window .path-bar-box {
-  	  background-color: transparent;
-  	  border-color: transparent;
-	}' >> $i
-done
-}
-
-patch_adressbar_darker() {
-for i in *.css; do
-	echo '.nautilus-window .path-bar-box {
-  	  background-color: transparent;
-  	  border-color: transparent;
-  	  color: #D3DAE3;
-	}' >> $i
-done
-}
-
   
 package_arc-themes-solid-maia() {
 pkgdesc="A flat theme without transparent elements Manjaro Maia variant"
-#optdepends=('arc-firefox-theme: Firefox theme to complete arc-theme experience')
 cd $srcdir/arc-themes-maia-$pkgver
   ./configure --prefix=/usr --disable-transparency --disable-unity --disable-plank
   make DESTDIR="${pkgdir}" install
@@ -216,14 +190,6 @@ find . -type f -name '*.*' -exec sed -i \
    "s/Arc-Maia/Arc-Maia-Solid/g;\
    s/Arc-Darker-Maia/Arc-Darker-Maia-Solid/g;\
   s/Arc-Dark-Maia/Arc-Dark-Maia-Solid/g" {} \;
-
-for i in Arc-Maia-solid Arc-Maia-Dark-solid; do
-	cd $pkgdir/usr/share/themes/$i/gtk-3.0
-	patch_adressbar
-done
-
-cd $pkgdir/usr/share/themes/Arc-Maia-Darker-solid/gtk-3.0
-	patch_adressbar_darker
 }
 
 package_arc-themes-maia() {
@@ -231,14 +197,6 @@ pkgdesc="A flat theme with transparent elements Manjaro Maia variant"
 cd $srcdir/arc-themes-maia-$pkgver
   ./configure --prefix=/usr --disable-unity --disable-plank
   make DESTDIR="${pkgdir}" install
-  
-for i in Arc-Maia Arc-Maia-Dark; do
-	cd $pkgdir/usr/share/themes/$i/gtk-3.0
-	patch_adressbar
-done
-
-cd $pkgdir/usr/share/themes/Arc-Maia-Darker/gtk-3.0
-	patch_adressbar_darker
 }
 
 package_arc-themes-solid-breath() {
@@ -248,7 +206,6 @@ cd $srcdir/arc-themes-breath-$pkgver
   make DESTDIR="${pkgdir}" install
 
 #Change folder name for solid version
-
 cd $pkgdir/usr/share/themes
 
 #Add Breath-Solid suffix (don't change this order)
@@ -256,14 +213,6 @@ find . -type f -name '*.*' -exec sed -i \
    "s/Arc-Breath/Arc-Breath-Solid/g;\
    s/Arc-Darker-Breath/Arc-Darker-Breath-Solid/g;\
   s/Arc-Dark-Breath/Arc-Dark-Breath-Solid/g" {} \;
-  
-for i in Arc-Breath-solid Arc-Breath-Dark-solid; do
-	cd $pkgdir/usr/share/themes/$i/gtk-3.0
-	patch_adressbar
-done
-
-cd $pkgdir/usr/share/themes/Arc-Breath-Darker-solid/gtk-3.0
-	patch_adressbar_darker
 }
 
 package_arc-themes-breath() {
@@ -271,12 +220,4 @@ pkgdesc="A flat theme with transparent elements Manjaro Breath variant"
 cd $srcdir/arc-themes-breath-$pkgver
   ./configure --prefix=/usr --disable-unity --disable-plank
   make DESTDIR="${pkgdir}" install
-  
-for i in Arc-Breath Arc-Breath-Dark; do
-	cd $pkgdir/usr/share/themes/$i/gtk-3.0
-	patch_adressbar
-done
-
-cd $pkgdir/usr/share/themes/Arc-Breath-Darker/gtk-3.0
-	patch_adressbar_darker
 }
