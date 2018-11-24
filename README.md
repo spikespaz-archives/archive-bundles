@@ -120,6 +120,14 @@ Some of these are [Awesome Lists](https://github.com/sindresorhus/awesome) (cura
 
 ## Ideas
 
+ - RepRap 3D
+   - Does same thing as Repetier Host, Cura.
+   - Does it better, with a nice interface in Qt, or maybe Ultralight (because it's fast).
+   - Keep features like Overrides and Slicing engines from Repetier.
+   - Keep the prettiness of Cura's interface, but make it more useful.
+   - Make it not slow, because Cura is painful. Make it not ugly like Repetier.
+   - Use the actual APIs for the slicers. I think Repetier and Cura use the executable CLI.
+   - Maybe a web server for Raspberry Pi?
  - DSymbolizer
    - Use [libdparse](https://github.com/dlang-community/libdparse/) (or [alternative](https://wiki.dlang.org/Lexers_Parsers)) to parse symbols.
    - Output valid D/DI code for use by IntelliSense autocompletion.
