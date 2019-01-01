@@ -25,7 +25,8 @@ No project is ever truly complete. If there are bugs, or important features that
  - [Search Deflector](https://github.com/spikespaz/search-deflector)
    - An alternative to EdgeDeflector and SearchWithMyBrowser that redirects searches to any search engine of your choice.
    - This is what I would consider to be my most successful project. It is additionally where I taught myself D.
-   - Maybe list on Microsoft Store, package as UWP (TODO).
+   - ~~Maybe list on Microsoft Store, package as UWP (TODO).~~
+     - Done! **You can get the store version [here](https://www.microsoft.com/store/productId/9P8ZJJ80RZ2K).**
  - [Clone by Path](https://github.com/spikespaz/clone-by-path)
    - A simple command that, when invoked, attempts to parse a repository path from your current working directory path.
  - [VS Code SmoothType](https://github.com/spikespaz/vscode-smoothtype)
@@ -98,21 +99,28 @@ Some of these are [Awesome Lists](https://github.com/sindresorhus/awesome) (cura
    - Another fork of a Minecraft mod to update to 1.11.2.
    - [Original](https://github.com/RedRelay/ForgeCreeperHeal) is now unmaintained.
  - [Awesome VS Code](https://github.com/viatsko/awesome-vscode)
-   - Added my [SmoothType](https://github.com/spikespaz/vscode-smoothtype) extension as [PR #179](https://github.com/viatsko/awesome-vscode/pull/179).
+   - Added [SmoothType](https://github.com/spikespaz/vscode-smoothtype) extension as [PR #179](https://github.com/viatsko/awesome-vscode/pull/179).
  - [Awesome Windows](https://github.com/Awesome-Windows/Awesome)
-   - Added my [Search Deflector](https://github.com/spikespaz/search-deflector) as [PR #190](https://github.com/Awesome-Windows/Awesome/pull/190).
+   - Added [Search Deflector](https://github.com/spikespaz/search-deflector) as [PR #190](https://github.com/Awesome-Windows/Awesome/pull/190).
  - [Awesome Free Software](https://github.com/johnjago/awesome-free-software)
-   - Added my [Search Deflector](https://github.com/spikespaz/search-deflector) as [PR #21](https://github.com/johnjago/awesome-free-software/pull/21).
+   - Added [Search Deflector](https://github.com/spikespaz/search-deflector) as [PR #21](https://github.com/johnjago/awesome-free-software/pull/21).
 
-## Soon<sup>TM</sup>
+## Planned
+
+ - [EliteCMDR](https://github.com/spikespaz/elitecmdr)
+    - Promised on Reddit but I haven’t had time to start.
+    - Voice Attack clone specifically tailored to Elite Dangerous.
+    - Does everything based on user keymaps.
 
  - [spikespaz.com](https://github.com/spikespaz/spikespaz.github.io)
    - Make this site pretty and stuff, ready for presentation.
    - Possibly custom static site generator?
  - [Deezloaded](https://git.teknik.io/spikespaz/deezloaded)
    - Revive Deezloader Reborn (rewrite).
-   - Better language, not JavaScript (Either Go or D).
-   - Use Sciter for web frontend.
+   - Write in a better language, like D.
+   - Use [Ultralight](https://ultralig.ht).
+   - Maybe use the same UI as Reborn fork, port backend. Or use a CSS-only framework and keep it light.
+   - Currently waiting for Ultralight to support SWIG.
  - [µTerm (Micro Term)](https://github.com/spikespaz/uterm)
    - Micro Term (abbreviated µTerm or uTerm, `Alt`+`230`) is a very minimal terminal emulator written using [Ultralight](https://ultralig.ht) and [Xterm.js](https://xtermjs.org).
    - Even though it uses a JavaScript frontend, it is very fast because of the minimal WebKit fork Ultralight.
@@ -134,8 +142,8 @@ Some of these are [Awesome Lists](https://github.com/sindresorhus/awesome) (cura
    - Only function, class, struct, and method symbols, no implimentation.
    - Add symbols that take type `T` as first param to the class or struct of type `T` (as a member).
    - Fix Uniform Function Call Syntax in [DLS](https://github.com/d-language-server) or [code-d](https://github.com/Pure-D/code-d).
- - [FastIRC](https://github.com/spikespaz/fastirc)
-   - Yet another IRC client, but this one is made to look great.
+ - Yet Another IRC Client (YAIRC?)
+   - But this one is made to look great (Ultralight again).
    - Very similar design to Discord's interface.
    - Renders markdown from messages.
    - Image, video, GIF, and link embeds.
@@ -160,9 +168,10 @@ Some of these are [Awesome Lists](https://github.com/sindresorhus/awesome) (cura
  - Terminal File Explorer
    - Cross platform.
    - Drag & Drop shell integration.
+   - Interface like a terminal multiplexer, several panels (resembling traditional File Explorer).
+   - Keyboard shortcuts. Yes.
  - Open Forum Server
    - Write in Go or vibe.d.
-   - Add context menu item.
    - Should impliment markdown.
    - May support ReStructuredText and BB script.
  - Euphoric Engine
@@ -175,23 +184,19 @@ Some of these are [Awesome Lists](https://github.com/sindresorhus/awesome) (cura
    - Computes based on environment variables (direction, volume, location, etc.).
    - Stereo sound is calculated through the relative position of an item in 3D space.
    - Aimed to be scientifically accurate, representing the real way sound travels.
-   - Most likely to be implimented into Euphitic engine.
+   - Most likely to be implimented into Euphoric engine.
  - Windows System AdBlocker
    - Like AdGuard but FOSS.
    - Finish [Adwin](https://github.com/spikespaz-old/windows-adwin).
    - Make it fast (Adwin is slow because hosts files in Windows don't match patterns).
    - Possibly use [Acrylic](http://mayakron.altervista.org) or use existing server implimentation in language.
-   - Operating system-wide, applies ad filters  to all applications that make relevant requests.
+   - Operating system-wide, applies ad filters  to all applications that make DNS requests.
  - Office Music Server
    - Plays music in an office environment.
-   - Web interface that users can log into.
+   - Web interface that users can log into like a forum.
    - Vote for tracks, or dislike them.
    - Suggest tracks to be played.
    - Option to anonymously request tracks.
- - Elite Commander
-   - Promised on [Reddit](https://www.reddit.com/r/EliteDangerous/comments/77jkri/would_this_community_enjoy_a_completely_free_and/) but I haven't had time to start.
-   - Voice Attack clone specifically tailored to Elite Dangerous.
-   - Does everything based on user keymaps.
  - [FFbatcher](https://github.com/spikespaz-old/ffbatcher)
    - Uses FFmpeg to batch transcode files.
    - GUI for FFmpeg with all exposed settings.
