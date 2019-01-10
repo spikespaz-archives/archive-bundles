@@ -1,3 +1,5 @@
+***Please note that this is a placeholder site. This is not representative of the websites that I can create.***
+
 # About Me
 
 I’m a Junior computer science student in a specialty school in Arizona. I am nearly entirely self-taught, I spend most of my personal time programming, and occasionally playing games with friends. **I value user experience, performance, maintainability and quality of code. I always try my best to write software the best way I know how to.** I try by best to make clean, concise source code that will subsequently be maintainable in the future.
