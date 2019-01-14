@@ -130,6 +130,9 @@ Some of these are [Awesome Lists](https://github.com/sindresorhus/awesome) (cura
 
 ## Ideas
 
+ - Sessionify
+   - WebExtension similar to TabsAside!
+   - More features and a better interface, using custom CSS.
  - RepRap 3D
    - Does same thing as Repetier Host, Cura.
    - Does it better, with a nice interface in Qt, or maybe Ultralight (because it's fast).
