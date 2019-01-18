@@ -52,7 +52,7 @@ No project is ever truly complete. If there are bugs, or important features that
    - A WebExtension to add metadata to GitHub's website, notmally only accessible through their API.
    - Example: Download counts.
  - [Litemeter](https://github.com/spikespaz/litemeter)
-   - Experimental lightweight alternative to Rainmeter, low system resources and high performance. 
+   - Experimental lightweight alternative to Rainmeter, low system resources and high performance.
 
 ## On-hold
 
@@ -239,3 +239,9 @@ Some of these are [Awesome Lists](https://github.com/sindresorhus/awesome) (cura
 | Project              | Date           | Description                                                       |
 | -------------------- | -------------- | ----------------------------------------------------------------- |
 | Native Dark          | 06-26-2018     | Rewrite the entire extension and make a polished v2.0             |
+
+# Donate
+
+If you value my work and would like to show your appreciation, please consider making a donation!
+
+[![Donate](assets/donate_button_1x.png)](https://spikespaz.com/donate)
