@@ -9,6 +9,12 @@ I have a love/hate relationship with JavaScript/CSS/HTML. I use preprocessors wh
 
 My first real programming language was Java, with which I created my first Minecraft mod. I've since forgotten most of what I knew about it.
 
+---
+
+**If you you value my work and would like to show your appreciation, please consider making a small donation!**
+
+[![Donate](https://spikespaz.com/assets/donate_button_1x.png)](https://spikespaz.com/donate)
+
 ### Social
 
  - Twitter: [twitter.com/spikespaz](https://twitter.com/spikespaz)
@@ -239,9 +245,3 @@ Some of these are [Awesome Lists](https://github.com/sindresorhus/awesome) (cura
 | Project              | Date           | Description                                                       |
 | -------------------- | -------------- | ----------------------------------------------------------------- |
 | Native Dark          | 06-26-2018     | Rewrite the entire extension and make a polished v2.0             |
-
-# Donate
-
-If you value my work and would like to show your appreciation, please consider making a donation!
-
-[![Donate](assets/donate_button_1x.png)](https://spikespaz.com/donate)
