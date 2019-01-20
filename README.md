@@ -13,7 +13,9 @@ My first real programming language was Java, with which I created my first Minec
 
 **If you you value my work and would like to show your appreciation, please consider making a small donation!**
 
-[![Donate](https://spikespaz.com/assets/donate_button_1x.png)](https://spikespaz.com/donate)
+<a class="donate-button" href="https://spikespaz.com/donate" target="_blank">
+  <span>DONATE</span><span>&nbsp;♥</span>
+</a>
 
 ### Social
 
