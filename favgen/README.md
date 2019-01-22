@@ -2,12 +2,14 @@
 
 ### Usage
 
-    favicon_generator.py [-h] [-c CONFIG] [-s SVG]
-                         [-ps PNG_SIZES [PNG_SIZES ...]]
-                         [-is ICO_SIZES [ICO_SIZES ...]] [-pn PNG_NAME]
-                         [-in ICO_NAME]
+```
+favicon_generator.py [-h] [-c CONFIG] [-s SVG]
+                        [-ps PNG_SIZES [PNG_SIZES ...]]
+                        [-is ICO_SIZES [ICO_SIZES ...]] [-pn PNG_NAME]
+                        [-in ICO_NAME]
 
-    Generate favicons from an SVG.
+Generate favicons from an SVG.
+```
 
 ### Optional Arguments
 
