@@ -138,6 +138,12 @@ Some of these are [Awesome Lists](https://github.com/sindresorhus/awesome) (cura
 
 ## Ideas
 
+ - PortProxy
+   - Use Selenium to access services running on different ports on the local network
+   - Allow all of those services to be exposed to the internet through one port
+ - Cron for Windows
+   - Unix-like cronjobs for windows
+   - A proxy to Task Manager or a separate process
  - Sessionify
    - WebExtension similar to TabsAside!
    - More features and a better interface, using custom CSS.
