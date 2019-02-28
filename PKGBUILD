@@ -11,7 +11,7 @@ pkgname=('arc-themes-solid-maia'
 		 'arc-themes-solid-breath')
 _pkgname=$pkgbase
 _pkgbase=arc-themes-maia
-pkgver=20181022
+pkgver=20190213
 pkgrel=1
 #_gnomever=3.22
 arch=('any')
@@ -28,7 +28,7 @@ source=("${_pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkg
         "${_pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
         #"${_pkgname}-${pkgver}.tar.xz::${url}/archive/${_commit}.tar.gz"
 )
-sha256sums=('7c9d7d326f3f017b8d2b64f0fc3cc4c82e8a2ee74a85fae52b8e4965906f4d0c'
+sha256sums=('13f66534cdda738e20564e0005bc72606aebe6355ee06ab265aa269ba69dbe59'
             'SKIP')
 validpgpkeys=('97312D5EB9D7AE7D0BD4307351DAE9B7C1AE9161') #Nicohood key
 
