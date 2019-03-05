@@ -1,5 +1,9 @@
+# Python
+__pycache__/
+
 # VS Code
 .code/
+
 # IDEA
 *.ipr
 *.iws
