@@ -31,8 +31,25 @@ class AdoptAPI:
             )
             self.heap_size = kwargs.get("heap_size", None)
             self.download_count = kwargs.get("download_count", None)
-            # The below lines are bugged, the default None gets passed to datetime.strptime if the keys don't exist.
-            self.updated_at = datetime.strptime(kwargs.get("updated_at", None), datetime_format)
-            self.timestamp = datetime.strptime(kwargs.get("timestamp", None), datetime_format)
+            self.updated_at = wrap_throwable(
+                lambda: datetime.strptime(
+                    kwargs["updated_at"],
+                    datetime_format),
+                KeyError)()
+            self.timestamp = wrap_throwable(
+                lambda: datetime.strptime(
+                    kwargs["timestamp"],
+                    datetime_format),
+                KeyError)()
             self.release_name = kwargs.get("release_name", None)
             self.release_link = kwargs.get("release_link", None)
+
+
+def wrap_throwable(func, *exc):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except exc:
+            return None
+
+    return wrapper
