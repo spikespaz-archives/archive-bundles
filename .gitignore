@@ -1,0 +1,6 @@
+# VS Code
+.code/
+# IDEA
+*.ipr
+*.iws
+*.iml
