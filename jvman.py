@@ -7,7 +7,7 @@ import json
 
 
 class AdoptAPI:
-    adopt_api_base = "https://api.adoptopenjdk.net/v2"
+    api_base_url = "https://api.adoptopenjdk.net/v2"
 
     class Asset:
         VersionData = namedtuple("VersionData", "openjdk_version semver optional")
@@ -27,7 +27,7 @@ class AdoptAPI:
             self.version_data = AdoptAPI.Asset.VersionData(
                 openjdk_version=kwargs.get("version_data", dict()).get("openjdk_version", None),
                 semver=kwargs.get("version_data", dict()).get("semver", None),
-                optional=kwargs.get("version_data", dict()).get("optional"),
+                optional=kwargs.get("version_data", dict()).get("optional", None),
             )
             self.heap_size = kwargs.get("heap_size", None)
             self.download_count = kwargs.get("download_count", None)
@@ -43,6 +43,9 @@ class AdoptAPI:
                 KeyError)()
             self.release_name = kwargs.get("release_name", None)
             self.release_link = kwargs.get("release_link", None)
+
+        def display(self):
+            return "{openjdk_impl}-{version_data.semver}-{architecture}-{binary_type}".format(**self.__dict__)
 
 
 def wrap_throwable(func, *exc):
