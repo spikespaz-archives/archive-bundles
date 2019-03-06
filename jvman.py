@@ -10,6 +10,14 @@ class AdoptAPI:
     api_base_url = "https://api.adoptopenjdk.net/v2"
     datetime_format = r"%Y-%m-%dT%H:%M:%SZ"
 
+    @staticmethod
+    def search_releases(version, nightly=False, **kwargs):
+        api_url = "/".join([AdoptAPI.api_base_url, "info", ("nightly" if nightly else "releases"), version])
+        release_data_list = json.loads(requests.get(api_url, params=kwargs).text)
+
+        for release_data in release_data_list:
+            yield AdoptAPI.Release(**release_data)
+
     class Release:
         def __init__(self, **kwargs):
             self.release_name = kwargs.get("release_name", None)
