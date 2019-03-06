@@ -2,6 +2,7 @@ from collections import namedtuple
 from datetime import datetime
 
 import requests
+import json
 
 
 class AdoptAPI:
@@ -32,6 +33,20 @@ class AdoptAPI:
                 AdoptAPI.ReleaseAsset(**data) for data in kwargs.get("binaries", list())
             ]
             self.download_count = kwargs.get("download_count", None)
+
+        def serialize(self):
+            data = self.__dict__
+            data.update(
+                {
+                    "timestamp": self.timestamp.strftime(AdoptAPI.datetime_format),
+                    "binaries": [binary.json() for binary in self.binaries],
+                }
+            )
+
+            return data
+
+        def json(self):
+            return json.dumps(self.serialize())
 
     class ReleaseAsset:
         VersionData = namedtuple("VersionData", "openjdk_version semver optional")
@@ -66,6 +81,23 @@ class AdoptAPI:
             return "{openjdk_impl}-{version_data.semver}-{architecture}-{binary_type}".format(
                 **self.__dict__
             )
+
+        def serialize(self):
+            data = self.__dict__
+            data.update({
+                "version_data": {
+                    "openjdk_version": self.version_data.openjdk_version,
+                    "semver": self.version_data.semver,
+                    "optional": self.version_data.optional,
+                },
+                "updated_at": self.updated_at.strftime(AdoptAPI.datetime_format),
+                "timestamp": self.updated_at.strftime(AdoptAPI.datetime_format),
+            })
+
+            return data
+
+        def json(self):
+            return json.dumps(self.serialize())
 
 
 def wrap_throwable(func, *exc):
