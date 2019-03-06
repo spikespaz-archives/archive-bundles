@@ -1,9 +1,7 @@
 from collections import namedtuple
 from datetime import datetime
-from tqdm import tqdm
+
 import requests
-import click
-import json
 
 
 class AdoptAPI:
@@ -12,8 +10,12 @@ class AdoptAPI:
 
     @staticmethod
     def search_releases(version, nightly=False, **kwargs):
-        api_url = "/".join([AdoptAPI.api_base_url, "info", ("nightly" if nightly else "releases"), version])
-        release_data_list = json.loads(requests.get(api_url, params=kwargs).text)
+        api_url = "{api_base_url}/info/{release_type}/{openjdk_version}".format(
+            api_base_url=AdoptAPI.api_base_url,
+            release_type="nightly" if nightly else "releases",
+            openjdk_version=version,
+        )
+        release_data_list = requests.get(api_url, params=kwargs).json()
 
         for release_data in release_data_list:
             yield AdoptAPI.Release(**release_data)
@@ -23,12 +25,12 @@ class AdoptAPI:
             self.release_name = kwargs.get("release_name", None)
             self.release_link = kwargs.get("release_link", None)
             self.timestamp = wrap_throwable(
-                lambda: datetime.strptime(
-                    kwargs["timestamp"],
-                    AdoptAPI.datetime_format),
-                KeyError)()
+                lambda: datetime.strptime(kwargs["timestamp"], AdoptAPI.datetime_format), KeyError
+            )()
             self.release = kwargs.get("release", None)
-            self.binaries = [AdoptAPI.ReleaseAsset(**data) for data in kwargs.get("binaries", list())]
+            self.binaries = [
+                AdoptAPI.ReleaseAsset(**data) for data in kwargs.get("binaries", list())
+            ]
             self.download_count = kwargs.get("download_count", None)
 
     class ReleaseAsset:
@@ -52,20 +54,18 @@ class AdoptAPI:
             self.heap_size = kwargs.get("heap_size", None)
             self.download_count = kwargs.get("download_count", None)
             self.updated_at = wrap_throwable(
-                lambda: datetime.strptime(
-                    kwargs["updated_at"],
-                    AdoptAPI.datetime_format),
-                KeyError)()
+                lambda: datetime.strptime(kwargs["updated_at"], AdoptAPI.datetime_format), KeyError
+            )()
             self.timestamp = wrap_throwable(
-                lambda: datetime.strptime(
-                    kwargs["timestamp"],
-                    AdoptAPI.datetime_format),
-                KeyError)()
+                lambda: datetime.strptime(kwargs["timestamp"], AdoptAPI.datetime_format), KeyError
+            )()
             self.release_name = kwargs.get("release_name", None)
             self.release_link = kwargs.get("release_link", None)
 
         def display(self):
-            return "{openjdk_impl}-{version_data.semver}-{architecture}-{binary_type}".format(**self.__dict__)
+            return "{openjdk_impl}-{version_data.semver}-{architecture}-{binary_type}".format(
+                **self.__dict__
+            )
 
 
 def wrap_throwable(func, *exc):
