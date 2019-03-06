@@ -4,20 +4,32 @@ from datetime import datetime
 import requests
 import json
 
-api_base_url = "https://api.adoptopenjdk.net/v2"
-datetime_format = r"%Y-%m-%dT%H:%M:%SZ"
+
+API_BASE_URL = "https://api.adoptopenjdk.net/v2"
+STRFTIME_FORMAT = r"%Y-%m-%dT%H:%M:%SZ"
 
 
 def search_releases(version, nightly=False, **kwargs):
-    api_url = "{api_base_url}/info/{release_type}/{openjdk_version}".format(
-        api_base_url=api_base_url,
+    request_url = "{api_base_url}/info/{release_type}/{openjdk_version}".format(
+        api_base_url=API_BASE_URL,
         release_type="nightly" if nightly else "releases",
         openjdk_version=version,
     )
-    release_data_list = requests.get(api_url, params=kwargs).json()
+    release_data_list = requests.get(request_url, params=kwargs).json()
 
     for release_data in release_data_list:
         yield Release(**release_data)
+
+
+def fetch_binary(version, nightly=False, **kwargs):
+    request_url = "{api_base_url}/binary/{release_type}/{openjdk_version}".format(
+        api_base_url=API_BASE_URL,
+        release_type="nightly" if nightly else "releases",
+        openjdk_version=version,
+    )
+    binary_data = requests.get(request_url, params=kwargs).json()
+
+    return ReleaseAsset(binary_data)
 
 
 class Release:
@@ -25,7 +37,7 @@ class Release:
         self.release_name = kwargs.get("release_name", None)
         self.release_link = kwargs.get("release_link", None)
         self.timestamp = wrap_throwable(
-            lambda: datetime.strptime(kwargs["timestamp"], datetime_format), KeyError
+            lambda: datetime.strptime(kwargs["timestamp"], STRFTIME_FORMAT), KeyError
         )()
         self.release = kwargs.get("release", None)
         self.binaries = [ReleaseAsset(**data) for data in kwargs.get("binaries", list())]
@@ -35,7 +47,7 @@ class Release:
         data = self.__dict__
         data.update(
             {
-                "timestamp": self.timestamp.strftime(datetime_format),
+                "timestamp": self.timestamp.strftime(STRFTIME_FORMAT),
                 "binaries": [binary.json() for binary in self.binaries],
             }
         )
@@ -67,10 +79,10 @@ class ReleaseAsset:
         self.heap_size = kwargs.get("heap_size", None)
         self.download_count = kwargs.get("download_count", None)
         self.updated_at = wrap_throwable(
-            lambda: datetime.strptime(kwargs["updated_at"], datetime_format), KeyError
+            lambda: datetime.strptime(kwargs["updated_at"], STRFTIME_FORMAT), KeyError
         )()
         self.timestamp = wrap_throwable(
-            lambda: datetime.strptime(kwargs["timestamp"], datetime_format), KeyError
+            lambda: datetime.strptime(kwargs["timestamp"], STRFTIME_FORMAT), KeyError
         )()
         self.release_name = kwargs.get("release_name", None)
         self.release_link = kwargs.get("release_link", None)
@@ -89,8 +101,8 @@ class ReleaseAsset:
                     "semver": self.version_data.semver,
                     "optional": self.version_data.optional,
                 },
-                "updated_at": self.updated_at.strftime(datetime_format),
-                "timestamp": self.updated_at.strftime(datetime_format),
+                "updated_at": self.updated_at.strftime(STRFTIME_FORMAT),
+                "timestamp": self.updated_at.strftime(STRFTIME_FORMAT),
             }
         )
 
