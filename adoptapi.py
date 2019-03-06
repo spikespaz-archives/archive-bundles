@@ -9,7 +9,7 @@ API_BASE_URL = "https://api.adoptopenjdk.net/v2"
 STRFTIME_FORMAT = r"%Y-%m-%dT%H:%M:%SZ"
 
 
-def search_releases(version, nightly=False, **kwargs):
+def info(version, nightly=False, **kwargs):
     request_url = "{api_base_url}/info/{release_type}/{openjdk_version}".format(
         api_base_url=API_BASE_URL,
         release_type="nightly" if nightly else "releases",
@@ -21,7 +21,7 @@ def search_releases(version, nightly=False, **kwargs):
         yield Release(**release_data)
 
 
-def fetch_binary(version, nightly=False, **kwargs):
+def binary(version, nightly=False, **kwargs):
     request_url = "{api_base_url}/binary/{release_type}/{openjdk_version}".format(
         api_base_url=API_BASE_URL,
         release_type="nightly" if nightly else "releases",
@@ -32,7 +32,7 @@ def fetch_binary(version, nightly=False, **kwargs):
     return ReleaseAsset(**binary_data)
 
 
-def fetch_latest_binaries(version, nightly=False, **kwargs):
+def latest_assets(version, nightly=False, **kwargs):
     request_url = "{api_base_url}/latestAssets/{release_type}/{openjdk_version}".format(
         api_base_url=API_BASE_URL,
         release_type="nightly" if nightly else "releases",
