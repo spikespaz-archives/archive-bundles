@@ -9,36 +9,32 @@ API_BASE_URL = "https://api.adoptopenjdk.net/v2"
 STRFTIME_FORMAT = r"%Y-%m-%dT%H:%M:%SZ"
 
 
-def info(version, nightly=False, **kwargs):
-    request_url = "{api_base_url}/info/{release_type}/{openjdk_version}".format(
+def _request(endpoint, version, nightly, **kwargs):
+    request_url = "{api_base_url}/{api_endpoint}/{release_type}/{openjdk_version}".format(
         api_base_url=API_BASE_URL,
+        api_endpoint=endpoint,
         release_type="nightly" if nightly else "releases",
         openjdk_version=version,
     )
-    release_data_list = requests.get(request_url, params=kwargs).json()
+
+    return requests.get(request_url, params=kwargs).json()
+
+
+def info(version, nightly=False, **kwargs):
+    release_data_list = _request("info", version, nightly, **kwargs)
 
     for release_data in release_data_list:
         yield Release(**release_data)
 
 
 def binary(version, nightly=False, **kwargs):
-    request_url = "{api_base_url}/binary/{release_type}/{openjdk_version}".format(
-        api_base_url=API_BASE_URL,
-        release_type="nightly" if nightly else "releases",
-        openjdk_version=version,
-    )
-    binary_data = requests.get(request_url, params=kwargs).json()
+    binary_data = _request("binary", version, nightly, **kwargs)
 
     return ReleaseAsset(**binary_data)
 
 
 def latest_assets(version, nightly=False, **kwargs):
-    request_url = "{api_base_url}/latestAssets/{release_type}/{openjdk_version}".format(
-        api_base_url=API_BASE_URL,
-        release_type="nightly" if nightly else "releases",
-        openjdk_version=version,
-    )
-    asset_data_list = requests.get(request_url, params=kwargs).json()
+    asset_data_list = _request("latestAssets", version, nightly, **kwargs)
 
     for asset_data in asset_data_list:
         yield ReleaseAsset(**asset_data)
