@@ -8,13 +8,25 @@ import json
 
 class AdoptAPI:
     api_base_url = "https://api.adoptopenjdk.net/v2"
+    datetime_format = r"%Y-%m-%dT%H:%M:%SZ"
 
-    class Asset:
+    class Release:
+        def __init__(self, **kwargs):
+            self.release_name = kwargs.get("release_name", None)
+            self.release_link = kwargs.get("release_link", None)
+            self.timestamp = wrap_throwable(
+                lambda: datetime.strptime(
+                    kwargs["timestamp"],
+                    AdoptAPI.datetime_format),
+                KeyError)()
+            self.release = kwargs.get("release", None)
+            self.binaries = [AdoptAPI.ReleaseAsset(**data) for data in kwargs.get("binaries", list())]
+            self.download_count = kwargs.get("download_count", None)
+
+    class ReleaseAsset:
         VersionData = namedtuple("VersionData", "openjdk_version semver optional")
 
         def __init__(self, **kwargs):
-            datetime_format = r"%Y-%m-%dT%H:%M:%SZ"
-
             self.os = kwargs.get("os", None)
             self.architecture = kwargs.get("architecture", None)
             self.binary_type = kwargs.get("binary_type", None)
@@ -24,7 +36,7 @@ class AdoptAPI:
             self.binary_size = kwargs.get("binary_size", None)
             self.checksum_link = kwargs.get("checksum_link", None)
             self.version = kwargs.get("version", None)
-            self.version_data = AdoptAPI.Asset.VersionData(
+            self.version_data = AdoptAPI.ReleaseAsset.VersionData(
                 openjdk_version=kwargs.get("version_data", dict()).get("openjdk_version", None),
                 semver=kwargs.get("version_data", dict()).get("semver", None),
                 optional=kwargs.get("version_data", dict()).get("optional", None),
@@ -34,12 +46,12 @@ class AdoptAPI:
             self.updated_at = wrap_throwable(
                 lambda: datetime.strptime(
                     kwargs["updated_at"],
-                    datetime_format),
+                    AdoptAPI.datetime_format),
                 KeyError)()
             self.timestamp = wrap_throwable(
                 lambda: datetime.strptime(
                     kwargs["timestamp"],
-                    datetime_format),
+                    AdoptAPI.datetime_format),
                 KeyError)()
             self.release_name = kwargs.get("release_name", None)
             self.release_link = kwargs.get("release_link", None)
