@@ -56,7 +56,7 @@ class Release:
         data.update(
             {
                 "timestamp": self.timestamp.strftime(STRFTIME_FORMAT),
-                "binaries": [binary.json() for binary in self.binaries],
+                "binaries": [binary.serialize() for binary in self.binaries],
             }
         )
 
