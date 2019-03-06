@@ -29,7 +29,19 @@ def fetch_binary(version, nightly=False, **kwargs):
     )
     binary_data = requests.get(request_url, params=kwargs).json()
 
-    return ReleaseAsset(binary_data)
+    return ReleaseAsset(**binary_data)
+
+
+def fetch_latest_binaries(version, nightly=False, **kwargs):
+    request_url = "{api_base_url}/latestAssets/{release_type}/{openjdk_version}".format(
+        api_base_url=API_BASE_URL,
+        release_type="nightly" if nightly else "releases",
+        openjdk_version=version,
+    )
+    asset_data_list = requests.get(request_url, params=kwargs).json()
+
+    for asset_data in asset_data_list:
+        yield ReleaseAsset(**asset_data)
 
 
 class Release:
