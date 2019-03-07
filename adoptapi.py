@@ -9,6 +9,16 @@ API_BASE_URL = "https://api.adoptopenjdk.net/v2"
 STRFTIME_FORMAT = r"%Y-%m-%dT%H:%M:%SZ"
 
 
+def _wrap_throwable(func, *exc):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except exc:
+            return None
+
+    return wrapper
+
+
 def _request(endpoint, version, nightly, **kwargs):
     request_url = "{api_base_url}/{api_endpoint}/{release_type}/{openjdk_version}".format(
         api_base_url=API_BASE_URL,
@@ -52,7 +62,7 @@ class Release:
     def __init__(self, **kwargs):
         self.release_name = kwargs.get("release_name", None)
         self.release_link = kwargs.get("release_link", None)
-        self.timestamp = wrap_throwable(
+        self.timestamp = _wrap_throwable(
             lambda: datetime.strptime(kwargs["timestamp"], STRFTIME_FORMAT), KeyError
         )()
         self.release = kwargs.get("release", None)
@@ -94,10 +104,10 @@ class ReleaseAsset:
         )
         self.heap_size = kwargs.get("heap_size", None)
         self.download_count = kwargs.get("download_count", None)
-        self.updated_at = wrap_throwable(
+        self.updated_at = _wrap_throwable(
             lambda: datetime.strptime(kwargs["updated_at"], STRFTIME_FORMAT), KeyError
         )()
-        self.timestamp = wrap_throwable(
+        self.timestamp = _wrap_throwable(
             lambda: datetime.strptime(kwargs["timestamp"], STRFTIME_FORMAT), KeyError
         )()
         self.release_name = kwargs.get("release_name", None)
@@ -126,13 +136,3 @@ class ReleaseAsset:
 
     def json(self):
         return json.dumps(self.serialize())
-
-
-def wrap_throwable(func, *exc):
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except exc:
-            return None
-
-    return wrapper
