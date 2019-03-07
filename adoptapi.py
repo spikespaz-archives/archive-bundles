@@ -21,9 +21,13 @@ def _request(endpoint, version, nightly, **kwargs):
 
 
 def info(version, nightly=False, **kwargs):
-    release_data_list = _request("info", version, nightly, **kwargs)
+    response_data = _request("info", version, nightly, **kwargs)
 
-    for release_data in release_data_list:
+    if kwargs.get("release") == "latest":
+        yield Release(**response_data)
+        raise StopIteration
+
+    for release_data in response_data:
         yield Release(**release_data)
 
 
@@ -34,9 +38,13 @@ def binary(version, nightly=False, **kwargs):
 
 
 def latest_assets(version, nightly=False, **kwargs):
-    asset_data_list = _request("latestAssets", version, nightly, **kwargs)
+    response_data = _request("latestAssets", version, nightly, **kwargs)
 
-    for asset_data in asset_data_list:
+    if kwargs.get("release") == "latest":
+        yield ReleaseAsset(**response_data)
+        raise StopIteration
+
+    for asset_data in response_data:
         yield ReleaseAsset(**asset_data)
 
 
