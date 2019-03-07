@@ -107,11 +107,6 @@ class ReleaseAsset:
         self.updated_at = _wrap_throwable(
             lambda: datetime.strptime(kwargs["updated_at"], STRFTIME_FORMAT), KeyError
         )()
-        self.timestamp = _wrap_throwable(
-            lambda: datetime.strptime(kwargs["timestamp"], STRFTIME_FORMAT), KeyError
-        )()
-        self.release_name = kwargs.get("release_name", None)
-        self.release_link = kwargs.get("release_link", None)
 
     def display(self):
         return "{openjdk_impl}-{version_data.semver}-{architecture}-{binary_type}".format(
@@ -128,7 +123,6 @@ class ReleaseAsset:
                     "optional": self.version_data.optional,
                 },
                 "updated_at": self.updated_at.strftime(STRFTIME_FORMAT),
-                "timestamp": self.updated_at.strftime(STRFTIME_FORMAT),
             }
         )
 
