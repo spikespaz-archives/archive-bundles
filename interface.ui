@@ -123,39 +123,33 @@
               </layout>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_2">
+              <widget class="QLabel" name="label_5">
                <property name="text">
-                <string>Virtual Machine:</string>
+                <string>Release Type:</string>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout">
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
                <item>
-                <widget class="QRadioButton" name="hotspotVmRadioButton">
+                <widget class="QCheckBox" name="stableReleaseTypeCheckBox">
                  <property name="text">
-                  <string>HotSpot</string>
-                 </property>
-                 <attribute name="buttonGroup">
-                  <string notr="true">vmButtonGroup</string>
-                 </attribute>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="openj9VmRadioButton">
-                 <property name="text">
-                  <string>OpenJ9</string>
+                  <string>Stable</string>
                  </property>
                  <property name="checked">
                   <bool>true</bool>
                  </property>
-                 <attribute name="buttonGroup">
-                  <string notr="true">vmButtonGroup</string>
-                 </attribute>
                 </widget>
                </item>
                <item>
-                <spacer name="horizontalSpacer">
+                <widget class="QCheckBox" name="nightlyReleaseTypeCheckBox">
+                 <property name="text">
+                  <string>Nightly</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_5">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
@@ -169,40 +163,30 @@
                </item>
               </layout>
              </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QFormLayout" name="formLayout_2">
-             <item row="0" column="0">
+             <item row="2" column="0">
               <widget class="QLabel" name="label_3">
                <property name="text">
                 <string>Binary Type:</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
+             <item row="2" column="1">
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QRadioButton" name="jreBinRadioButton">
-                 <property name="text">
-                  <string>JRE</string>
-                 </property>
-                 <attribute name="buttonGroup">
-                  <string notr="true">binTypeButtonGroup</string>
-                 </attribute>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="jdkBinRadioButton">
+                <widget class="QCheckBox" name="jdkBinCheckBox">
                  <property name="text">
                   <string>JDK</string>
                  </property>
                  <property name="checked">
                   <bool>true</bool>
                  </property>
-                 <attribute name="buttonGroup">
-                  <string notr="true">binTypeButtonGroup</string>
-                 </attribute>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="jreBinCheckBox">
+                 <property name="text">
+                  <string>JRE</string>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -220,40 +204,123 @@
                </item>
               </layout>
              </item>
-             <item row="1" column="0">
+            </layout>
+           </item>
+           <item>
+            <layout class="QFormLayout" name="formLayout_2">
+             <item row="2" column="0">
               <widget class="QLabel" name="label_4">
                <property name="text">
                 <string>Heap Size:</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
+             <item row="2" column="1">
               <layout class="QHBoxLayout" name="horizontalLayout_4">
                <item>
-                <widget class="QRadioButton" name="normalHeapSizeRadioButton">
+                <widget class="QCheckBox" name="normalHeapSizeCheckBox">
                  <property name="text">
                   <string>Normal</string>
                  </property>
                  <property name="checked">
                   <bool>true</bool>
                  </property>
-                 <attribute name="buttonGroup">
-                  <string notr="true">heapSizeButtonGroup</string>
-                 </attribute>
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="largeHeapSizeRadioButton">
+                <widget class="QCheckBox" name="largeHeapSizeCheckBox">
                  <property name="text">
                   <string>Large</string>
                  </property>
-                 <attribute name="buttonGroup">
-                  <string notr="true">heapSizeButtonGroup</string>
-                 </attribute>
                 </widget>
                </item>
                <item>
                 <spacer name="horizontalSpacer_4">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Architecture:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <item>
+                <widget class="QCheckBox" name="x64ArchCheckBox">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>x64</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="x32ArchCheckBox">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>x32</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_6">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>Virtual Machine:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <widget class="QCheckBox" name="hotspotVmCheckBox">
+                 <property name="text">
+                  <string>HotSpot</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="openj9VmCheckBox">
+                 <property name="text">
+                  <string>OpenJ9</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
@@ -282,9 +349,4 @@
  </widget>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="vmButtonGroup"/>
-  <buttongroup name="binTypeButtonGroup"/>
-  <buttongroup name="heapSizeButtonGroup"/>
- </buttongroups>
 </ui>
