@@ -1,7 +1,9 @@
 import sys
 import adoptapi
 import itertools
+import platform
 
+from collections import namedtuple
 from PyQt5 import QtWidgets, QtCore
 from interface import Ui_MainWindow
 
@@ -32,6 +34,23 @@ class CheckBoxButtonGroup(QtWidgets.QButtonGroup):
 
 
 class AppMainWindow(Ui_MainWindow):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.param_os = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
+        self.param_arch = (
+            lambda x: {
+                "amd64": "x64",
+                "x86_64": "x64",
+                "aarch64_be": "aarch64",
+                "armv8b": "aarch64",
+                "armv8l": "aarch64",
+                "i386": "x32",
+                "i686": "x32",
+                "s390": "s390x",
+            }.get(x, x)
+        )(platform.machine().lower())
+
     def setupUi(self, window, *args, **kwargs):
         super().setupUi(window, *args, **kwargs)
 
@@ -67,29 +86,17 @@ class AppMainWindow(Ui_MainWindow):
         self.archButtonGroup.addButton(self.x64ArchCheckBox)
         self.archButtonGroup.addButton(self.x32ArchCheckBox)
 
-    def fill_available_binaries_table(self):
-        versions = {
-            "openjdk8": self.javaVer8CheckBox.isChecked(),
-            "openjdk9": self.javaVer9CheckBox.isChecked(),
-            "openjdk10": self.javaVer10CheckBox.isChecked(),
-            "openjdk11": self.javaVer11CheckBox.isChecked(),
-        }
+        if self.param_arch == "x32":
+            self.archLabel.setEnabled(True)
 
-        filter_options = {
-            "openjdk_impl": "hotspot" if self.hotspotVmRadioButton.isChecked() else "openj9",
-            "binary_type": "jre" if self.jreBinRadioButton.isChecked() else "jdk",
-            "heap_size": "normal" if self.normalHeapSizeRadioButton.isChecked() else "large",
-        }
+            self.x32ArchCheckBox.setChecked(True)
+            self.x32ArchCheckBox.setEnabled(False)
+        elif self.param_arch == "x64":
+            self.archLabel.setEnabled(True)
 
-        for version, checked in versions:
-            if not checked:
-                continue
-
-            for release in itertools.chain(
-                adoptapi.info(version, nightly=False, **filter_options),
-                adoptapi.info(version, nightly=True, **filter_options),
-            ):
-                pass
+            self.x64ArchCheckBox.setChecked(True)
+            self.x64ArchCheckBox.setEnabled(False)
+            self.x32ArchCheckBox.setEnabled(True)
 
 
 if __name__ == "__main__":
