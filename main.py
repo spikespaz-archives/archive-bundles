@@ -8,23 +8,27 @@ from PyQt5 import QtWidgets, QtCore
 from interface import Ui_MainWindow
 
 
-def permutate_dict(data):
-    keys, values = zip(*data.items())
-    return [dict(zip(keys, v)) for v in itertools.product(*values)]
+def product_dicts(**kwargs):
+    keys = kwargs.keys()
+    values = kwargs.values()
+
+    for instance in itertools.product(*values):
+        yield dict(zip(keys, instance))
 
 
 class InfoRequestParams:
-    def __init__(self, default=None, **kwargs):
-        self._version = kwargs.get("_version", default)
-        self._nightly = kwargs.get("_nightly", default)
-        self.openjdk_impl = kwargs.get("openjdk_impl", default)
-        self.os = kwargs.get("os", default)
-        self.arch = kwargs.get("arch", default)
-        self.type = kwargs.get("type", default)
-        self.heap_size = kwargs.get("heap_size", default)
+    def __init__(self, many=False, **kwargs):
+        self._version = kwargs.get("_version", [] if many else None)
+        self._nightly = kwargs.get("_nightly", [] if many else None)
+        self.openjdk_impl = kwargs.get("openjdk_impl", [] if many else None)
+        self.os = kwargs.get("os", [] if many else None)
+        self.arch = kwargs.get("arch", [] if many else None)
+        self.type = kwargs.get("type", [] if many else None)
+        self.heap_size = kwargs.get("heap_size", [] if many else None)
 
-    def permutations(self):
-        return [InfoRequestParams(**data) for data in permutate_dict(self.__dict__)]
+    def products(self):
+        for product in product_dicts(**self.__dict__):
+            yield InfoRequestParams(**product)
 
     def dictionary(self):
         data = self.__dict__
@@ -126,7 +130,7 @@ class AppMainWindow(Ui_MainWindow):
             self.x32ArchCheckBox.setEnabled(True)
 
     def filter_options(self):
-        params = InfoRequestParams([], os=self.param_os)
+        params = InfoRequestParams(many=True, os=self.param_os)
 
         if self.javaVer8CheckBox.isChecked():
             params._version.append("openjdk8")
