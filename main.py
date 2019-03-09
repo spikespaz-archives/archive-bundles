@@ -125,6 +125,56 @@ class AppMainWindow(Ui_MainWindow):
             self.x64ArchCheckBox.setEnabled(False)
             self.x32ArchCheckBox.setEnabled(True)
 
+    def filter_options(self):
+        params = InfoRequestParams([], os=self.param_os)
+
+        if self.javaVer8CheckBox.isChecked():
+            params._version.append("openjdk8")
+
+        if self.javaVer9CheckBox.isChecked():
+            params._version.append("openjdk9")
+
+        if self.javaVer10CheckBox.isChecked():
+            params._version.append("openjdk10")
+
+        if self.javaVer11CheckBox.isChecked():
+            params._version.append("openjdk11")
+
+        if self.stableReleaseTypeCheckBox.isChecked():
+            params._nightly.append(False)
+
+        if self.nightlyReleaseTypeCheckBox.isChecked():
+            params._nightly.append(True)
+
+        if self.hotspotVmCheckBox.isChecked():
+            params.openjdk_impl.append("hotspot")
+
+        if self.openj9VmCheckBox.isChecked():
+            params.openjdk_impl.append("openj9")
+
+        if self.param_arch == "x64":
+            if self.x32ArchCheckBox.isChecked():
+                params.arch.append("x32")
+
+            if self.x64ArchCheckBox.isChecked():
+                params.arch.append("x64")
+        else:
+            params.arch.append(self.param_arch)
+
+        if self.jdkBinCheckBox.isChecked():
+            params.type.append("jdk")
+
+        if self.jreBinCheckBox.isChecked():
+            params.type.append("jre")
+
+        if self.normalHeapSizeCheckBox.isChecked():
+            params.heap_size.append("normal")
+
+        if self.largeHeapSizeCheckBox.isChecked():
+            params.heap_size.append("large")
+
+        return params
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
