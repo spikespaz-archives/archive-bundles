@@ -8,6 +8,33 @@ from PyQt5 import QtWidgets, QtCore
 from interface import Ui_MainWindow
 
 
+def permutate_dict(data):
+    keys, values = zip(*data.items())
+    return [dict(zip(keys, v)) for v in itertools.product(*values)]
+
+
+class InfoRequestParams:
+    def __init__(self, default=None, **kwargs):
+        self._version = kwargs.get("_version", default)
+        self._nightly = kwargs.get("_nightly", default)
+        self.openjdk_impl = kwargs.get("openjdk_impl", default)
+        self.os = kwargs.get("os", default)
+        self.arch = kwargs.get("arch", default)
+        self.type = kwargs.get("type", default)
+        self.heap_size = kwargs.get("heap_size", default)
+
+    def permutations(self):
+        return [InfoRequestParams(**data) for data in permutate_dict(self.__dict__)]
+
+    def dictionary(self):
+        data = self.__dict__
+
+        del data["_version"]
+        del data["_nightly"]
+
+        return data
+
+
 class CheckBoxButtonGroup(QtWidgets.QButtonGroup):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
