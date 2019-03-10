@@ -5,6 +5,7 @@ import platform
 from PyQt5 import QtWidgets
 from adoptapi import RequestOptions
 from interface import Ui_MainWindow
+from special import CheckBoxButtonGroup
 
 PLATFORM_OS = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
 PLATFORM_ARCH = (
@@ -19,31 +20,6 @@ PLATFORM_ARCH = (
         "s390": "s390x",
     }.get(x, x)
 )(platform.machine().lower())
-
-
-class CheckBoxButtonGroup(QtWidgets.QButtonGroup):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.setExclusive(False)
-        self.buttonToggled.connect(self.__protect_remaining)
-
-    def addButton(self, button, *args, **kwargs):
-        super().addButton(button, *args, **kwargs)
-
-        self.__protect_remaining(button, button.isChecked())
-
-    def __protect_remaining(self, button, checked):
-        checked_buttons = self.checked_buttons()
-
-        if checked:
-            for button in checked_buttons:
-                button.setEnabled(True)
-        elif len(checked_buttons) == 1:
-            checked_buttons[0].setEnabled(False)
-
-    def checked_buttons(self):
-        return [button for button in self.buttons() if button.isChecked()]
 
 
 class AppMainWindow(Ui_MainWindow):
@@ -121,7 +97,7 @@ class AppMainWindow(Ui_MainWindow):
         if self.openj9VmCheckBox.isChecked():
             options.openjdk_impl.append("openj9")
 
-        if self.param_arch == "x64":
+        if PLATFORM_ARCH == "x64":
             if self.x32ArchCheckBox.isChecked():
                 options.arch.append("x32")
 
