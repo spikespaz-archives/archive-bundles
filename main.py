@@ -1,42 +1,24 @@
 import sys
 import adoptapi
-import itertools
 import platform
 
-from collections import namedtuple
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets
+from adoptapi import RequestOptions
 from interface import Ui_MainWindow
 
-
-def product_dicts(**kwargs):
-    keys = kwargs.keys()
-    values = kwargs.values()
-
-    for instance in itertools.product(*values):
-        yield dict(zip(keys, instance))
-
-
-class InfoRequestParams:
-    def __init__(self, many=False, **kwargs):
-        self._version = kwargs.get("_version", [] if many else None)
-        self._nightly = kwargs.get("_nightly", [] if many else None)
-        self.openjdk_impl = kwargs.get("openjdk_impl", [] if many else None)
-        self.os = kwargs.get("os", [] if many else None)
-        self.arch = kwargs.get("arch", [] if many else None)
-        self.type = kwargs.get("type", [] if many else None)
-        self.heap_size = kwargs.get("heap_size", [] if many else None)
-
-    def products(self):
-        for product in product_dicts(**self.__dict__):
-            yield InfoRequestParams(**product)
-
-    def dictionary(self):
-        data = self.__dict__
-
-        del data["_version"]
-        del data["_nightly"]
-
-        return data
+PLATFORM_OS = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
+PLATFORM_ARCH = (
+    lambda x: {
+        "amd64": "x64",
+        "x86_64": "x64",
+        "aarch64_be": "aarch64",
+        "armv8b": "aarch64",
+        "armv8l": "aarch64",
+        "i386": "x32",
+        "i686": "x32",
+        "s390": "s390x",
+    }.get(x, x)
+)(platform.machine().lower())
 
 
 class CheckBoxButtonGroup(QtWidgets.QButtonGroup):
@@ -65,23 +47,6 @@ class CheckBoxButtonGroup(QtWidgets.QButtonGroup):
 
 
 class AppMainWindow(Ui_MainWindow):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.param_os = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
-        self.param_arch = (
-            lambda x: {
-                "amd64": "x64",
-                "x86_64": "x64",
-                "aarch64_be": "aarch64",
-                "armv8b": "aarch64",
-                "armv8l": "aarch64",
-                "i386": "x32",
-                "i686": "x32",
-                "s390": "s390x",
-            }.get(x, x)
-        )(platform.machine().lower())
-
     def setupUi(self, window, *args, **kwargs):
         super().setupUi(window, *args, **kwargs)
 
@@ -117,12 +82,12 @@ class AppMainWindow(Ui_MainWindow):
         self.archButtonGroup.addButton(self.x64ArchCheckBox)
         self.archButtonGroup.addButton(self.x32ArchCheckBox)
 
-        if self.param_arch == "x32":
+        if PLATFORM_ARCH == "x32":
             self.archLabel.setEnabled(True)
 
             self.x32ArchCheckBox.setChecked(True)
             self.x32ArchCheckBox.setEnabled(False)
-        elif self.param_arch == "x64":
+        elif PLATFORM_ARCH == "x64":
             self.archLabel.setEnabled(True)
 
             self.x64ArchCheckBox.setChecked(True)
@@ -130,54 +95,54 @@ class AppMainWindow(Ui_MainWindow):
             self.x32ArchCheckBox.setEnabled(True)
 
     def filter_options(self):
-        params = InfoRequestParams(many=True, os=self.param_os)
+        options = RequestOptions(many=True, os=PLATFORM_OS)
 
         if self.javaVer8CheckBox.isChecked():
-            params._version.append("openjdk8")
+            options._version.append("openjdk8")
 
         if self.javaVer9CheckBox.isChecked():
-            params._version.append("openjdk9")
+            options._version.append("openjdk9")
 
         if self.javaVer10CheckBox.isChecked():
-            params._version.append("openjdk10")
+            options._version.append("openjdk10")
 
         if self.javaVer11CheckBox.isChecked():
-            params._version.append("openjdk11")
+            options._version.append("openjdk11")
 
         if self.stableReleaseTypeCheckBox.isChecked():
-            params._nightly.append(False)
+            options._nightly.append(False)
 
         if self.nightlyReleaseTypeCheckBox.isChecked():
-            params._nightly.append(True)
+            options._nightly.append(True)
 
         if self.hotspotVmCheckBox.isChecked():
-            params.openjdk_impl.append("hotspot")
+            options.openjdk_impl.append("hotspot")
 
         if self.openj9VmCheckBox.isChecked():
-            params.openjdk_impl.append("openj9")
+            options.openjdk_impl.append("openj9")
 
         if self.param_arch == "x64":
             if self.x32ArchCheckBox.isChecked():
-                params.arch.append("x32")
+                options.arch.append("x32")
 
             if self.x64ArchCheckBox.isChecked():
-                params.arch.append("x64")
+                options.arch.append("x64")
         else:
-            params.arch.append(self.param_arch)
+            options.arch.append(PLATFORM_ARCH)
 
         if self.jdkBinCheckBox.isChecked():
-            params.type.append("jdk")
+            options.type.append("jdk")
 
         if self.jreBinCheckBox.isChecked():
-            params.type.append("jre")
+            options.type.append("jre")
 
         if self.normalHeapSizeCheckBox.isChecked():
-            params.heap_size.append("normal")
+            options.heap_size.append("normal")
 
         if self.largeHeapSizeCheckBox.isChecked():
-            params.heap_size.append("large")
+            options.heap_size.append("large")
 
-        return params
+        return options
 
 
 if __name__ == "__main__":

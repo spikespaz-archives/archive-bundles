@@ -2,21 +2,11 @@ from collections import namedtuple
 from datetime import datetime
 
 import requests
+import utils
 import json
-
 
 API_BASE_URL = "https://api.adoptopenjdk.net/v2"
 STRFTIME_FORMAT = r"%Y-%m-%dT%H:%M:%SZ"
-
-
-def _wrap_throwable(func, *exc):
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except exc:
-            return None
-
-    return wrapper
 
 
 def _request(endpoint, version, nightly, **kwargs):
@@ -62,7 +52,7 @@ class Release:
     def __init__(self, **kwargs):
         self.release_name = kwargs.get("release_name", None)
         self.release_link = kwargs.get("release_link", None)
-        self.timestamp = _wrap_throwable(
+        self.timestamp = utils.wrap_throwable(
             lambda: datetime.strptime(kwargs["timestamp"], STRFTIME_FORMAT), KeyError
         )()
         self.release = kwargs.get("release", None)
@@ -104,7 +94,7 @@ class ReleaseAsset:
         )
         self.heap_size = kwargs.get("heap_size", None)
         self.download_count = kwargs.get("download_count", None)
-        self.updated_at = _wrap_throwable(
+        self.updated_at = utils.wrap_throwable(
             lambda: datetime.strptime(kwargs["updated_at"], STRFTIME_FORMAT), KeyError
         )()
 
@@ -130,3 +120,26 @@ class ReleaseAsset:
 
     def json(self):
         return json.dumps(self.serialize())
+
+
+class RequestOptions:
+    def __init__(self, many=False, **kwargs):
+        self._version = kwargs.get("_version", [] if many else None)
+        self._nightly = kwargs.get("_nightly", [] if many else None)
+        self.openjdk_impl = kwargs.get("openjdk_impl", [] if many else None)
+        self.os = kwargs.get("os", [] if many else None)
+        self.arch = kwargs.get("arch", [] if many else None)
+        self.type = kwargs.get("type", [] if many else None)
+        self.heap_size = kwargs.get("heap_size", [] if many else None)
+
+    def products(self):
+        for product in utils.product_dicts(**self.__dict__):
+            yield RequestOptions(**product)
+
+    def params(self):
+        data = self.__dict__
+
+        del data["_version"]
+        del data["_nightly"]
+
+        return data
