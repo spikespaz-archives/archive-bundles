@@ -135,10 +135,6 @@ class RequestOptions:
     def products(self):
         data = self.__dict__
 
-        for value in data.values():
-            if not isinstance(value, (tuple, list, set)):
-                raise ValueError("Cannot create cartesian products from singleton values")
-
         for product in utils.product_dicts(**data):
             yield RequestOptions(**product)
 
