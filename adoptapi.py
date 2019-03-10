@@ -133,11 +133,21 @@ class RequestOptions:
         self.heap_size = kwargs.get("heap_size", [] if many else None)
 
     def products(self):
-        for product in utils.product_dicts(**self.__dict__):
+        data = self.__dict__
+
+        for value in data.values():
+            if not isinstance(value, (tuple, list, set)):
+                raise ValueError("Cannot create cartesian products from singleton values")
+
+        for product in utils.product_dicts(**data):
             yield RequestOptions(**product)
 
     def params(self):
         data = self.__dict__
+
+        for value in data.values():
+            if isinstance(value, (tuple, list, set)):
+                raise ValueError("Cannot get query parameters from a polymorphic instance")
 
         del data["_version"]
         del data["_nightly"]
