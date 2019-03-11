@@ -26,37 +26,10 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QTableWidget" name="availableBinariesTable">
-          <column>
-           <property name="text">
-            <string>Release Name</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>OpenJDK Version</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Virtual Machine</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Architecture</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Binary Type</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Binary Size</string>
-           </property>
-          </column>
+         <widget class="QTableView" name="availableBinariesTableView">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
          </widget>
         </item>
         <item>
