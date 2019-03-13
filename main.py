@@ -1,11 +1,12 @@
 import sys
-import adoptapi
 import platform
 
-from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from adoptapi import RequestOptions
+from utils import BackgroundThread
 from interface import Ui_MainWindow
-from special import CheckBoxButtonGroup
+from special import CheckBoxButtonGroup, AvailableBinariesTableModel
+
 
 PLATFORM_OS = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
 PLATFORM_ARCH = (
@@ -23,8 +24,13 @@ PLATFORM_ARCH = (
 
 
 class AppMainWindow(Ui_MainWindow):
+    background_threads = []
+
     def setupUi(self, window, *args, **kwargs):
         super().setupUi(window, *args, **kwargs)
+
+        self.availableBinariesTableModel = AvailableBinariesTableModel()
+        self.availableBinariesTableView.setModel(self.availableBinariesTableModel)
 
         self.javaVerButtonGroup = CheckBoxButtonGroup(window)
         self.javaVerButtonGroup.setObjectName("javaVerButtonGroup")
@@ -70,8 +76,27 @@ class AppMainWindow(Ui_MainWindow):
             self.x64ArchCheckBox.setEnabled(False)
             self.x32ArchCheckBox.setEnabled(True)
 
+        for group in [
+            self.javaVerButtonGroup,
+            self.releaseTypeButtonGroup,
+            self.binTypeButtonGroup,
+            self.vmButtonGroup,
+            self.heapSizeButtonGroup,
+            self.archButtonGroup,
+        ]:
+            group.buttonToggled.connect(self.populate_available_binaries_table_model)
+
+    @BackgroundThread(background_threads)
+    def populate_available_binaries_table_model(self, *_, **__):
+        options = self.filter_options()
+
+        self.availableBinariesTableModel.populate_model(options)
+        self.availableBinariesTableModel.layoutChanged.emit()
+        self.availableBinariesTableView.resizeRowsToContents()
+        # Must be moved and registered to a slot
+
     def filter_options(self):
-        options = RequestOptions(many=True, os=PLATFORM_OS)
+        options = RequestOptions(many=True, os=[PLATFORM_OS])
 
         if self.javaVer8CheckBox.isChecked():
             options._version.append("openjdk8")
@@ -122,9 +147,10 @@ class AppMainWindow(Ui_MainWindow):
 
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
-    window = QtWidgets.QMainWindow()
+    app = QApplication([])
+    window = QMainWindow()
     ui = AppMainWindow()
     ui.setupUi(window)
     window.show()
+    ui.populate_available_binaries_table_model()
     sys.exit(app.exec_())

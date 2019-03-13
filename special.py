@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt, QModelIndex, QVariant, QAbstractTableModel
 from PyQt5.QtWidgets import QButtonGroup
-from adoptapi import Release, ReleaseAsset
-from requests import HTTPError
+from adoptapi import Release
+from requests.exceptions import HTTPError
 
 import sys
 import copy
@@ -117,9 +117,13 @@ class AvailableBinariesTableModel(QAbstractTableModel):
 
         for params in params_iter:
             try:
-                response = adoptapi.info(params._version, nightly=params._nightly, **params.params())
+                response = adoptapi.info(
+                    params._version,
+                    nightly=params._nightly,
+                    **params.params()
+                )
             except HTTPError as e:
-                # print(e, file=sys.stderr)
+                print(e, file=sys.stderr)
                 continue
 
             for release in response:
