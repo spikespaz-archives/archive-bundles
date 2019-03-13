@@ -1,8 +1,11 @@
 from PyQt5.QtCore import Qt, QModelIndex, QVariant, QAbstractTableModel
 from PyQt5.QtWidgets import QButtonGroup
 from adoptapi import Release, ReleaseAsset
+from requests import HTTPError
 
+import sys
 import copy
+import adoptapi
 
 
 class CheckBoxButtonGroup(QButtonGroup):
@@ -95,19 +98,39 @@ class AvailableBinariesTableModel(QAbstractTableModel):
 
         return QVariant()
 
-    def insertRows(self, position, rows, parent):
-        self.beginInsertRows(QModelIndex(), position, position + rows - 1)
+    def insertRows(self, row, count, parent=QModelIndex()):
+        self.beginInsertRows(QModelIndex(), row, row + count - 1)
 
-        for row in range(rows):
-            self._internal_data.insert(Release(binaries=[ReleaseAsset()]))
+        for position in range(count):
+            self._internal_data.insert(row + position, Release(binaries=[{}]))
 
         self.endInsertRows()
 
         return True
 
-    def add_release(self, release):
-        for binary in release.binaries:
-            standalone = copy.copy(release)
-            standalone.binaries = [copy.copy(binary)]
+    def populate_model(self, options):
+        self.beginResetModel()
+        self._internal_data = []
+        self.endResetModel()
 
-            self._internal_data.append(standalone)
+        params_iter = options.products()
+
+        for params in params_iter:
+            try:
+                response = adoptapi.info(params._version, nightly=params._nightly, **params.params())
+            except HTTPError as e:
+                # print(e, file=sys.stderr)
+                continue
+
+            for release in response:
+                for binary in release.binaries:
+                    standalone = copy.copy(release)
+                    standalone.binaries = [copy.copy(binary)]
+
+                    self.insertRows(self.rowCount(), len(release.binaries))
+                    self._internal_data[self.rowCount() - 1] = standalone
+
+        self.dataChanged.emit(
+            self.index(0, 0),
+            self.index(self.columnCount() - 1, self.rowCount() - 1)
+        )
