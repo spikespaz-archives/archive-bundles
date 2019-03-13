@@ -17,7 +17,10 @@ def _request(endpoint, version, nightly, **kwargs):
         openjdk_version=version,
     )
 
-    return requests.get(request_url, params=kwargs).json()
+    request = requests.get(request_url, params=kwargs)
+    request.raise_for_status()
+
+    return request.json()
 
 
 def info(version, nightly=False, **kwargs):
