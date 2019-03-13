@@ -2,16 +2,17 @@
 
 # Form implementation generated from reading ui file 'interface.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.12
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(700, 400)
+        MainWindow.resize(800, 450)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -24,7 +25,14 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.availableBinariesTableView = QtWidgets.QTableView(self.availableBinariesTab)
         self.availableBinariesTableView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.availableBinariesTableView.setAlternatingRowColors(True)
+        self.availableBinariesTableView.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.availableBinariesTableView.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.availableBinariesTableView.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.availableBinariesTableView.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.availableBinariesTableView.setObjectName("availableBinariesTableView")
+        self.availableBinariesTableView.horizontalHeader().setStretchLastSection(True)
+        self.availableBinariesTableView.verticalHeader().setVisible(False)
         self.verticalLayout_2.addWidget(self.availableBinariesTableView)
         self.groupBox = QtWidgets.QGroupBox(self.availableBinariesTab)
         self.groupBox.setObjectName("groupBox")
@@ -171,4 +179,5 @@ class Ui_MainWindow(object):
         self.hotspotVmCheckBox.setText(_translate("MainWindow", "HotSpot"))
         self.openj9VmCheckBox.setText(_translate("MainWindow", "OpenJ9"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.availableBinariesTab), _translate("MainWindow", "Available Binaries"))
+
 
