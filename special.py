@@ -1,7 +1,8 @@
-from PyQt5.QtCore import Qt, QModelIndex, QVariant, QAbstractTableModel
+from PyQt5.QtCore import Qt, QModelIndex, QVariant, QAbstractTableModel, QThread
 from PyQt5.QtWidgets import QButtonGroup
+from requests import HTTPError
 from adoptapi import Release
-from requests.exceptions import HTTPError
+from PyQt5 import QtCore
 
 import sys
 import copy
@@ -34,6 +35,37 @@ class CheckBoxButtonGroup(QButtonGroup):
 
 
 class AvailableBinariesTableModel(QAbstractTableModel):
+    class BackgroundThread(QThread):
+        append_release = QtCore.pyqtSignal(Release)
+
+        def __init__(self, options, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+
+            self._options = options
+            self.finished.connect(self.deleteLater)
+
+        def __del__(self):
+            self.wait()
+
+        def run(self):
+            params_iter = self._options.products()
+
+            for params in params_iter:
+                try:
+                    response = adoptapi.info(
+                        params._version, nightly=params._nightly, **params.params()
+                    )
+                except HTTPError as e:
+                    print(e, file=sys.stderr)
+                    continue
+
+                for release in response:
+                    for binary in release.binaries:
+                        standalone = copy.copy(release)
+                        standalone.binaries = [copy.copy(binary)]
+
+                        self.append_release.emit(standalone)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -47,6 +79,7 @@ class AvailableBinariesTableModel(QAbstractTableModel):
             "Architecture",
         ]
         self._internal_data = []
+        self._background_thread = None
 
     def rowCount(self, parent=QModelIndex()):
         return len(self._internal_data)
@@ -108,33 +141,25 @@ class AvailableBinariesTableModel(QAbstractTableModel):
 
         return True
 
+    @QtCore.pyqtSlot(Release)
+    def append_release(self, release):
+        self.insertRows(self.rowCount(), 1)
+        self._internal_data[self.rowCount() - 1] = release
+
+        self.dataChanged.emit(
+            self.index(0, self.rowCount() - 1),
+            self.index(self.columnCount() - 1, self.rowCount() - 1),
+        )
+
     def populate_model(self, options):
+        if self._background_thread:
+            self._background_thread.terminate()
+            self._background_thread.wait()
+
         self.beginResetModel()
         self._internal_data = []
         self.endResetModel()
 
-        params_iter = options.products()
-
-        for params in params_iter:
-            try:
-                response = adoptapi.info(
-                    params._version,
-                    nightly=params._nightly,
-                    **params.params()
-                )
-            except HTTPError as e:
-                print(e, file=sys.stderr)
-                continue
-
-            for release in response:
-                for binary in release.binaries:
-                    standalone = copy.copy(release)
-                    standalone.binaries = [copy.copy(binary)]
-
-                    self.insertRows(self.rowCount(), len(release.binaries))
-                    self._internal_data[self.rowCount() - 1] = standalone
-
-        self.dataChanged.emit(
-            self.index(0, 0),
-            self.index(self.columnCount() - 1, self.rowCount() - 1)
-        )
+        self._background_thread = AvailableBinariesTableModel.BackgroundThread(options)
+        self._background_thread.append_release.connect(self.append_release)
+        self._background_thread.start()
