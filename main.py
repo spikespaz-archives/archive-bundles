@@ -35,6 +35,13 @@ class AppMainWindow(Ui_MainWindow):
             0, QHeaderView.Stretch
         )
 
+        def _rows_inserted(parent, first, last):
+            for row in range(first, last + 1):
+                self.availableBinariesTableView.resizeRowToContents(row)
+
+        self.availableBinariesTableModel.rowsInserted.connect(_rows_inserted)
+        self.availableBinariesTableModel.status_change.connect(self.statusbar.showMessage)
+
         self.javaVerButtonGroup = CheckBoxButtonGroup(window)
         self.javaVerButtonGroup.setObjectName("javaVerButtonGroup")
         self.javaVerButtonGroup.addButton(self.javaVer8CheckBox)
@@ -90,13 +97,6 @@ class AppMainWindow(Ui_MainWindow):
             group.buttonToggled.connect(
                 lambda: self.availableBinariesTableModel.populate_model(self.filter_options())
             )
-
-        def _rows_inserted(parent, first, last):
-            for row in range(first, last + 1):
-                self.availableBinariesTableView.resizeRowToContents(row)
-
-        self.availableBinariesTableModel.rowsInserted.connect(_rows_inserted)
-        self.availableBinariesTableModel.status_change.connect(self.statusbar.showMessage)
 
     def filter_options(self):
         options = RequestOptions(many=True, os=[PLATFORM_OS])
