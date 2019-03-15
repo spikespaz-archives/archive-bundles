@@ -45,7 +45,6 @@ class AvailableBinariesTableModel(QAbstractTableModel):
             super().__init__(*args, **kwargs)
 
             self._options = options
-            self.finished.connect(self.deleteLater)
 
         def __del__(self):
             self.wait()
