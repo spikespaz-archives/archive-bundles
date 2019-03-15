@@ -1,37 +1,11 @@
-from PyQt5.QtCore import Qt, QModelIndex, QVariant, QAbstractTableModel, QThread
-from PyQt5.QtWidgets import QButtonGroup
+from PyQt5.QtCore import Qt, QAbstractTableModel, QThread, QVariant, QModelIndex
+from PyQt5 import QtCore
 from requests import HTTPError
 from adoptapi import Release
-from PyQt5 import QtCore
 
-import sys
-import copy
 import adoptapi
-
-
-class CheckBoxButtonGroup(QButtonGroup):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.setExclusive(False)
-        self.buttonToggled.connect(self.__protect_remaining)
-
-    def addButton(self, button, *args, **kwargs):
-        super().addButton(button, *args, **kwargs)
-
-        self.__protect_remaining(button, button.isChecked())
-
-    def __protect_remaining(self, button, checked):
-        checked_buttons = self.checked_buttons()
-
-        if checked:
-            for button in checked_buttons:
-                button.setEnabled(True)
-        elif len(checked_buttons) == 1:
-            checked_buttons[0].setEnabled(False)
-
-    def checked_buttons(self):
-        return [button for button in self.buttons() if button.isChecked()]
+import copy
+import sys
 
 
 class AvailableBinariesTableModel(QAbstractTableModel):

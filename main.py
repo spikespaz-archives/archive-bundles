@@ -4,7 +4,8 @@ import platform
 from PyQt5.QtWidgets import QApplication, QMainWindow, QHeaderView
 from adoptapi import RequestOptions
 from interface import Ui_MainWindow
-from special import CheckBoxButtonGroup, AvailableBinariesTableModel
+from widgets import CheckBoxButtonGroup
+from models import AvailableBinariesTableModel
 
 
 PLATFORM_OS = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
