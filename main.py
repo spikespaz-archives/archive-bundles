@@ -1,9 +1,8 @@
 import sys
 import platform
 
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QHeaderView
 from adoptapi import RequestOptions
-from utils import BackgroundThread
 from interface import Ui_MainWindow
 from special import CheckBoxButtonGroup, AvailableBinariesTableModel
 
@@ -31,6 +30,9 @@ class AppMainWindow(Ui_MainWindow):
 
         self.availableBinariesTableModel = AvailableBinariesTableModel()
         self.availableBinariesTableView.setModel(self.availableBinariesTableModel)
+        self.availableBinariesTableView.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.Stretch
+        )
 
         self.javaVerButtonGroup = CheckBoxButtonGroup(window)
         self.javaVerButtonGroup.setObjectName("javaVerButtonGroup")
@@ -84,16 +86,16 @@ class AppMainWindow(Ui_MainWindow):
             self.heapSizeButtonGroup,
             self.archButtonGroup,
         ]:
-            group.buttonToggled.connect(self.populate_available_binaries_table_model)
+            group.buttonToggled.connect(
+                lambda: self.availableBinariesTableModel.populate_model(self.filter_options())
+            )
 
-    @BackgroundThread(background_threads)
-    def populate_available_binaries_table_model(self, *_, **__):
-        options = self.filter_options()
+        def _rows_inserted(parent, first, last):
+            for row in range(first, last + 1):
+                self.availableBinariesTableView.resizeRowToContents(row)
 
-        self.availableBinariesTableModel.populate_model(options)
-        self.availableBinariesTableModel.layoutChanged.emit()
-        self.availableBinariesTableView.resizeRowsToContents()
-        # Must be moved and registered to a slot
+        self.availableBinariesTableModel.rowsInserted.connect(_rows_inserted)
+        self.availableBinariesTableModel.status_change.connect(self.statusbar.showMessage)
 
     def filter_options(self):
         options = RequestOptions(many=True, os=[PLATFORM_OS])
@@ -152,5 +154,5 @@ if __name__ == "__main__":
     ui = AppMainWindow()
     ui.setupUi(window)
     window.show()
-    ui.populate_available_binaries_table_model()
+    ui.availableBinariesTableModel.populate_model(ui.filter_options())
     sys.exit(app.exec_())
