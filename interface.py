@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 450)
+        MainWindow.resize(900, 450)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -30,8 +30,8 @@ class Ui_MainWindow(object):
         self.availableBinariesTableView.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.availableBinariesTableView.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.availableBinariesTableView.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.availableBinariesTableView.setWordWrap(False)
         self.availableBinariesTableView.setObjectName("availableBinariesTableView")
-        self.availableBinariesTableView.horizontalHeader().setStretchLastSection(True)
         self.availableBinariesTableView.verticalHeader().setVisible(False)
         self.verticalLayout_2.addWidget(self.availableBinariesTableView)
         self.groupBox = QtWidgets.QGroupBox(self.availableBinariesTab)
