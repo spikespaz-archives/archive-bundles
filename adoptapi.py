@@ -10,12 +10,8 @@ STRFTIME_FORMAT = r"%Y-%m-%dT%H:%M:%SZ"
 
 
 def _request(endpoint, version, nightly, **kwargs):
-    request_url = "{api_base_url}/{api_endpoint}/{release_type}/{openjdk_version}".format(
-        api_base_url=API_BASE_URL,
-        api_endpoint=endpoint,
-        release_type="nightly" if nightly else "releases",
-        openjdk_version=version,
-    )
+    release_type = "nightly" if nightly else "releases"
+    request_url = f"{API_BASE_URL}/{endpoint}/{release_type}/{version}"
 
     request = requests.get(request_url, params=kwargs)
     request.raise_for_status()
@@ -102,8 +98,8 @@ class ReleaseAsset:
         )()
 
     def display(self):
-        return "{openjdk_impl}-{version_data.semver}-{architecture}-{binary_type}".format(
-            **self.__dict__
+        return (
+            f"{self.openjdk_impl}-{self.version_data.semver}-{self.architecture}-{self.binary_type}"
         )
 
     def serialize(self):
