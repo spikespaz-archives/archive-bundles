@@ -35,8 +35,11 @@ class CheckBoxButtonGroup(QButtonGroup):
 
 
 class AvailableBinariesTableModel(QAbstractTableModel):
-    class BackgroundThread(QThread):
+    status_change = QtCore.pyqtSignal(str, int)
+
+    class UpdateThread(QThread):
         append_release = QtCore.pyqtSignal(Release)
+        status_change = QtCore.pyqtSignal(str, int)
 
         def __init__(self, options, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -48,23 +51,28 @@ class AvailableBinariesTableModel(QAbstractTableModel):
             self.wait()
 
         def run(self):
-            params_iter = self._options.products()
+            params_iter = list(self._options.products())
 
-            for params in params_iter:
+            for count, params in enumerate(params_iter, 1):
+                percent = int(count / len(params_iter) * 100)
+                self.status_change.emit(
+                    f"Sending requests... {percent}% ({count}/{len(params_iter)})", 5000
+                )
+
+                response = adoptapi.info(
+                    params._version, nightly=params._nightly, **params.params()
+                )
+
                 try:
-                    response = adoptapi.info(
-                        params._version, nightly=params._nightly, **params.params()
-                    )
+                    for release in response:
+                        for binary in release.binaries:
+                            standalone = copy.copy(release)
+                            standalone.binaries = [copy.copy(binary)]
+
+                            self.append_release.emit(standalone)
                 except HTTPError as e:
                     print(e, file=sys.stderr)
                     continue
-
-                for release in response:
-                    for binary in release.binaries:
-                        standalone = copy.copy(release)
-                        standalone.binaries = [copy.copy(binary)]
-
-                        self.append_release.emit(standalone)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -79,7 +87,7 @@ class AvailableBinariesTableModel(QAbstractTableModel):
             "Architecture",
         ]
         self._internal_data = []
-        self._background_thread = None
+        self._update_thread = None
 
     def rowCount(self, parent=QModelIndex()):
         return len(self._internal_data)
@@ -143,23 +151,21 @@ class AvailableBinariesTableModel(QAbstractTableModel):
 
     @QtCore.pyqtSlot(Release)
     def append_release(self, release):
-        self.insertRows(self.rowCount(), 1)
-        self._internal_data[self.rowCount() - 1] = release
-
-        self.dataChanged.emit(
-            self.index(0, self.rowCount() - 1),
-            self.index(self.columnCount() - 1, self.rowCount() - 1),
-        )
+        self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount())
+        self._internal_data.append(release)
+        self.endInsertRows()
 
     def populate_model(self, options):
-        if self._background_thread:
-            self._background_thread.terminate()
-            self._background_thread.wait()
+        if self._update_thread:
+            self._update_thread.terminate()
+            self._update_thread.wait()
 
         self.beginResetModel()
         self._internal_data = []
         self.endResetModel()
 
-        self._background_thread = AvailableBinariesTableModel.BackgroundThread(options)
-        self._background_thread.append_release.connect(self.append_release)
-        self._background_thread.start()
+        self._update_thread = AvailableBinariesTableModel.UpdateThread(options)
+        self._update_thread.append_release.connect(self.append_release)
+        self._update_thread.status_change.connect(self.status_change)
+
+        self._update_thread.start()
