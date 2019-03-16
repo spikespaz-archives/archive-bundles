@@ -6,6 +6,7 @@ from adoptapi import RequestOptions
 from interface import Ui_MainWindow
 from widgets import CheckBoxButtonGroup
 from models import AvailableBinariesTableModel
+from utils import DownloaderThread
 
 
 PLATFORM_OS = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
@@ -24,7 +25,10 @@ PLATFORM_ARCH = (
 
 
 class AppMainWindow(Ui_MainWindow):
-    background_threads = []
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.download_thread = DownloaderThread(chunk_size=1024)
 
     def setupUi(self, window, *args, **kwargs):
         super().setupUi(window, *args, **kwargs)
@@ -34,13 +38,6 @@ class AppMainWindow(Ui_MainWindow):
         self.availableBinariesTableView.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.Stretch
         )
-
-        def _rows_inserted(parent, first, last):
-            for row in range(first, last + 1):
-                self.availableBinariesTableView.resizeRowToContents(row)
-
-        self.availableBinariesTableModel.rowsInserted.connect(_rows_inserted)
-        self.availableBinariesTableModel.status_change.connect(self.statusbar.showMessage)
 
         self.javaVerButtonGroup = CheckBoxButtonGroup(window)
         self.javaVerButtonGroup.setObjectName("javaVerButtonGroup")
@@ -86,6 +83,16 @@ class AppMainWindow(Ui_MainWindow):
             self.x64ArchCheckBox.setEnabled(False)
             self.x32ArchCheckBox.setEnabled(True)
 
+        self.setup_connections()
+
+    def setup_connections(self):
+        def _on_rows_inserted(parent, first, last):
+            for row in range(first, last + 1):
+                self.availableBinariesTableView.resizeRowToContents(row)
+
+        self.availableBinariesTableModel.rowsInserted.connect(_on_rows_inserted)
+        self.availableBinariesTableModel.status_change.connect(self.statusbar.showMessage)
+
         for group in [
             self.javaVerButtonGroup,
             self.releaseTypeButtonGroup,
@@ -97,6 +104,43 @@ class AppMainWindow(Ui_MainWindow):
             group.buttonToggled.connect(
                 lambda: self.availableBinariesTableModel.populate_model(self.filter_options())
             )
+
+        self.download_thread.filesizeFound.connect(self.availableBinariesProgressBar.setMaximum)
+        self.download_thread.bytesChanged.connect(self.availableBinariesProgressBar.setValue)
+
+        self.availableBinariesInfoButton.clicked.connect(self.open_info_window)
+        self.availableBinariesDownloadButton.clicked.connect(self.download_selected_binary)
+        self.availableBinariesInstallButton.clicked.connect(self.install_selected_binary)
+
+        def _selection_changed(selected, deselected):
+            self.enable_available_binaries_tab_actions(True)
+
+        self.availableBinariesTableView.selectionModel().selectionChanged.connect(
+            _selection_changed
+        )
+
+    def open_info_window(self, _):
+        print("open_info_window")
+
+    def download_selected_binary(self, _):
+        print("download_selected_binary")
+
+        selected_release = self.availableBinariesTableModel.data(
+            self.availableBinariesTableView.selectedIndexes()[0],
+            AvailableBinariesTableModel.ObjectRole,
+        )
+        request_url = selected_release.binaries[0].binary_link
+
+        self.download_thread(request_url, location="./downloads")
+
+    def install_selected_binary(self, _):
+        print("install_selected_binary")
+
+    def enable_available_binaries_tab_actions(self, enable=True):
+        self.availableBinariesInfoButton.setEnabled(True)
+        self.availableBinariesDownloadButton.setEnabled(True)
+        self.availableBinariesInstallButton.setEnabled(True)
+        self.availableBinariesProgressBar.setEnabled(True)
 
     def filter_options(self):
         options = RequestOptions(many=True, os=[PLATFORM_OS])

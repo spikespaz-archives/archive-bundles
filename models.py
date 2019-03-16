@@ -9,6 +9,7 @@ import sys
 
 
 class AvailableBinariesTableModel(QAbstractTableModel):
+    ObjectRole = Qt.UserRole + 1
     status_change = QtCore.pyqtSignal(str, int)
 
     class UpdateThread(QThread):
@@ -98,6 +99,8 @@ class AvailableBinariesTableModel(QAbstractTableModel):
                 return release.binaries[0].heap_size.title()
             elif index.column() == 6:  # Architecture
                 return release.binaries[0].architecture
+        elif role == AvailableBinariesTableModel.ObjectRole:
+            return self._internal_data[index.row()]
 
         return QVariant()
 
