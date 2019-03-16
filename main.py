@@ -72,12 +72,12 @@ class AppMainWindow(Ui_MainWindow):
         self.archButtonGroup.addButton(self.x32ArchCheckBox)
 
         if PLATFORM_ARCH == "x32":
-            self.archLabel.setEnabled(True)
+            self.archOptionLabel.setEnabled(True)
 
             self.x32ArchCheckBox.setChecked(True)
             self.x32ArchCheckBox.setEnabled(False)
         elif PLATFORM_ARCH == "x64":
-            self.archLabel.setEnabled(True)
+            self.archOptionLabel.setEnabled(True)
 
             self.x64ArchCheckBox.setChecked(True)
             self.x64ArchCheckBox.setEnabled(False)
@@ -111,9 +111,7 @@ class AppMainWindow(Ui_MainWindow):
         self.download_thread.beginSendRequest.connect(_on_begin_send_request)
 
         def _on_begin_download():
-            self.availableBinariesProgressBar.setMaximum(
-                int(self.download_thread.filesize / self.download_thread.chunk_size)
-            )
+            self.availableBinariesProgressBar.setMaximum(self.download_thread.filesize)
             self.availableBinariesProgressBar.setFormat("Downloading... %p%")
 
         self.download_thread.beginDownload.connect(_on_begin_download)
@@ -123,10 +121,17 @@ class AppMainWindow(Ui_MainWindow):
                 f'Downloaded "{self.download_thread.filename}" successfully!'
             )
 
+            self.availableBinariesTableView.setEnabled(True)
+            self.availableBinariesDownloadButton.setEnabled(True)
+            self.availableBinariesInstallButton.setEnabled(True)
+            self.filterOptionsGroupBox.setEnabled(True)
+
+            self.availableBinariesTableView.setFocus()
+
         self.download_thread.endDownload.connect(_on_end_download)
 
         self.download_thread.filesizeFound.connect(self.availableBinariesProgressBar.setMaximum)
-        self.download_thread.chunkWritten.connect(self.availableBinariesProgressBar.setValue)
+        self.download_thread.bytesChanged.connect(self.availableBinariesProgressBar.setValue)
 
         self.availableBinariesInfoButton.clicked.connect(self.open_info_window)
         self.availableBinariesDownloadButton.clicked.connect(self.download_selected_binary)
@@ -146,6 +151,11 @@ class AppMainWindow(Ui_MainWindow):
 
     def download_selected_binary(self, _):
         print("download_selected_binary")
+
+        self.availableBinariesTableView.setEnabled(False)
+        self.availableBinariesDownloadButton.setEnabled(False)
+        self.availableBinariesInstallButton.setEnabled(False)
+        self.filterOptionsGroupBox.setEnabled(False)
 
         selected_release = self.availableBinariesTableModel.data(
             self.availableBinariesTableView.selectedIndexes()[0],
