@@ -80,7 +80,7 @@ class DownloaderThread(QThread):
 
     def run(self):
         self.beginSendRequest.emit()
-        request = requests.get(self._url)
+        request = requests.get(self._url, stream=True)
         self.endSendRequest.emit()
 
         self.filesize = int(request.headers["content-length"])
@@ -94,13 +94,16 @@ class DownloaderThread(QThread):
         self.beginDownload.emit(self.file_location)
 
         with open(self.file_location, "wb") as file:
+            downloaded_bytes = 0
+
             for count, chunk in enumerate(request.iter_content(chunk_size=self.chunk_size)):
                 if not chunk:
                     continue
 
                 file.write(chunk)
+                downloaded_bytes += len(chunk)
 
-                self.bytesChanged.emit(min(count * self.chunk_size, self.filesize))
+                self.bytesChanged.emit(downloaded_bytes)
                 self.chunkWritten.emit(count)
 
         self.endDownload.emit(self.file_location)
