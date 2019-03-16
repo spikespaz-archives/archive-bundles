@@ -105,18 +105,40 @@ class AppMainWindow(Ui_MainWindow):
                 lambda: self.availableBinariesTableModel.populate_model(self.filter_options())
             )
 
+        def _on_begin_send_request():
+            self.availableBinariesProgressBar.setMaximum(0)
+
+        self.download_thread.beginSendRequest.connect(_on_begin_send_request)
+
+        def _on_begin_download():
+            self.availableBinariesProgressBar.setMaximum(
+                int(self.download_thread.filesize / self.download_thread.chunk_size)
+            )
+            self.availableBinariesProgressBar.setFormat("Downloading... %p%")
+
+        self.download_thread.beginDownload.connect(_on_begin_download)
+
+        def _on_end_download():
+            self.availableBinariesProgressBar.setFormat(
+                f'Downloaded "{self.download_thread.filename}" successfully!'
+            )
+
+        self.download_thread.endDownload.connect(_on_end_download)
+
         self.download_thread.filesizeFound.connect(self.availableBinariesProgressBar.setMaximum)
-        self.download_thread.bytesChanged.connect(self.availableBinariesProgressBar.setValue)
+        self.download_thread.chunkWritten.connect(self.availableBinariesProgressBar.setValue)
 
         self.availableBinariesInfoButton.clicked.connect(self.open_info_window)
         self.availableBinariesDownloadButton.clicked.connect(self.download_selected_binary)
         self.availableBinariesInstallButton.clicked.connect(self.install_selected_binary)
 
-        def _selection_changed(selected, deselected):
+        def _on_selection_changed(selected, deselected):
             self.enable_available_binaries_tab_actions(True)
+            self.availableBinariesProgressBar.setMaximum(1)
+            self.availableBinariesProgressBar.setValue(0)
 
         self.availableBinariesTableView.selectionModel().selectionChanged.connect(
-            _selection_changed
+            _on_selection_changed
         )
 
     def open_info_window(self, _):

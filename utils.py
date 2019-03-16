@@ -53,14 +53,21 @@ class DownloaderThread(QThread):
     filenameFound = QtCore.pyqtSignal(str)
     filesizeFound = QtCore.pyqtSignal(int)
     bytesChanged = QtCore.pyqtSignal(int)
+    chunkWritten = QtCore.pyqtSignal(int)
+    beginSendRequest = QtCore.pyqtSignal()
+    endSendRequest = QtCore.pyqtSignal()
+    beginDownload = QtCore.pyqtSignal(str)
+    endDownload = QtCore.pyqtSignal(str)
 
-    def __init__(self, chunk_size=512, *args, **kwargs):
+    def __init__(self, chunk_size=1024, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.chunk_size = chunk_size
         self.filename = None
+        self.filesize = None
         self._url = None
         self._location = None
+        self.file_location = None
 
     def __del__(self):
         self.wait()
@@ -72,18 +79,28 @@ class DownloaderThread(QThread):
         self.start()
 
     def run(self):
+        self.beginSendRequest.emit()
         request = requests.get(self._url)
-        filesize = int(request.headers["content-length"])
-        self.filename = re.findall("filename=(.+)", request.headers["content-disposition"])[0]
+        self.endSendRequest.emit()
+
+        self.filesize = int(request.headers["content-length"])
+        self.filename = re.findall(r"filename=(.+)", request.headers["content-disposition"])[0]
 
         self.filenameFound.emit(self.filename)
-        self.filesizeFound.emit(filesize)
+        self.filesizeFound.emit(self.filesize)
 
-        with open(path.join(self._location, self.filename), "wb") as file:
-            for count, chunk in enumerate(request.iter_content(chunk_size=self.chunk_size), 1):
+        self.file_location = path.join(self._location, self.filename)
+
+        self.beginDownload.emit(self.file_location)
+
+        with open(self.file_location, "wb") as file:
+            for count, chunk in enumerate(request.iter_content(chunk_size=self.chunk_size)):
                 if not chunk:
                     continue
 
                 file.write(chunk)
 
-                self.bytesChanged.emit(count * self.chunk_size)
+                self.bytesChanged.emit(min(count * self.chunk_size, self.filesize))
+                self.chunkWritten.emit(count)
+
+        self.endDownload.emit(self.file_location)
