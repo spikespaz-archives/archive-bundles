@@ -101,7 +101,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="filterOptionsGroupBox">
           <property name="title">
            <string>Filter Options</string>
           </property>
@@ -109,7 +109,7 @@
            <item>
             <layout class="QFormLayout" name="formLayout_3">
              <item row="0" column="0">
-              <widget class="QLabel" name="label">
+              <widget class="QLabel" name="javaVerOptionLabel">
                <property name="text">
                 <string>Java Version:</string>
                </property>
@@ -164,7 +164,7 @@
               </layout>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_5">
+              <widget class="QLabel" name="releaseTypeOptionLabel">
                <property name="text">
                 <string>Release Type:</string>
                </property>
@@ -205,7 +205,7 @@
               </layout>
              </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="label_3">
+              <widget class="QLabel" name="binTypeOptionLabel">
                <property name="text">
                 <string>Binary Type:</string>
                </property>
@@ -250,7 +250,7 @@
            <item>
             <layout class="QFormLayout" name="formLayout_2">
              <item row="2" column="0">
-              <widget class="QLabel" name="label_4">
+              <widget class="QLabel" name="heapSizeOptionLabel">
                <property name="text">
                 <string>Heap Size:</string>
                </property>
@@ -291,7 +291,7 @@
               </layout>
              </item>
              <item row="3" column="0">
-              <widget class="QLabel" name="archLabel">
+              <widget class="QLabel" name="archOptionLabel">
                <property name="enabled">
                 <bool>false</bool>
                </property>
@@ -338,7 +338,7 @@
               </layout>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_2">
+              <widget class="QLabel" name="vmOptionLabel">
                <property name="text">
                 <string>Virtual Machine:</string>
                </property>
