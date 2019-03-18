@@ -28,7 +28,7 @@ class AppMainWindow(Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.download_thread = DownloaderThread(chunk_size=1024)
+        self._download_thread = DownloaderThread(chunk_size=1024)
 
     def setupUi(self, window, *args, **kwargs):
         super().setupUi(window, *args, **kwargs)
@@ -108,17 +108,17 @@ class AppMainWindow(Ui_MainWindow):
         def _on_begin_send_request():
             self.availableBinariesProgressBar.setMaximum(0)
 
-        self.download_thread.beginSendRequest.connect(_on_begin_send_request)
+        self._download_thread.beginSendRequest.connect(_on_begin_send_request)
 
         def _on_begin_download():
-            self.availableBinariesProgressBar.setMaximum(self.download_thread.filesize)
+            self.availableBinariesProgressBar.setMaximum(self._download_thread.filesize)
             self.availableBinariesProgressBar.setFormat("Downloading... %p%")
 
-        self.download_thread.beginDownload.connect(_on_begin_download)
+        self._download_thread.beginDownload.connect(_on_begin_download)
 
         def _on_end_download():
             self.availableBinariesProgressBar.setFormat(
-                f'Downloaded "{self.download_thread.filename}" successfully!'
+                f'Downloaded "{self._download_thread.filename}" successfully!'
             )
 
             self.availableBinariesTableView.setEnabled(True)
@@ -128,10 +128,10 @@ class AppMainWindow(Ui_MainWindow):
 
             self.availableBinariesTableView.setFocus()
 
-        self.download_thread.endDownload.connect(_on_end_download)
+        self._download_thread.endDownload.connect(_on_end_download)
 
-        self.download_thread.filesizeFound.connect(self.availableBinariesProgressBar.setMaximum)
-        self.download_thread.bytesChanged.connect(self.availableBinariesProgressBar.setValue)
+        self._download_thread.filesizeFound.connect(self.availableBinariesProgressBar.setMaximum)
+        self._download_thread.bytesChanged.connect(self.availableBinariesProgressBar.setValue)
 
         self.availableBinariesInfoButton.clicked.connect(self.open_info_window)
         self.availableBinariesDownloadButton.clicked.connect(self.download_selected_binary)
@@ -163,7 +163,7 @@ class AppMainWindow(Ui_MainWindow):
         )
         request_url = selected_release.binaries[0].binary_link
 
-        self.download_thread(request_url, location="./downloads")
+        self._download_thread(request_url, location=self.app_options["download_path"])
 
     def install_selected_binary(self, _):
         print("install_selected_binary")
