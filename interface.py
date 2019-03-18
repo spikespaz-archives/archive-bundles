@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 
 class Ui_MainWindow(object):
@@ -17,8 +17,37 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
-        self.tabWidget.setObjectName("tabWidget")
+        self.mainTabWidget = QtWidgets.QTabWidget(self.centralwidget)
+        self.mainTabWidget.setObjectName("mainTabWidget")
+        self.installedBinariesTab = QtWidgets.QWidget()
+        self.installedBinariesTab.setObjectName("installedBinariesTab")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.installedBinariesTab)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.installedBinariesListView = QtWidgets.QListView(self.installedBinariesTab)
+        self.installedBinariesListView.setObjectName("installedBinariesListView")
+        self.verticalLayout_3.addWidget(self.installedBinariesListView)
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.toggleSelectedBinaryPushButton = QtWidgets.QPushButton(self.installedBinariesTab)
+        self.toggleSelectedBinaryPushButton.setObjectName("toggleSelectedBinaryPushButton")
+        self.horizontalLayout_8.addWidget(self.toggleSelectedBinaryPushButton)
+        self.launchSelectedBinaryShellPushButton = QtWidgets.QPushButton(self.installedBinariesTab)
+        self.launchSelectedBinaryShellPushButton.setObjectName(
+            "launchSelectedBinaryShellPushButton"
+        )
+        self.horizontalLayout_8.addWidget(self.launchSelectedBinaryShellPushButton)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_8.addItem(spacerItem)
+        self.deleteSelectedBinaryPushButton = QtWidgets.QPushButton(self.installedBinariesTab)
+        self.deleteSelectedBinaryPushButton.setObjectName("deleteSelectedBinaryPushButton")
+        self.horizontalLayout_8.addWidget(self.deleteSelectedBinaryPushButton)
+        self.renameSelectedBinaryPushButton = QtWidgets.QPushButton(self.installedBinariesTab)
+        self.renameSelectedBinaryPushButton.setObjectName("renameSelectedBinaryPushButton")
+        self.horizontalLayout_8.addWidget(self.renameSelectedBinaryPushButton)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_8)
+        self.mainTabWidget.addTab(self.installedBinariesTab, "")
         self.availableBinariesTab = QtWidgets.QWidget()
         self.availableBinariesTab.setObjectName("availableBinariesTab")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.availableBinariesTab)
@@ -26,10 +55,16 @@ class Ui_MainWindow(object):
         self.availableBinariesTableView = QtWidgets.QTableView(self.availableBinariesTab)
         self.availableBinariesTableView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.availableBinariesTableView.setAlternatingRowColors(True)
-        self.availableBinariesTableView.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.availableBinariesTableView.setSelectionMode(
+            QtWidgets.QAbstractItemView.SingleSelection
+        )
         self.availableBinariesTableView.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-        self.availableBinariesTableView.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
-        self.availableBinariesTableView.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.availableBinariesTableView.setVerticalScrollMode(
+            QtWidgets.QAbstractItemView.ScrollPerPixel
+        )
+        self.availableBinariesTableView.setHorizontalScrollMode(
+            QtWidgets.QAbstractItemView.ScrollPerPixel
+        )
         self.availableBinariesTableView.setWordWrap(False)
         self.availableBinariesTableView.setObjectName("availableBinariesTableView")
         self.availableBinariesTableView.verticalHeader().setVisible(False)
@@ -51,7 +86,9 @@ class Ui_MainWindow(object):
         self.availableBinariesProgressBar = QtWidgets.QProgressBar(self.availableBinariesTab)
         self.availableBinariesProgressBar.setEnabled(False)
         self.availableBinariesProgressBar.setProperty("value", 0)
-        self.availableBinariesProgressBar.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignVCenter)
+        self.availableBinariesProgressBar.setAlignment(
+            QtCore.Qt.AlignJustify | QtCore.Qt.AlignVCenter
+        )
         self.availableBinariesProgressBar.setObjectName("availableBinariesProgressBar")
         self.horizontalLayout_9.addWidget(self.availableBinariesProgressBar)
         self.verticalLayout_2.addLayout(self.horizontalLayout_9)
@@ -79,8 +116,10 @@ class Ui_MainWindow(object):
         self.javaVer11CheckBox = QtWidgets.QCheckBox(self.filterOptionsGroupBox)
         self.javaVer11CheckBox.setObjectName("javaVer11CheckBox")
         self.horizontalLayout_2.addWidget(self.javaVer11CheckBox)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_2.addItem(spacerItem1)
         self.formLayout_3.setLayout(0, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_2)
         self.releaseTypeOptionLabel = QtWidgets.QLabel(self.filterOptionsGroupBox)
         self.releaseTypeOptionLabel.setObjectName("releaseTypeOptionLabel")
@@ -94,8 +133,10 @@ class Ui_MainWindow(object):
         self.nightlyReleaseTypeCheckBox = QtWidgets.QCheckBox(self.filterOptionsGroupBox)
         self.nightlyReleaseTypeCheckBox.setObjectName("nightlyReleaseTypeCheckBox")
         self.horizontalLayout_6.addWidget(self.nightlyReleaseTypeCheckBox)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_6.addItem(spacerItem1)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_6.addItem(spacerItem2)
         self.formLayout_3.setLayout(1, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_6)
         self.binTypeOptionLabel = QtWidgets.QLabel(self.filterOptionsGroupBox)
         self.binTypeOptionLabel.setObjectName("binTypeOptionLabel")
@@ -109,8 +150,10 @@ class Ui_MainWindow(object):
         self.jreBinCheckBox = QtWidgets.QCheckBox(self.filterOptionsGroupBox)
         self.jreBinCheckBox.setObjectName("jreBinCheckBox")
         self.horizontalLayout_3.addWidget(self.jreBinCheckBox)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem2)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_3.addItem(spacerItem3)
         self.formLayout_3.setLayout(2, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_3)
         self.horizontalLayout_5.addLayout(self.formLayout_3)
         self.formLayout_2 = QtWidgets.QFormLayout()
@@ -127,8 +170,10 @@ class Ui_MainWindow(object):
         self.largeHeapSizeCheckBox = QtWidgets.QCheckBox(self.filterOptionsGroupBox)
         self.largeHeapSizeCheckBox.setObjectName("largeHeapSizeCheckBox")
         self.horizontalLayout_4.addWidget(self.largeHeapSizeCheckBox)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem3)
+        spacerItem4 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_4.addItem(spacerItem4)
         self.formLayout_2.setLayout(2, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_4)
         self.archOptionLabel = QtWidgets.QLabel(self.filterOptionsGroupBox)
         self.archOptionLabel.setEnabled(False)
@@ -144,8 +189,10 @@ class Ui_MainWindow(object):
         self.x32ArchCheckBox.setEnabled(False)
         self.x32ArchCheckBox.setObjectName("x32ArchCheckBox")
         self.horizontalLayout_7.addWidget(self.x32ArchCheckBox)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem4)
+        spacerItem5 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_7.addItem(spacerItem5)
         self.formLayout_2.setLayout(3, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_7)
         self.vmOptionLabel = QtWidgets.QLabel(self.filterOptionsGroupBox)
         self.vmOptionLabel.setObjectName("vmOptionLabel")
@@ -159,25 +206,35 @@ class Ui_MainWindow(object):
         self.openj9VmCheckBox = QtWidgets.QCheckBox(self.filterOptionsGroupBox)
         self.openj9VmCheckBox.setObjectName("openj9VmCheckBox")
         self.horizontalLayout.addWidget(self.openj9VmCheckBox)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem5)
+        spacerItem6 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout.addItem(spacerItem6)
         self.formLayout_2.setLayout(1, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout)
         self.horizontalLayout_5.addLayout(self.formLayout_2)
         self.verticalLayout_2.addWidget(self.filterOptionsGroupBox)
-        self.tabWidget.addTab(self.availableBinariesTab, "")
-        self.verticalLayout.addWidget(self.tabWidget)
+        self.mainTabWidget.addTab(self.availableBinariesTab, "")
+        self.verticalLayout.addWidget(self.mainTabWidget)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.mainTabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Java Version Manager"))
+        self.toggleSelectedBinaryPushButton.setText(_translate("MainWindow", "Set Active"))
+        self.launchSelectedBinaryShellPushButton.setText(_translate("MainWindow", "Launch Shell"))
+        self.deleteSelectedBinaryPushButton.setText(_translate("MainWindow", "Delete"))
+        self.renameSelectedBinaryPushButton.setText(_translate("MainWindow", "Rename"))
+        self.mainTabWidget.setTabText(
+            self.mainTabWidget.indexOf(self.installedBinariesTab),
+            _translate("MainWindow", "Installed Binaries"),
+        )
         self.availableBinariesInfoButton.setText(_translate("MainWindow", "Details"))
         self.availableBinariesDownloadButton.setText(_translate("MainWindow", "Download"))
         self.availableBinariesInstallButton.setText(_translate("MainWindow", "Install"))
@@ -202,6 +259,7 @@ class Ui_MainWindow(object):
         self.vmOptionLabel.setText(_translate("MainWindow", "Virtual Machine:"))
         self.hotspotVmCheckBox.setText(_translate("MainWindow", "HotSpot"))
         self.openj9VmCheckBox.setText(_translate("MainWindow", "OpenJ9"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.availableBinariesTab), _translate("MainWindow", "Available Binaries"))
-
-
+        self.mainTabWidget.setTabText(
+            self.mainTabWidget.indexOf(self.availableBinariesTab),
+            _translate("MainWindow", "Available Binaries"),
+        )

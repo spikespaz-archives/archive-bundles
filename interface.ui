@@ -16,10 +16,65 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="mainTabWidget">
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <widget class="QWidget" name="installedBinariesTab">
+       <attribute name="title">
+        <string>Installed Binaries</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QListView" name="installedBinariesListView"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QPushButton" name="toggleSelectedBinaryPushButton">
+            <property name="text">
+             <string>Set Active</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="launchSelectedBinaryShellPushButton">
+            <property name="text">
+             <string>Launch Shell</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_7">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="deleteSelectedBinaryPushButton">
+            <property name="text">
+             <string>Delete</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="renameSelectedBinaryPushButton">
+            <property name="text">
+             <string>Rename</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="availableBinariesTab">
        <attribute name="title">
         <string>Available Binaries</string>
