@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt, QAbstractTableModel, QThread, QVariant, QModelIndex
+from PyQt5.QtCore import Qt, QAbstractTableModel, QAbstractListModel, QThread, QVariant, QModelIndex
 from PyQt5 import QtCore
 from requests import HTTPError
 from adoptapi import Release
@@ -145,3 +145,47 @@ class AvailableBinariesTableModel(QAbstractTableModel):
         self._update_thread.status_change.connect(self.status_change)
 
         self._update_thread.start()
+
+
+class InstalledBinariesListModel(QAbstractListModel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._internal_data = []
+
+    def rowCount(self, parent=QModelIndex()):
+        return len(self._internal_data)
+
+    def data(self, index, role=Qt.DisplayRole):
+        if not index.isValid() or index.row() > self.rowCount() or index.column() > 0:
+            return QVariant()
+
+        if role == Qt.DisplayRole:
+            return self._internal_data[index.row()]
+        elif role == AvailableBinariesTableModel.ObjectRole:
+            return self._internal_data[index.row()]
+
+        return QVariant()
+
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        if role != Qt.DisplayRole:
+            return QVariant()
+
+        if orientation == Qt.Horizontal:
+            return "Installed Binaries"
+        else:
+            return section
+
+        return QVariant()
+
+    def insertRows(self, row, count, parent=QModelIndex()):
+        self.beginInsertRows(parent, row, row + count)
+        self._internal_data = (
+            self._internal_data[:row] + ["" for _ in range(count)] + self._internal_data[row:]
+        )
+        self.endInsertRows()
+
+    def removeRows(self, row, count, parent=QModelIndex()):
+        self.beginRemoveRows(parent, row, row + count)
+        self._internal_data = self._internal_data[:row] + self._internal_data[row + count :]
+        self.endRemoveRows()
