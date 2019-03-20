@@ -26,7 +26,13 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QListView" name="installedBinariesListView"/>
+         <widget class="QSplitter" name="splitter">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QListView" name="installedBinariesListView"/>
+          <widget class="QTreeView" name="selectedBinaryDetailsTreeView"/>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -41,6 +47,13 @@
            <widget class="QPushButton" name="launchSelectedBinaryShellPushButton">
             <property name="text">
              <string>Launch Shell</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="openDirectorySelectedBinaryPushButton">
+            <property name="text">
+             <string>Open Directory</string>
             </property>
            </widget>
           </item>
