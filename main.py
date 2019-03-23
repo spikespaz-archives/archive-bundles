@@ -1,14 +1,16 @@
 import sys
 import platform
 
-from models import AvailableBinariesTableModel, InstalledBinariesListModel
+from PyQt5 import QtCore
+from models import AvailableBinariesTableModel, InstalledBinariesListModel, ObjectRole
 from PyQt5.QtWidgets import QApplication, QMainWindow, QHeaderView
 from pathlib import Path
-from adoptapi import RequestOptions
+from adoptapi import RequestOptions, Release
 from widgets import CheckBoxButtonGroup
 from interface import Ui_MainWindow
 from utils import DownloaderThread
 from settings import SettingsFile
+from collections import OrderedDict
 
 
 PLATFORM_OS = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
@@ -31,19 +33,31 @@ SETTINGS = SettingsFile(
     serialize_map={
         "download_path": lambda x: str(Path.resolve(x)),
         "binaries_path": lambda x: str(Path.resolve(x)),
-        "filter_options": lambda x: x.__dict__
+        "filter_options": lambda x: x.__dict__,
+        "installed_binaries": lambda x: dict(
+            [(key, value.serialize()) for key, value in x.items()]
+        ),
     },
     deserialize_map={
         "download_path": Path,
         "binaries_path": Path,
-        "filter_options": lambda x: RequestOptions(many=True, **x)
+        "filter_options": lambda x: RequestOptions(many=True, **x),
+        "installed_binaries": lambda x: OrderedDict(
+            [(key, Release(**value)) for key, value in x.items()]
+        ),
     },
     defaults={
         "download_path": Path(Path.home(), "Downloads"),
         "binaries_path": Path(Path.home(), ".jvman"),
-        "filter_options": RequestOptions(_version=["openjdk8"], many=True, os=[PLATFORM_OS])
-    }
+        "filter_options": RequestOptions(_version=["openjdk8"], many=True, os=[PLATFORM_OS]),
+        "installed_binaries": OrderedDict(),
+    },
 )
+
+
+@QtCore.pyqtSlot()
+def dump_settings(*args, **kwargs):
+    SETTINGS.dump()
 
 
 class AppMainWindow(Ui_MainWindow):
@@ -64,7 +78,9 @@ class AppMainWindow(Ui_MainWindow):
             0, QHeaderView.Stretch
         )
 
-        self.installedBinariesListModel = InstalledBinariesListModel()
+        self.installedBinariesListModel = InstalledBinariesListModel(
+            datamodel=SETTINGS["installed_binaries"]
+        )
         self.installedBinariesListView.setModel(self.installedBinariesListModel)
 
         self.javaVerButtonGroup = CheckBoxButtonGroup(window)
@@ -116,11 +132,9 @@ class AppMainWindow(Ui_MainWindow):
             tab_name = self.mainTabWidget.tabText(index)
 
             if tab_name == "Installed Binaries":
-                self.installedBinariesListModel.populate_model()
+                pass
             elif tab_name == "Available Binaries":
                 self.availableBinariesTableModel.populate_model(self.get_filter_options())
-
-        self.mainTabWidget.currentChanged.connect(_on_current_changed)
 
         def _on_delete_selected_binary_clicked():
             selection = self.installedBinariesListView.selectedIndexes()
@@ -128,41 +142,25 @@ class AppMainWindow(Ui_MainWindow):
             for index in selection:
                 self.installedBinariesListModel.removeRows(index.row(), 1)
 
-        self.deleteSelectedBinaryPushButton.clicked.connect(_on_delete_selected_binary_clicked)
+            SETTINGS.dump()
 
         def _on_rows_inserted(parent, first, last):
             for row in range(first, last + 1):
                 self.availableBinariesTableView.resizeRowToContents(row)
 
-        self.availableBinariesTableModel.rowsInserted.connect(_on_rows_inserted)
-        self.availableBinariesTableModel.status_change.connect(self.statusbar.showMessage)
-
         def _on_filter_option_toggled():
             options = self.get_filter_options()
             SETTINGS["filter_options"] = options
             SETTINGS.dump()
-            self.availableBinariesTableModel.populate_model(options)
 
-        for group in [
-            self.javaVerButtonGroup,
-            self.releaseTypeButtonGroup,
-            self.binTypeButtonGroup,
-            self.vmButtonGroup,
-            self.heapSizeButtonGroup,
-            self.archButtonGroup,
-        ]:
-            group.buttonToggled.connect(_on_filter_option_toggled)
+            self.availableBinariesTableModel.populate_model(options)
 
         def _on_begin_send_request():
             self.availableBinariesProgressBar.setMaximum(0)
 
-        self._download_thread.beginSendRequest.connect(_on_begin_send_request)
-
         def _on_begin_download():
             self.availableBinariesProgressBar.setMaximum(self._download_thread.filesize)
             self.availableBinariesProgressBar.setFormat("Downloading... %p%")
-
-        self._download_thread.beginDownload.connect(_on_begin_download)
 
         def _on_end_download():
             self.availableBinariesProgressBar.setFormat(
@@ -176,6 +174,32 @@ class AppMainWindow(Ui_MainWindow):
 
             self.availableBinariesTableView.setFocus()
 
+        def _on_selection_changed(selected, deselected):
+            self.enable_available_binaries_tab_actions(True)
+            self.availableBinariesProgressBar.setMaximum(1)
+            self.availableBinariesProgressBar.setValue(0)
+
+        self.installedBinariesListModel.rowsInserted.connect(dump_settings)
+        self.installedBinariesListModel.rowsMoved.connect(dump_settings)
+        self.installedBinariesListModel.rowsRemoved.connect(dump_settings)
+
+        self.mainTabWidget.currentChanged.connect(_on_current_changed)
+        self.deleteSelectedBinaryPushButton.clicked.connect(_on_delete_selected_binary_clicked)
+        self.availableBinariesTableModel.rowsInserted.connect(_on_rows_inserted)
+        self.availableBinariesTableModel.status_change.connect(self.statusbar.showMessage)
+
+        for group in [
+            self.javaVerButtonGroup,
+            self.releaseTypeButtonGroup,
+            self.binTypeButtonGroup,
+            self.vmButtonGroup,
+            self.heapSizeButtonGroup,
+            self.archButtonGroup,
+        ]:
+            group.buttonToggled.connect(_on_filter_option_toggled)
+
+        self._download_thread.beginSendRequest.connect(_on_begin_send_request)
+        self._download_thread.beginDownload.connect(_on_begin_download)
         self._download_thread.endDownload.connect(_on_end_download)
 
         self._download_thread.filesizeFound.connect(self.availableBinariesProgressBar.setMaximum)
@@ -184,11 +208,6 @@ class AppMainWindow(Ui_MainWindow):
         self.availableBinariesInfoButton.clicked.connect(self.open_info_window)
         self.availableBinariesDownloadButton.clicked.connect(self.download_selected_binary)
         self.availableBinariesInstallButton.clicked.connect(self.install_selected_binary)
-
-        def _on_selection_changed(selected, deselected):
-            self.enable_available_binaries_tab_actions(True)
-            self.availableBinariesProgressBar.setMaximum(1)
-            self.availableBinariesProgressBar.setValue(0)
 
         self.availableBinariesTableView.selectionModel().selectionChanged.connect(
             _on_selection_changed
@@ -212,10 +231,17 @@ class AppMainWindow(Ui_MainWindow):
     def install_selected_binary(self, *args, **kwargs):
         print("install_selected_binary")
 
+        selected_release = self.selected_release()
+
+        self.install_release(selected_release)
+
+    def install_release(self, release):
+        self.installedBinariesListModel.add_release(release.release_name, release)
+
     def selected_release(self):
         return self.availableBinariesTableModel.data(
             self.availableBinariesTableView.selectedIndexes()[0],
-            AvailableBinariesTableModel.ObjectRole,
+            ObjectRole,
         )
 
     def enable_available_binaries_tab_actions(self, enable=True):
