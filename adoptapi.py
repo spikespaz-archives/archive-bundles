@@ -55,7 +55,8 @@ class Release:
             lambda: datetime.strptime(kwargs["timestamp"], STRFTIME_FORMAT), KeyError
         )()
         self.release = kwargs.get("release", None)
-        self.binaries = [ReleaseAsset(**data) for data in kwargs.get("binaries", list())]
+        binaries = kwargs.get("binaries", [])
+        self.binaries = [ReleaseAsset(**binary) for binary in binaries]
         self.download_count = kwargs.get("download_count", None)
 
     def serialize(self):
@@ -64,6 +65,7 @@ class Release:
             {
                 "timestamp": self.timestamp.strftime(STRFTIME_FORMAT),
                 "binaries": [binary.serialize() for binary in self.binaries],
+                "__class__.__name__": self.__class__.__name__,
             }
         )
 
@@ -112,6 +114,7 @@ class ReleaseAsset:
                     "optional": self.version_data.optional,
                 },
                 "updated_at": self.updated_at.strftime(STRFTIME_FORMAT),
+                "__class__.__name__": self.__class__.__name__,
             }
         )
 
@@ -150,5 +153,12 @@ class RequestOptions:
 
         del data["_version"]
         del data["_nightly"]
+
+        return data
+
+    def serialize(self):
+        data = self.__dict__
+
+        data.update({"__class__.__name__": self.__class__.__name__})
 
         return data
