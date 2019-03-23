@@ -1,4 +1,5 @@
 import json
+import copy
 
 from json import JSONDecodeError
 
@@ -25,7 +26,7 @@ class FileDict(dict):
                 dictionary = self.__serializer.deserialize(dictionary)
 
                 self.update(dictionary)
-        except JSONDecodeError as e:
+        except (JSONDecodeError, FileNotFoundError) as e:
             print("Could not load settings file, creating default")
             print("\t", e)
 
@@ -47,10 +48,14 @@ class ValueSerializer:
         for name_or_type, func in deserializers:
             self.add_deserializer(name_or_type, func)
 
-        self.add_serializer(dict, self._dict_serializer)
         self.add_serializer(FileDict, self._dict_serializer)
-        self.add_deserializer(dict.__name__, self._dict_deserializer)
         self.add_deserializer(FileDict.__name__, self._dict_deserializer)
+        self.add_serializer(dict, self._dict_serializer)
+        self.add_deserializer(dict.__name__, self._dict_deserializer)
+        self.add_serializer(list, self._list_serializer)
+        self.add_deserializer(list.__name__, self._list_deserializer)
+        self.add_serializer(tuple, self._list_serializer)
+        self.add_deserializer(tuple.__name__, self._list_deserializer)
 
     def add_serializer(self, clazz, func):
         self._serializers[clazz] = func
@@ -70,17 +75,35 @@ class ValueSerializer:
 
         return dictionary
 
+    def _list_serializer(self, iterable):
+        return_list = []
+
+        for item in list(iterable):
+            return_list.append(self.serialize(item))
+
+        return return_list
+
+    def _list_deserializer(self, iterable):
+        return_list = []
+
+        for item in list(iterable):
+            return_list.append(self.deserialize(item))
+
+        return return_list
+
     def serialize(self, value):
+        value = copy.deepcopy(value)
+
         serializer = self._serializers.get(value.__class__)
 
         if serializer:
-            value_name = value.__class__.__name__
             value = serializer(value)
-            value["__class__.__name__"] = value_name
 
         return value
 
     def deserialize(self, value):
+        value = copy.deepcopy(value)
+
         if isinstance(value, dict):
             class_name = value.get("__class__.__name__") or value.__class__.__name__
             deserializer = self._deserializers.get(class_name)
