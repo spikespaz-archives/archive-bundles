@@ -1,12 +1,18 @@
+import os
 import sys
+import json
+import utils
 import platform
+import patoolib
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QHeaderView
-from adoptapi import RequestOptions
-from interface import Ui_MainWindow
+from models import AvailableBinariesTableModel, InstalledBinariesListModel
 from widgets import CheckBoxButtonGroup
-from models import AvailableBinariesTableModel
+from interface import Ui_MainWindow
+from adoptapi import RequestOptions
 from utils import DownloaderThread
+from pathlib import Path
+from filedict import FileDict
 
 
 PLATFORM_OS = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
@@ -23,10 +29,26 @@ PLATFORM_ARCH = (
     }.get(x, x)
 )(platform.machine().lower())
 
+DOWNLOADS_DIR = Path(Path.home(), "Downloads")
+BINARIES_DIR = Path(Path.home(), ".jvman")
+SETTINGS_FILE = Path(BINARIES_DIR, "options.json")
+
 
 class AppMainWindow(Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        os.makedirs(BINARIES_DIR, exist_ok=True)
+
+        self.settings = FileDict(
+            SETTINGS_FILE,
+            defaults={
+                "downloads_dir": DOWNLOADS_DIR,
+                "binaries_dir": BINARIES_DIR,
+                "filter_options": RequestOptions(many=True),
+                "installs": {},
+            },
+        )
 
         self._download_thread = DownloaderThread(chunk_size=1024)
 
@@ -38,6 +60,9 @@ class AppMainWindow(Ui_MainWindow):
         self.availableBinariesTableView.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.Stretch
         )
+
+        self.installedBinariesListModel = InstalledBinariesListModel()
+        self.installedBinariesListView.setModel(self.installedBinariesListModel)
 
         self.javaVerButtonGroup = CheckBoxButtonGroup(window)
         self.javaVerButtonGroup.setObjectName("javaVerButtonGroup")
@@ -85,13 +110,38 @@ class AppMainWindow(Ui_MainWindow):
 
         self.setup_connections()
 
+        # self.set_filter_options(self.settings["filter_options"])
+
     def setup_connections(self):
+        def _on_current_changed(index):
+            tab_name = self.mainTabWidget.tabText(index)
+
+            if tab_name == "Installed Binaries":
+                self.installedBinariesListModel.populate_model()
+            elif tab_name == "Available Binaries":
+                self.availableBinariesTableModel.populate_model(self.get_filter_options())
+
+        self.mainTabWidget.currentChanged.connect(_on_current_changed)
+
+        def _on_delete_selected_binary_clicked():
+            selection = self.installedBinariesListView.selectedIndexes()
+
+            for index in selection:
+                self.installedBinariesListModel.removeRows(index.row(), 1)
+
+        self.deleteSelectedBinaryPushButton.clicked.connect(_on_delete_selected_binary_clicked)
+
         def _on_rows_inserted(parent, first, last):
             for row in range(first, last + 1):
                 self.availableBinariesTableView.resizeRowToContents(row)
 
         self.availableBinariesTableModel.rowsInserted.connect(_on_rows_inserted)
         self.availableBinariesTableModel.status_change.connect(self.statusbar.showMessage)
+
+        def _on_filter_option_toggled():
+            options = self.get_filter_options()
+            self.settings["filter_options"] = options
+            self.availableBinariesTableModel.populate_model(options)
 
         for group in [
             self.javaVerButtonGroup,
@@ -101,9 +151,7 @@ class AppMainWindow(Ui_MainWindow):
             self.heapSizeButtonGroup,
             self.archButtonGroup,
         ]:
-            group.buttonToggled.connect(
-                lambda: self.availableBinariesTableModel.populate_model(self.filter_options())
-            )
+            group.buttonToggled.connect(_on_filter_option_toggled)
 
         def _on_begin_send_request():
             self.availableBinariesProgressBar.setMaximum(0)
@@ -146,10 +194,10 @@ class AppMainWindow(Ui_MainWindow):
             _on_selection_changed
         )
 
-    def open_info_window(self, _):
+    def open_info_window(self, *args, **kwargs):
         print("open_info_window")
 
-    def download_selected_binary(self, _):
+    def download_selected_binary(self, *args, **kwargs):
         print("download_selected_binary")
 
         self.availableBinariesTableView.setEnabled(False)
@@ -157,16 +205,48 @@ class AppMainWindow(Ui_MainWindow):
         self.availableBinariesInstallButton.setEnabled(False)
         self.filterOptionsGroupBox.setEnabled(False)
 
+        selected_release = self.get_selected_release()
+        request_url = selected_release.binaries[0].binary_link
+
+        self._download_thread(request_url, location=self.settings["downloads_dir"])
+
+    def install_selected_binary(self, *args, **kwargs):
+        print("install_selected_binary")
+
+        members_before = set(BINARIES_DIR.iterdir())
+        print(members_before)
+
+        def _on_end_download(filepath):
+            print("_on_end_download")
+            patoolib.extract_archive(filepath, outdir=self.settings["binaries_dir"])
+
+            members_after = set(BINARIES_DIR.iterdir())
+
+            members_delta = members_after - members_before
+
+            if len(members_delta) == 0:
+                self.statusbar.showMessage(
+                    "No new JAVA_HOME directories found, possibly already installed?"
+                )
+
+                return
+
+            print(members_delta)
+
+            for item in members_delta:
+                if item.is_dir():
+                    self.register_binary_path(item, self.get_selected_release())
+
+        self._download_thread.endDownload.connect(_on_end_download)
+        self.download_selected_binary()
+
+    def get_selected_release(self):
         selected_release = self.availableBinariesTableModel.data(
             self.availableBinariesTableView.selectedIndexes()[0],
             AvailableBinariesTableModel.ObjectRole,
         )
-        request_url = selected_release.binaries[0].binary_link
 
-        self._download_thread(request_url, location=self.app_options["download_path"])
-
-    def install_selected_binary(self, _):
-        print("install_selected_binary")
+        return selected_release
 
     def enable_available_binaries_tab_actions(self, enable=True):
         self.availableBinariesInfoButton.setEnabled(True)
@@ -174,7 +254,16 @@ class AppMainWindow(Ui_MainWindow):
         self.availableBinariesInstallButton.setEnabled(True)
         self.availableBinariesProgressBar.setEnabled(True)
 
-    def filter_options(self):
+    def register_binary_path(self, binary_path, selected_release):
+        self.settings["installs"][binary_path.name] = selected_release
+
+        self.statusbar.showMessage(
+            f'Registered "{selected_release.binaries[0].binary_name}" as an available binary!'
+        )
+
+        self.dump_settings_file()
+
+    def get_filter_options(self):
         options = RequestOptions(many=True, os=[PLATFORM_OS])
 
         if self.javaVer8CheckBox.isChecked():
@@ -224,6 +313,27 @@ class AppMainWindow(Ui_MainWindow):
 
         return options
 
+    def set_filter_options(self, options):
+        self.javaVer8CheckBox.setChecked("openjdk8" in options._version)
+        self.javaVer9CheckBox.setChecked("openjdk9" in options._version)
+        self.javaVer10CheckBox.setChecked("openjdk10" in options._version)
+        self.javaVer11CheckBox.setChecked("openjdk11" in options._version)
+
+        self.stableReleaseTypeCheckBox.setChecked(False in options._nightly)
+        self.nightlyReleaseTypeCheckBox.setChecked(True in options._nightly)
+
+        self.hotspotVmCheckBox.setChecked("hotspot" in options.openjdk_impl)
+        self.openj9VmCheckBox.setChecked("openj9" in options.openjdk_impl)
+
+        self.x32ArchCheckBox.setChecked("x32" in options.arch)
+        self.x64ArchCheckBox.setChecked("x64" in options.arch)
+
+        self.jdkBinCheckBox.setChecked("jdk" in options.type)
+        self.jreBinCheckBox.setChecked("jre" in options.type)
+
+        self.normalHeapSizeCheckBox.setChecked("normal" in options.heap_size)
+        self.largeHeapSizeCheckBox.setChecked("large" in options.heap_size)
+
 
 if __name__ == "__main__":
     app = QApplication([])
@@ -231,5 +341,4 @@ if __name__ == "__main__":
     ui = AppMainWindow()
     ui.setupUi(window)
     window.show()
-    ui.availableBinariesTableModel.populate_model(ui.filter_options())
     sys.exit(app.exec_())
