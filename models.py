@@ -150,7 +150,7 @@ class InstalledBinariesListModel(QAbstractListModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._internal_data = []
+        self._internal_data = {}
 
     def rowCount(self, parent=QModelIndex()):
         return len(self._internal_data)
@@ -159,10 +159,12 @@ class InstalledBinariesListModel(QAbstractListModel):
         if not index.isValid() or index.row() > self.rowCount() or index.column() > 0:
             return QVariant()
 
+        release = self._internal_data.values()[index.row()]
+
         if role == Qt.DisplayRole:
-            return self._internal_data[index.row()]
+            return f"{release.release_name} - {release.binaries[0].architecture}"
         elif role == AvailableBinariesTableModel.ObjectRole:
-            return self._internal_data[index.row()]
+            return release
 
         return QVariant()
 
@@ -188,3 +190,17 @@ class InstalledBinariesListModel(QAbstractListModel):
         self.beginRemoveRows(parent, row, row + count)
         self._internal_data = self._internal_data[:row] + self._internal_data[row + count :]
         self.endRemoveRows()
+
+    def add_release(self, name, release):
+        self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount() + 1)
+        if name in self._internal_data:
+            name = f"{name} ({self._internal_data.keys().count(name)})"
+        self._internal_data[name] = release
+        self.endInsertRows()
+
+    def add_releases(self, releases):
+        for release in releases:
+            self.add_release(release.binaries[0].release_name, release)
+
+    def get_release(self, name):
+        return self._internal_data.get(name)

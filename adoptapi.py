@@ -155,10 +155,3 @@ class RequestOptions:
         del data["_nightly"]
 
         return data
-
-    def serialize(self):
-        data = self.__dict__
-
-        data.update({"__class__.__name__": self.__class__.__name__})
-
-        return data

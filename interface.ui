@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="mainTabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="installedBinariesTab">
        <attribute name="title">
@@ -190,9 +190,6 @@
                  <property name="text">
                   <string>8</string>
                  </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
                 </widget>
                </item>
                <item>
@@ -245,9 +242,6 @@
                  <property name="text">
                   <string>Stable</string>
                  </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
                 </widget>
                </item>
                <item>
@@ -285,9 +279,6 @@
                 <widget class="QCheckBox" name="jdkBinCheckBox">
                  <property name="text">
                   <string>JDK</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -330,9 +321,6 @@
                 <widget class="QCheckBox" name="normalHeapSizeCheckBox">
                  <property name="text">
                   <string>Normal</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -418,9 +406,6 @@
                 <widget class="QCheckBox" name="hotspotVmCheckBox">
                  <property name="text">
                   <string>HotSpot</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
                  </property>
                 </widget>
                </item>

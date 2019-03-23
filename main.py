@@ -1,14 +1,14 @@
 import sys
 import platform
 
+from models import AvailableBinariesTableModel, InstalledBinariesListModel
 from PyQt5.QtWidgets import QApplication, QMainWindow, QHeaderView
-from adoptapi import RequestOptions, Release, ReleaseAsset
-from interface import Ui_MainWindow
+from pathlib import Path
+from adoptapi import RequestOptions
 from widgets import CheckBoxButtonGroup
-from models import AvailableBinariesTableModel
+from interface import Ui_MainWindow
 from utils import DownloaderThread
-from filedict import FileDict
-from pathlib import Path, PurePath, PosixPath, WindowsPath
+from settings import SettingsFile
 
 
 PLATFORM_OS = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
@@ -25,35 +25,25 @@ PLATFORM_ARCH = (
     }.get(x, x)
 )(platform.machine().lower())
 
-BINARIES_DIR = Path(Path.home(), ".jvman")
-BINARIES_DIR.mkdir(exist_ok=True)
-SETTINGS_FILE = Path(BINARIES_DIR, "settings.json")
-SETTINGS = FileDict(SETTINGS_FILE)
 
-_serializer = SETTINGS.serializer()
-
-_serializer.add_serializer(Path, lambda x: str(x.resolve()))
-_serializer.add_serializer(PurePath, lambda x: str(Path(x.resolve())))
-_serializer.add_serializer(PosixPath, lambda x: str(Path(x.resolve())))
-_serializer.add_serializer(WindowsPath, lambda x: str(Path(x.resolve())))
-
-_serializer.add_serializer(RequestOptions, RequestOptions.serialize)
-_serializer.add_deserializer(RequestOptions.__name__, lambda x: RequestOptions(**x))
-
-_serializer.add_serializer(Release, Release.serialize)
-_serializer.add_deserializer(Release.__name__, lambda x: Release(**x))
-
-_serializer.add_serializer(ReleaseAsset, ReleaseAsset.serialize)
-_serializer.add_deserializer(ReleaseAsset.__name__, lambda x: ReleaseAsset(**x))
-
-
-def set_settings_defaults():
-    SETTINGS.setdefault("filter_options", RequestOptions(many=True))
-    SETTINGS.setdefault("installed_binaries", [])
-    SETTINGS.setdefault("download_path", Path(Path.home(), "Downloads"))
-    SETTINGS.setdefault("binaries_dir", Path(Path.home(), ".jvman"))
-
-    SETTINGS.dump()
+SETTINGS = SettingsFile(
+    Path(Path.home(), ".jvman", "settings.json"),
+    serialize_map={
+        "download_path": lambda x: str(Path.resolve(x)),
+        "binaries_path": lambda x: str(Path.resolve(x)),
+        "filter_options": lambda x: x.__dict__
+    },
+    deserialize_map={
+        "download_path": Path,
+        "binaries_path": Path,
+        "filter_options": lambda x: RequestOptions(many=True, **x)
+    },
+    defaults={
+        "download_path": Path(Path.home(), "Downloads"),
+        "binaries_path": Path(Path.home(), ".jvman"),
+        "filter_options": RequestOptions(_version=["openjdk8"], many=True, os=[PLATFORM_OS])
+    }
+)
 
 
 class AppMainWindow(Ui_MainWindow):
@@ -61,7 +51,7 @@ class AppMainWindow(Ui_MainWindow):
         super().__init__(*args, **kwargs)
 
         SETTINGS.load()
-        set_settings_defaults()
+        SETTINGS["binaries_path"].mkdir(exist_ok=True)
 
         self._download_thread = DownloaderThread(chunk_size=1024)
 
@@ -73,6 +63,9 @@ class AppMainWindow(Ui_MainWindow):
         self.availableBinariesTableView.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.Stretch
         )
+
+        self.installedBinariesListModel = InstalledBinariesListModel()
+        self.installedBinariesListView.setModel(self.installedBinariesListModel)
 
         self.javaVerButtonGroup = CheckBoxButtonGroup(window)
         self.javaVerButtonGroup.setObjectName("javaVerButtonGroup")
@@ -108,25 +101,47 @@ class AppMainWindow(Ui_MainWindow):
 
         if PLATFORM_ARCH == "x32":
             self.archOptionLabel.setEnabled(True)
-
-            self.x32ArchCheckBox.setChecked(True)
-            self.x32ArchCheckBox.setEnabled(False)
+            self.x32ArchCheckBox.setEnabled(True)
         elif PLATFORM_ARCH == "x64":
             self.archOptionLabel.setEnabled(True)
-
-            self.x64ArchCheckBox.setChecked(True)
-            self.x64ArchCheckBox.setEnabled(False)
+            self.x64ArchCheckBox.setEnabled(True)
             self.x32ArchCheckBox.setEnabled(True)
 
         self.setup_connections()
 
+        self.set_filter_options(SETTINGS["filter_options"])
+
     def setup_connections(self):
+        def _on_current_changed(index):
+            tab_name = self.mainTabWidget.tabText(index)
+
+            if tab_name == "Installed Binaries":
+                self.installedBinariesListModel.populate_model()
+            elif tab_name == "Available Binaries":
+                self.availableBinariesTableModel.populate_model(self.get_filter_options())
+
+        self.mainTabWidget.currentChanged.connect(_on_current_changed)
+
+        def _on_delete_selected_binary_clicked():
+            selection = self.installedBinariesListView.selectedIndexes()
+
+            for index in selection:
+                self.installedBinariesListModel.removeRows(index.row(), 1)
+
+        self.deleteSelectedBinaryPushButton.clicked.connect(_on_delete_selected_binary_clicked)
+
         def _on_rows_inserted(parent, first, last):
             for row in range(first, last + 1):
                 self.availableBinariesTableView.resizeRowToContents(row)
 
         self.availableBinariesTableModel.rowsInserted.connect(_on_rows_inserted)
         self.availableBinariesTableModel.status_change.connect(self.statusbar.showMessage)
+
+        def _on_filter_option_toggled():
+            options = self.get_filter_options()
+            SETTINGS["filter_options"] = options
+            SETTINGS.dump()
+            self.availableBinariesTableModel.populate_model(options)
 
         for group in [
             self.javaVerButtonGroup,
@@ -136,9 +151,7 @@ class AppMainWindow(Ui_MainWindow):
             self.heapSizeButtonGroup,
             self.archButtonGroup,
         ]:
-            group.buttonToggled.connect(
-                lambda: self.availableBinariesTableModel.populate_model(self.filter_options())
-            )
+            group.buttonToggled.connect(_on_filter_option_toggled)
 
         def _on_begin_send_request():
             self.availableBinariesProgressBar.setMaximum(0)
@@ -181,10 +194,10 @@ class AppMainWindow(Ui_MainWindow):
             _on_selection_changed
         )
 
-    def open_info_window(self, _):
+    def open_info_window(self, *args, **kwargs):
         print("open_info_window")
 
-    def download_selected_binary(self, _):
+    def download_selected_binary(self, *args, **kwargs):
         print("download_selected_binary")
 
         self.availableBinariesTableView.setEnabled(False)
@@ -196,12 +209,8 @@ class AppMainWindow(Ui_MainWindow):
 
         self._download_thread(request_url, location=SETTINGS["download_path"])
 
-    def install_selected_binary(self, _):
+    def install_selected_binary(self, *args, **kwargs):
         print("install_selected_binary")
-
-        SETTINGS["installed_binaries"].append(self.selected_release())
-
-        SETTINGS.dump()
 
     def selected_release(self):
         return self.availableBinariesTableModel.data(
@@ -215,7 +224,7 @@ class AppMainWindow(Ui_MainWindow):
         self.availableBinariesInstallButton.setEnabled(True)
         self.availableBinariesProgressBar.setEnabled(True)
 
-    def filter_options(self):
+    def get_filter_options(self):
         options = RequestOptions(many=True, os=[PLATFORM_OS])
 
         if self.javaVer8CheckBox.isChecked():
@@ -265,6 +274,34 @@ class AppMainWindow(Ui_MainWindow):
 
         return options
 
+    def set_filter_options(self, options):
+        self.javaVer8CheckBox.setChecked("openjdk8" in options._version)
+        self.javaVer9CheckBox.setChecked("openjdk9" in options._version)
+        self.javaVer10CheckBox.setChecked("openjdk10" in options._version)
+        self.javaVer11CheckBox.setChecked("openjdk11" in options._version)
+
+        self.stableReleaseTypeCheckBox.setChecked(False in options._nightly)
+        self.nightlyReleaseTypeCheckBox.setChecked(True in options._nightly)
+
+        self.hotspotVmCheckBox.setChecked("hotspot" in options.openjdk_impl)
+        self.openj9VmCheckBox.setChecked("openj9" in options.openjdk_impl)
+
+        self.x32ArchCheckBox.setChecked("x32" in options.arch)
+        self.x64ArchCheckBox.setChecked("x64" in options.arch)
+
+        self.jdkBinCheckBox.setChecked("jdk" in options.type)
+        self.jreBinCheckBox.setChecked("jre" in options.type)
+
+        self.normalHeapSizeCheckBox.setChecked("normal" in options.heap_size)
+        self.largeHeapSizeCheckBox.setChecked("large" in options.heap_size)
+
+        self.javaVerButtonGroup.reset()
+        self.releaseTypeButtonGroup.reset()
+        self.vmButtonGroup.reset()
+        self.archButtonGroup.reset()
+        self.binTypeButtonGroup.reset()
+        self.heapSizeButtonGroup.reset()
+
 
 if __name__ == "__main__":
     app = QApplication([])
@@ -272,5 +309,4 @@ if __name__ == "__main__":
     ui = AppMainWindow()
     ui.setupUi(window)
     window.show()
-    ui.availableBinariesTableModel.populate_model(ui.filter_options())
     sys.exit(app.exec_())
