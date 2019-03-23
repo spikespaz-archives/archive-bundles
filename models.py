@@ -160,7 +160,7 @@ class InstalledBinariesListModel(QAbstractListModel):
         if not index.isValid() or index.row() > self.rowCount() or index.column() > 0:
             return QVariant()
 
-        release = self._internal_data.values()[index.row()]
+        release = tuple(self._internal_data.values())[index.row()]
 
         if role == Qt.DisplayRole:
             return f"{release.release_name} - {release.binaries[0].architecture}"
