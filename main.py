@@ -2,11 +2,13 @@ import sys
 import platform
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QHeaderView
-from adoptapi import RequestOptions
+from adoptapi import RequestOptions, Release, ReleaseAsset
 from interface import Ui_MainWindow
 from widgets import CheckBoxButtonGroup
 from models import AvailableBinariesTableModel
 from utils import DownloaderThread
+from filedict import FileDict
+from pathlib import Path, PurePath, PosixPath, WindowsPath
 
 
 PLATFORM_OS = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
@@ -23,10 +25,43 @@ PLATFORM_ARCH = (
     }.get(x, x)
 )(platform.machine().lower())
 
+BINARIES_DIR = Path(Path.home(), ".jvman")
+BINARIES_DIR.mkdir(exist_ok=True)
+SETTINGS_FILE = Path(BINARIES_DIR, "settings.json")
+SETTINGS = FileDict(SETTINGS_FILE)
+
+_serializer = SETTINGS.serializer()
+
+_serializer.add_serializer(Path, lambda x: str(x.resolve()))
+_serializer.add_serializer(PurePath, lambda x: str(Path(x.resolve())))
+_serializer.add_serializer(PosixPath, lambda x: str(Path(x.resolve())))
+_serializer.add_serializer(WindowsPath, lambda x: str(Path(x.resolve())))
+
+_serializer.add_serializer(RequestOptions, RequestOptions.serialize)
+_serializer.add_deserializer(RequestOptions.__name__, lambda x: RequestOptions(**x))
+
+_serializer.add_serializer(Release, Release.serialize)
+_serializer.add_deserializer(Release.__name__, lambda x: Release(**x))
+
+_serializer.add_serializer(ReleaseAsset, ReleaseAsset.serialize)
+_serializer.add_deserializer(ReleaseAsset.__name__, lambda x: ReleaseAsset(**x))
+
+
+def set_settings_defaults():
+    SETTINGS.setdefault("filter_options", RequestOptions(many=True))
+    SETTINGS.setdefault("installed_binaries", [])
+    SETTINGS.setdefault("download_path", Path(Path.home(), "Downloads"))
+    SETTINGS.setdefault("binaries_dir", Path(Path.home(), ".jvman"))
+
+    SETTINGS.dump()
+
 
 class AppMainWindow(Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        SETTINGS.load()
+        set_settings_defaults()
 
         self._download_thread = DownloaderThread(chunk_size=1024)
 
@@ -157,16 +192,22 @@ class AppMainWindow(Ui_MainWindow):
         self.availableBinariesInstallButton.setEnabled(False)
         self.filterOptionsGroupBox.setEnabled(False)
 
-        selected_release = self.availableBinariesTableModel.data(
-            self.availableBinariesTableView.selectedIndexes()[0],
-            AvailableBinariesTableModel.ObjectRole,
-        )
-        request_url = selected_release.binaries[0].binary_link
+        request_url = self.selected_release().binaries[0].binary_link
 
-        self._download_thread(request_url, location=self.app_options["download_path"])
+        self._download_thread(request_url, location=SETTINGS["download_path"])
 
     def install_selected_binary(self, _):
         print("install_selected_binary")
+
+        SETTINGS["installed_binaries"].append(self.selected_release())
+
+        SETTINGS.dump()
+
+    def selected_release(self):
+        return self.availableBinariesTableModel.data(
+            self.availableBinariesTableView.selectedIndexes()[0],
+            AvailableBinariesTableModel.ObjectRole,
+        )
 
     def enable_available_binaries_tab_actions(self, enable=True):
         self.availableBinariesInfoButton.setEnabled(True)
