@@ -40,10 +40,9 @@ class AvailableBinariesTableModel(QAbstractTableModel):
                 try:
                     for release in response:
                         for binary in release.binaries:
-                            standalone = copy.copy(release)
-                            standalone.binaries = [copy.copy(binary)]
-
-                            self.append_release.emit(standalone)
+                            release = copy.copy(release)
+                            release.binaries = [copy.deepcopy(binary)]
+                            self.append_release.emit(release)
                 except HTTPError as e:
                     print(e, file=sys.stderr)
                     continue
