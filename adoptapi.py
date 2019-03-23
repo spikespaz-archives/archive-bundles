@@ -4,6 +4,7 @@ from datetime import datetime
 import requests
 import utils
 import json
+import copy
 
 API_BASE_URL = "https://api.adoptopenjdk.net/v2"
 STRFTIME_FORMAT = r"%Y-%m-%dT%H:%M:%SZ"
@@ -60,12 +61,11 @@ class Release:
         self.download_count = kwargs.get("download_count", None)
 
     def serialize(self):
-        data = self.__dict__
+        data = copy.copy(self.__dict__)
         data.update(
             {
                 "timestamp": self.timestamp.strftime(STRFTIME_FORMAT),
                 "binaries": [binary.serialize() for binary in self.binaries],
-                "__class__.__name__": self.__class__.__name__,
             }
         )
 
@@ -105,7 +105,7 @@ class ReleaseAsset:
         )
 
     def serialize(self):
-        data = self.__dict__
+        data = copy.copy(self.__dict__)
         data.update(
             {
                 "version_data": {
@@ -114,7 +114,6 @@ class ReleaseAsset:
                     "optional": self.version_data.optional,
                 },
                 "updated_at": self.updated_at.strftime(STRFTIME_FORMAT),
-                "__class__.__name__": self.__class__.__name__,
             }
         )
 
