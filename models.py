@@ -2,6 +2,7 @@ from PyQt5.QtCore import Qt, QAbstractTableModel, QAbstractListModel, QThread, Q
 from PyQt5 import QtCore
 from requests import HTTPError
 from adoptapi import Release
+from collections import OrderedDict
 
 import adoptapi
 import copy
@@ -147,13 +148,13 @@ class AvailableBinariesTableModel(QAbstractTableModel):
 
 
 class InstalledBinariesListModel(QAbstractListModel):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, datamodel=OrderedDict(), *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._internal_data = {}
+        self._internal_data = datamodel
 
     def rowCount(self, parent=QModelIndex()):
-        return len(self._internal_data)
+        return len(self._internal_data.keys())
 
     def data(self, index, role=Qt.DisplayRole):
         if not index.isValid() or index.row() > self.rowCount() or index.column() > 0:
@@ -181,14 +182,19 @@ class InstalledBinariesListModel(QAbstractListModel):
 
     def insertRows(self, row, count, parent=QModelIndex()):
         self.beginInsertRows(parent, row, row + count)
-        self._internal_data = (
-            self._internal_data[:row] + ["" for _ in range(count)] + self._internal_data[row:]
-        )
+        new_data = OrderedDict(tuple(self._internal_data.items())[:row])
+        new_data.update([(f".unnamed-n", Release(binaries=[{}])) for n in range(row, row + count)])
+        new_data.update(tuple(self._internal_data.items())[row + count :])
+        self._internal_data.clear()
+        self._internal_data.update(new_data)
         self.endInsertRows()
 
     def removeRows(self, row, count, parent=QModelIndex()):
         self.beginRemoveRows(parent, row, row + count)
-        self._internal_data = self._internal_data[:row] + self._internal_data[row + count :]
+        new_data = OrderedDict(tuple(self._internal_data.items())[:row])
+        new_data.update(tuple(self._internal_data.items())[row + count :])
+        self._internal_data.clear()
+        self._internal_data.update(new_data)
         self.endRemoveRows()
 
     def add_release(self, name, release):
@@ -200,7 +206,15 @@ class InstalledBinariesListModel(QAbstractListModel):
 
     def add_releases(self, releases):
         for release in releases:
-            self.add_release(release.binaries[0].release_name, release)
+            self.add_release(release.binaries[0].binary_name, release)
 
     def get_release(self, name):
         return self._internal_data.get(name)
+
+    def serialize(self):
+        serialized = {}
+
+        for key, value in self._internal_data.items():
+            serialized[key] = value.serialize()
+
+        return serialized
