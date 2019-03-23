@@ -8,9 +8,10 @@ import adoptapi
 import copy
 import sys
 
+ObjectRole = Qt.UserRole + 1
+
 
 class AvailableBinariesTableModel(QAbstractTableModel):
-    ObjectRole = Qt.UserRole + 1
     status_change = QtCore.pyqtSignal(str, int)
 
     class UpdateThread(QThread):
@@ -99,7 +100,7 @@ class AvailableBinariesTableModel(QAbstractTableModel):
                 return release.binaries[0].heap_size.title()
             elif index.column() == 6:  # Architecture
                 return release.binaries[0].architecture
-        elif role == AvailableBinariesTableModel.ObjectRole:
+        elif role == ObjectRole:
             return self._internal_data[index.row()]
 
         return QVariant()
@@ -160,11 +161,12 @@ class InstalledBinariesListModel(QAbstractListModel):
         if not index.isValid() or index.row() > self.rowCount() or index.column() > 0:
             return QVariant()
 
+        name = tuple(self._internal_data.keys())[index.row()]
         release = tuple(self._internal_data.values())[index.row()]
 
         if role == Qt.DisplayRole:
-            return f"{release.release_name} - {release.binaries[0].architecture}"
-        elif role == AvailableBinariesTableModel.ObjectRole:
+            return f"{name} [{release.release_name}]"
+        elif role == ObjectRole:
             return release
 
         return QVariant()
@@ -183,7 +185,9 @@ class InstalledBinariesListModel(QAbstractListModel):
     def insertRows(self, row, count, parent=QModelIndex()):
         self.beginInsertRows(parent, row, row + count)
         new_data = OrderedDict(tuple(self._internal_data.items())[:row])
-        new_data.update([(f".unnamed-n", Release(binaries=[{}])) for n in range(row, row + count)])
+        new_data.update(
+            [(f"Unnamed Release ({n})", Release(binaries=[{}])) for n in range(row, row + count)]
+        )
         new_data.update(tuple(self._internal_data.items())[row + count :])
         self._internal_data.clear()
         self._internal_data.update(new_data)
@@ -198,11 +202,14 @@ class InstalledBinariesListModel(QAbstractListModel):
         self.endRemoveRows()
 
     def add_release(self, name, release):
-        self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount() + 1)
         if name in self._internal_data:
-            name = f"{name} ({self._internal_data.keys().count(name)})"
-        self._internal_data[name] = release
-        self.endInsertRows()
+            self._internal_data[name] = release
+            top_left = self.index(tuple(self._internal_data.keys()).index(name), 0)
+            self.dataChanged.emit(top_left, top_left)
+        else:
+            self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount() + 1)
+            self._internal_data[name] = release
+            self.endInsertRows()
 
     def add_releases(self, releases):
         for release in releases:
