@@ -1,5 +1,7 @@
 import json
 
+from json import JSONDecodeError
+
 
 class FileDict(dict):
     def __init__(self, file, *args, **kwargs):
@@ -17,11 +19,18 @@ class FileDict(dict):
             json.dump(dictionary, file, indent=2)
 
     def load(self):
-        with open(self.__file, "r") as file:
-            dictionary = json.load(file)
-            dictionary = self.__serializer.deserialize(dictionary)
+        try:
+            with open(self.__file, "r") as file:
+                dictionary = json.load(file)
+                dictionary = self.__serializer.deserialize(dictionary)
 
-            self.update(dictionary)
+                self.update(dictionary)
+        except JSONDecodeError as e:
+            print("Could not load settings file, creating default")
+            print("\t", e)
+
+            with open(self.__file, "w") as file:
+                json.dump(self, file, indent=4)
 
     def serializer(self):
         return self.__serializer
