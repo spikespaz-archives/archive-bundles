@@ -1,6 +1,5 @@
-import json
+import rapidjson
 
-from json import JSONDecodeError
 from pathlib import Path
 
 
@@ -18,19 +17,19 @@ class SettingsFile(dict):
             for key, value in serialized.items():
                 serialized[key] = self._serialize_map[key](value)
 
-            json.dump(serialized, file, indent=2)
+            rapidjson.dump(serialized, file, indent=2)
 
     def load(self):
         try:
             with open(self._file_name, "r") as file:
-                deserialized = json.load(file)
+                deserialized = rapidjson.load(file)
 
                 for key, value in deserialized.items():
                     deserialized[key] = self._deserialize_map[key](value)
 
                 self.update(deserialized)
                 self.set_defaults()
-        except (FileNotFoundError, JSONDecodeError) as e:
+        except (FileNotFoundError, ValueError) as e:
             print("Settings file not valid, creating default")
             print("\t", e)
 

@@ -1,9 +1,9 @@
 from collections import namedtuple
 from datetime import datetime
 
+import rapidjson
 import requests
 import utils
-import json
 import copy
 
 API_BASE_URL = "https://api.adoptopenjdk.net/v2"
@@ -72,7 +72,7 @@ class Release:
         return data
 
     def json(self):
-        return json.dumps(self.serialize())
+        return rapidjson.dumps(self.serialize())
 
 
 class ReleaseAsset:
@@ -120,7 +120,7 @@ class ReleaseAsset:
         return data
 
     def json(self):
-        return json.dumps(self.serialize())
+        return rapidjson.dumps(self.serialize())
 
 
 class RequestOptions:
