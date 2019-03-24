@@ -1,10 +1,12 @@
 import itertools
 import requests
+import platform
 import re
 
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread, QProcess
 from PyQt5 import QtCore
-from os import path
+from PyQt5.Qt import QDesktopServices
+from pathlib import Path
 
 
 def wrap_throwable(func, *exc):
@@ -68,6 +70,8 @@ class DownloaderThread(QThread):
         self._url = None
         self._location = None
         self.file_location = None
+        self.success = False
+        self._stopped = False
 
     def __del__(self):
         self.wait()
@@ -78,7 +82,16 @@ class DownloaderThread(QThread):
 
         self.start()
 
+    def stop(self):
+        self._stopped = True
+        self.success = False
+        self.endDownload.emit(str(self.file_location))
+        self.exit(0)
+
     def run(self):
+        self._stopped = False
+        self.success = False
+
         self.beginSendRequest.emit()
         request = requests.get(self._url, stream=True)
         self.endSendRequest.emit()
@@ -89,15 +102,17 @@ class DownloaderThread(QThread):
         self.filenameFound.emit(self.filename)
         self.filesizeFound.emit(self.filesize)
 
-        self.file_location = path.join(self._location, self.filename)
+        self.file_location = Path(self._location, self.filename).resolve()
 
-        self.beginDownload.emit(self.file_location)
+        self.beginDownload.emit(str(self.file_location))
 
         with open(self.file_location, "wb") as file:
             downloaded_bytes = 0
 
             for count, chunk in enumerate(request.iter_content(chunk_size=self.chunk_size)):
-                if not chunk:
+                if self._stopped:
+                    return
+                elif not chunk:
                     continue
 
                 file.write(chunk)
@@ -106,4 +121,29 @@ class DownloaderThread(QThread):
                 self.bytesChanged.emit(downloaded_bytes)
                 self.chunkWritten.emit(count)
 
-        self.endDownload.emit(self.file_location)
+        self.success = True
+        self.endDownload.emit(str(self.file_location))
+
+
+def open_explorer(path):
+    path = Path(path).resolve()
+    system = platform.system().lower()
+
+    print(system)
+
+    if system == "windows":
+        if path.is_dir():
+            QProcess.startDetached(f'explorer.exe "{path}"')
+        else:
+            QProcess.startDetached(f'explorer.exe /select,"{path}"')
+    elif system == "darwin":
+        QProcess.execute(
+            "/usr/bin/osascript",
+            '-e tell application "Finder" -e activate'
+            + f' -e select POSIX file "{path}" -e and tell -e return',
+        )
+    else:
+        if path.is_dir():
+            QDesktopServices.openUrl(path.as_uri())
+        else:
+            QDesktopServices.openUrl(path.parent().as_uri())
