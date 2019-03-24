@@ -358,12 +358,3 @@ class AppMainWindow(Ui_MainWindow):
         self.archButtonGroup.reset()
         self.binTypeButtonGroup.reset()
         self.heapSizeButtonGroup.reset()
-
-
-if __name__ == "__main__":
-    app = QApplication([])
-    window = QMainWindow()
-    ui = AppMainWindow()
-    ui.setupUi(window)
-    window.show()
-    sys.exit(app.exec_())
