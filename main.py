@@ -187,7 +187,7 @@ class AppMainWindow(Ui_MainWindow):
 
             if self._download_thread.success:
                 if file_location and file_location.exists():
-                    utils.open_explorer(file_location)
+                    utils.open_path(file_location)
             else:
                 if file_location and file_location.exists():
                     file_location.unlink()

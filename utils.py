@@ -3,7 +3,7 @@ import requests
 import platform
 import re
 
-from PyQt5.QtCore import QThread, QProcess
+from PyQt5.QtCore import QThread, QProcess, QUrl
 from PyQt5 import QtCore
 from PyQt5.Qt import QDesktopServices
 from pathlib import Path
@@ -137,13 +137,17 @@ def open_explorer(path):
         else:
             QProcess.startDetached(f'explorer.exe /select,"{path}"')
     elif system == "darwin":
-        QProcess.execute(
-            "/usr/bin/osascript",
-            '-e tell application "Finder" -e activate'
-            + f' -e select POSIX file "{path}" -e and tell -e return',
-        )
+        # QProcess.execute(
+        #     "/usr/bin/osascript",
+        #     '-e tell application "Finder" -e activate'
+        #     + f' -e select POSIX file "{path}" -e and tell -e return',
+        # )
+        QProcess.startDetached(f'open -R "{path}"')
     else:
         if path.is_dir():
-            QDesktopServices.openUrl(path.as_uri())
+            QDesktopServices.openUrl(QUrl(path.as_uri()))
         else:
-            QDesktopServices.openUrl(path.parent().as_uri())
+            QDesktopServices.openUrl(QUrl(path.parent.as_uri()))
+        
+def open_path(path):
+    QDesktopServices.openUrl(QUrl(path.as_uri()))
