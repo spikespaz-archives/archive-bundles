@@ -3,7 +3,7 @@ from datetime import datetime
 
 import rapidjson
 import requests
-import utils
+import helpers
 import copy
 
 API_BASE_URL = "https://api.adoptopenjdk.net/v2"
@@ -52,7 +52,7 @@ class Release:
     def __init__(self, **kwargs):
         self.release_name = kwargs.get("release_name", None)
         self.release_link = kwargs.get("release_link", None)
-        self.timestamp = utils.wrap_throwable(
+        self.timestamp = helpers.wrap_throwable(
             lambda: datetime.strptime(kwargs["timestamp"], STRFTIME_FORMAT), KeyError
         )()
         self.release = kwargs.get("release", None)
@@ -95,7 +95,7 @@ class ReleaseAsset:
         )
         self.heap_size = kwargs.get("heap_size", None)
         self.download_count = kwargs.get("download_count", None)
-        self.updated_at = utils.wrap_throwable(
+        self.updated_at = helpers.wrap_throwable(
             lambda: datetime.strptime(kwargs["updated_at"], STRFTIME_FORMAT), KeyError
         )()
 
@@ -140,7 +140,7 @@ class RequestOptions:
             if not isinstance(value, (tuple, list, set)):
                 raise ValueError("Cannot create cartesian products from singleton values")
 
-        for product in utils.product_dicts(**data):
+        for product in helpers.product_dicts(**data):
             yield RequestOptions(**product)
 
     def params(self):

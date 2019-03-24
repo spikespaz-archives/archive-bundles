@@ -1,5 +1,5 @@
 import sys
-import utils
+import helpers
 import platform
 
 from PyQt5 import QtCore
@@ -9,7 +9,7 @@ from pathlib import Path
 from adoptapi import RequestOptions, Release
 from widgets import CheckBoxButtonGroup
 from interface import Ui_MainWindow
-from utils import DownloaderThread
+from helpers import DownloaderThread
 from settings import SettingsFile
 from collections import OrderedDict
 
@@ -187,7 +187,7 @@ class AppMainWindow(Ui_MainWindow):
 
             if self._download_thread.success:
                 if file_location and file_location.exists():
-                    utils.open_path(file_location)
+                    helpers.open_path(file_location)
             else:
                 if file_location and file_location.exists():
                     file_location.unlink()
