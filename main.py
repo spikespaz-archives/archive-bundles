@@ -1,4 +1,5 @@
 import sys
+import utils
 import platform
 
 from PyQt5 import QtCore
@@ -162,9 +163,32 @@ class AppMainWindow(Ui_MainWindow):
             self.availableBinariesProgressBar.setMaximum(self._download_thread.filesize)
             self.availableBinariesProgressBar.setFormat("Downloading... %p%")
 
-        def _on_end_download():
+            self.availableBinariesCancelButton.setEnabled(True)
+
+            def _on_clicked():
+                self._download_thread.stop()
+                self._download_thread.wait()
+
+            self.availableBinariesCancelButton.clicked.connect(_on_clicked)
+
+        @QtCore.pyqtSlot(str)
+        def _on_end_download(file_location):
+            file_location = Path(file_location)
+
+            self._download_thread.wait()
+
+            if self._download_thread.success:
+                if file_location and file_location.exists():
+                    utils.open_explorer(file_location)
+            else:
+                if file_location and file_location.exists():
+                    file_location.unlink()
+
+            self.availableBinariesCancelButton.setEnabled(False)
+
             self.availableBinariesProgressBar.setFormat(
-                f'Downloaded "{self._download_thread.filename}" successfully!'
+                f'Download "{self._download_thread.filename}"'
+                + f'{"succeeded" if self._download_thread.success else "failed"}!'
             )
 
             self.availableBinariesTableView.setEnabled(True)
@@ -240,8 +264,7 @@ class AppMainWindow(Ui_MainWindow):
 
     def selected_release(self):
         return self.availableBinariesTableModel.data(
-            self.availableBinariesTableView.selectedIndexes()[0],
-            ObjectRole,
+            self.availableBinariesTableView.selectedIndexes()[0], ObjectRole
         )
 
     def enable_available_binaries_tab_actions(self, enable=True):
