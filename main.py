@@ -50,7 +50,16 @@ SETTINGS = SettingsFile(
     defaults={
         "download_path": Path(Path.home(), "Downloads"),
         "binaries_path": Path(Path.home(), ".jvman"),
-        "filter_options": RequestOptions(_version=["openjdk8"], many=True, os=[PLATFORM_OS]),
+        "filter_options": RequestOptions(
+            _version=["openjdk8"],
+            _nightly=[False],
+            openjdk_impl=["openj9"],
+            os=[PLATFORM_OS],
+            arch=[PLATFORM_ARCH],
+            type=["jdk", "jre"],
+            heap_size=["normal"],
+            many=True,
+        ),
         "installed_binaries": OrderedDict(),
     },
 )
@@ -66,7 +75,6 @@ class AppMainWindow(Ui_MainWindow):
         super().__init__(*args, **kwargs)
 
         SETTINGS.load()
-        SETTINGS["binaries_path"].mkdir(exist_ok=True)
 
         self._download_thread = DownloaderThread(chunk_size=1024)
 

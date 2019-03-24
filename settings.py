@@ -1,6 +1,7 @@
 import json
 
 from json import JSONDecodeError
+from pathlib import Path
 
 
 class SettingsFile(dict):
@@ -32,6 +33,8 @@ class SettingsFile(dict):
         except (FileNotFoundError, JSONDecodeError) as e:
             print("Settings file not valid, creating default")
             print("\t", e)
+
+            Path(self._file_name).parent.mkdir(exist_ok=True)
 
             self.set_defaults()
             self.dump()
