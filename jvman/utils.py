@@ -148,6 +148,7 @@ def open_explorer(path):
             QDesktopServices.openUrl(QUrl(path.as_uri()))
         else:
             QDesktopServices.openUrl(QUrl(path.parent.as_uri()))
-        
+
+
 def open_path(path):
     QDesktopServices.openUrl(QUrl(path.as_uri()))
