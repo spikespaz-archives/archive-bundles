@@ -3,8 +3,9 @@ from datetime import datetime
 
 import rapidjson
 import requests
-import helpers
 import copy
+
+from . import helpers
 
 API_BASE_URL = "https://api.adoptopenjdk.net/v2"
 STRFTIME_FORMAT = r"%Y-%m-%dT%H:%M:%SZ"

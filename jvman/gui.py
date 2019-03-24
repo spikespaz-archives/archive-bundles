@@ -1,18 +1,17 @@
-import sys
-import helpers
 import platform
-
-from PyQt5 import QtCore
-from models import AvailableBinariesTableModel, InstalledBinariesListModel, ObjectRole
-from PyQt5.QtWidgets import QApplication, QMainWindow, QHeaderView
-from pathlib import Path
-from adoptapi import RequestOptions, Release
-from widgets import CheckBoxButtonGroup
-from interface import Ui_MainWindow
-from helpers import DownloaderThread
-from settings import SettingsFile
 from collections import OrderedDict
 
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QHeaderView
+from pathlib import Path
+
+from . import helpers
+from .helpers import DownloaderThread
+from .settings import SettingsFile
+from .widgets import CheckBoxButtonGroup
+from .models import AvailableBinariesTableModel, InstalledBinariesListModel, ObjectRole
+from .interface import Ui_MainWindow
+from .adoptapi import RequestOptions, Release
 
 PLATFORM_OS = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
 PLATFORM_ARCH = (

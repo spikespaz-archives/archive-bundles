@@ -1,12 +1,13 @@
+import sys
+import copy
+from collections import OrderedDict
+
 from PyQt5.QtCore import Qt, QAbstractTableModel, QAbstractListModel, QThread, QVariant, QModelIndex
 from PyQt5 import QtCore
 from requests import HTTPError
-from adoptapi import Release
-from collections import OrderedDict
 
-import adoptapi
-import copy
-import sys
+from . import adoptapi
+from .adoptapi import Release
 
 ObjectRole = Qt.UserRole + 1
 

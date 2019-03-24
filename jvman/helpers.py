@@ -1,3 +1,4 @@
+from pathlib import Path
 import itertools
 import requests
 import platform
@@ -6,7 +7,6 @@ import re
 from PyQt5.QtCore import QThread, QProcess, QUrl
 from PyQt5 import QtCore
 from PyQt5.Qt import QDesktopServices
-from pathlib import Path
 
 
 def wrap_throwable(func, *exc):

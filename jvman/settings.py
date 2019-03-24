@@ -1,6 +1,6 @@
-import rapidjson
-
 from pathlib import Path
+
+import rapidjson
 
 
 class SettingsFile(dict):
