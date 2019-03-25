@@ -3,7 +3,7 @@ import sys
 
 if __name__ == "__main__":
     if "gui" in sys.argv:
-        from gui import AppMainWindow
+        from .gui import AppMainWindow
         from PyQt5.QtWidgets import QApplication, QMainWindow
 
         app = QApplication([])
