@@ -18,3 +18,7 @@ interface.py
 build/
 dist/
 *.spec
+
+# Nuitka
+jvmangui.build/
+jvmangui.dist/
