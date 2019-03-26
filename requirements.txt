@@ -3,3 +3,4 @@ requests
 pyqt5
 patool
 black
+nuitka
