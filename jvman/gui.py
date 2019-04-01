@@ -151,7 +151,8 @@ class AppMainWindow(Ui_MainWindow):
             if tab_name == "Installed Binaries":
                 pass
             elif tab_name == "Available Binaries":
-                self.availableBinariesTableModel.populate_model(self.get_filter_options())
+                if self.availableBinariesTableModel.rowCount() == 0:
+                    self.availableBinariesTableModel.populate_model(self.get_filter_options())
 
         def _on_delete_selected_binary_clicked():
             selection = self.installedBinariesListView.selectedIndexes()

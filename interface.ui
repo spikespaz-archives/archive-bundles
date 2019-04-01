@@ -30,7 +30,14 @@
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="QListView" name="installedBinariesListView"/>
+          <widget class="QListView" name="installedBinariesListView">
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
           <widget class="QTreeView" name="selectedBinaryDetailsTreeView">
            <property name="editTriggers">
             <set>QAbstractItemView::NoEditTriggers</set>
