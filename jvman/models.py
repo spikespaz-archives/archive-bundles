@@ -2,7 +2,15 @@ import sys
 import copy
 from collections import OrderedDict
 
-from PyQt5.QtCore import Qt, QAbstractTableModel, QAbstractListModel, QThread, QVariant, QModelIndex
+from PyQt5.QtCore import (
+    Qt,
+    QAbstractTableModel,
+    QSortFilterProxyModel,
+    QAbstractListModel,
+    QThread,
+    QVariant,
+    QModelIndex,
+)
 from PyQt5 import QtCore
 from requests import HTTPError
 
@@ -10,6 +18,14 @@ from . import adoptapi
 from .adoptapi import Release
 
 ObjectRole = Qt.UserRole + 1
+
+
+class GenericSortFilterProxyModel(QSortFilterProxyModel):
+    def lessThan(self, left, right):
+        left_data = self.sourceModel().data(left)
+        right_data = self.sourceModel().data(right)
+
+        return left_data < right_data
 
 
 class AvailableBinariesTableModel(QAbstractTableModel):
