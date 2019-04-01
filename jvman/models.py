@@ -246,7 +246,7 @@ class InstalledBinariesListModel(QAbstractListModel):
 
 
 class TreeItem:
-    def __init__(self, data, parent):
+    def __init__(self, data, parent=None):
         self._parent_item = parent
         self._child_items = []
         self._item_data = data
@@ -258,7 +258,10 @@ class TreeItem:
         return len(self._item_data)
 
     def data(self, column):
-        return self._item_data[column]
+        if len(self._item_data) > column:
+            return self._item_data[column]
+
+        return QVariant()
 
     def row(self):
         if self._parent_item:
@@ -308,6 +311,17 @@ class ReferenceTreeModel(QAbstractItemModel):
 
         return self.createIndex(parent_item.row(), 0, parent_item)
 
+    def rowCount(self, parent):
+        if parent.column() > 0:
+            return 0
+
+        if not parent.isValid():
+            parent_item = self._root_item
+        else:
+            parent_item = parent.internalPointer()
+
+        return parent_item.childCount()
+
     def columnCount(self, parent=QModelIndex()):
         if parent.isValid():
             return parent.internalPointer().columnCount()
@@ -321,7 +335,7 @@ class ReferenceTreeModel(QAbstractItemModel):
         if role != Qt.DisplayRole:
             return QVariant()
 
-        item = index.internalPointer
+        item = index.internalPointer()
 
         return item.data(index.column())
 
@@ -329,7 +343,7 @@ class ReferenceTreeModel(QAbstractItemModel):
         if not index.isValid():
             return 0
 
-        return QAbstractItemModel.flags(index)
+        return super().flags(index)
 
     def headerData(self, section, orientation, role):
         if orientation == Qt.Horizontal and role == Qt.DisplayRole:
@@ -339,11 +353,64 @@ class ReferenceTreeModel(QAbstractItemModel):
 
 
 class SelectedBinaryDetailsTreeModel(ReferenceTreeModel):
-    def __init__(self, data, parent):
+    def __init__(self, data, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
         self._root_data = ["Field", "Value"]
-        self._root_item = TreeItem(self.rootData)
+        self._root_item = TreeItem(self._root_data)
 
-        self.populate_model(data, self.rootItem)
+        self.populate_model(data)
 
-    def populate_model(self, data, parent):
-        pass
+    def populate_model(self, release):
+        release_item_release_name = TreeItem(["Release Name"], parent=self._root_item)
+        release_item_release_link = TreeItem(["Release Link"], parent=self._root_item)
+        release_item_timestamp = TreeItem(["Timestamp"], parent=self._root_item)
+        release_item_release = TreeItem(["Release"], parent=self._root_item)
+        release_item_binaries = TreeItem(["Binaries"], parent=self._root_item)
+        release_item_download_count = TreeItem(["Download Count"], parent=self._root_item)
+
+        for index, binary in enumerate(release.binaries):
+            binary_item = TreeItem([index], parent=release_item_binaries)
+
+            binary_item_os = TreeItem(["Operating System"], parent=binary_item)
+            binary_item_architecture = TreeItem(["Architecture"], parent=binary_item)
+            binary_item_binary_type = TreeItem(["Binary Type"], parent=binary_item)
+            binary_item_openjdk_impl = TreeItem(["OpenJDK Implementation"], parent=binary_item)
+            binary_item_binary_name = TreeItem(["Binary Name"], parent=binary_item)
+            binary_item_binary_link = TreeItem(["Binary Link"], parent=binary_item)
+            binary_item_binary_size = TreeItem(["Binary Size"], parent=binary_item)
+            binary_item_checksum_link = TreeItem(["Checksum Link"], parent=binary_item)
+            binary_item_version = TreeItem(["Version"], parent=binary_item)
+            binary_item_version_data = TreeItem(["Version Data"], parent=binary_item)
+            binary_item_version_data_openjdk_version = TreeItem(["OpenJDK Version"], parent=binary_item_version_data)
+            binary_item_version_data_semver = TreeItem(["Semantic Version"], parent=binary_item_version_data)
+            binary_item_version_data_optional = TreeItem(["Optional"], parent=binary_item_version_data)
+            binary_item_heap_size = TreeItem(["Heap Size"], parent=binary_item)
+            binary_item_download_count = TreeItem(["Download Count"], parent=binary_item)
+            binary_item_updated_at = TreeItem(["Updated At"], parent=binary_item)
+
+            binary_item.appendChild(binary_item_os)
+            binary_item.appendChild(binary_item_architecture)
+            binary_item.appendChild(binary_item_binary_type)
+            binary_item.appendChild(binary_item_openjdk_impl)
+            binary_item.appendChild(binary_item_binary_name)
+            binary_item.appendChild(binary_item_binary_link)
+            binary_item.appendChild(binary_item_binary_size)
+            binary_item.appendChild(binary_item_checksum_link)
+            binary_item.appendChild(binary_item_version)
+            binary_item.appendChild(binary_item_version_data)
+            binary_item_version_data.appendChild(binary_item_version_data_openjdk_version)
+            binary_item_version_data.appendChild(binary_item_version_data_semver)
+            binary_item_version_data.appendChild(binary_item_version_data_optional)
+            binary_item.appendChild(binary_item_heap_size)
+            binary_item.appendChild(binary_item_download_count)
+            binary_item.appendChild(binary_item_updated_at)
+
+            release_item_binaries.appendChild(binary_item)
+
+        self._root_item.appendChild(release_item_release_name)
+        self._root_item.appendChild(release_item_release_link)
+        self._root_item.appendChild(release_item_timestamp)
+        self._root_item.appendChild(release_item_release)
+        self._root_item.appendChild(release_item_binaries)
+        self._root_item.appendChild(release_item_download_count)
