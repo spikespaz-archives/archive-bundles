@@ -280,7 +280,7 @@ class AppMainWindow(Ui_MainWindow):
         self.installedBinariesListModel.add_release(release.release_name, release)
 
     def selected_release(self):
-        return self.availableBinariesTableModel.data(
+        return self.availableBinariesTableSortFilterProxyModel.data(
             self.availableBinariesTableView.selectedIndexes()[0], ObjectRole
         )
 
