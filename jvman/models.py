@@ -277,3 +277,73 @@ class TreeItem:
 
     def parent(self):
         return self._parent_item
+
+
+class ReferenceTreeModel(QAbstractItemModel):
+    def index(self, row, column, parent=QModelIndex()):
+        if not self.hasIndex(row, column, parent):
+            return QModelIndex()
+
+        if not parent.isValid():
+            parent_item = self._root_item
+        else:
+            parent_item = parent.internalPointer()
+
+        child_item = parent_item.child(row)
+
+        if child_item:
+            return self.createIndex(row, column, child_item)
+        else:
+            return QModelIndex()
+
+    def parent(self, index):
+        if not index.isValid():
+            return QModelIndex()
+
+        child_item = index.internalPointer()
+        parent_item = child_item.parentItem()
+
+        if parent_item == self._root_item:
+            return QModelIndex()
+
+        return self.createIndex(parent_item.row(), 0, parent_item)
+
+    def columnCount(self, parent=QModelIndex()):
+        if parent.isValid():
+            return parent.internalPointer().columnCount()
+        else:
+            return self._root_item.columnCount()
+
+    def data(self, index, role):
+        if not index.isValid():
+            return QVariant()
+
+        if role != Qt.DisplayRole:
+            return QVariant()
+
+        item = index.internalPointer
+
+        return item.data(index.column())
+
+    def flags(self, index):
+        if not index.isValid():
+            return 0
+
+        return QAbstractItemModel.flags(index)
+
+    def headerData(self, section, orientation, role):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            return self._root_item.data(section)
+
+        return QVariant()
+
+
+class SelectedBinaryDetailsTreeModel(ReferenceTreeModel):
+    def __init__(self, data, parent):
+        self._root_data = ["Field", "Value"]
+        self._root_item = TreeItem(self.rootData)
+
+        self.populate_model(data, self.rootItem)
+
+    def populate_model(self, data, parent):
+        pass
