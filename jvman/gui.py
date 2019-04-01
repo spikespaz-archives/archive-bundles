@@ -12,8 +12,9 @@ from .widgets import CheckBoxButtonGroup
 from .models import (
     AvailableBinariesTableModel,
     InstalledBinariesListModel,
-    ObjectRole,
     GenericSortFilterProxyModel,
+    SelectedBinaryDetailsTreeModel,
+    ObjectRole,
 )
 from .interface import Ui_MainWindow
 from .adoptapi import RequestOptions, Release
@@ -215,14 +216,26 @@ class AppMainWindow(Ui_MainWindow):
 
             self.availableBinariesTableView.setFocus()
 
-        def _on_selection_changed(selected, deselected):
+        def _on_available_binaries_selection_changed(selected, deselected):
             self.enable_available_binaries_tab_actions(True)
             self.availableBinariesProgressBar.setMaximum(1)
             self.availableBinariesProgressBar.setValue(0)
 
+        def _on_installed_binaries_selection_changed(selected, deselected):
+            selected_release = self.selected_installed_release()
+            release_model = SelectedBinaryDetailsTreeModel(selected_release)
+
+            self.selectedBinaryDetailsTreeView.setModel(release_model)
+            self.selectedBinaryDetailsTreeView.expandAll()
+            self.selectedBinaryDetailsTreeView.resizeColumnToContents(0)
+
         self.installedBinariesListModel.rowsInserted.connect(dump_settings)
         self.installedBinariesListModel.rowsMoved.connect(dump_settings)
         self.installedBinariesListModel.rowsRemoved.connect(dump_settings)
+
+        self.installedBinariesListView.selectionModel().selectionChanged.connect(
+            _on_installed_binaries_selection_changed
+        )
 
         self.mainTabWidget.currentChanged.connect(_on_current_changed)
         self.deleteSelectedBinaryPushButton.clicked.connect(_on_delete_selected_binary_clicked)
@@ -251,7 +264,7 @@ class AppMainWindow(Ui_MainWindow):
         self.availableBinariesInstallButton.clicked.connect(self.install_selected_binary)
 
         self.availableBinariesTableView.selectionModel().selectionChanged.connect(
-            _on_selection_changed
+            _on_available_binaries_selection_changed
         )
 
     def open_info_window(self, *args, **kwargs):
@@ -282,6 +295,11 @@ class AppMainWindow(Ui_MainWindow):
     def selected_release(self):
         return self.availableBinariesTableSortFilterProxyModel.data(
             self.availableBinariesTableView.selectedIndexes()[0], ObjectRole
+        )
+
+    def selected_installed_release(self):
+        return self.installedBinariesListModel.data(
+            self.installedBinariesListView.selectedIndexes()[0], ObjectRole
         )
 
     def enable_available_binaries_tab_actions(self, enable=True):
