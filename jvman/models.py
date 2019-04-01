@@ -5,6 +5,7 @@ from collections import OrderedDict
 from PyQt5.QtCore import (
     Qt,
     QAbstractTableModel,
+    QAbstractItemModel,
     QSortFilterProxyModel,
     QAbstractListModel,
     QThread,
@@ -242,3 +243,37 @@ class InstalledBinariesListModel(QAbstractListModel):
             serialized[key] = value.serialize()
 
         return serialized
+
+
+class TreeItem:
+    def __init__(self, data, parent):
+        self._parent_item = parent
+        self._child_items = []
+        self._item_data = data
+
+    def childCount(self):
+        return len(self._child_items)
+
+    def columnCount(self):
+        return len(self._item_data)
+
+    def data(self, column):
+        return self._item_data[column]
+
+    def row(self):
+        if self._parent_item:
+            return self._parent_item._child_items.index(self)
+
+        return 0
+
+    def parentItem(self):
+        return self._parent_item
+
+    def appendChild(self, item):
+        self._child_items.append(item)
+
+    def child(self, row):
+        return self._child_items[row]
+
+    def parent(self):
+        return self._parent_item
