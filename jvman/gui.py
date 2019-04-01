@@ -9,7 +9,12 @@ from . import helpers
 from .helpers import DownloaderThread
 from .settings import SettingsFile
 from .widgets import CheckBoxButtonGroup
-from .models import AvailableBinariesTableModel, InstalledBinariesListModel, ObjectRole
+from .models import (
+    AvailableBinariesTableModel,
+    InstalledBinariesListModel,
+    ObjectRole,
+    GenericSortFilterProxyModel,
+)
 from .interface import Ui_MainWindow
 from .adoptapi import RequestOptions, Release
 
@@ -81,7 +86,11 @@ class AppMainWindow(Ui_MainWindow):
         super().setupUi(window, *args, **kwargs)
 
         self.availableBinariesTableModel = AvailableBinariesTableModel()
-        self.availableBinariesTableView.setModel(self.availableBinariesTableModel)
+        self.availableBinariesTableSortFilterProxyModel = GenericSortFilterProxyModel()
+        self.availableBinariesTableSortFilterProxyModel.setSourceModel(
+            self.availableBinariesTableModel
+        )
+        self.availableBinariesTableView.setModel(self.availableBinariesTableSortFilterProxyModel)
         self.availableBinariesTableView.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.Stretch
         )

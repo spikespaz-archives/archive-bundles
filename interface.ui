@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="mainTabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="installedBinariesTab">
        <attribute name="title">
@@ -116,6 +116,9 @@
           </property>
           <property name="horizontalScrollMode">
            <enum>QAbstractItemView::ScrollPerPixel</enum>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
           </property>
           <property name="wordWrap">
            <bool>false</bool>
