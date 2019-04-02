@@ -13,7 +13,7 @@ from .models import (
     AvailableBinariesTableModel,
     InstalledBinariesListModel,
     GenericSortFilterProxyModel,
-    SelectedBinaryDetailsTreeModel,
+    BinaryDetailsTreeModel,
     ObjectRole,
 )
 from .interface import Ui_MainWindow
@@ -227,7 +227,7 @@ class AppMainWindow(Ui_MainWindow):
                 return
 
             selected_release = self.selected_installed_release()
-            release_model = SelectedBinaryDetailsTreeModel(selected_release)
+            release_model = BinaryDetailsTreeModel(selected_release)
 
             self.selectedBinaryDetailsTreeView.setModel(release_model)
             self.selectedBinaryDetailsTreeView.expandAll()
