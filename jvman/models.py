@@ -246,10 +246,11 @@ class InstalledBinariesListModel(QAbstractListModel):
 
 
 class TreeItem:
-    def __init__(self, data, parent=None):
+    def __init__(self, data, tooltip=None, parent=None):
         self._parent_item = parent
         self._child_items = []
         self._item_data = data
+        self.tooltip = tooltip
 
     def childCount(self):
         return len(self._child_items)
@@ -332,12 +333,12 @@ class ReferenceTreeModel(QAbstractItemModel):
         if not index.isValid():
             return QVariant()
 
-        if role != Qt.DisplayRole:
-            return QVariant()
+        if role == Qt.DisplayRole:
+            return index.internalPointer().data(index.column())
+        elif role == Qt.ToolTipRole:
+            return index.internalPointer().tooltip
 
-        item = index.internalPointer()
-
-        return item.data(index.column())
+        return QVariant()
 
     def flags(self, index):
         if not index.isValid():
@@ -365,64 +366,110 @@ class BinaryDetailsTreeModel(ReferenceTreeModel):
         data = release.serialize()
 
         release_item_release_name = TreeItem(
-            ["Release Name", data["release_name"]], parent=self._root_item
+            ["Release Name", data["release_name"]], tooltip="release_name", parent=self._root_item
         )
         release_item_release_link = TreeItem(
-            ["Release Link", data["release_link"]], parent=self._root_item
+            ["Release Link", data["release_link"]], tooltip="release_link", parent=self._root_item
         )
-        release_item_timestamp = TreeItem(["Timestamp", data["timestamp"]], parent=self._root_item)
-        release_item_release = TreeItem(["Release", data["release"]], parent=self._root_item)
-        release_item_binaries = TreeItem(["Binaries", None], parent=self._root_item)
+        release_item_timestamp = TreeItem(
+            ["Timestamp", data["timestamp"]], tooltip="timestamp", parent=self._root_item
+        )
+        release_item_release = TreeItem(
+            ["Release", data["release"]], tooltip="release", parent=self._root_item
+        )
+        release_item_binaries = TreeItem(
+            ["Binaries", None], tooltip="binaries", parent=self._root_item
+        )
         release_item_download_count = TreeItem(
-            ["Download Count", data["download_count"]], parent=self._root_item
+            ["Download Count", data["download_count"]],
+            tooltip="download_count",
+            parent=self._root_item,
         )
 
         for index, binary in enumerate(data["binaries"]):
-            binary_item = TreeItem([index, None], parent=release_item_binaries)
+            binary_item = TreeItem(
+                [index, None], tooltip=f"binaries[{index}]", parent=release_item_binaries
+            )
 
-            binary_item_os = TreeItem(["Operating System", binary["os"]], parent=binary_item)
+            binary_item_os = TreeItem(
+                ["Operating System", binary["os"]],
+                tooltip=f"binaries[{index}].os",
+                parent=binary_item,
+            )
             binary_item_architecture = TreeItem(
-                ["Architecture", binary["architecture"]], parent=binary_item
+                ["Architecture", binary["architecture"]],
+                tooltip=f"binaries[{index}].architecture",
+                parent=binary_item,
             )
             binary_item_binary_type = TreeItem(
-                ["Binary Type", binary["binary_type"]], parent=binary_item
+                ["Binary Type", binary["binary_type"]],
+                tooltip=f"binaries[{index}].binary_type",
+                parent=binary_item,
             )
             binary_item_openjdk_impl = TreeItem(
-                ["Implementation", binary["openjdk_impl"]], parent=binary_item
+                ["Implementation", binary["openjdk_impl"]],
+                tooltip=f"binaries[{index}].openjdk_impl",
+                parent=binary_item,
             )
             binary_item_binary_name = TreeItem(
-                ["Binary Name", binary["binary_name"]], parent=binary_item
+                ["Binary Name", binary["binary_name"]],
+                tooltip=f"binaries[{index}].binary_name",
+                parent=binary_item,
             )
             binary_item_binary_link = TreeItem(
-                ["Binary Link", binary["binary_link"]], parent=binary_item
+                ["Binary Link", binary["binary_link"]],
+                tooltip=f"binaries[{index}].binary_link",
+                parent=binary_item,
             )
             binary_item_binary_size = TreeItem(
-                ["Binary Size", binary["binary_size"]], parent=binary_item
+                ["Binary Size", binary["binary_size"]],
+                tooltip=f"binaries[{index}].binary_size",
+                parent=binary_item,
             )
             binary_item_checksum_link = TreeItem(
-                ["Checksum Link", binary["checksum_link"]], parent=binary_item
+                ["Checksum Link", binary["checksum_link"]],
+                tooltip=f"binaries[{index}].checksum_link",
+                parent=binary_item,
             )
-            binary_item_version = TreeItem(["Version", binary["version"]], parent=binary_item)
+            binary_item_version = TreeItem(
+                ["Version", binary["version"]],
+                tooltip=f"binaries[{index}].version",
+                parent=binary_item,
+            )
             binary_item_version_data = TreeItem(
-                ["Version Data", binary["version_data"]], parent=binary_item
+                ["Version Data", binary["version_data"]],
+                tooltip=f"binaries[{index}].version_data",
+                parent=binary_item,
             )
             binary_item_version_data_openjdk_version = TreeItem(
                 ["OpenJDK Version", binary["version_data"]["openjdk_version"]],
+                tooltip=f"binaries[{index}].version_data.openjdk_version",
                 parent=binary_item_version_data,
             )
             binary_item_version_data_semver = TreeItem(
                 ["Semantic Version", binary["version_data"]["semver"]],
+                tooltip=f"binaries[{index}].version_data.semver",
                 parent=binary_item_version_data,
             )
             binary_item_version_data_optional = TreeItem(
-                ["Optional", binary["version_data"]["optional"]], parent=binary_item_version_data
+                ["Optional", binary["version_data"]["optional"]],
+                tooltip=f"binaries[{index}].version_data.optional",
+                parent=binary_item_version_data,
             )
-            binary_item_heap_size = TreeItem(["Heap Size", binary["heap_size"]], parent=binary_item)
+            binary_item_heap_size = TreeItem(
+                ["Heap Size", binary["heap_size"]],
+                tooltip=f"binaries[{index}].heap_size",
+                parent=binary_item,
+            )
             binary_item_download_count = TreeItem(
-                ["Download Count", binary["download_count"]], parent=binary_item
+                ["Download Count", binary["download_count"]],
+                tooltip=f"binaries[{index}].download_count",
+                parent=binary_item,
             )
             binary_item_updated_at = TreeItem(
-                ["Updated At", binary["updated_at"]], parent=binary_item
+                ["Updated At", binary["updated_at"]],
+                tooltip=f"binaries[{index}].updated_at",
+                parent=binary_item,
             )
 
             binary_item.appendChild(binary_item_os)
