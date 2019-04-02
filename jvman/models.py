@@ -372,13 +372,13 @@ class SelectedBinaryDetailsTreeModel(ReferenceTreeModel):
         )
         release_item_timestamp = TreeItem(["Timestamp", data["timestamp"]], parent=self._root_item)
         release_item_release = TreeItem(["Release", data["release"]], parent=self._root_item)
-        release_item_binaries = TreeItem(["Binaries"], parent=self._root_item)
+        release_item_binaries = TreeItem(["Binaries", None], parent=self._root_item)
         release_item_download_count = TreeItem(
             ["Download Count", data["download_count"]], parent=self._root_item
         )
 
         for index, binary in enumerate(data["binaries"]):
-            binary_item = TreeItem([index], parent=release_item_binaries)
+            binary_item = TreeItem([index, None], parent=release_item_binaries)
 
             binary_item_os = TreeItem(["Operating System", binary["os"]], parent=binary_item)
             binary_item_architecture = TreeItem(
