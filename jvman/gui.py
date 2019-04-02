@@ -222,6 +222,10 @@ class AppMainWindow(Ui_MainWindow):
             self.availableBinariesProgressBar.setValue(0)
 
         def _on_installed_binaries_selection_changed(selected, deselected):
+            if selected.isEmpty():
+                self.selectedBinaryDetailsTreeView.setModel(None)
+                return
+
             selected_release = self.selected_installed_release()
             release_model = SelectedBinaryDetailsTreeModel(selected_release)
 
@@ -268,31 +272,27 @@ class AppMainWindow(Ui_MainWindow):
         )
 
     def open_info_window(self, *args, **kwargs):
-        print("open_info_window")
+        pass
 
     def download_selected_binary(self, *args, **kwargs):
-        print("download_selected_binary")
-
         self.availableBinariesTableView.setEnabled(False)
         self.availableBinariesDownloadButton.setEnabled(False)
         self.availableBinariesInstallButton.setEnabled(False)
         self.filterOptionsGroupBox.setEnabled(False)
 
-        request_url = self.selected_release().binaries[0].binary_link
+        request_url = self.selected_available_release().binaries[0].binary_link
 
         self._download_thread(request_url, location=SETTINGS["download_path"])
 
     def install_selected_binary(self, *args, **kwargs):
-        print("install_selected_binary")
-
-        selected_release = self.selected_release()
+        selected_release = self.selected_available_release()
 
         self.install_release(selected_release)
 
     def install_release(self, release):
         self.installedBinariesListModel.add_release(release.release_name, release)
 
-    def selected_release(self):
+    def selected_available_release(self):
         return self.availableBinariesTableSortFilterProxyModel.data(
             self.availableBinariesTableView.selectedIndexes()[0], ObjectRole
         )
