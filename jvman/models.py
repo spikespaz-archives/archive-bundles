@@ -362,32 +362,68 @@ class SelectedBinaryDetailsTreeModel(ReferenceTreeModel):
         self.populate_model(data)
 
     def populate_model(self, release):
-        release_item_release_name = TreeItem(["Release Name"], parent=self._root_item)
-        release_item_release_link = TreeItem(["Release Link"], parent=self._root_item)
-        release_item_timestamp = TreeItem(["Timestamp"], parent=self._root_item)
-        release_item_release = TreeItem(["Release"], parent=self._root_item)
-        release_item_binaries = TreeItem(["Binaries"], parent=self._root_item)
-        release_item_download_count = TreeItem(["Download Count"], parent=self._root_item)
+        data = release.serialize()
 
-        for index, binary in enumerate(release.binaries):
+        release_item_release_name = TreeItem(
+            ["Release Name", data["release_name"]], parent=self._root_item
+        )
+        release_item_release_link = TreeItem(
+            ["Release Link", data["release_link"]], parent=self._root_item
+        )
+        release_item_timestamp = TreeItem(["Timestamp", data["timestamp"]], parent=self._root_item)
+        release_item_release = TreeItem(["Release", data["release"]], parent=self._root_item)
+        release_item_binaries = TreeItem(["Binaries"], parent=self._root_item)
+        release_item_download_count = TreeItem(
+            ["Download Count", data["download_count"]], parent=self._root_item
+        )
+
+        for index, binary in enumerate(data["binaries"]):
             binary_item = TreeItem([index], parent=release_item_binaries)
 
-            binary_item_os = TreeItem(["Operating System"], parent=binary_item)
-            binary_item_architecture = TreeItem(["Architecture"], parent=binary_item)
-            binary_item_binary_type = TreeItem(["Binary Type"], parent=binary_item)
-            binary_item_openjdk_impl = TreeItem(["OpenJDK Implementation"], parent=binary_item)
-            binary_item_binary_name = TreeItem(["Binary Name"], parent=binary_item)
-            binary_item_binary_link = TreeItem(["Binary Link"], parent=binary_item)
-            binary_item_binary_size = TreeItem(["Binary Size"], parent=binary_item)
-            binary_item_checksum_link = TreeItem(["Checksum Link"], parent=binary_item)
-            binary_item_version = TreeItem(["Version"], parent=binary_item)
-            binary_item_version_data = TreeItem(["Version Data"], parent=binary_item)
-            binary_item_version_data_openjdk_version = TreeItem(["OpenJDK Version"], parent=binary_item_version_data)
-            binary_item_version_data_semver = TreeItem(["Semantic Version"], parent=binary_item_version_data)
-            binary_item_version_data_optional = TreeItem(["Optional"], parent=binary_item_version_data)
-            binary_item_heap_size = TreeItem(["Heap Size"], parent=binary_item)
-            binary_item_download_count = TreeItem(["Download Count"], parent=binary_item)
-            binary_item_updated_at = TreeItem(["Updated At"], parent=binary_item)
+            binary_item_os = TreeItem(["Operating System", binary["os"]], parent=binary_item)
+            binary_item_architecture = TreeItem(
+                ["Architecture", binary["architecture"]], parent=binary_item
+            )
+            binary_item_binary_type = TreeItem(
+                ["Binary Type", binary["binary_type"]], parent=binary_item
+            )
+            binary_item_openjdk_impl = TreeItem(
+                ["Implementation", binary["openjdk_impl"]], parent=binary_item
+            )
+            binary_item_binary_name = TreeItem(
+                ["Binary Name", binary["binary_name"]], parent=binary_item
+            )
+            binary_item_binary_link = TreeItem(
+                ["Binary Link", binary["binary_link"]], parent=binary_item
+            )
+            binary_item_binary_size = TreeItem(
+                ["Binary Size", binary["binary_size"]], parent=binary_item
+            )
+            binary_item_checksum_link = TreeItem(
+                ["Checksum Link", binary["checksum_link"]], parent=binary_item
+            )
+            binary_item_version = TreeItem(["Version", binary["version"]], parent=binary_item)
+            binary_item_version_data = TreeItem(
+                ["Version Data", binary["version_data"]], parent=binary_item
+            )
+            binary_item_version_data_openjdk_version = TreeItem(
+                ["OpenJDK Version", binary["version_data"]["openjdk_version"]],
+                parent=binary_item_version_data,
+            )
+            binary_item_version_data_semver = TreeItem(
+                ["Semantic Version", binary["version_data"]["semver"]],
+                parent=binary_item_version_data,
+            )
+            binary_item_version_data_optional = TreeItem(
+                ["Optional", binary["version_data"]["optional"]], parent=binary_item_version_data
+            )
+            binary_item_heap_size = TreeItem(["Heap Size", binary["heap_size"]], parent=binary_item)
+            binary_item_download_count = TreeItem(
+                ["Download Count", binary["download_count"]], parent=binary_item
+            )
+            binary_item_updated_at = TreeItem(
+                ["Updated At", binary["updated_at"]], parent=binary_item
+            )
 
             binary_item.appendChild(binary_item_os)
             binary_item.appendChild(binary_item_architecture)
