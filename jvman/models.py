@@ -26,7 +26,7 @@ class GenericSortFilterProxyModel(QSortFilterProxyModel):
         left_data = self.sourceModel().data(left)
         right_data = self.sourceModel().data(right)
 
-        return left_data < right_data
+        return left_data > right_data
 
 
 class AvailableBinariesTableModel(QAbstractTableModel):
