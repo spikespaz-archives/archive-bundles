@@ -11,15 +11,15 @@ pkgname=('arc-themes-solid-maia'
 		 'arc-themes-solid-breath')
 _pkgname=$pkgbase
 _pkgbase=arc-themes-maia
-pkgver=20190213
+pkgver=20190330
 pkgrel=1
 #_gnomever=3.22
 arch=('any')
 _url='https://github.com/horst3180/arc-theme' #original theme
 url='https://github.com/NicoHood/arc-theme' #soft fork
 license=('GPL3')
-depends=('sassc' 'gtk3')
-makedepends=('optipng' 'inkscape' 'autoconf' 'automake' 'pkg-config' 'libcanberra' 'gnome-shell')
+depends=('gtk3')
+makedepends=('optipng' 'inkscape' 'autoconf' 'automake' 'pkg-config' 'libcanberra' 'gnome-shell' 'sassc' )
 optdepends=('arc-maia-icon-theme: recommended icon theme'
             'gtk-engine-murrine: for gtk2 themes'
             'gnome-themes-standard: for gtk2 themes')
@@ -28,7 +28,7 @@ source=("${_pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkg
         "${_pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
         #"${_pkgname}-${pkgver}.tar.xz::${url}/archive/${_commit}.tar.gz"
 )
-sha256sums=('13f66534cdda738e20564e0005bc72606aebe6355ee06ab265aa269ba69dbe59'
+sha256sums=('77a6c4ffd0006cab917fdef27904a5dbd931aa0089ccd30ac43a3fb03ebc3cf7'
             'SKIP')
 validpgpkeys=('97312D5EB9D7AE7D0BD4307351DAE9B7C1AE9161') #Nicohood key
 
