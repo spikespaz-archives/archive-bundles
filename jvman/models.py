@@ -75,7 +75,7 @@ class AvailableBinariesTableModel(QAbstractTableModel):
             "Java Version",
             "Release Type",
             "Binary Type",
-            "Virtial Machine",
+            "Virtal Machine",
             "Heap Size",
             "Architecture",
         ]
