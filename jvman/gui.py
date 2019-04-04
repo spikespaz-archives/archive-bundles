@@ -1,8 +1,8 @@
 import platform
 from collections import OrderedDict
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QHeaderView
+from PyQt5 import QtCore, uic
+from PyQt5.QtWidgets import QHeaderView, QMainWindow
 from pathlib import Path
 
 from . import helpers
@@ -16,7 +16,6 @@ from .models import (
     BinaryDetailsTreeModel,
     ObjectRole,
 )
-from .interface import Ui_MainWindow
 from .adoptapi import RequestOptions, Release
 
 PLATFORM_OS = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
@@ -75,17 +74,20 @@ def dump_settings(*args, **kwargs):
     SETTINGS.dump()
 
 
-class AppMainWindow(Ui_MainWindow):
+class AppMainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        uic.loadUi(Path(__file__) / ".." / "interface.ui", self)
 
         SETTINGS.load()
 
         self._download_thread = DownloaderThread(chunk_size=1024)
 
-    def setupUi(self, window, *args, **kwargs):
-        super().setupUi(window, *args, **kwargs)
+        self.setup_interface()
+        self.setup_connections()
 
+    def setup_interface(self):
         self.availableBinariesTableModel = AvailableBinariesTableModel()
         self.availableBinariesTableSortFilterProxyModel = GenericSortFilterProxyModel()
         self.availableBinariesTableSortFilterProxyModel.setSourceModel(
@@ -101,34 +103,34 @@ class AppMainWindow(Ui_MainWindow):
         )
         self.installedBinariesListView.setModel(self.installedBinariesListModel)
 
-        self.javaVerButtonGroup = CheckBoxButtonGroup(window)
+        self.javaVerButtonGroup = CheckBoxButtonGroup(self)
         self.javaVerButtonGroup.setObjectName("javaVerButtonGroup")
         self.javaVerButtonGroup.addButton(self.javaVer8CheckBox)
         self.javaVerButtonGroup.addButton(self.javaVer9CheckBox)
         self.javaVerButtonGroup.addButton(self.javaVer10CheckBox)
         self.javaVerButtonGroup.addButton(self.javaVer11CheckBox)
 
-        self.releaseTypeButtonGroup = CheckBoxButtonGroup(window)
+        self.releaseTypeButtonGroup = CheckBoxButtonGroup(self)
         self.releaseTypeButtonGroup.setObjectName("releaseTypeButtonGroup")
         self.releaseTypeButtonGroup.addButton(self.stableReleaseTypeCheckBox)
         self.releaseTypeButtonGroup.addButton(self.nightlyReleaseTypeCheckBox)
 
-        self.binTypeButtonGroup = CheckBoxButtonGroup(window)
+        self.binTypeButtonGroup = CheckBoxButtonGroup(self)
         self.binTypeButtonGroup.setObjectName("binTypeButtonGroup")
         self.binTypeButtonGroup.addButton(self.jdkBinCheckBox)
         self.binTypeButtonGroup.addButton(self.jreBinCheckBox)
 
-        self.vmButtonGroup = CheckBoxButtonGroup(window)
+        self.vmButtonGroup = CheckBoxButtonGroup(self)
         self.vmButtonGroup.setObjectName("vmButtonGroup")
         self.vmButtonGroup.addButton(self.hotspotVmCheckBox)
         self.vmButtonGroup.addButton(self.openj9VmCheckBox)
 
-        self.heapSizeButtonGroup = CheckBoxButtonGroup(window)
+        self.heapSizeButtonGroup = CheckBoxButtonGroup(self)
         self.heapSizeButtonGroup.setObjectName("heapSizeButtonGroup")
         self.heapSizeButtonGroup.addButton(self.normalHeapSizeCheckBox)
         self.heapSizeButtonGroup.addButton(self.largeHeapSizeCheckBox)
 
-        self.archButtonGroup = CheckBoxButtonGroup(window)
+        self.archButtonGroup = CheckBoxButtonGroup(self)
         self.archButtonGroup.setObjectName("archButtonGroup")
         self.archButtonGroup.addButton(self.x64ArchCheckBox)
         self.archButtonGroup.addButton(self.x32ArchCheckBox)
@@ -140,8 +142,6 @@ class AppMainWindow(Ui_MainWindow):
             self.archOptionLabel.setEnabled(True)
             self.x64ArchCheckBox.setEnabled(True)
             self.x32ArchCheckBox.setEnabled(True)
-
-        self.setup_connections()
 
         self.set_filter_options(SETTINGS["filter_options"])
 
