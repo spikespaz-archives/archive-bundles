@@ -9,6 +9,7 @@ from . import helpers
 from .helpers import DownloaderThread
 from .settings import SettingsFile
 from .widgets import CheckBoxButtonGroup
+from .views import BinaryDetailsDialog
 from .models import (
     AvailableBinariesTableModel,
     InstalledBinariesListModel,
@@ -272,7 +273,9 @@ class AppMainWindow(QMainWindow):
         )
 
     def open_info_window(self, *args, **kwargs):
-        pass
+        release = self.selected_available_release()
+        dialog = BinaryDetailsDialog(release, parent=self)
+        dialog.show()
 
     def download_selected_binary(self, *args, **kwargs):
         self.availableBinariesTableView.setEnabled(False)
