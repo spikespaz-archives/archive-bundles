@@ -265,32 +265,40 @@ class AppMainWindow(QMainWindow):
         self._download_thread.bytesChanged.connect(self.availableBinariesProgressBar.setValue)
 
         self.availableBinariesInfoButton.clicked.connect(self.open_info_window)
-        self.availableBinariesDownloadButton.clicked.connect(self.download_selected_binary)
-        self.availableBinariesInstallButton.clicked.connect(self.install_selected_binary)
+        self.availableBinariesDownloadButton.clicked.connect(self.download_binary)
+        self.availableBinariesInstallButton.clicked.connect(self.install_binary)
 
         self.availableBinariesTableView.selectionModel().selectionChanged.connect(
             _on_available_binaries_selection_changed
         )
 
-    def open_info_window(self, *args, **kwargs):
-        release = self.selected_available_release()
+    def open_info_window(self, release=None, *args, **kwargs):
+        if not release:
+            release = self.selected_available_release()
+
         dialog = BinaryDetailsDialog(release, parent=self)
         dialog.show()
 
-    def download_selected_binary(self, *args, **kwargs):
+    def download_binary(self, release=None, *args, **kwargs):
+        if not release:
+            release = self.selected_available_release()
+
         self.availableBinariesTableView.setEnabled(False)
         self.availableBinariesDownloadButton.setEnabled(False)
         self.availableBinariesInstallButton.setEnabled(False)
         self.filterOptionsGroupBox.setEnabled(False)
 
-        request_url = self.selected_available_release().binaries[0].binary_link
+        request_url = release.binaries[0].binary_link
 
         self._download_thread(request_url, location=SETTINGS["download_path"])
 
-    def install_selected_binary(self, *args, **kwargs):
-        selected_release = self.selected_available_release()
+    def install_binary(self, release=None, *args, **kwargs):
+        if not release:
+            release = self.selected_available_release()
 
-        self.install_release(selected_release)
+        self.download_binary(release=release)
+
+        self.install_release(release)
 
     def install_release(self, release):
         self.installedBinariesListModel.add_release(release.release_name, release)
