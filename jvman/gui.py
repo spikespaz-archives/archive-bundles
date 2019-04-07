@@ -298,10 +298,11 @@ class AppMainWindow(QMainWindow):
 
         self.download_binary(release=release)
 
-        self.install_release(release)
+        @QtCore.pyqtSlot(str)
+        def _on_end_download(file_location):
+            self.installedBinariesListModel.add_release(release.release_name, release)
 
-    def install_release(self, release):
-        self.installedBinariesListModel.add_release(release.release_name, release)
+        self._download_thread.endDownload.connect(_on_end_download)
 
     def selected_available_release(self):
         return self.availableBinariesTableSortFilterProxyModel.data(
