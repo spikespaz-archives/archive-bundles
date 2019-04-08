@@ -191,25 +191,14 @@ class AppMainWindow(QMainWindow):
 
             self.availableBinariesCancelButton.setEnabled(True)
 
-            @QtCore.pyqtSlot()
-            def _on_clicked():
-                self._download_thread.stop()
-                self._download_thread.wait()
-
-            self.availableBinariesCancelButton.clicked.connect(_on_clicked)
-
         @QtCore.pyqtSlot(str)
         def _on_end_download(file_location):
             file_location = Path(file_location)
 
             self._download_thread.wait()
 
-            if self._download_thread.success:
-                if file_location and file_location.exists():
-                    helpers.open_path(file_location)
-            else:
-                if file_location and file_location.exists():
-                    file_location.unlink()
+            if not self._download_thread.success and file_location and file_location.exists():
+                file_location.unlink()
 
             self.availableBinariesCancelButton.setEnabled(False)
 
@@ -244,6 +233,39 @@ class AppMainWindow(QMainWindow):
             self.selectedBinaryDetailsTreeView.expandAll()
             self.selectedBinaryDetailsTreeView.resizeColumnToContents(0)
 
+        @QtCore.pyqtSlot()
+        def _on_binaries_info_button_clicked():
+            selected_binary = self.selected_available_release()
+
+            self.open_info_window(selected_binary)
+
+        @QtCore.pyqtSlot()
+        def _on_binaries_download_button_clicked():
+            selected_binary = self.selected_available_release()
+
+            @QtCore.pyqtSlot(str)
+            def _on_end_download(file_location):
+                file_location = Path(file_location)
+
+                if self._download_thread.success and file_location and file_location.exists():
+                    helpers.show_file(file_location)
+
+                self._download_thread.endDownload.disconnect(_on_end_download)
+
+            self._download_thread.endDownload.connect(_on_end_download)
+
+            self.download_binary(selected_binary)
+
+        @QtCore.pyqtSlot()
+        def _on_binaries_install_button_clicked():
+            selected_binary = self.selected_available_release()
+
+            self.install_binary(selected_binary)
+
+        @QtCore.pyqtSlot()
+        def _on_binaries_cancel_button_clicked():
+            self.cancel_current_download()
+
         self.installedBinariesListModel.rowsInserted.connect(dump_settings)
         self.installedBinariesListModel.rowsMoved.connect(dump_settings)
         self.installedBinariesListModel.rowsRemoved.connect(dump_settings)
@@ -274,22 +296,27 @@ class AppMainWindow(QMainWindow):
         self._download_thread.filesizeFound.connect(self.availableBinariesProgressBar.setMaximum)
         self._download_thread.bytesChanged.connect(self.availableBinariesProgressBar.setValue)
 
-        self.availableBinariesInfoButton.clicked.connect(self.open_info_window)
-        self.availableBinariesDownloadButton.clicked.connect(self.download_binary)
-        self.availableBinariesInstallButton.clicked.connect(self.install_binary)
+        self.availableBinariesInfoButton.clicked.connect(_on_binaries_info_button_clicked)
+        self.availableBinariesDownloadButton.clicked.connect(_on_binaries_download_button_clicked)
+        self.availableBinariesInstallButton.clicked.connect(_on_binaries_install_button_clicked)
+        self.availableBinariesCancelButton.clicked.connect(_on_binaries_cancel_button_clicked)
 
         self.availableBinariesTableView.selectionModel().selectionChanged.connect(
             _on_available_binaries_selection_changed
         )
 
-    def open_info_window(self, release=None, *args, **kwargs):
+    def cancel_current_download(self):
+        self._download_thread.stop()
+        self._download_thread.wait()
+
+    def open_info_window(self, release=None):
         if not release:
             release = self.selected_available_release()
 
         dialog = BinaryDetailsDialog(release, parent=self)
         dialog.show()
 
-    def download_binary(self, release=None, *args, **kwargs):
+    def download_binary(self, release=None):
         if not release:
             release = self.selected_available_release()
 
@@ -302,7 +329,7 @@ class AppMainWindow(QMainWindow):
 
         self._download_thread(request_url, location=SETTINGS["download_path"])
 
-    def install_binary(self, release=None, *args, **kwargs):
+    def install_binary(self, release=None):
         if not release:
             release = self.selected_available_release()
 
@@ -311,6 +338,8 @@ class AppMainWindow(QMainWindow):
         @QtCore.pyqtSlot(str)
         def _on_end_download(file_location):
             self.installedBinariesListModel.add_release(release.release_name, release)
+
+            self._download_thread.endDownload.disconnect(_on_end_download)
 
         self._download_thread.endDownload.connect(_on_end_download)
 
