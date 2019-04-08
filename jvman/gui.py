@@ -2,6 +2,7 @@ import platform
 from collections import OrderedDict
 
 from PyQt5 import QtCore, uic
+from PyQt5.QtCore import QModelIndex
 from PyQt5.QtWidgets import QHeaderView, QMainWindow
 from pathlib import Path
 
@@ -147,6 +148,7 @@ class AppMainWindow(QMainWindow):
         self.set_filter_options(SETTINGS["filter_options"])
 
     def setup_connections(self):
+        @QtCore.pyqtSlot(int)
         def _on_current_changed(index):
             tab_name = self.mainTabWidget.tabText(index)
 
@@ -156,6 +158,7 @@ class AppMainWindow(QMainWindow):
                 if self.availableBinariesTableModel.rowCount() == 0:
                     self.availableBinariesTableModel.populate_model(self.get_filter_options())
 
+        @QtCore.pyqtSlot()
         def _on_delete_selected_binary_clicked():
             selection = self.installedBinariesListView.selectedIndexes()
 
@@ -164,10 +167,12 @@ class AppMainWindow(QMainWindow):
 
             SETTINGS.dump()
 
+        @QtCore.pyqtSlot(QModelIndex, int, int)
         def _on_rows_inserted(parent, first, last):
             for row in range(first, last + 1):
                 self.availableBinariesTableView.resizeRowToContents(row)
 
+        @QtCore.pyqtSlot()
         def _on_filter_option_toggled():
             options = self.get_filter_options()
             SETTINGS["filter_options"] = options
@@ -175,15 +180,18 @@ class AppMainWindow(QMainWindow):
 
             self.availableBinariesTableModel.populate_model(options)
 
+        @QtCore.pyqtSlot()
         def _on_begin_send_request():
             self.availableBinariesProgressBar.setMaximum(0)
 
+        @QtCore.pyqtSlot()
         def _on_begin_download():
             self.availableBinariesProgressBar.setMaximum(self._download_thread.filesize)
             self.availableBinariesProgressBar.setFormat("Downloading... %p%")
 
             self.availableBinariesCancelButton.setEnabled(True)
 
+            @QtCore.pyqtSlot()
             def _on_clicked():
                 self._download_thread.stop()
                 self._download_thread.wait()
@@ -217,11 +225,13 @@ class AppMainWindow(QMainWindow):
 
             self.availableBinariesTableView.setFocus()
 
+        @QtCore.pyqtSlot(QModelIndex, QModelIndex)
         def _on_available_binaries_selection_changed(selected, deselected):
             self.enable_available_binaries_tab_actions(True)
             self.availableBinariesProgressBar.setMaximum(1)
             self.availableBinariesProgressBar.setValue(0)
 
+        @QtCore.pyqtSlot(QModelIndex, QModelIndex)
         def _on_installed_binaries_selection_changed(selected, deselected):
             if selected.isEmpty():
                 self.selectedBinaryDetailsTreeView.setModel(None)
