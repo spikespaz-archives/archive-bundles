@@ -11,6 +11,7 @@ from PyQt5.QtCore import (
     QThread,
     QVariant,
     QModelIndex,
+    QPersistentModelIndex,
 )
 from PyQt5 import QtCore
 from requests import HTTPError
@@ -167,6 +168,8 @@ class AvailableBinariesTableModel(QAbstractTableModel):
 
 
 class InstalledBinariesListModel(QAbstractListModel):
+    rowsChanged = QtCore.pyqtSignal(QModelIndex, int, int)
+
     def __init__(self, datamodel=OrderedDict(), *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -189,6 +192,39 @@ class InstalledBinariesListModel(QAbstractListModel):
 
         return QVariant()
 
+    def setData(self, index, value, role):
+        if role == Qt.EditRole:
+            if not self.checkIndex(index):
+                return False
+
+            name = tuple(self._internal_data.keys())[index.row()]
+            new_data = OrderedDict()
+
+            for key, data in self._internal_data.items():
+                if key == name:
+                    new_data[str(value)] = data
+                else:
+                    new_data[key] = data
+
+            persistent_index = QPersistentModelIndex(index)
+
+            self.layoutAboutToBeChanged.emit([persistent_index])
+            self._internal_data.clear()
+            self._internal_data.update(new_data)
+            self.layoutChanged.emit([persistent_index])
+
+            self.rowsChanged.emit(QModelIndex, index.row(), index.row())
+
+            return True
+
+        return False
+
+    def flags(self, index):
+        if not index.isValid():
+            return 0
+
+        return Qt.ItemIsEditable | super().flags(index)
+
     def headerData(self, section, orientation, role=Qt.DisplayRole):
         if role != Qt.DisplayRole:
             return QVariant()
@@ -201,20 +237,22 @@ class InstalledBinariesListModel(QAbstractListModel):
         return QVariant()
 
     def insertRows(self, row, count, parent=QModelIndex()):
-        self.beginInsertRows(parent, row, row + count)
         new_data = OrderedDict(tuple(self._internal_data.items())[:row])
         new_data.update(
             [(f"Unnamed Release ({n})", Release(binaries=[{}])) for n in range(row, row + count)]
         )
         new_data.update(tuple(self._internal_data.items())[row + count :])
+
+        self.beginInsertRows(parent, row, row + count)
         self._internal_data.clear()
         self._internal_data.update(new_data)
         self.endInsertRows()
 
     def removeRows(self, row, count, parent=QModelIndex()):
-        self.beginRemoveRows(parent, row, row + count)
         new_data = OrderedDict(tuple(self._internal_data.items())[:row])
         new_data.update(tuple(self._internal_data.items())[row + count :])
+
+        self.beginRemoveRows(parent, row, row + count)
         self._internal_data.clear()
         self._internal_data.update(new_data)
         self.endRemoveRows()
