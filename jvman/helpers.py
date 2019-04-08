@@ -3,6 +3,8 @@ import itertools
 import requests
 import platform
 import re
+import sys
+import subprocess
 
 from PyQt5.QtCore import QThread, QProcess, QUrl
 from PyQt5 import QtCore
@@ -152,3 +154,21 @@ def open_explorer(path):
 
 def open_path(path):
     QDesktopServices.openUrl(QUrl(path.as_uri()))
+
+
+def show_file(path):
+    path = str(path.resolve())
+
+    if sys.platform == "darwin":
+        subprocess.call(["open", "--reveal", path])
+    elif sys.platform == "linux":
+        # file_manager = subprocess.check_output("xdg-mime query default inode/directory")
+
+        # if file_manager_command in ("nautilus", "dolphin"):
+        #     subprocess.call([file_manager, "--select", path])
+        # elif file_manager_command in ("nemo",):
+        #     subprocess.call(["nemo", path])
+        # else:
+        open_path(Path(path).parent)
+    elif sys.platform == "win32":
+        subprocess.call(f'explorer /select,"{path}"')
