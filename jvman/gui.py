@@ -276,6 +276,7 @@ class AppMainWindow(QMainWindow):
         self.installedBinariesListModel.rowsMoved.connect(dump_settings)
         self.installedBinariesListModel.rowsRemoved.connect(dump_settings)
         self.installedBinariesListModel.rowsChanged.connect(dump_settings)
+        self.installedBinariesListModel.status_change.connect(self.statusbar.showMessage)
 
         self.installedBinariesListView.selectionModel().selectionChanged.connect(
             _on_installed_binaries_selection_changed
