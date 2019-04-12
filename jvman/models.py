@@ -213,7 +213,7 @@ class InstalledBinariesListModel(QAbstractListModel):
             self._internal_data.update(new_data)
             self.layoutChanged.emit([persistent_index])
 
-            self.rowsChanged.emit(QModelIndex, index.row(), index.row())
+            self.rowsChanged.emit(QModelIndex(), index.row(), index.row())
 
             return True
 
