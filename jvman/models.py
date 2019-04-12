@@ -321,7 +321,7 @@ class TreeItem:
         return self._parent_item
 
 
-class ReferenceTreeModel(QAbstractItemModel):
+class GenericTreeModel(QAbstractItemModel):
     def index(self, row, column, parent=QModelIndex()):
         if not self.hasIndex(row, column, parent):
             return QModelIndex()
@@ -391,7 +391,7 @@ class ReferenceTreeModel(QAbstractItemModel):
         return QVariant()
 
 
-class BinaryDetailsTreeModel(ReferenceTreeModel):
+class BinaryDetailsTreeModel(GenericTreeModel):
     def __init__(self, data, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
