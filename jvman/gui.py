@@ -355,10 +355,10 @@ class AppMainWindow(QMainWindow):
         )
 
     def enable_available_binaries_tab_actions(self, enable=True):
-        self.availableBinariesInfoButton.setEnabled(True)
-        self.availableBinariesDownloadButton.setEnabled(True)
-        self.availableBinariesInstallButton.setEnabled(True)
-        self.availableBinariesProgressBar.setEnabled(True)
+        self.availableBinariesInfoButton.setEnabled(enable)
+        self.availableBinariesDownloadButton.setEnabled(enable)
+        self.availableBinariesInstallButton.setEnabled(enable)
+        self.availableBinariesProgressBar.setEnabled(enable)
 
     def get_filter_options(self):
         options = RequestOptions(many=True, os=[PLATFORM_OS])
