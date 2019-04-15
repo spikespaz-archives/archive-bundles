@@ -169,6 +169,7 @@ class AvailableBinariesTableModel(QAbstractTableModel):
 
 class InstalledBinariesListModel(QAbstractListModel):
     rowsChanged = QtCore.pyqtSignal(QModelIndex, int, int)
+    status_change = QtCore.pyqtSignal(str, int)
 
     def __init__(self, datamodel=OrderedDict(), *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -197,12 +198,24 @@ class InstalledBinariesListModel(QAbstractListModel):
             if not self.checkIndex(index):
                 return False
 
+            value = str(value).strip()
+
+            if not value:
+                self.status_change.emit(f"Invalid binary name, input must have content.", 3000)
+                return False
+
+            if value in self._internal_data:
+                self.status_change.emit(
+                    f'Installed binary with name, "{value}" already exists.', 3000
+                )
+                return False
+
             name = tuple(self._internal_data.keys())[index.row()]
             new_data = OrderedDict()
 
             for key, data in self._internal_data.items():
                 if key == name:
-                    new_data[str(value)] = data
+                    new_data[value] = data
                 else:
                     new_data[key] = data
 
@@ -213,7 +226,8 @@ class InstalledBinariesListModel(QAbstractListModel):
             self._internal_data.update(new_data)
             self.layoutChanged.emit([persistent_index])
 
-            self.rowsChanged.emit(QModelIndex, index.row(), index.row())
+            self.rowsChanged.emit(QModelIndex(), index.row(), index.row())
+            self.status_change.emit(f'Installed binary renamed to "{value}".')
 
             return True
 
@@ -321,7 +335,7 @@ class TreeItem:
         return self._parent_item
 
 
-class ReferenceTreeModel(QAbstractItemModel):
+class GenericTreeModel(QAbstractItemModel):
     def index(self, row, column, parent=QModelIndex()):
         if not self.hasIndex(row, column, parent):
             return QModelIndex()
@@ -391,7 +405,7 @@ class ReferenceTreeModel(QAbstractItemModel):
         return QVariant()
 
 
-class BinaryDetailsTreeModel(ReferenceTreeModel):
+class BinaryDetailsTreeModel(GenericTreeModel):
     def __init__(self, data, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

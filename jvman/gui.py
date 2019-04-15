@@ -266,14 +266,23 @@ class AppMainWindow(QMainWindow):
         def _on_binaries_cancel_button_clicked():
             self.cancel_current_download()
 
+        @QtCore.pyqtSlot()
+        def _on_binary_rename_button_clicked():
+            selected_index = self.installedBinariesListView.selectedIndexes()[0]
+
+            self.installedBinariesListView.edit(selected_index)
+
         self.installedBinariesListModel.rowsInserted.connect(dump_settings)
         self.installedBinariesListModel.rowsMoved.connect(dump_settings)
         self.installedBinariesListModel.rowsRemoved.connect(dump_settings)
         self.installedBinariesListModel.rowsChanged.connect(dump_settings)
+        self.installedBinariesListModel.status_change.connect(self.statusbar.showMessage)
 
         self.installedBinariesListView.selectionModel().selectionChanged.connect(
             _on_installed_binaries_selection_changed
         )
+
+        self.renameSelectedBinaryPushButton.clicked.connect(_on_binary_rename_button_clicked)
 
         self.mainTabWidget.currentChanged.connect(_on_current_changed)
         self.deleteSelectedBinaryPushButton.clicked.connect(_on_delete_selected_binary_clicked)
