@@ -188,6 +188,8 @@ class InstalledBinariesListModel(QAbstractListModel):
 
         if role == Qt.DisplayRole:
             return f"{name} [{release.release_name}]"
+        if role == Qt.EditRole:
+            return name
         elif role == ObjectRole:
             return release
 
@@ -227,7 +229,7 @@ class InstalledBinariesListModel(QAbstractListModel):
             self.layoutChanged.emit([persistent_index])
 
             self.rowsChanged.emit(QModelIndex(), index.row(), index.row())
-            self.status_change.emit(f'Installed binary renamed to "{value}".')
+            self.status_change.emit(f'Installed binary renamed to "{value}".', 2000)
 
             return True
 
