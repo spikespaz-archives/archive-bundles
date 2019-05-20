@@ -20,7 +20,11 @@ from .models import (
 )
 from .adoptapi import RequestOptions, Release
 
+# Constant to tell what the current system platform is, replacing "darwin" with "mac"
+# for compatibility with the AdoptOpenJDK API.
 PLATFORM_OS = (lambda x: {"darwin": "mac"}.get(x, x))(platform.system().lower())
+# Constant to find the architecture of the current system, with necessary replacements
+# for equivalent architectures for compatibility with the AdoptOpenJDK API.
 PLATFORM_ARCH = (
     lambda x: {
         "amd64": "x64",
@@ -35,8 +39,10 @@ PLATFORM_ARCH = (
 )(platform.machine().lower())
 
 
+# Instantiate an object for serializing and deserializing the application's data in a JSON file.
 SETTINGS = SettingsFile(
     Path(Path.home(), ".jvman", "settings.json"),
+    # Anonymous functions that are responsible for making values serializble.
     serialize_map={
         "download_path": lambda x: str(Path.resolve(x)),
         "binaries_path": lambda x: str(Path.resolve(x)),
@@ -45,6 +51,7 @@ SETTINGS = SettingsFile(
             [(key, value.serialize()) for key, value in x.items()]
         ),
     },
+    # Anonymous functions that are responsible for deserializing values.
     deserialize_map={
         "download_path": Path,
         "binaries_path": Path,
@@ -53,6 +60,7 @@ SETTINGS = SettingsFile(
             [(key, Release(**value)) for key, value in x.items()]
         ),
     },
+    # Default keys and values to create if they aren't already in the file on load.
     defaults={
         "download_path": Path(Path.home(), "Downloads"),
         "binaries_path": Path(Path.home(), ".jvman"),
@@ -71,24 +79,24 @@ SETTINGS = SettingsFile(
 )
 
 
-@QtCore.pyqtSlot()
-def dump_settings(*args, **kwargs):
-    SETTINGS.dump()
-
-
+# Subclass of Qt's main window widget for this application.
 class AppMainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Load the Qt UI file into this main window.
         uic.loadUi(Path(__file__) / ".." / "interface.ui", self)
 
+        # Load the settings data into the settings file object.
         SETTINGS.load()
 
+        # Instantiate a thread in the background for downloads to be used across the application.
         self._download_thread = DownloaderThread(chunk_size=1024)
 
         self.setup_interface()
         self.setup_connections()
 
+    # Perform any necessary interface set-up, such as creating control groups and view models.
     def setup_interface(self):
         self.availableBinariesTableModel = AvailableBinariesTableModel()
         self.availableBinariesTableSortFilterProxyModel = GenericSortFilterProxyModel()
@@ -248,7 +256,7 @@ class AppMainWindow(QMainWindow):
                 file_location = Path(file_location)
 
                 if self._download_thread.success and file_location and file_location.exists():
-                    helpers.show_file(file_location)
+                    helpers.open_explorer(file_location)
 
                 self._download_thread.endDownload.disconnect(_on_end_download)
 
@@ -272,10 +280,10 @@ class AppMainWindow(QMainWindow):
 
             self.installedBinariesListView.edit(selected_index)
 
-        self.installedBinariesListModel.rowsInserted.connect(dump_settings)
-        self.installedBinariesListModel.rowsMoved.connect(dump_settings)
-        self.installedBinariesListModel.rowsRemoved.connect(dump_settings)
-        self.installedBinariesListModel.rowsChanged.connect(dump_settings)
+        self.installedBinariesListModel.rowsInserted.connect(SETTINGS.dump)
+        self.installedBinariesListModel.rowsMoved.connect(SETTINGS.dump)
+        self.installedBinariesListModel.rowsRemoved.connect(SETTINGS.dump)
+        self.installedBinariesListModel.rowsChanged.connect(SETTINGS.dump)
         self.installedBinariesListModel.status_change.connect(self.statusbar.showMessage)
 
         self.installedBinariesListView.selectionModel().selectionChanged.connect(
