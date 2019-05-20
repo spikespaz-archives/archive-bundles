@@ -3,14 +3,13 @@ import itertools
 import requests
 import platform
 import re
-import sys
-import subprocess
 
 from PyQt5.QtCore import QThread, QProcess, QUrl
 from PyQt5 import QtCore
 from PyQt5.Qt import QDesktopServices
 
 
+# Wraps a function and returns None when specified exceptions are thrown.
 def wrap_throwable(func, *exc):
     def wrapper(*args, **kwargs):
         try:
@@ -21,12 +20,41 @@ def wrap_throwable(func, *exc):
     return wrapper
 
 
+# Generator that yields the cartesian products of a polymorphic dictionary.
 def product_dicts(**kwargs):
     keys = kwargs.keys()
     values = kwargs.values()
 
     for instance in itertools.product(*values):
         yield dict(zip(keys, instance))
+
+
+# Opens the system's file manager on a file, or open a directory.
+# On Windows and Mac, the explorer window will open with the specified file selected,
+# much like Chrome's "Show in folder" behavior for downloads.
+def open_explorer(path):
+    path = Path(path).resolve()
+    system = platform.system().lower()
+
+    if system == "windows":
+        if path.is_dir():
+            # The path is a directory.
+            QProcess.startDetached(f'explorer.exe "{path}"')
+        else:
+            # THe path is a file, open the parent directory and select the file in the view.
+            QProcess.startDetached(f'explorer.exe /select,"{path}"')
+    elif system == "darwin":
+        # Apple's "open" command handles "show in folder" with the "--reveal" flag.
+        QProcess.startDetached(f'open -R "{path}"')
+    else:
+        # The platform is not Windows or Mac, must be Linux?
+        # Open the directory with generic handling provided by Qt.
+
+        if path.is_dir():
+            QDesktopServices.openUrl(QUrl(path.as_uri()))
+        else:
+            # If the path provided is a file, Qt needs to open the parent directory.
+            QDesktopServices.openUrl(QUrl(path.parent.as_uri()))
 
 
 class BackgroundThread(QThread):
@@ -125,50 +153,3 @@ class DownloaderThread(QThread):
 
         self.success = True
         self.endDownload.emit(str(self.file_location))
-
-
-def open_explorer(path):
-    path = Path(path).resolve()
-    system = platform.system().lower()
-
-    print(system)
-
-    if system == "windows":
-        if path.is_dir():
-            QProcess.startDetached(f'explorer.exe "{path}"')
-        else:
-            QProcess.startDetached(f'explorer.exe /select,"{path}"')
-    elif system == "darwin":
-        # QProcess.execute(
-        #     "/usr/bin/osascript",
-        #     '-e tell application "Finder" -e activate'
-        #     + f' -e select POSIX file "{path}" -e and tell -e return',
-        # )
-        QProcess.startDetached(f'open -R "{path}"')
-    else:
-        if path.is_dir():
-            QDesktopServices.openUrl(QUrl(path.as_uri()))
-        else:
-            QDesktopServices.openUrl(QUrl(path.parent.as_uri()))
-
-
-def open_path(path):
-    QDesktopServices.openUrl(QUrl(path.as_uri()))
-
-
-def show_file(path):
-    path = str(path.resolve())
-
-    if sys.platform == "darwin":
-        subprocess.call(["open", "--reveal", path])
-    elif sys.platform == "linux":
-        # file_manager = subprocess.check_output("xdg-mime query default inode/directory")
-
-        # if file_manager_command in ("nautilus", "dolphin"):
-        #     subprocess.call([file_manager, "--select", path])
-        # elif file_manager_command in ("nemo",):
-        #     subprocess.call(["nemo", path])
-        # else:
-        open_path(Path(path).parent)
-    elif sys.platform == "win32":
-        subprocess.call(f'explorer /select,"{path}"')
