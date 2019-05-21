@@ -115,35 +115,37 @@ class AppMainWindow(QMainWindow):
 
         self.javaVerButtonGroup = CheckBoxButtonGroup(self)
         self.javaVerButtonGroup.setObjectName("javaVerButtonGroup")
-        self.javaVerButtonGroup.addButton(self.javaVer8CheckBox)
-        self.javaVerButtonGroup.addButton(self.javaVer9CheckBox)
-        self.javaVerButtonGroup.addButton(self.javaVer10CheckBox)
-        self.javaVerButtonGroup.addButton(self.javaVer11CheckBox)
+        self.javaVerButtonGroup.add_buttons(
+            self.javaVer8CheckBox,
+            self.javaVer9CheckBox,
+            self.javaVer10CheckBox,
+            self.javaVer11CheckBox,
+            self.javaVer8CheckBox,
+        )
 
         self.releaseTypeButtonGroup = CheckBoxButtonGroup(self)
         self.releaseTypeButtonGroup.setObjectName("releaseTypeButtonGroup")
-        self.releaseTypeButtonGroup.addButton(self.stableReleaseTypeCheckBox)
-        self.releaseTypeButtonGroup.addButton(self.nightlyReleaseTypeCheckBox)
+        self.releaseTypeButtonGroup.add_buttons(
+            self.stableReleaseTypeCheckBox, self.nightlyReleaseTypeCheckBox
+        )
 
         self.binTypeButtonGroup = CheckBoxButtonGroup(self)
         self.binTypeButtonGroup.setObjectName("binTypeButtonGroup")
-        self.binTypeButtonGroup.addButton(self.jdkBinCheckBox)
-        self.binTypeButtonGroup.addButton(self.jreBinCheckBox)
+        self.binTypeButtonGroup.add_buttons(self.jdkBinCheckBox, self.jreBinCheckBox)
 
         self.vmButtonGroup = CheckBoxButtonGroup(self)
         self.vmButtonGroup.setObjectName("vmButtonGroup")
-        self.vmButtonGroup.addButton(self.hotspotVmCheckBox)
-        self.vmButtonGroup.addButton(self.openj9VmCheckBox)
+        self.vmButtonGroup.add_buttons(self.hotspotVmCheckBox, self.openj9VmCheckBox)
 
         self.heapSizeButtonGroup = CheckBoxButtonGroup(self)
         self.heapSizeButtonGroup.setObjectName("heapSizeButtonGroup")
-        self.heapSizeButtonGroup.addButton(self.normalHeapSizeCheckBox)
-        self.heapSizeButtonGroup.addButton(self.largeHeapSizeCheckBox)
+        self.heapSizeButtonGroup.add_buttons(
+            self.normalHeapSizeCheckBox, self.largeHeapSizeCheckBox
+        )
 
         self.archButtonGroup = CheckBoxButtonGroup(self)
         self.archButtonGroup.setObjectName("archButtonGroup")
-        self.archButtonGroup.addButton(self.x64ArchCheckBox)
-        self.archButtonGroup.addButton(self.x32ArchCheckBox)
+        self.archButtonGroup.add_buttons(self.x64ArchCheckBox, self.x32ArchCheckBox)
 
         if PLATFORM_ARCH == "x32":
             self.archOptionLabel.setEnabled(True)

@@ -8,8 +8,14 @@ class CheckBoxButtonGroup(QButtonGroup):
         self.setExclusive(False)
         self.buttonToggled.connect(self.reset)
 
-    def addButton(self, button, *args, **kwargs):
-        super().addButton(button, *args, **kwargs)
+    def addButton(self, button):
+        super().addButton(button)
+
+        self.reset()
+
+    def add_buttons(self, *buttons):
+        for button in buttons:
+            super().addButton(button)
 
         self.reset()
 
