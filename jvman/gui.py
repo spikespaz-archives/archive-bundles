@@ -156,7 +156,8 @@ class AppMainWindow(QMainWindow):
         self.set_filter_options(SETTINGS["filter_options"])
 
     def setup_connections(self):
-        @QtCore.pyqtSlot(int)
+        @helpers.make_slot(int)
+        @helpers.connect_slot(self.mainTabWidget.currentChanged)
         def _on_current_changed(index):
             tab_name = self.mainTabWidget.tabText(index)
 
@@ -166,7 +167,8 @@ class AppMainWindow(QMainWindow):
                 if self.availableBinariesTableModel.rowCount() == 0:
                     self.availableBinariesTableModel.populate_model(self.get_filter_options())
 
-        @QtCore.pyqtSlot()
+        @helpers.make_slot()
+        @helpers.connect_slot(self.deleteSelectedBinaryPushButton.clicked)
         def _on_delete_selected_binary_clicked():
             selection = self.installedBinariesListView.selectedIndexes()
 
@@ -175,12 +177,19 @@ class AppMainWindow(QMainWindow):
 
             SETTINGS.dump()
 
-        @QtCore.pyqtSlot(QModelIndex, int, int)
+        @helpers.make_slot(QModelIndex, int, int)
+        @helpers.connect_slot(self.availableBinariesTableModel.rowsInserted)
         def _on_rows_inserted(parent, first, last):
             for row in range(first, last + 1):
                 self.availableBinariesTableView.resizeRowToContents(row)
 
-        @QtCore.pyqtSlot()
+        @helpers.make_slot()
+        @helpers.connect_slot(self.javaVerButtonGroup.buttonToggled)
+        @helpers.connect_slot(self.releaseTypeButtonGroup.buttonToggled)
+        @helpers.connect_slot(self.binTypeButtonGroup.buttonToggled)
+        @helpers.connect_slot(self.vmButtonGroup.buttonToggled)
+        @helpers.connect_slot(self.heapSizeButtonGroup.buttonToggled)
+        @helpers.connect_slot(self.archButtonGroup.buttonToggled)
         def _on_filter_option_toggled():
             options = self.get_filter_options()
             SETTINGS["filter_options"] = options
@@ -188,18 +197,21 @@ class AppMainWindow(QMainWindow):
 
             self.availableBinariesTableModel.populate_model(options)
 
-        @QtCore.pyqtSlot()
+        @helpers.make_slot()
+        @helpers.connect_slot(self._download_thread.beginSendRequest)
         def _on_begin_send_request():
             self.availableBinariesProgressBar.setMaximum(0)
 
-        @QtCore.pyqtSlot()
+        @helpers.make_slot()
+        @helpers.connect_slot(self._download_thread.beginDownload)
         def _on_begin_download():
             self.availableBinariesProgressBar.setMaximum(self._download_thread.filesize)
             self.availableBinariesProgressBar.setFormat("Downloading... %p%")
 
             self.availableBinariesCancelButton.setEnabled(True)
 
-        @QtCore.pyqtSlot(str)
+        @helpers.make_slot(str)
+        @helpers.connect_slot(self._download_thread.endDownload)
         def _on_end_download(file_location):
             file_location = Path(file_location)
 
@@ -222,13 +234,15 @@ class AppMainWindow(QMainWindow):
 
             self.availableBinariesTableView.setFocus()
 
-        @QtCore.pyqtSlot(QModelIndex, QModelIndex)
+        @helpers.make_slot(QModelIndex, QModelIndex)
+        @helpers.connect_slot(self.availableBinariesTableView.selectionModel().selectionChanged)
         def _on_available_binaries_selection_changed(selected, deselected):
             self.enable_available_binaries_tab_actions(True)
             self.availableBinariesProgressBar.setMaximum(1)
             self.availableBinariesProgressBar.setValue(0)
 
-        @QtCore.pyqtSlot(QModelIndex, QModelIndex)
+        @helpers.make_slot(QModelIndex, QModelIndex)
+        @helpers.connect_slot(self.installedBinariesListView.selectionModel().selectionChanged)
         def _on_installed_binaries_selection_changed(selected, deselected):
             if selected.isEmpty():
                 self.selectedBinaryDetailsTreeView.setModel(None)
@@ -241,17 +255,19 @@ class AppMainWindow(QMainWindow):
             self.selectedBinaryDetailsTreeView.expandAll()
             self.selectedBinaryDetailsTreeView.resizeColumnToContents(0)
 
-        @QtCore.pyqtSlot()
+        @helpers.make_slot()
+        @helpers.connect_slot(self.availableBinariesInfoButton.clicked)
         def _on_binaries_info_button_clicked():
             selected_binary = self.selected_available_release()
 
             self.open_info_window(selected_binary)
 
-        @QtCore.pyqtSlot()
+        @helpers.make_slot()
+        @helpers.connect_slot(self.availableBinariesDownloadButton.clicked)
         def _on_binaries_download_button_clicked():
             selected_binary = self.selected_available_release()
 
-            @QtCore.pyqtSlot(str)
+            @helpers.make_slot(str)
             def _on_end_download(file_location):
                 file_location = Path(file_location)
 
@@ -264,17 +280,20 @@ class AppMainWindow(QMainWindow):
 
             self.download_binary(selected_binary)
 
-        @QtCore.pyqtSlot()
+        @helpers.make_slot()
+        @helpers.connect_slot(self.availableBinariesInstallButton.clicked)
         def _on_binaries_install_button_clicked():
             selected_binary = self.selected_available_release()
 
             self.install_binary(selected_binary)
 
-        @QtCore.pyqtSlot()
+        @helpers.make_slot()
+        @helpers.connect_slot(self.availableBinariesCancelButton.clicked)
         def _on_binaries_cancel_button_clicked():
             self.cancel_current_download()
 
-        @QtCore.pyqtSlot()
+        @helpers.make_slot()
+        @helpers.connect_slot(self.renameSelectedBinaryPushButton.clicked)
         def _on_binary_rename_button_clicked():
             selected_index = self.installedBinariesListView.selectedIndexes()[0]
 
@@ -286,42 +305,10 @@ class AppMainWindow(QMainWindow):
         self.installedBinariesListModel.rowsChanged.connect(SETTINGS.dump)
         self.installedBinariesListModel.status_change.connect(self.statusbar.showMessage)
 
-        self.installedBinariesListView.selectionModel().selectionChanged.connect(
-            _on_installed_binaries_selection_changed
-        )
-
-        self.renameSelectedBinaryPushButton.clicked.connect(_on_binary_rename_button_clicked)
-
-        self.mainTabWidget.currentChanged.connect(_on_current_changed)
-        self.deleteSelectedBinaryPushButton.clicked.connect(_on_delete_selected_binary_clicked)
-        self.availableBinariesTableModel.rowsInserted.connect(_on_rows_inserted)
         self.availableBinariesTableModel.status_change.connect(self.statusbar.showMessage)
-
-        for group in [
-            self.javaVerButtonGroup,
-            self.releaseTypeButtonGroup,
-            self.binTypeButtonGroup,
-            self.vmButtonGroup,
-            self.heapSizeButtonGroup,
-            self.archButtonGroup,
-        ]:
-            group.buttonToggled.connect(_on_filter_option_toggled)
-
-        self._download_thread.beginSendRequest.connect(_on_begin_send_request)
-        self._download_thread.beginDownload.connect(_on_begin_download)
-        self._download_thread.endDownload.connect(_on_end_download)
 
         self._download_thread.filesizeFound.connect(self.availableBinariesProgressBar.setMaximum)
         self._download_thread.bytesChanged.connect(self.availableBinariesProgressBar.setValue)
-
-        self.availableBinariesInfoButton.clicked.connect(_on_binaries_info_button_clicked)
-        self.availableBinariesDownloadButton.clicked.connect(_on_binaries_download_button_clicked)
-        self.availableBinariesInstallButton.clicked.connect(_on_binaries_install_button_clicked)
-        self.availableBinariesCancelButton.clicked.connect(_on_binaries_cancel_button_clicked)
-
-        self.availableBinariesTableView.selectionModel().selectionChanged.connect(
-            _on_available_binaries_selection_changed
-        )
 
     def cancel_current_download(self):
         self._download_thread.stop()
