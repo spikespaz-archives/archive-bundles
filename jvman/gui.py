@@ -155,7 +155,7 @@ class AppMainWindow(QMainWindow):
             self.x64ArchCheckBox.setEnabled(True)
             self.x32ArchCheckBox.setEnabled(True)
 
-        self.set_filter_options(SETTINGS["filter_options"])
+        self.filter_options = SETTINGS["filter_options"]
 
     def setup_connections(self):
         @helpers.make_slot(int)
@@ -167,7 +167,7 @@ class AppMainWindow(QMainWindow):
                 pass
             elif tab_name == "Available Binaries":
                 if self.availableBinariesTableModel.rowCount() == 0:
-                    self.availableBinariesTableModel.populate_model(self.get_filter_options())
+                    self.availableBinariesTableModel.populate_model(self.filter_options)
 
         @helpers.make_slot()
         @helpers.connect_slot(self.deleteSelectedBinaryPushButton.clicked)
@@ -193,11 +193,10 @@ class AppMainWindow(QMainWindow):
         @helpers.connect_slot(self.heapSizeButtonGroup.buttonToggled)
         @helpers.connect_slot(self.archButtonGroup.buttonToggled)
         def _on_filter_option_toggled():
-            options = self.get_filter_options()
-            SETTINGS["filter_options"] = options
+            SETTINGS["filter_options"] = self.filter_options
             SETTINGS.dump()
 
-            self.availableBinariesTableModel.populate_model(options)
+            self.availableBinariesTableModel.populate_model(SETTINGS["filter_options"])
 
         @helpers.make_slot()
         @helpers.connect_slot(self._download_thread.beginSendRequest)
@@ -366,7 +365,8 @@ class AppMainWindow(QMainWindow):
         self.availableBinariesInstallButton.setEnabled(enable)
         self.availableBinariesProgressBar.setEnabled(enable)
 
-    def get_filter_options(self):
+    @property
+    def filter_options(self):
         options = RequestOptions(many=True, os=[PLATFORM_OS])
 
         if self.javaVer8CheckBox.isChecked():
@@ -416,7 +416,8 @@ class AppMainWindow(QMainWindow):
 
         return options
 
-    def set_filter_options(self, options):
+    @filter_options.setter
+    def filter_options(self, options):
         self.javaVer8CheckBox.setChecked("openjdk8" in options._version)
         self.javaVer9CheckBox.setChecked("openjdk9" in options._version)
         self.javaVer10CheckBox.setChecked("openjdk10" in options._version)
