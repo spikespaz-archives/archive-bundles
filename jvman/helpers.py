@@ -20,6 +20,26 @@ def wrap_throwable(func, *exc):
     return wrapper
 
 
+def make_slot(*args, **kwargs):
+    def wrapper(func):
+        # Convert "snake_case" to "camelCase" for the name of the Qt slot.
+        kwargs.setdefault("name", func.__name__.replace("_", " ").title().replace(" ", ""))
+
+        return QtCore.pyqtSlot(*args, **kwargs)(func)
+
+    return wrapper
+
+
+# Decorator for functions to be automatically connected to a signal.
+def connect_slot(signal, *args, **kwargs):
+    def wrapper(func):
+        signal.connect(func)
+
+        return func
+
+    return wrapper
+
+
 # Generator that yields the cartesian products of a polymorphic dictionary.
 def product_dicts(**kwargs):
     keys = kwargs.keys()
