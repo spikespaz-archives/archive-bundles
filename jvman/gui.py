@@ -3,7 +3,9 @@ from collections import OrderedDict
 
 from PyQt5 import QtCore, uic
 from PyQt5.QtCore import QModelIndex
+from PyQt5.Qt import QClipboard, QApplication
 from PyQt5.QtWidgets import QHeaderView, QMainWindow
+from PyQt5.QtCore import Qt
 from pathlib import Path
 
 from . import helpers
@@ -310,6 +312,12 @@ class AppMainWindow(QMainWindow):
 
         self._download_thread.filesizeFound.connect(self.availableBinariesProgressBar.setMaximum)
         self._download_thread.bytesChanged.connect(self.availableBinariesProgressBar.setValue)
+
+        self.selectedBinaryDetailsTreeView.doubleClicked.connect(
+            lambda index: QApplication.clipboard().setText(
+                self.selectedBinaryDetailsTreeView.model().data(index, Qt.DisplayRole)
+            )
+        )
 
     def cancel_current_download(self):
         self._download_thread.stop()
