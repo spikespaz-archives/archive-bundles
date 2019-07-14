@@ -4,11 +4,13 @@ import rapidjson
 
 
 class SettingsFile(dict):
-    def __init__(self, file_name, serialize_map={}, deserialize_map={}, defaults={}):
-        self._file_name = file_name
-        self._serialize_map = serialize_map
-        self._deserialize_map = deserialize_map
-        self._defaults = defaults
+    def __init__(self, file_name, serialize_map=None, deserialize_map=None, defaults=None):
+        self._file_name = file_name or {}
+        self._serialize_map = serialize_map or {}
+        self._deserialize_map = deserialize_map or {}
+        self._defaults = defaults or {}
+
+        super().__init__()
 
     def dump(self):
         with open(self._file_name, "w") as file:
@@ -29,9 +31,9 @@ class SettingsFile(dict):
 
                 self.update(deserialized)
                 self.set_defaults()
-        except (FileNotFoundError, ValueError) as e:
+        except (FileNotFoundError, ValueError) as error:
             print("Settings file not valid, creating default")
-            print("\t", e)
+            print("\t", error)
 
             Path(self._file_name).parent.mkdir(exist_ok=True)
 
