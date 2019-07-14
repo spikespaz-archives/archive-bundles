@@ -1,9 +1,10 @@
+import copy
+
 from collections import namedtuple
 from datetime import datetime
 
-import rapidjson
 import requests
-import copy
+import rapidjson
 
 from . import helpers
 

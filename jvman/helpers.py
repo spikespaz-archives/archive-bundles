@@ -1,8 +1,10 @@
-from pathlib import Path
 import itertools
-import requests
 import platform
 import re
+
+from pathlib import Path
+
+import requests
 
 from PyQt5.QtCore import QThread, QProcess, QUrl
 from PyQt5 import QtCore
@@ -32,6 +34,8 @@ def make_slot(*args, **kwargs):
 
 # Decorator for functions to be automatically connected to a signal.
 def connect_slot(signal, *args, **kwargs):
+    del args, kwargs
+
     def wrapper(func):
         signal.connect(func)
 

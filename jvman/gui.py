@@ -1,4 +1,5 @@
 import platform
+
 from collections import OrderedDict
 from pathlib import Path
 
@@ -13,14 +14,14 @@ from .helpers import DownloaderThread
 from .settings import SettingsFile
 from .widgets import CheckBoxButtonGroup
 from .views import BinaryDetailsDialog
+from .adoptapi import RequestOptions, Release
 from .models import (
     AvailableBinariesTableModel,
     InstalledBinariesListModel,
     GenericSortFilterProxyModel,
     BinaryDetailsTreeModel,
-    ObjectRole,
+    QT_OBJECTROLE
 )
-from .adoptapi import RequestOptions, Release
 
 # Constant to tell what the current system platform is, replacing "darwin" with "mac"
 # for compatibility with the AdoptOpenJDK API.
@@ -380,12 +381,12 @@ class AppMainWindow(QMainWindow):
 
     def selected_available_release(self):
         return self.availableBinariesTableSortFilterProxyModel.data(
-            self.availableBinariesTableView.selectedIndexes()[0], ObjectRole
+            self.availableBinariesTableView.selectedIndexes()[0], QT_OBJECTROLE
         )
 
     def selected_installed_release(self):
         return self.installedBinariesListModel.data(
-            self.installedBinariesListView.selectedIndexes()[0], ObjectRole
+            self.installedBinariesListView.selectedIndexes()[0], QT_OBJECTROLE
         )
 
     def enable_available_binaries_tab_actions(self, enable=True):

@@ -23,6 +23,8 @@ class CheckBoxButtonGroup(QButtonGroup):
         return [button for button in self.buttons() if button.isChecked()]
 
     def reset(self, *args, **kwargs):
+        del args, kwargs
+
         checked = self.checked_buttons()
 
         if len(checked) == 1:

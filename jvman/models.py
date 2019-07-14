@@ -1,7 +1,10 @@
 import sys
 import copy
+
 from collections import OrderedDict
 
+from requests import HTTPError
+from PyQt5 import QtCore
 from PyQt5.QtCore import (
     Qt,
     QAbstractTableModel,
@@ -13,13 +16,11 @@ from PyQt5.QtCore import (
     QModelIndex,
     QPersistentModelIndex,
 )
-from PyQt5 import QtCore
-from requests import HTTPError
 
 from . import adoptapi
 from .adoptapi import Release
 
-ObjectRole = Qt.UserRole + 1
+QT_OBJECTROLE = Qt.UserRole + 1
 
 
 class GenericSortFilterProxyModel(QSortFilterProxyModel):
@@ -64,8 +65,8 @@ class AvailableBinariesTableModel(QAbstractTableModel):
                             release = copy.copy(release)
                             release.binaries = [copy.deepcopy(binary)]
                             self.append_release.emit(release)
-                except HTTPError as e:
-                    print(e, file=sys.stderr)
+                except HTTPError as error:
+                    print(error, file=sys.stderr)
                     continue
 
     def __init__(self, *args, **kwargs):
@@ -83,10 +84,14 @@ class AvailableBinariesTableModel(QAbstractTableModel):
         self._internal_data = []
         self._update_thread = None
 
-    def rowCount(self, parent=QModelIndex()):
+    def rowCount(self, parent=None):
+        del parent  # QModelIndex()
+
         return len(self._internal_data)
 
-    def columnCount(self, parent=QModelIndex()):
+    def columnCount(self, parent=None):
+        del parent  # QModelIndex()
+
         return len(self._column_names)
 
     def data(self, index, role=Qt.DisplayRole):
@@ -119,7 +124,7 @@ class AvailableBinariesTableModel(QAbstractTableModel):
                 return release.binaries[0].heap_size.title()
             elif index.column() == 6:  # Architecture
                 return release.binaries[0].architecture
-        elif role == ObjectRole:
+        elif role == QT_OBJECTROLE:
             return self._internal_data[index.row()]
 
         return QVariant()
@@ -130,12 +135,12 @@ class AvailableBinariesTableModel(QAbstractTableModel):
 
         if orientation == Qt.Horizontal:
             return self._column_names[section]
-        else:
-            return section
 
-        return QVariant()
+        return section
 
-    def insertRows(self, row, count, parent=QModelIndex()):
+    def insertRows(self, row, count, parent=None):
+        del parent  # QModelIndex()
+
         self.beginInsertRows(QModelIndex(), row, row + count - 1)
 
         for position in range(count):
@@ -171,12 +176,13 @@ class InstalledBinariesListModel(QAbstractListModel):
     rowsChanged = QtCore.pyqtSignal(QModelIndex, int, int)
     status_change = QtCore.pyqtSignal(str, int)
 
-    def __init__(self, datamodel=OrderedDict(), *args, **kwargs):
+    def __init__(self, *args, datamodel=OrderedDict(), **kwargs):
         super().__init__(*args, **kwargs)
 
         self._internal_data = datamodel
 
-    def rowCount(self, parent=QModelIndex()):
+    def rowCount(self, parent=None):
+        del parent  # QModelIndex()
         return len(self._internal_data.keys())
 
     def data(self, index, role=Qt.DisplayRole):
@@ -190,7 +196,7 @@ class InstalledBinariesListModel(QAbstractListModel):
             return f"{name} [{release.release_name}]"
         if role == Qt.EditRole:
             return name
-        elif role == ObjectRole:
+        elif role == QT_OBJECTROLE:
             return release
 
         return QVariant()

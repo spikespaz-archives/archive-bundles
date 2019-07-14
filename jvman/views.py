@@ -1,12 +1,12 @@
 from PyQt5.QtWidgets import QDialog, QTreeView, QVBoxLayout, QAbstractItemView
 from PyQt5.QtCore import Qt
-from PyQt5.Qt import QClipboard, QApplication
+from PyQt5.Qt import QApplication
 
 from .models import BinaryDetailsTreeModel
 
 
 class BinaryDetailsDialog(QDialog):
-    def __init__(self, data, title=None, *args, **kwargs):
+    def __init__(self, data, *args, title=None, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
