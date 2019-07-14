@@ -44,7 +44,7 @@ PLATFORM_ARCH = (
 
 # Instantiate an object for serializing and deserializing the application's data in a JSON file.
 SETTINGS = SettingsFile(
-    Path(Path.home(), ".jvman", "settings.json"),
+    Path(Path.home(), ".jvt", "settings.json"),
     # Anonymous functions that are responsible for making values serializble.
     serialize_map={
         "download_path": lambda x: str(Path.resolve(x)),
@@ -65,8 +65,8 @@ SETTINGS = SettingsFile(
     },
     # Default keys and values to create if they aren't already in the file on load.
     defaults={
-        "download_path": Path(Path.home(), "Downloads"),
-        "binaries_path": Path(Path.home(), ".jvman"),
+        "download_path": Path(Path.home(), ".jvt", "Downloads"),
+        "binaries_path": Path(Path.home(), ".jvt"),
         "filter_options": RequestOptions(
             _version=["openjdk8"],
             _nightly=[False],
