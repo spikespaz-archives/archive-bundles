@@ -1,12 +1,12 @@
 import platform
 from collections import OrderedDict
+from pathlib import Path
 
 from PyQt5 import QtCore, uic
 from PyQt5.QtCore import QModelIndex
-from PyQt5.Qt import QClipboard, QApplication
+from PyQt5.Qt import QApplication
 from PyQt5.QtWidgets import QHeaderView, QMainWindow
 from PyQt5.QtCore import Qt
-from pathlib import Path
 
 from . import helpers
 from .helpers import DownloaderThread
@@ -184,6 +184,8 @@ class AppMainWindow(QMainWindow):
         @helpers.make_slot(QModelIndex, int, int)
         @helpers.connect_slot(self.availableBinariesTableModel.rowsInserted)
         def _on_rows_inserted(parent, first, last):
+            del parent
+
             for row in range(first, last + 1):
                 self.availableBinariesTableView.resizeRowToContents(row)
 
@@ -240,6 +242,8 @@ class AppMainWindow(QMainWindow):
         @helpers.make_slot(QModelIndex, QModelIndex)
         @helpers.connect_slot(self.availableBinariesTableView.selectionModel().selectionChanged)
         def _on_available_binaries_selection_changed(selected, deselected):
+            del selected, deselected
+
             self.enable_available_binaries_tab_actions(True)
             self.availableBinariesProgressBar.setMaximum(1)
             self.availableBinariesProgressBar.setValue(0)
@@ -247,6 +251,8 @@ class AppMainWindow(QMainWindow):
         @helpers.make_slot(QModelIndex, QModelIndex)
         @helpers.connect_slot(self.installedBinariesListView.selectionModel().selectionChanged)
         def _on_installed_binaries_selection_changed(selected, deselected):
+            del deselected
+
             if selected.isEmpty():
                 self.selectedBinaryDetailsTreeView.setModel(None)
                 return
@@ -351,6 +357,8 @@ class AppMainWindow(QMainWindow):
 
         @QtCore.pyqtSlot(str)
         def _on_end_download(file_location):
+            del file_location
+
             self.installedBinariesListModel.add_release(release.release_name, release)
 
             self._download_thread.endDownload.disconnect(_on_end_download)
