@@ -81,6 +81,10 @@ class BackgroundThread(QThread):
     def __init__(self, destination, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self._target = None
+        self._args = None
+        self._kwargs = None
+
         destination.append(self)
 
     def __call__(self, function):
@@ -111,7 +115,7 @@ class DownloaderThread(QThread):
     beginDownload = QtCore.pyqtSignal(str)
     endDownload = QtCore.pyqtSignal(str)
 
-    def __init__(self, chunk_size=1024, *args, **kwargs):
+    def __init__(self, *args, chunk_size=1024, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.chunk_size = chunk_size
@@ -121,6 +125,7 @@ class DownloaderThread(QThread):
         self._url = None
         self._location = None
         self.file_location = None
+        self.part_location = None
         self.success = False
         self._stopped = False
 
@@ -144,33 +149,57 @@ class DownloaderThread(QThread):
         self.success = False
 
         self.beginSendRequest.emit()
-        request = requests.get(self._url, stream=True)
-        self.endSendRequest.emit()
 
-        self.filesize = int(request.headers["content-length"])
-        self.filename = re.findall(r"filename=(.+)", request.headers["content-disposition"])[0]
+        with requests.get(self._url, stream=True) as request:
+            self.endSendRequest.emit()
 
-        self.filenameFound.emit(self.filename)
-        self.filesizeFound.emit(self.filesize)
+            request.raise_for_status()
 
-        self.file_location = Path(self._location, self.filename).resolve()
+            self.filesize = int(request.headers["content-length"])
+            self.filename = re.findall(r"filename=(.+)", request.headers["content-disposition"])[0]
 
-        self.beginDownload.emit(str(self.file_location))
+            self.filenameFound.emit(self.filename)
+            self.filesizeFound.emit(self.filesize)
 
-        with open(self.file_location, "wb") as file:
+            self.file_location = Path(self._location, self.filename).resolve()
+            self.part_location = Path(self.file_location).resolve()
+            self.part_location = (self.file_location.parent / self.file_location.name).with_suffix(
+                self.file_location.suffix + ".part"
+            )
+
+            print(self.file_location)
+            print(self.part_location)
+
+            # If there were a way to seek to a position on a file stream,
+            # I would like to be able to resume a failed download from the PART file.
+            #
+            # if self.part_location.is_file() and self.part_location.exists():
+            #     self.downloaded_bytes = self.part_location.stat().st_size
+            # else:
+            #     self.downloaded_bytes = 0
+
             self.downloaded_bytes = 0
 
-            for count, chunk in enumerate(request.iter_content(chunk_size=self.chunk_size)):
-                if self._stopped:
-                    return
-                elif not chunk:
-                    continue
+            self.beginDownload.emit(str(self.file_location))
 
-                file.write(chunk)
-                self.downloaded_bytes += len(chunk)
+            # with open(self.part_location, "r+b") as file:
+            with open(self.part_location, "wb") as file:
+                for count, chunk in enumerate(request.iter_content(chunk_size=self.chunk_size)):
+                    if self._stopped:
+                        return
 
-                self.bytesChanged.emit(self.downloaded_bytes)
-                self.chunkWritten.emit(count)
+                    if not chunk:
+                        continue
+
+                    file.write(chunk)
+                    self.downloaded_bytes += len(chunk)
+
+                    self.bytesChanged.emit(self.downloaded_bytes)
+                    self.chunkWritten.emit(count)
+
+                file.flush()
+
+        self.part_location.replace(self.file_location)
 
         self.success = True
         self.endDownload.emit(str(self.file_location))
