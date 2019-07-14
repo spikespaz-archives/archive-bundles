@@ -308,6 +308,18 @@ class AppMainWindow(QMainWindow):
 
             self.installedBinariesListView.edit(selected_index)
 
+        @helpers.make_slot()
+        @helpers.connect_slot(self._download_thread.bytesChanged)
+        def _on_binary_download_bytes_changed(current_bytes):
+            max_kb = self._download_thread.filesize / 1000
+            current_kb = current_bytes / 1000
+
+            self.availableBinariesProgressBar.setValue(current_bytes)
+
+            self.availableBinariesProgressBar.setFormat(
+                f"Downloading... {current_kb / max_kb:.2%} ({current_kb:,.0f} / {max_kb:,.0f} kB)"
+            )
+
         self.installedBinariesListModel.rowsInserted.connect(SETTINGS.dump)
         self.installedBinariesListModel.rowsMoved.connect(SETTINGS.dump)
         self.installedBinariesListModel.rowsRemoved.connect(SETTINGS.dump)
@@ -317,7 +329,6 @@ class AppMainWindow(QMainWindow):
         self.availableBinariesTableModel.status_change.connect(self.statusbar.showMessage)
 
         self._download_thread.filesizeFound.connect(self.availableBinariesProgressBar.setMaximum)
-        self._download_thread.bytesChanged.connect(self.availableBinariesProgressBar.setValue)
 
         self.selectedBinaryDetailsTreeView.doubleClicked.connect(
             lambda index: QApplication.clipboard().setText(

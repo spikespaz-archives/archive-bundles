@@ -117,6 +117,7 @@ class DownloaderThread(QThread):
         self.chunk_size = chunk_size
         self.filename = None
         self.filesize = None
+        self.downloaded_bytes = 0
         self._url = None
         self._location = None
         self.file_location = None
@@ -157,7 +158,7 @@ class DownloaderThread(QThread):
         self.beginDownload.emit(str(self.file_location))
 
         with open(self.file_location, "wb") as file:
-            downloaded_bytes = 0
+            self.downloaded_bytes = 0
 
             for count, chunk in enumerate(request.iter_content(chunk_size=self.chunk_size)):
                 if self._stopped:
@@ -166,9 +167,9 @@ class DownloaderThread(QThread):
                     continue
 
                 file.write(chunk)
-                downloaded_bytes += len(chunk)
+                self.downloaded_bytes += len(chunk)
 
-                self.bytesChanged.emit(downloaded_bytes)
+                self.bytesChanged.emit(self.downloaded_bytes)
                 self.chunkWritten.emit(count)
 
         self.success = True
