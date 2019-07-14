@@ -92,6 +92,9 @@ class AppMainWindow(QMainWindow):
         # Load the settings data into the settings file object.
         SETTINGS.load()
 
+        SETTINGS["download_path"].mkdir(parents=True, exist_ok=True)
+        SETTINGS["binaries_path"].mkdir(parents=True, exist_ok=True)
+
         # Instantiate a thread in the background for downloads to be used across the application.
         self._download_thread = DownloaderThread(chunk_size=1024)
 
@@ -211,7 +214,6 @@ class AppMainWindow(QMainWindow):
         @helpers.connect_slot(self._download_thread.beginDownload)
         def _on_begin_download():
             self.availableBinariesProgressBar.setMaximum(self._download_thread.filesize)
-            self.availableBinariesProgressBar.setFormat("Downloading... %p%")
 
             self.availableBinariesCancelButton.setEnabled(True)
 
