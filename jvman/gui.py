@@ -231,7 +231,7 @@ class AppMainWindow(QMainWindow):
             self.availableBinariesCancelButton.setEnabled(False)
 
             self.availableBinariesProgressBar.setFormat(
-                f'Download "{self._download_thread.filename}"'
+                f'Download "{self._download_thread.filename}" '
                 + f'{"succeeded" if self._download_thread.success else "failed"}!'
             )
 
