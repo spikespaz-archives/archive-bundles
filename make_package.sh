@@ -1,3 +1,4 @@
+# Nuitka compile
 python -OO -m nuitka --standalone \
                      --follow-imports \
                      --plugin-enable=qt-plugins \
@@ -5,6 +6,7 @@ python -OO -m nuitka --standalone \
                      --windows-disable-console \
                      "./jvtgui.py"
 
+# Use a batch file to fix the PATH and start the GUI with a theme
 cat > "./jvtgui.dist/run_jvtgui.bat" << EOL
 @echo off
 
@@ -23,8 +25,10 @@ start "" jvtgui.exe %ARGS%
 exit
 EOL
 
+# Shell script for the same thing
 cat > "./jvtgui.dist/run_jvtgui.sh" << EOL
 #! /usr/bin/sh
+
 export PATH="\$PATH:\${pwd}"
 
 # NOTE: If you wish, you may use variants of the Fusion theme.
@@ -35,7 +39,7 @@ export PATH="\$PATH:\${pwd}"
 # For a custom Fusion Dark theme with a blue accent:
 # ./jvtgui fusion fusion-dark
 
-For a custom Fusion Dark theme with an orange accent (this is for you brother):
+# For a custom Fusion Dark theme with an orange accent (this is for you brother):
 # ./jvtgui fusion fusion-dark accent-orange
 
 # Let the gods decide
@@ -44,8 +48,10 @@ For a custom Fusion Dark theme with an orange accent (this is for you brother):
 exit
 EOL
 
+# Make the directory for the UI file and copy it
 mkdir -p "./jvtgui.dist/jvtgui/"
 cp "./jvtgui/interface.ui" "./jvtgui.dist/jvtgui/"
 
+# Mark executables as executable
 chmod +x "./jvtgui.dist/jvtgui"
 chmod +x "./jvtgui.dist/run_jvtgui.sh"
