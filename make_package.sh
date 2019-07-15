@@ -25,21 +25,22 @@ EOL
 
 cat > "./jvtgui.dist/run_jvtgui.sh" << EOL
 #! /usr/bin/sh
+
 export PATH="\$PATH:\${pwd}"
 
 # NOTE: If you wish, you may use variants of the Fusion theme.
 
 # For the default Qt Fusion theme:
-# ./jvtgui fusion
+# jvtgui fusion
 
 # For a custom Fusion Dark theme with a blue accent:
-# ./jvtgui fusion fusion-dark
+# jvtgui fusion fusion-dark
 
 For a custom Fusion Dark theme with an orange accent (this is for you brother):
-# ./jvtgui fusion fusion-dark accent-orange
+# jvtgui fusion fusion-dark accent-orange
 
 # Let the gods decide
-./jvtgui
+jvtgui
 
 exit
 EOL
