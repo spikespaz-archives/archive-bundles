@@ -3,7 +3,7 @@ import copy
 
 from collections import OrderedDict
 
-from requests import HTTPError
+from requests import HTTPError, ConnectionError
 from PyQt5 import QtCore
 from PyQt5.QtCore import (
     Qt,
@@ -66,8 +66,15 @@ class AvailableBinariesTableModel(QAbstractTableModel):
                             release.binaries = [copy.deepcopy(binary)]
                             self.append_release.emit(release)
                 except HTTPError as error:
-                    print(error, file=sys.stderr)
+                    print(type(error), error, file=sys.stderr)
+
                     continue
+                except ConnectionError as error:
+                    print(type(error), error, file=sys.stderr)
+                    
+                    self.status_change.emit(f"Connection error; maybe you're not connected to the internet? Check the console log.", 30000)
+                    
+                    return
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

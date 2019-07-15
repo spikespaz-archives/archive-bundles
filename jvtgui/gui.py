@@ -166,7 +166,7 @@ class AppMainWindow(QMainWindow):
     def setup_connections(self):
         @helpers.make_slot(int)
         @helpers.connect_slot(self.mainTabWidget.currentChanged)
-        def _on_current_changed(index):
+        def _on_current_tab_changed(index):
             tab_name = self.mainTabWidget.tabText(index)
 
             if tab_name == "Installed Binaries":
