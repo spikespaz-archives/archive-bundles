@@ -174,14 +174,6 @@ class DownloaderThread(QThread):
             print(self.file_location)
             print(self.part_location)
 
-            # If there were a way to seek to a position on a file stream,
-            # I would like to be able to resume a failed download from the PART file.
-            #
-            # if self.part_location.is_file() and self.part_location.exists():
-            #     self.downloaded_bytes = self.part_location.stat().st_size
-            # else:
-            #     self.downloaded_bytes = 0
-
             self.downloaded_bytes = 0
 
             self.beginDownload.emit(str(self.file_location))
