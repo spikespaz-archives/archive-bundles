@@ -88,7 +88,7 @@ class AppMainWindow(QMainWindow):
         super().__init__(*args, **kwargs)
 
         # Load the Qt UI file into this main window.
-        uic.loadUi(Path(__file__) / ".." / "interface.ui", self)
+        uic.loadUi(Path(__file__).parent / "interface.ui", self)
 
         # Load the settings data into the settings file object.
         SETTINGS.load()
