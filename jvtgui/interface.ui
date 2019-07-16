@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="mainTabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="installedBinariesTab">
        <attribute name="title">
@@ -493,8 +493,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>348</width>
-              <height>377</height>
+              <width>340</width>
+              <height>423</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -547,7 +547,11 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_11">
                <item>
-                <widget class="QLineEdit" name="userProfileDirLineEdit"/>
+                <widget class="QLineEdit" name="userProfileDirLineEdit">
+                 <property name="clearButtonEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QToolButton" name="userProfileDirToolButton">
@@ -559,6 +563,13 @@
               </layout>
              </item>
              <item>
+              <widget class="Line" name="line_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QLabel" name="label_3">
                <property name="text">
                 <string>Downloads directory</string>
@@ -568,7 +579,11 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_12">
                <item>
-                <widget class="QLineEdit" name="dlDirLineEdit"/>
+                <widget class="QLineEdit" name="dlDirLineEdit">
+                 <property name="clearButtonEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QToolButton" name="dlDirToolButton">
@@ -598,6 +613,31 @@
               </layout>
              </item>
              <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_10">
+               <item>
+                <widget class="QLabel" name="label_9">
+                 <property name="text">
+                  <string>File stream chunk size</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="dlChunkSizeComboBox">
+                 <property name="editable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="Line" name="line_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QLabel" name="label_4">
                <property name="text">
                 <string>Installed binaries directory</string>
@@ -607,7 +647,11 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_13">
                <item>
-                <widget class="QLineEdit" name="binDirLineEdit"/>
+                <widget class="QLineEdit" name="binDirLineEdit">
+                 <property name="clearButtonEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QToolButton" name="binDirToolButton">
@@ -635,7 +679,11 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_14">
                <item>
-                <widget class="QLineEdit" name="defaultShellLineEdit"/>
+                <widget class="QLineEdit" name="defaultShellLineEdit">
+                 <property name="clearButtonEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QToolButton" name="defaultShellToolButton">
@@ -654,7 +702,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="defaultShellArgsLineEdit"/>
+              <widget class="QLineEdit" name="defaultShellArgsLineEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <spacer name="verticalSpacer">
