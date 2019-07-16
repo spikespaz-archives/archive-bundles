@@ -114,6 +114,9 @@ class AppMainWindow(QMainWindow):
         # Load the Qt UI file into this main window.
         uic.loadUi(Path(__file__).parent / "interface.ui", self)
 
+        self.saveSettingsPushButton.setEnabled(True)
+        self.saveSettingsPushButton.hide()
+
         # Load the settings data into the settings file object.
         SETTINGS.load()
 
@@ -132,7 +135,8 @@ class AppMainWindow(QMainWindow):
     def trigger_save(self):
         self._save_timer.start()
 
-        self.saveSettingsPushButton.setEnabled(True)
+        # self.saveSettingsPushButton.setEnabled(True)
+        self.saveSettingsPushButton.show()
 
     def resizeEvent(self, event):
         if event.oldSize() == QSize(-1, -1):
@@ -484,7 +488,8 @@ class AppMainWindow(QMainWindow):
 
             self.statusbar.showMessage("Saved settings file.", 5000)
 
-            self.saveSettingsPushButton.setEnabled(False)
+            # self.saveSettingsPushButton.setEnabled(False)
+            self.saveSettingsPushButton.hide()
             self.saveSettingsPushButton.clearFocus()
 
         @helpers.make_slot()

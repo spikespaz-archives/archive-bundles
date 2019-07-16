@@ -517,7 +517,7 @@
                <item>
                 <widget class="QLabel" name="label_6">
                  <property name="text">
-                  <string>Remember window size on start</string>
+                  <string>Resize window on start</string>
                  </property>
                 </widget>
                </item>
