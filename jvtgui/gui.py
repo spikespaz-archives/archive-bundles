@@ -470,7 +470,7 @@ class AppMainWindow(QMainWindow):
                 self,
                 "Select Default Shell Executable",
                 path=SETTINGS["default_shell"],
-                types="Executable File (*.exe)\nUnknown (*.*)",
+                types=("Windows Executable (*.exe)", "Unknown (*.*)"),
             ).resolve()
 
             self.defaultShellLineEdit.setText(str(SETTINGS["default_shell"]))
@@ -482,7 +482,7 @@ class AppMainWindow(QMainWindow):
         def _on_save_settings_timer_timeout():
             SETTINGS.dump()
 
-            self.statusbar.showMessage("Saved settings file.", 3000)
+            self.statusbar.showMessage("Saved settings file.", 5000)
 
             self.saveSettingsPushButton.setEnabled(False)
             self.saveSettingsPushButton.clearFocus()

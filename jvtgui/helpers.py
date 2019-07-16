@@ -44,13 +44,13 @@ def pick_directory(parent, title="Select Directory", start=Path("~")):
     return start
 
 
-def pick_file(parent, title="Select File", path=Path("~"), types="Text Document (*.txt)"):
+def pick_file(parent, title="Select File", path=Path("~"), types=("Text Document (*.txt)",)):
     if path.is_file():
         start = path.parent.resolve()
     else:
         start = path.resolve()
 
-    file = QFileDialog.getOpenFileName(parent, title, str(start), filter=types)[0]
+    file = QFileDialog.getOpenFileName(parent, title, str(start), filter="\n".join(types))[0]
 
     if file:
         return Path(file)
