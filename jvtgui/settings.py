@@ -12,7 +12,12 @@ class SettingsFile(dict):
 
         super().__init__()
 
-    def dump(self):
+    def dump(self, debug=False):
+        if debug:
+            self.debug_dump()
+
+            return
+
         with open(self._file_name, "w") as file:
             serialized = dict(**self)
 
@@ -22,6 +27,40 @@ class SettingsFile(dict):
                 )
 
             rapidjson.dump(serialized, file, indent=2)
+
+            return serialized
+
+    def debug_dump(self):
+        import builtins
+
+        old_dict = None
+        
+        with open(self._file_name, "r") as file:
+            old_dict = rapidjson.load(file)
+
+        new_dict = self.dump()
+
+        new_dict_keys = list(new_dict.keys())
+        old_dict_keys = list(old_dict.keys())
+
+        for key in new_dict_keys + old_dict_keys:
+            if key in new_dict_keys and key not in old_dict_keys:
+                print(f"[A] {key}: {new_dict[key].__repr__()}")
+
+                continue
+            if key in new_dict_keys and old_dict_keys:
+                if old_dict[key] == new_dict[key]:
+                    continue
+
+                print(f"[U] {key}: {old_dict[key].__repr__()} => {new_dict[key].__repr__()}")
+
+                continue
+            if key in old_dict_keys and key not in new_dict_keys:
+                print(f"[D] {key}: {old_dict[key].__repr__()}")
+
+                continue
+
+        return new_dict
 
     def load(self):
         try:
