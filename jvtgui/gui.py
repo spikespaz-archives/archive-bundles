@@ -1,4 +1,7 @@
 import platform
+import shutil
+import os
+import re
 
 from collections import OrderedDict
 from pathlib import Path
@@ -20,7 +23,7 @@ from .models import (
     InstalledBinariesListModel,
     GenericSortFilterProxyModel,
     BinaryDetailsTreeModel,
-    QT_OBJECTROLE
+    QT_OBJECTROLE,
 )
 
 # Constant to tell what the current system platform is, replacing "darwin" with "mac"
@@ -47,8 +50,10 @@ SETTINGS = SettingsFile(
     Path(Path.home(), ".jvt", "settings.json"),
     # Anonymous functions that are responsible for making values serializble.
     serialize_map={
+        "profile_path": lambda x: str(Path.resolve(x)),
         "download_path": lambda x: str(Path.resolve(x)),
         "binaries_path": lambda x: str(Path.resolve(x)),
+        "default_shell": lambda x: str(Path.resolve(x)),
         "filter_options": lambda x: x.__dict__,
         "installed_binaries": lambda x: dict(
             [(key, value.serialize()) for key, value in x.items()]
@@ -56,8 +61,10 @@ SETTINGS = SettingsFile(
     },
     # Anonymous functions that are responsible for deserializing values.
     deserialize_map={
+        "profile_path": Path,
         "download_path": Path,
         "binaries_path": Path,
+        "default_shell": Path,
         "filter_options": lambda x: RequestOptions(many=True, **x),
         "installed_binaries": lambda x: OrderedDict(
             [(key, Release(**value)) for key, value in x.items()]
@@ -65,8 +72,23 @@ SETTINGS = SettingsFile(
     },
     # Default keys and values to create if they aren't already in the file on load.
     defaults={
-        "download_path": Path(Path.home(), ".jvt", "Downloads"),
-        "binaries_path": Path(Path.home(), ".jvt"),
+        "interface_theme": "fusion fusion-dark accent-orange",
+        "remember_window_size": True,
+        "window_size": (900, 450),
+        "profile_path": Path(Path.home(), ".jvt"),
+        "download_path": Path(Path.home(), ".jvt", "downloads"),
+        "use_bytesio": (
+            PLATFORM_OS == "windows"
+            or re.match(
+                r"^MemTotal:\s+(\d+)kB$",
+                Path("/proc/meminfo").read_text(),
+                re.MULTILINE | re.IGNORECASE,
+            ).groups()[1]
+        ),
+        "dl_chunk_size": 4096,
+        "binaries_path": Path(Path.home(), ".jvt", "bin"),
+        "default_shell": Path(shutil.which("bash") or os.environ["comspec"]),
+        "default_shell_args": ("-i", "--login") if shutil.which("bash") else tuple(),
         "filter_options": RequestOptions(
             _version=["openjdk8"],
             _nightly=[False],
@@ -163,7 +185,69 @@ class AppMainWindow(QMainWindow):
 
         self.filter_options = SETTINGS["filter_options"]
 
+    def bind_settings_options(self):
+        self.interfaceThemeComboBox.currentTextChanged.connect(
+            lambda x: SETTINGS.__setitem__("interface_theme", str(x))
+        )
+        self.interfaceThemeComboBox.currentTextChanged.connect(SETTINGS.dump)
+
+        self.rememberSizeCheckBox.toggled.connect(
+            lambda x: SETTINGS.__setitem__("remember_window_size", x)
+        )
+        self.rememberSizeCheckBox.toggled.connect(SETTINGS.dump)
+
+        self.userProfileDirLineEdit.textChanged.connect(
+            lambda x: SETTINGS.__setitem__("profile_path", (Path(x)))
+        )
+        self.userProfileDirLineEdit.textChanged.connect(SETTINGS.dump)
+
+        self.dlDirLineEdit.textChanged.connect(
+            lambda x: SETTINGS.__setitem__("download_path", (Path(x)))
+        )
+        self.dlDirLineEdit.textChanged.connect(SETTINGS.dump)
+
+        self.useBytesIOCheckBox.toggled.connect(lambda x: SETTINGS.__setitem__("use_bytesio", x))
+        self.useBytesIOCheckBox.toggled.connect(SETTINGS.dump)
+
+        self.binDirLineEdit.textChanged.connect(
+            lambda x: SETTINGS.__setitem__("binaries_path", (Path(x)))
+        )
+        self.binDirLineEdit.textChanged.connect(SETTINGS.dump)
+
+        self.defaultShellLineEdit.textChanged.connect(
+            lambda x: SETTINGS.__setitem__("default_shell", (Path(x)))
+        )
+        self.defaultShellLineEdit.textChanged.connect(SETTINGS.dump)
+
+        self.defaultShellArgsLineEdit.textChanged.connect(
+            lambda x: SETTINGS.__setitem__("default_shell_args", (x.split()))
+        )
+        self.defaultShellArgsLineEdit.textChanged.connect(SETTINGS.dump)
+
+    def load_settings_options(self):
+        self.interfaceThemeComboBox.setEditable(True)
+
+        self.interfaceThemeComboBox.addItems(
+            [None, "Windows", "Fusion", "Fusion Dark - Blue", "Fusion Dark - Augment Orange"]
+        )
+
+        self.interfaceThemeComboBox.setEditText(SETTINGS["interface_theme"])
+        self.rememberSizeCheckBox.setChecked(SETTINGS["remember_window_size"])
+
+        if SETTINGS["remember_window_size"]:
+            self.centralWidget().resize(*SETTINGS["window_size"])
+
+        self.userProfileDirLineEdit.setText(str(SETTINGS["profile_path"]))
+        self.dlDirLineEdit.setText(str(SETTINGS["download_path"]))
+        self.useBytesIOCheckBox.setChecked(SETTINGS["use_bytesio"])
+        self.binDirLineEdit.setText(str(SETTINGS["binaries_path"]))
+        self.defaultShellLineEdit.setText(str(SETTINGS["default_shell"]))
+        self.defaultShellArgsLineEdit.setText(str(" ".join(SETTINGS["default_shell_args"])))
+
     def setup_connections(self):
+        self.load_settings_options()
+        self.bind_settings_options()
+
         @helpers.make_slot(int)
         @helpers.connect_slot(self.mainTabWidget.currentChanged)
         def _on_current_tab_changed(index):

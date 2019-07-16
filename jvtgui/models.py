@@ -71,9 +71,12 @@ class AvailableBinariesTableModel(QAbstractTableModel):
                     continue
                 except ConnectionError as error:
                     print(type(error), error, file=sys.stderr)
-                    
-                    self.status_change.emit(f"Connection error; maybe you're not connected to the internet? Check the console log.", 30000)
-                    
+
+                    self.status_change.emit(
+                        "Connection error; maybe you're not connected to the internet? Check the console log.",
+                        30000,
+                    )
+
                     return
 
     def __init__(self, *args, **kwargs):
