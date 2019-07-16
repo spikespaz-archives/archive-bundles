@@ -34,14 +34,14 @@ if __name__ == "__main__":
         PALETTE.setColor(QPalette.HighlightedText, Qt.black)
 
         if "accent-orange" in sys.argv:
-            PALETTE.setColor(QPalette.Link, QColor(218, 115, 42))
-            PALETTE.setColor(QPalette.Highlight, QColor(218, 115, 42))
+            PALETTE.setColor(QPalette.Link, QColor(240, 83, 0))
+            PALETTE.setColor(QPalette.Highlight, QColor(240, 83, 0))
 
             APP.setStyleSheet(
                 """
                 QToolTip {
                     color: #ffffff;
-                    background-color: #2a82da;
+                    background-color: #F05300; #2a82da
                     border: 1px solid white;
                 }
                 """
