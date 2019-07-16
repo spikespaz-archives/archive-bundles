@@ -7,6 +7,7 @@ from pathlib import Path
 import requests
 
 from PyQt5.QtCore import QThread, QProcess, QUrl
+from PyQt5.QtWidgets import QFileDialog
 from PyQt5 import QtCore
 from PyQt5.Qt import QDesktopServices
 
@@ -30,6 +31,31 @@ def make_slot(*args, **kwargs):
         return QtCore.pyqtSlot(*args, **kwargs)(func)
 
     return wrapper
+
+
+def pick_directory(parent, title="Select Directory", start=Path("~")):
+    path = QFileDialog.getExistingDirectory(
+        parent, title, str(start.resolve()), QFileDialog.ShowDirsOnly
+    )
+
+    if path:
+        return Path(path)
+
+    return start
+
+
+def pick_file(parent, title="Select File", path=Path("~"), types="Text Document (*.txt)"):
+    if path.is_file():
+        start = path.parent.resolve()
+    else:
+        start = path.resolve()
+
+    file = QFileDialog.getOpenFileName(parent, title, str(start), filter=types)[0]
+
+    if file:
+        return Path(file)
+
+    return path
 
 
 # Decorator for functions to be automatically connected to a signal.

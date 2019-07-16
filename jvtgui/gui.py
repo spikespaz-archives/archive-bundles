@@ -214,33 +214,33 @@ class AppMainWindow(QMainWindow):
         )
         self.rememberSizeCheckBox.toggled.connect(SETTINGS.dump)
 
-        self.userProfileDirLineEdit.textChanged.connect(
-            lambda x: SETTINGS.__setitem__("profile_path", (Path(x)))
+        self.userProfileDirLineEdit.textEdited.connect(
+            lambda x: SETTINGS.__setitem__("profile_path", Path(x))
         )
-        self.userProfileDirLineEdit.textChanged.connect(self.trigger_save)
+        self.userProfileDirLineEdit.textEdited.connect(self.trigger_save)
 
-        self.dlDirLineEdit.textChanged.connect(
-            lambda x: SETTINGS.__setitem__("download_path", (Path(x)))
+        self.dlDirLineEdit.textEdited.connect(
+            lambda x: SETTINGS.__setitem__("download_path", Path(x))
         )
-        self.dlDirLineEdit.textChanged.connect(self.trigger_save)
+        self.dlDirLineEdit.textEdited.connect(self.trigger_save)
 
         self.useBytesIOCheckBox.toggled.connect(lambda x: SETTINGS.__setitem__("use_bytesio", x))
         self.useBytesIOCheckBox.toggled.connect(SETTINGS.dump)
 
-        self.binDirLineEdit.textChanged.connect(
-            lambda x: SETTINGS.__setitem__("binaries_path", (Path(x)))
+        self.binDirLineEdit.textEdited.connect(
+            lambda x: SETTINGS.__setitem__("binaries_path", Path(x))
         )
-        self.binDirLineEdit.textChanged.connect(self.trigger_save)
+        self.binDirLineEdit.textEdited.connect(self.trigger_save)
 
-        self.defaultShellLineEdit.textChanged.connect(
-            lambda x: SETTINGS.__setitem__("default_shell", (Path(x)))
+        self.defaultShellLineEdit.textEdited.connect(
+            lambda x: SETTINGS.__setitem__("default_shell", Path(x))
         )
-        self.defaultShellLineEdit.textChanged.connect(self.trigger_save)
+        self.defaultShellLineEdit.textEdited.connect(self.trigger_save)
 
-        self.defaultShellArgsLineEdit.textChanged.connect(
-            lambda x: SETTINGS.__setitem__("default_shell_args", (x.split()))
+        self.defaultShellArgsLineEdit.textEdited.connect(
+            lambda x: SETTINGS.__setitem__("default_shell_args", x.split())
         )
-        self.defaultShellArgsLineEdit.textChanged.connect(self.trigger_save)
+        self.defaultShellArgsLineEdit.textEdited.connect(self.trigger_save)
 
     def load_settings_options(self):
         self.interfaceThemeComboBox.setEditable(True)
@@ -425,6 +425,58 @@ class AppMainWindow(QMainWindow):
                 f"Downloading... {current_kb / max_kb:.2%} ({current_kb:,.0f} / {max_kb:,.0f} kB)"
             )
 
+        @helpers.make_slot(QModelIndex)
+        @helpers.connect_slot(self.selectedBinaryDetailsTreeView.doubleClicked)
+        def _copy_model_cell(index):
+            QApplication.clipboard().setText(index.parent.model().data(index, Qt.DisplayRole))
+
+        @helpers.make_slot()
+        @helpers.connect_slot(self.userProfileDirToolButton.clicked)
+        def _on_user_profile_dir_tool_button():
+            SETTINGS["profile_path"] = helpers.pick_directory(
+                self, "Select Profile Directory", start=SETTINGS["profile_path"]
+            ).resolve()
+
+            self.userProfileDirLineEdit.setText(str(SETTINGS["profile_path"]))
+
+            SETTINGS.dump()
+
+        @helpers.make_slot()
+        @helpers.connect_slot(self.dlDirToolButton.clicked)
+        def _on_dl_dir_tool_button():
+            SETTINGS["download_path"] = helpers.pick_directory(
+                self, "Select Download Directory", start=SETTINGS["download_path"]
+            ).resolve()
+
+            self.dlDirLineEdit.setText(str(SETTINGS["download_path"]))
+
+            SETTINGS.dump()
+
+        @helpers.make_slot()
+        @helpers.connect_slot(self.binDirToolButton.clicked)
+        def _on_bin_dir_tool_button():
+            SETTINGS["binaries_path"] = helpers.pick_directory(
+                self, "Select Binary Directory", start=SETTINGS["binaries_path"]
+            ).resolve()
+
+            self.binDirLineEdit.setText(str(SETTINGS["binaries_path"]))
+
+            SETTINGS.dump()
+
+        @helpers.make_slot()
+        @helpers.connect_slot(self.defaultShellToolButton.clicked)
+        def _on_default_shell_tool_button():
+            SETTINGS["default_shell"] = helpers.pick_file(
+                self,
+                "Select Default Shell Executable",
+                path=SETTINGS["default_shell"],
+                types="Executable File (*.exe)\nUnknown (*.*)",
+            ).resolve()
+
+            self.defaultShellLineEdit.setText(str(SETTINGS["default_shell"]))
+
+            SETTINGS.dump()
+
         @helpers.make_slot()
         @helpers.connect_slot(self._save_timer.timeout)
         def _on_save_settings_timer_timeout():
@@ -433,12 +485,13 @@ class AppMainWindow(QMainWindow):
             self.statusbar.showMessage("Saved settings file.", 3000)
 
             self.saveSettingsPushButton.setEnabled(False)
+            self.saveSettingsPushButton.clearFocus()
 
         @helpers.make_slot()
         @helpers.connect_slot(self.saveSettingsPushButton.clicked)
         def _on_save_settings_button_clicked():
             self._save_timer.stop()
-            
+
             _on_save_settings_timer_timeout()
 
         self.installedBinariesListModel.rowsInserted.connect(SETTINGS.dump)
@@ -450,12 +503,6 @@ class AppMainWindow(QMainWindow):
         self.availableBinariesTableModel.status_change.connect(self.statusbar.showMessage)
 
         self._download_thread.filesizeFound.connect(self.availableBinariesProgressBar.setMaximum)
-
-        self.selectedBinaryDetailsTreeView.doubleClicked.connect(
-            lambda index: QApplication.clipboard().setText(
-                self.selectedBinaryDetailsTreeView.model().data(index, Qt.DisplayRole)
-            )
-        )
 
     def cancel_current_download(self):
         self._download_thread.stop()
