@@ -469,7 +469,7 @@
        <attribute name="title">
         <string>Settings</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_10">
+       <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
          <widget class="QSplitter" name="splitter_2">
           <property name="orientation">
@@ -696,6 +696,19 @@
            </widget>
           </widget>
           <widget class="QTextBrowser" name="textBrowser"/>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="saveSettingsPushButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Save</string>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+S</string>
+          </property>
          </widget>
         </item>
        </layout>

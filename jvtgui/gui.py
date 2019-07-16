@@ -7,7 +7,7 @@ from collections import OrderedDict
 from pathlib import Path
 
 from PyQt5 import QtCore, uic
-from PyQt5.QtCore import QModelIndex
+from PyQt5.QtCore import QModelIndex, QSize, QTimer
 from PyQt5.Qt import QApplication
 from PyQt5.QtWidgets import QHeaderView, QMainWindow
 from PyQt5.QtCore import Qt
@@ -50,6 +50,7 @@ SETTINGS = SettingsFile(
     Path(Path.home(), ".jvt", "settings.json"),
     # Anonymous functions that are responsible for making values serializble.
     serialize_map={
+        "window_size": lambda x: (x.width(), x.height()),
         "profile_path": lambda x: str(Path.resolve(x)),
         "download_path": lambda x: str(Path.resolve(x)),
         "binaries_path": lambda x: str(Path.resolve(x)),
@@ -61,6 +62,7 @@ SETTINGS = SettingsFile(
     },
     # Anonymous functions that are responsible for deserializing values.
     deserialize_map={
+        "window_size": lambda x: QSize(*x),
         "profile_path": Path,
         "download_path": Path,
         "binaries_path": Path,
@@ -74,7 +76,7 @@ SETTINGS = SettingsFile(
     defaults={
         "interface_theme": "fusion fusion-dark accent-orange",
         "remember_window_size": True,
-        "window_size": (900, 450),
+        "window_size": QSize(900, 450),
         "profile_path": Path(Path.home(), ".jvt"),
         "download_path": Path(Path.home(), ".jvt", "downloads"),
         "use_bytesio": (
@@ -121,8 +123,24 @@ class AppMainWindow(QMainWindow):
         # Instantiate a thread in the background for downloads to be used across the application.
         self._download_thread = DownloaderThread(chunk_size=1024)
 
+        self._save_timer = QTimer()
+        self._save_timer.setInterval(5000)
+
         self.setup_interface()
         self.setup_connections()
+
+    def trigger_save(self):
+        self._save_timer.start()
+
+        self.saveSettingsPushButton.setEnabled(True)
+
+    def resizeEvent(self, event):
+        if event.oldSize() == QSize(-1, -1):
+            return
+
+        SETTINGS.__setitem__("window_size", event.size())
+
+        self.trigger_save()
 
     # Perform any necessary interface set-up, such as creating control groups and view models.
     def setup_interface(self):
@@ -189,7 +207,7 @@ class AppMainWindow(QMainWindow):
         self.interfaceThemeComboBox.currentTextChanged.connect(
             lambda x: SETTINGS.__setitem__("interface_theme", str(x))
         )
-        self.interfaceThemeComboBox.currentTextChanged.connect(SETTINGS.dump)
+        self.interfaceThemeComboBox.currentTextChanged.connect(self.trigger_save)
 
         self.rememberSizeCheckBox.toggled.connect(
             lambda x: SETTINGS.__setitem__("remember_window_size", x)
@@ -199,12 +217,12 @@ class AppMainWindow(QMainWindow):
         self.userProfileDirLineEdit.textChanged.connect(
             lambda x: SETTINGS.__setitem__("profile_path", (Path(x)))
         )
-        self.userProfileDirLineEdit.textChanged.connect(SETTINGS.dump)
+        self.userProfileDirLineEdit.textChanged.connect(self.trigger_save)
 
         self.dlDirLineEdit.textChanged.connect(
             lambda x: SETTINGS.__setitem__("download_path", (Path(x)))
         )
-        self.dlDirLineEdit.textChanged.connect(SETTINGS.dump)
+        self.dlDirLineEdit.textChanged.connect(self.trigger_save)
 
         self.useBytesIOCheckBox.toggled.connect(lambda x: SETTINGS.__setitem__("use_bytesio", x))
         self.useBytesIOCheckBox.toggled.connect(SETTINGS.dump)
@@ -212,17 +230,17 @@ class AppMainWindow(QMainWindow):
         self.binDirLineEdit.textChanged.connect(
             lambda x: SETTINGS.__setitem__("binaries_path", (Path(x)))
         )
-        self.binDirLineEdit.textChanged.connect(SETTINGS.dump)
+        self.binDirLineEdit.textChanged.connect(self.trigger_save)
 
         self.defaultShellLineEdit.textChanged.connect(
             lambda x: SETTINGS.__setitem__("default_shell", (Path(x)))
         )
-        self.defaultShellLineEdit.textChanged.connect(SETTINGS.dump)
+        self.defaultShellLineEdit.textChanged.connect(self.trigger_save)
 
         self.defaultShellArgsLineEdit.textChanged.connect(
             lambda x: SETTINGS.__setitem__("default_shell_args", (x.split()))
         )
-        self.defaultShellArgsLineEdit.textChanged.connect(SETTINGS.dump)
+        self.defaultShellArgsLineEdit.textChanged.connect(self.trigger_save)
 
     def load_settings_options(self):
         self.interfaceThemeComboBox.setEditable(True)
@@ -235,7 +253,7 @@ class AppMainWindow(QMainWindow):
         self.rememberSizeCheckBox.setChecked(SETTINGS["remember_window_size"])
 
         if SETTINGS["remember_window_size"]:
-            self.centralWidget().resize(*SETTINGS["window_size"])
+            self.resize(SETTINGS["window_size"])
 
         self.userProfileDirLineEdit.setText(str(SETTINGS["profile_path"]))
         self.dlDirLineEdit.setText(str(SETTINGS["download_path"]))
@@ -406,6 +424,22 @@ class AppMainWindow(QMainWindow):
             self.availableBinariesProgressBar.setFormat(
                 f"Downloading... {current_kb / max_kb:.2%} ({current_kb:,.0f} / {max_kb:,.0f} kB)"
             )
+
+        @helpers.make_slot()
+        @helpers.connect_slot(self._save_timer.timeout)
+        def _on_save_settings_timer_timeout():
+            SETTINGS.dump()
+
+            self.statusbar.showMessage("Saved settings file.", 3000)
+
+            self.saveSettingsPushButton.setEnabled(False)
+
+        @helpers.make_slot()
+        @helpers.connect_slot(self.saveSettingsPushButton.clicked)
+        def _on_save_settings_button_clicked():
+            self._save_timer.stop()
+            
+            _on_save_settings_timer_timeout()
 
         self.installedBinariesListModel.rowsInserted.connect(SETTINGS.dump)
         self.installedBinariesListModel.rowsMoved.connect(SETTINGS.dump)
