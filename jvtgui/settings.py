@@ -17,7 +17,7 @@ class SettingsFile(dict):
             serialized = dict(**self)
 
             for key, value in serialized.items():
-                serialized[key] = self._serialize_map[key](value)
+                serialized[key] = self._serialize_map[key](value) if key in self._serialize_map else value
 
             rapidjson.dump(serialized, file, indent=2)
 
@@ -27,7 +27,7 @@ class SettingsFile(dict):
                 deserialized = rapidjson.load(file)
 
                 for key, value in deserialized.items():
-                    deserialized[key] = self._deserialize_map[key](value)
+                    deserialized[key] = self._deserialize_map[key](value) if key in self._deserialize_map else value
 
                 self.update(deserialized)
                 self.set_defaults()
