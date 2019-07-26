@@ -241,6 +241,13 @@
                 </widget>
                </item>
                <item>
+                <widget class="QCheckBox" name="javaVer12CheckBox">
+                 <property name="text">
+                  <string>12</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <spacer name="horizontalSpacer_2">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
@@ -493,7 +500,7 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>340</width>
+              <width>356</width>
               <height>423</height>
              </rect>
             </property>
