@@ -11,7 +11,7 @@ if __name__ == "__main__":
     WINDOW = AppMainWindow()
 
     print(sys.argv)
-    
+
     if "fusion" in sys.argv:
         APP.setStyle("fusion")
 
@@ -19,7 +19,12 @@ if __name__ == "__main__":
         PALETTE = QPalette()
 
         # Color palette and stylesheet adapted from the gist below.
-        # https://gist.github.com/lschmierer/443b8e21ad93e2a2d7eb
+        # https://gist.github.com/QuantumCD/6245215
+
+        if "accent-orange" in sys.argv:
+            ACCENT_COLOR = (240, 83, 0)
+        else:
+            ACCENT_COLOR = (42, 130, 218)
 
         PALETTE.setColor(QPalette.Window, QColor(53, 53, 53))
         PALETTE.setColor(QPalette.WindowText, Qt.white)
@@ -31,58 +36,27 @@ if __name__ == "__main__":
         PALETTE.setColor(QPalette.Button, QColor(53, 53, 53))
         PALETTE.setColor(QPalette.ButtonText, Qt.white)
         PALETTE.setColor(QPalette.BrightText, Qt.red)
+        PALETTE.setColor(QPalette.Link, QColor(*ACCENT_COLOR))
+
+        PALETTE.setColor(QPalette.Highlight, QColor(*ACCENT_COLOR))
         PALETTE.setColor(QPalette.HighlightedText, Qt.black)
-
-        if "accent-orange" in sys.argv:
-            PALETTE.setColor(QPalette.Link, QColor(240, 83, 0))
-            PALETTE.setColor(QPalette.Highlight, QColor(240, 83, 0))
-
-            APP.setStyleSheet(
-                """
-                QToolTip {
-                    color: #ffffff;
-                    background-color: #F05300; #2a82da
-                    border: 1px solid white;
-                }
-                """
-            )
-        else:
-            PALETTE.setColor(QPalette.Link, QColor(42, 130, 218))
-            PALETTE.setColor(QPalette.Highlight, QColor(42, 130, 218))
-
-            APP.setStyleSheet(
-                """
-                QToolTip {
-                    color: #ffffff;
-                    background-color: #da732a;
-                    border: 1px solid white;
-                }
-                """
-            )
-       
-        APP.setPalette(PALETTE)
-
-     
-
-    if "accent-orange" in sys.argv:
-        PALETTE = QPalette()
-
-        # Color palette and stylesheet adapted from the gist below.
-        # https://gist.github.com/lschmierer/443b8e21ad93e2a2d7eb
-
-        
-
-        APP.setPalette(PALETTE)
 
         APP.setStyleSheet(
             """
             QToolTip {
                 color: #ffffff;
-                background-color: #da732a;
-                border: 1px solid white;
+                background-color: #2d2d2d;
+                border: 1px solid #{accent_color[0]:02x}{accent_color[1]:02x}{accent_color[2]:02x};
+            }
+            /* QFrame::HLine, QFrame::VLine */
+            QFrame[frameShape="4"][frameShadow="48"],
+            QFrame[frameShape="5"][frameShadow="48"] {
+                background-color: #2d2d2d;
             }
             """
         )
+
+        APP.setPalette(PALETTE)
 
     WINDOW.show()
     sys.exit(APP.exec_())
