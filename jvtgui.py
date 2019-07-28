@@ -1,9 +1,10 @@
 import sys
 
-from jvtgui.gui import AppMainWindow
-from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QPalette, QColor
+from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt
+
+from jvtgui.gui import AppMainWindow
 
 
 if __name__ == "__main__":
@@ -42,17 +43,17 @@ if __name__ == "__main__":
         PALETTE.setColor(QPalette.HighlightedText, Qt.black)
 
         APP.setStyleSheet(
-            """
-            QToolTip {
+            f"""
+            QToolTip {{
                 color: #ffffff;
                 background-color: #2d2d2d;
-                border: 1px solid #{accent_color[0]:02x}{accent_color[1]:02x}{accent_color[2]:02x};
-            }
+                border: 1px solid #{ACCENT_COLOR[0]:02x}{ACCENT_COLOR[1]:02x}{ACCENT_COLOR[2]:02x};
+            }}
             /* QFrame::HLine, QFrame::VLine */
             QFrame[frameShape="4"][frameShadow="48"],
-            QFrame[frameShape="5"][frameShadow="48"] {
+            QFrame[frameShape="5"][frameShadow="48"] {{
                 background-color: #2d2d2d;
-            }
+            }}
             """
         )
 
