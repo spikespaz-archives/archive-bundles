@@ -7,7 +7,7 @@ from os import path, listdir, chdir, getcwd, rename, makedirs
 from subprocess import call
 from re import match
 
-GIT_URL_RE = r"https?:\/\/([\w-.]+)\/([\w-]+)\/([\w-]+)"
+GIT_URL_RE = r"https?:\/\/([\w.-]+)\/([\w-]+)\/([\w-]+)"
 CWD = getcwd()
 
 # (url, author, repo)
@@ -21,6 +21,9 @@ with open("repo_list.txt") as fp:
             continue
 
         m = match(GIT_URL_RE, line)
+
+        if not m:
+            continue
 
         # Add a new tuple and make a new url that's guaranteed
         repo_list.append(("https://{}/{}/{}".format(*m.groups()), m.groups()[1], m.groups()[2]))
