@@ -1,0 +1,10 @@
+https://github.com/spikespaz-old/dockypi
+https://github.com/spikespaz-old/github-extended
+https://github.com/spikespaz-old/marker-qt
+https://github.com/spikespaz-old/newstyle-widgets
+https://github.com/spikespaz-old/pyqt-themes
+https://github.com/spikespaz-old/quizlet-py
+https://github.com/spikespaz-old/raspi-composter
+https://github.com/spikespaz-old/tools-js
+https://github.com/spikespaz-old/vernier-py
+https://github.com/spikespaz-old/website-legacy
