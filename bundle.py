@@ -3,7 +3,8 @@
 ## THIS IS JUST SOME LAZY CODE TO GET THE JOB DONE
 ## PLEASE DON'T HURT ME
 
-from os import path, listdir, chdir, getcwd, rename, remove, removedirs
+from os import path, listdir, chdir, getcwd, rename, remove
+from shutil import rmtree
 from subprocess import call
 from re import match
 
@@ -54,7 +55,7 @@ for item in listdir():
     rename("self.bundle", path.join(CWD, item + ".bundle"))
 
     print("Deleting clone directory...")
-    removedirs(item)
+    rmtree(path.join(CWD, item), ignore_errors=True)
 
     # exit repo
     chdir(CWD)

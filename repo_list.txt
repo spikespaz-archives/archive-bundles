@@ -8,3 +8,8 @@ https://github.com/spikespaz-old/raspi-composter
 https://github.com/spikespaz-old/tools-js
 https://github.com/spikespaz-old/vernier-py
 https://github.com/spikespaz-old/website-legacy
+https://github.com/spikespaz-old/litemeter
+https://github.com/spikespaz-old/windows-adwin
+https://github.com/spikespaz-old/python-ffpython
+https://github.com/spikespaz-old/ffbatcher
+https://github.com/spikespaz-old/js-games
