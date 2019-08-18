@@ -6,6 +6,8 @@ from pathlib import Path
 
 import requests
 
+from io import BytesIO
+
 from PyQt5.QtCore import QThread, QProcess, QUrl
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5 import QtCore
@@ -145,10 +147,11 @@ class DownloaderThread(QThread):
     beginDownload = QtCore.pyqtSignal(str)
     endDownload = QtCore.pyqtSignal(str)
 
-    def __init__(self, *args, chunk_size=1024, **kwargs):
+    def __init__(self, *args, chunk_size=1024, use_bytesio=False, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.chunk_size = chunk_size
+        self.use_bytesio = use_bytesio
         self.filename = None
         self.filesize = None
         self.downloaded_bytes = 0
@@ -204,24 +207,37 @@ class DownloaderThread(QThread):
 
             self.beginDownload.emit(str(self.file_location))
 
-            # with open(self.part_location, "r+b") as file:
-            with open(self.part_location, "wb") as file:
-                for count, chunk in enumerate(request.iter_content(chunk_size=self.chunk_size)):
-                    if self._stopped:
-                        return
+            if self.use_bytesio:
+                part_file = BytesIO()
+            else:
+                part_file = open(self.part_location, "wb")
 
-                    if not chunk:
-                        continue
+            for count, chunk in enumerate(request.iter_content(chunk_size=self.chunk_size)):
+                if self._stopped:
+                    return
 
-                    file.write(chunk)
-                    self.downloaded_bytes += len(chunk)
+                if not chunk:
+                    continue
 
-                    self.bytesChanged.emit(self.downloaded_bytes)
-                    self.chunkWritten.emit(count)
+                part_file.write(chunk)
+                self.downloaded_bytes += len(chunk)
 
-                file.flush()
+                self.bytesChanged.emit(self.downloaded_bytes)
+                self.chunkWritten.emit(count)
 
-        self.part_location.replace(self.file_location)
+            part_file.flush()
+
+        if self.use_bytesio:
+            with open(self.file_location, "wb") as final_file:
+                part_file.seek(0)
+
+                final_file.write(part_file.read())
+
+            part_file.close()
+        else:
+            part_file.close()
+
+            self.part_location.replace(self.file_location)
 
         self.success = True
         self.endDownload.emit(str(self.file_location))

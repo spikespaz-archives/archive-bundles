@@ -44,6 +44,14 @@ PLATFORM_ARCH = (
     }.get(x, x)
 )(platform.machine().lower())
 
+DATA_SIZES = {
+    "1 KiB": 1 * 2 ** 10,
+    "4 KiB": 4 * 2 ** 10,
+    "10 KiB": 10 * 2 ** 10,
+    "100 KiB": 100 * 2 ** 10,
+    "1 MiB": 1 * 2 ** 20,
+    "10 MiB": 10 * 2 ** 20,
+}
 
 # Instantiate an object for serializing and deserializing the application's data in a JSON file.
 SETTINGS = SettingsFile(
@@ -124,7 +132,10 @@ class AppMainWindow(QMainWindow):
         SETTINGS["binaries_path"].mkdir(parents=True, exist_ok=True)
 
         # Instantiate a thread in the background for downloads to be used across the application.
-        self._download_thread = DownloaderThread(chunk_size=1024)
+        self._download_thread = DownloaderThread(
+            chunk_size=DATA_SIZES.get(*(SETTINGS["dl_chunk_size"],) * 2),
+            use_bytesio=SETTINGS["use_bytesio"],
+        )
 
         self._save_timer = QTimer()
         self._save_timer.setInterval(5000)
@@ -236,6 +247,12 @@ class AppMainWindow(QMainWindow):
         )
         self.binDirLineEdit.textEdited.connect(self.trigger_save)
 
+        self.dlChunkSizeComboBox.currentTextChanged.connect(
+            lambda x: SETTINGS.__setitem__("dl_chunk_size", x)
+        )
+        self.dlChunkSizeComboBox.lineEdit().textEdited.connect(self.trigger_save)
+        self.dlChunkSizeComboBox.currentIndexChanged.connect(SETTINGS.dump)
+
         self.defaultShellLineEdit.textEdited.connect(
             lambda x: SETTINGS.__setitem__("default_shell", Path(x))
         )
@@ -262,6 +279,18 @@ class AppMainWindow(QMainWindow):
         self.userProfileDirLineEdit.setText(str(SETTINGS["profile_path"]))
         self.dlDirLineEdit.setText(str(SETTINGS["download_path"]))
         self.useBytesIOCheckBox.setChecked(SETTINGS["use_bytesio"])
+
+        self.dlChunkSizeComboBox.addItems(DATA_SIZES.keys())
+
+        chunk_size_index = self.dlChunkSizeComboBox.findData(
+            SETTINGS["dl_chunk_size"], Qt.DisplayRole
+        )
+
+        if chunk_size_index > -1:
+            self.dlChunkSizeComboBox.setCurrentIndex(chunk_size_index)
+        else:
+            self.dlChunkSizeComboBox.setEditText(str(SETTINGS["dl_chunk_size"]))
+
         self.binDirLineEdit.setText(str(SETTINGS["binaries_path"]))
         self.defaultShellLineEdit.setText(str(SETTINGS["default_shell"]))
         self.defaultShellArgsLineEdit.setText(str(" ".join(SETTINGS["default_shell_args"])))
