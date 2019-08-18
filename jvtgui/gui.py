@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QHeaderView, QMainWindow
 from PyQt5.QtCore import Qt
 
 from . import helpers
-from .helpers import DownloaderThread
+from .helpers import DownloaderThread, ExtractionThread
 from .settings import SettingsFile
 from .widgets import CheckBoxButtonGroup
 from .views import BinaryDetailsDialog
@@ -136,6 +136,7 @@ class AppMainWindow(QMainWindow):
             chunk_size=DATA_SIZES.get(*(SETTINGS["dl_chunk_size"],) * 2),
             use_bytesio=SETTINGS["use_bytesio"],
         )
+        self._extract_thread = ExtractionThread()
 
         self._save_timer = QTimer()
         self._save_timer.setInterval(5000)
@@ -458,6 +459,17 @@ class AppMainWindow(QMainWindow):
                 f"Downloading... {current_kb / max_kb:.2%} ({current_kb:,.0f} / {max_kb:,.0f} kB)"
             )
 
+        @helpers.connect_slot(self._extract_thread.begin_extract)
+        @helpers.make_slot(str)
+        def _on_begin_extract(dest_dir):
+            self.availableBinariesProgressBar.setValue(0)
+            self.availableBinariesProgressBar.setMaximum(0)
+
+        @helpers.connect_slot(self._extract_thread.endExtract)
+        @helpers.make_slot(str)
+        def _on_end_extract(dest_dir):
+            self.availableBinariesProgressBar.setMaximum(1)
+
         @helpers.make_slot(QModelIndex)
         @helpers.connect_slot(self.selectedBinaryDetailsTreeView.doubleClicked)
         def _copy_model_cell(index):
@@ -568,7 +580,8 @@ class AppMainWindow(QMainWindow):
 
         self.download_binary(release=release)
 
-        @QtCore.pyqtSlot(str)
+        @helpers.connect_slot(self._download_thread.endDownload)
+        @helpers.make_slot(str)
         def _on_end_download(file_location):
             del file_location
 
@@ -576,7 +589,7 @@ class AppMainWindow(QMainWindow):
 
             self._download_thread.endDownload.disconnect(_on_end_download)
 
-        self._download_thread.endDownload.connect(_on_end_download)
+            self._extract_thread(self._download_thread.file_location, SETTINGS["binaries_path"])
 
     def selected_available_release(self):
         return self.availableBinariesTableSortFilterProxyModel.data(

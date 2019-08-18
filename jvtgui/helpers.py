@@ -1,12 +1,15 @@
 import itertools
 import platform
+import tempfile
+import shutil
 import re
 
+from io import BytesIO
 from pathlib import Path
 
 import requests
+import patoolib
 
-from io import BytesIO
 
 from PyQt5.QtCore import QThread, QProcess, QUrl
 from PyQt5.QtWidgets import QFileDialog
@@ -135,6 +138,58 @@ class BackgroundThread(QThread):
 
     def run(self):
         self._target(*self._args, **self._kwargs)
+
+
+class ExtractionThread(QThread):
+    begin_extract = QtCore.pyqtSignal(str)
+    endExtract = QtCore.pyqtSignal(str)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.source_file = None
+        self.dest_dir = None
+        self.success = True
+        self._stopped = False
+
+    def __del__(self):
+        self.wait()
+
+    def __call__(self, source, destination):
+        self.source_file = source
+        self.dest_dir = destination
+
+        self.start()
+
+    def stop(self):
+        self._stopped = True
+        self.success = False
+        self.endExtract.emit(str(self.dest_dir))
+        self.exit(0)
+
+    def run(self):
+        self._stopped = False
+        self.success = False
+        self.begin_extract.emit(str(self.dest_dir))
+
+        source_path = str(self.source_file.resolve())
+        dest_path = str(self.dest_dir.resolve())
+        temp_dest_path = tempfile.mkdtemp()
+        temp_dir = Path(temp_dest_path)
+
+        patoolib.extract_archive(source_path, outdir=temp_dest_path)
+
+        for member in map(lambda x: x.name, temp_dir.glob("*")):
+            if member in map(lambda x: x.name, self.dest_dir.glob("*")):
+                print("MEMBER:", member)
+                shutil.rmtree(self.dest_dir / member)
+
+                print("Deleting directory", member)
+
+            shutil.move(temp_dir / member, self.dest_dir / member)
+
+        self.success = True
+        self.endExtract.emit(str(self.dest_dir))
 
 
 class DownloaderThread(QThread):
