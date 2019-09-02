@@ -16,4 +16,3 @@ https://github.com/spikespaz-old/js-games
 https://github.com/spikespaz/windows-tiledwm
 https://github.com/spikespaz/classwork
 https://github.com/spikespaz/public-3d-models
-https://github.com/spikespaz/openscad-things
