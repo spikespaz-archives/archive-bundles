@@ -1,0 +1,21 @@
+{
+    "size": 192,
+    "padding": [20, 10],
+    "base": [900, 300],
+    "background": [31, 31, 31, 255],
+    "weights": [
+        "Regular",
+        "Bold",
+        "Black",
+        "ExtraBold",
+        "ExtraLight",
+        "Light",
+        "Medium",
+        "SemiBold",
+        "Thin"
+    ],
+    "text": [
+        {"text": "FORE",    "color": [223,  64,  64, 255]},
+        {"text": "GROUNDS", "color": [255, 255, 255, 255]}
+    ]
+}
