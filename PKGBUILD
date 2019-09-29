@@ -11,7 +11,7 @@ pkgname=('arc-themes-solid-maia'
 		 'arc-themes-solid-breath')
 _pkgname=$pkgbase
 _pkgbase=arc-themes-maia
-pkgver=20190330
+pkgver=20190917
 pkgrel=1
 #_gnomever=3.22
 arch=('any')
@@ -28,9 +28,10 @@ source=("${_pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkg
         "${_pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
         #"${_pkgname}-${pkgver}.tar.xz::${url}/archive/${_commit}.tar.gz"
 )
-sha256sums=('77a6c4ffd0006cab917fdef27904a5dbd931aa0089ccd30ac43a3fb03ebc3cf7'
+sha256sums=('4218e5d493adbf2bacd9d499d53849bed0226d5839b124e185f7a61323393745'
             'SKIP')
-validpgpkeys=('97312D5EB9D7AE7D0BD4307351DAE9B7C1AE9161') #Nicohood key
+validpgpkeys=('97312D5EB9D7AE7D0BD4307351DAE9B7C1AE9161'  # NicoHood
+              '1E1FB0017C998A8AE2C498A6C2EAA8A26ADC59EE') # Fossfreedom
 
 #ALL arc color
 _BLUE=5294E2 
