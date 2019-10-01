@@ -183,6 +183,7 @@ class AppMainWindow(QMainWindow):
             self.javaVer10CheckBox,
             self.javaVer11CheckBox,
             self.javaVer12CheckBox,
+            self.javaVer13CheckBox,
         )
 
         self.releaseTypeButtonGroup = CheckBoxButtonGroup(self)
@@ -626,6 +627,9 @@ class AppMainWindow(QMainWindow):
         if self.javaVer12CheckBox.isChecked():
             options._version.append("openjdk12")
 
+        if self.javaVer13CheckBox.isChecked():
+            options._version.append("openjdk13")
+
         if self.stableReleaseTypeCheckBox.isChecked():
             options._nightly.append(False)
 
@@ -667,7 +671,8 @@ class AppMainWindow(QMainWindow):
         self.javaVer9CheckBox.setChecked("openjdk9" in options._version)
         self.javaVer10CheckBox.setChecked("openjdk10" in options._version)
         self.javaVer11CheckBox.setChecked("openjdk11" in options._version)
-        self.javaVer11CheckBox.setChecked("openjdk12" in options._version)
+        self.javaVer12CheckBox.setChecked("openjdk12" in options._version)
+        self.javaVer13CheckBox.setChecked("openjdk13" in options._version)
 
         self.stableReleaseTypeCheckBox.setChecked(False in options._nightly)
         self.nightlyReleaseTypeCheckBox.setChecked(True in options._nightly)
