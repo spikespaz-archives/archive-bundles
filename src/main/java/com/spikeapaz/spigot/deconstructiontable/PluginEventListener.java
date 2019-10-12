@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +16,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
 
 public class PluginEventListener implements Listener {
     private DeconstructionTable plugin = JavaPlugin.getPlugin(DeconstructionTable.class);
@@ -39,9 +42,9 @@ public class PluginEventListener implements Listener {
 
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        ItemStack heldItem = event.getItem();
-        Block clickedBlock = event.getClickedBlock();
+        final Player player = event.getPlayer();
+        final ItemStack heldItem = event.getItem();
+        final Block clickedBlock = event.getClickedBlock();
 
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
             return;
@@ -61,10 +64,24 @@ public class PluginEventListener implements Listener {
             event.setCancelled(true);
 
             // Add the direction of the clicked face to the clock position.
-            Location placeLocation = clickedBlock.getLocation();
+            final Location placeLocation = clickedBlock.getLocation();
             placeLocation.add(event.getBlockFace().getDirection());
 
-            Block placedBlock = placeLocation.getBlock();
+            final Block placedBlock = placeLocation.getBlock();
+
+            // Get block locations on all six sides
+            final ArrayList<Location> adjacentLocations = new ArrayList<Location>();
+            adjacentLocations.add(placeLocation.clone().add(BlockFace.UP.getDirection()));
+            adjacentLocations.add(placeLocation.clone().add(BlockFace.DOWN.getDirection()));
+            adjacentLocations.add(placeLocation.clone().add(BlockFace.NORTH.getDirection()));
+            adjacentLocations.add(placeLocation.clone().add(BlockFace.SOUTH.getDirection()));
+            adjacentLocations.add(placeLocation.clone().add(BlockFace.EAST.getDirection()));
+            adjacentLocations.add(placeLocation.clone().add(BlockFace.WEST.getDirection()));
+
+            // Prevent the block from being placed to not mess up the mushroom textures
+            for (Location location : adjacentLocations)
+                if (location.getBlock().getType().equals(Material.RED_MUSHROOM_BLOCK))
+                    return;
 
             // Update block data to the unused red mushroom block.
             placedBlock.setType(Material.RED_MUSHROOM_BLOCK);
