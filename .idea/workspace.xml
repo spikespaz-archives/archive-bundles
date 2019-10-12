@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="126bd1b0-42bb-4b10-813b-7948b67451c5" name="Default Changelist" comment="" />
+    <list default="true" id="126bd1b0-42bb-4b10-813b-7948b67451c5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/copy-to-server.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginEventListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginInventoryHolder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/CustomInventory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/DeconstructionTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/DeconstructionTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/EventListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PlayerInteractEventListener.java" beforeDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,6 +27,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
       <MavenImportingSettings>
@@ -24,8 +39,11 @@
     </option>
   </component>
   <component name="ProjectId" id="1S4VrCk9dIkFvBGnavoIZqaeLhe" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="C:/Program Files/Git/bin/bash.exe" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -39,7 +57,33 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Bash.copy-to-server">
+    <configuration default="true" type="BashConfigurationType" factoryName="Bash">
+      <option name="INTERPRETER_OPTIONS" value="--login -i" />
+      <option name="INTERPRETER_PATH" value="C:\Program Files\Git\bin\bash.exe" />
+      <option name="PROJECT_INTERPRETER" value="false" />
+      <option name="WORKING_DIRECTORY" value="$MAVEN_REPOSITORY$" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="copy-to-server.sh" />
+      <option name="PARAMETERS" value="" />
+      <module name="" />
+      <method v="2">
+        <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean package" />
+      </method>
+    </configuration>
+    <configuration name="copy-to-server" type="BashConfigurationType" factoryName="Bash" nameIsGenerated="true">
+      <module name="deconstruction-table-spigot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="C:\Program Files\Git\bin\bash.exe" />
+      <option name="PROJECT_INTERPRETER" value="false" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_WORKING_DIR$" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="copy-to-server.sh" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean package" />
+      </method>
+    </configuration>
     <configuration name="deconstruction-table-spigot build" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -66,6 +110,10 @@
       </MavenSettings>
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Bash.copy-to-server" />
+      <item itemvalue="Maven.deconstruction-table-spigot build" />
+    </list>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -76,5 +124,16 @@
       <updated>1570823051656</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

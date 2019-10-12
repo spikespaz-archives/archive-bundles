@@ -3,23 +3,37 @@ package com.spikeapaz.spigot.deconstructiontable;
 import org.bukkit.Bukkit;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class DeconstructionTable extends JavaPlugin {
-    static BlockData customBlockData;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-    private PlayerInteractEventListener listener;
+public final class DeconstructionTable extends JavaPlugin {
+    private static DeconstructionTable instance;
+    static BlockData customBlockData;
+    private HashMap<ItemStack, ArrayList<ItemStack>> reversedRecipes;
+    private PluginEventListener listener;
+    private PluginInventoryHolder inventoryHolder;
 
     @Override
     public void onEnable() {
+        // Save an instance of this class for reference outside class scope.
+        instance = this;
+
+        // Bind the event listeners.
+        listener = new PluginEventListener();
+        getServer().getPluginManager().registerEvents(listener, this);
+
+        inventoryHolder = new PluginInventoryHolder();
+
+        // Create the BlockData for the mushroom block.
+        customBlockData = Bukkit.getServer().createBlockData("minecraft:red_mushroom_block[down=true,east=false,north=true,south=true,up=false,west=true]");
         // Tell the console that the plugin is loaded.
         tellConsole("Enabled Deconstruction Table.");
 
-        customBlockData = Bukkit.getServer().createBlockData("minecraft:red_mushroom_block[down=true,east=false,north=true,south=true,up=false,west=true]");
 
-        listener = new PlayerInteractEventListener();
-        getServer().getPluginManager().registerEvents(listener, this);
+
     }
 
     @Override
@@ -32,7 +46,19 @@ public final class DeconstructionTable extends JavaPlugin {
     }
 
     // Utility function to send a message to the console.
-    public void tellConsole(String message){
+    private void tellConsole(String message) {
         Bukkit.getConsoleSender().sendMessage(message);
+    }
+
+    public HashMap<ItemStack, ArrayList<ItemStack>> getReversedRecipes() {
+        return reversedRecipes;
+    }
+
+    public static DeconstructionTable getInstance() {
+        return instance;
+    }
+
+    public PluginInventoryHolder getInventoryHolder() {
+        return inventoryHolder;
     }
 }

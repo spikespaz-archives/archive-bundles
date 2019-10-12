@@ -1,5 +1,6 @@
 package com.spikeapaz.spigot.deconstructiontable;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,23 +9,20 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-class CustomInventory implements InventoryHolder, Listener {
+
+class PluginInventoryHolder implements InventoryHolder, Listener {
     private Plugin plugin = DeconstructionTable.getPlugin(DeconstructionTable.class);
     private Inventory inventory;
 
-    CustomInventory() {
+    PluginInventoryHolder() {
         inventory = plugin.getServer().createInventory(this, 18, "Deconstruction");
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
         populateItems();
-    }
-
-    @Override
-    public @NotNull Inventory getInventory() {
-        return inventory;
     }
 
     public void populateItems() {
@@ -40,11 +38,40 @@ class CustomInventory implements InventoryHolder, Listener {
         inventory.setItem(12, glassPane);
     }
 
+    public void setItemSlot(int slot, ItemStack item) {
+        if (slot < 3)
+            slot += 5;
+
+        if (slot > 4)
+            slot += 13;
+
+        inventory.setItem(slot, item);
+    }
+
     @EventHandler
     void onInventoryClickEvent(InventoryClickEvent event) {
-        assert event.getClickedInventory() != null;
-        InventoryHolder holder = event.getClickedInventory().getHolder();
-        if (holder != null && event.getClickedInventory().getHolder().getClass().isInstance(this))
-            event.setCancelled(true);
+        if (event.getClickedInventory() == null)
+            return;
+
+        org.bukkit.inventory.InventoryHolder holder = event.getClickedInventory().getHolder();
+
+        if (holder != null && holder.getClass().isInstance(this)) {
+            ItemStack item = event.getCurrentItem();
+            if (item == null) return;
+            ItemMeta meta = item.getItemMeta();
+            if (meta == null) return;
+
+            Bukkit.broadcastMessage(meta.getDisplayName());
+
+            if ((event.getRawSlot() >= 1 && event.getRawSlot() <= 4) || (event.getRawSlot() >= 9 && event.getRawSlot() <= 12))
+                event.setCancelled(true);
+        }
     }
+
+    @Override
+    public @NotNull Inventory getInventory() {
+        return inventory;
+    }
+
+    void handleClick(InventoryClickEvent event) {}
 }
