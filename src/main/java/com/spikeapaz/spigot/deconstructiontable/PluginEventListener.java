@@ -44,6 +44,7 @@ public class PluginEventListener implements Listener {
 
         if (Utils.isDeconstructionTableBlock(clickedBlock)) {
             player.openInventory(plugin.getInventoryHolder().getInventory());
+            event.setCancelled(true);
         } else if (Utils.isDeconstructionTableItem(event.getItem())) {
             if (clickedBlock == null)
                 return;
