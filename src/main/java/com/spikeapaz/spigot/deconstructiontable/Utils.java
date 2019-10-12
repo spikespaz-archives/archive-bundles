@@ -8,10 +8,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 
 public class Utils {
@@ -55,5 +52,21 @@ public class Utils {
 
     public static boolean isDeconstructionTableBlock(Block block) {
         return block != null && block.getBlockData().equals(DeconstructionTable.customBlockData);
+    }
+
+    public static String randomString(int size) {
+        final Random random = new Random();
+        final StringBuilder buffer = new StringBuilder();
+        final char[] alphabet = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
+
+        for (int i = 0; i < size; i++)
+            buffer.append(alphabet[random.nextInt(alphabet.length - 1)]);
+
+        return buffer.toString();
+    }
+
+    // Utility function to send a message to the console.
+    public static void tellConsole(String message) {
+        Bukkit.getConsoleSender().sendMessage(message);
     }
 }

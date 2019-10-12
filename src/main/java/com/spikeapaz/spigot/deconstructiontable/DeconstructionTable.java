@@ -11,6 +11,12 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
+
+import static com.spikeapaz.spigot.deconstructiontable.Utils.tellConsole;
+
 
 public final class DeconstructionTable extends JavaPlugin {
     private static DeconstructionTable instance;
@@ -34,12 +40,14 @@ public final class DeconstructionTable extends JavaPlugin {
         itemMeta.setCustomModelData(10000100);
         blockItem.setItemMeta(itemMeta);
 
-        final ShapedRecipe blockRecipe = new ShapedRecipe(new NamespacedKey(this, "deconstruction_table"), blockItem);
+        final NamespacedKey namespacedKey = new NamespacedKey(this, "deconstruction_table_" + Utils.randomString(6));
+        final ShapedRecipe blockRecipe = new ShapedRecipe(namespacedKey, blockItem);
         blockRecipe.shape("III", "ICI", "III");
         blockRecipe.setIngredient('I', Material.IRON_INGOT);
         blockRecipe.setIngredient('C', Material.CRAFTING_TABLE);
-
         Bukkit.addRecipe(blockRecipe);
+
+        tellConsole("deconstruction_table namespace: " + namespacedKey.getNamespace() + "." + namespacedKey.getKey());
 
         inventoryHolder = new PluginInventoryHolder();
 
@@ -57,11 +65,6 @@ public final class DeconstructionTable extends JavaPlugin {
 
         // Unregister the PlayerInteractEventListener
         HandlerList.unregisterAll(listener);
-    }
-
-    // Utility function to send a message to the console.
-    public static void tellConsole(String message) {
-        Bukkit.getConsoleSender().sendMessage(message);
     }
 
     public static DeconstructionTable getInstance() {
