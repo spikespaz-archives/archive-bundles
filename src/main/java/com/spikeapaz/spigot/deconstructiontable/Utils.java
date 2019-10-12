@@ -13,33 +13,36 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+
 public class Utils {
+    private static HashMap<ItemStack, ArrayList<ItemStack>> reversedRecipes;
+
     public static HashMap<ItemStack, ArrayList<ItemStack>> getReversedRecipes() {
-        HashMap<ItemStack, ArrayList<ItemStack>> reversedRecipes = new HashMap<>();
+        if (reversedRecipes == null) {
+            Iterator<Recipe> recipeIterator = Bukkit.getServer().recipeIterator();
+            Recipe recipeBase;
 
-        Iterator<Recipe> recipeIterator = Bukkit.getServer().recipeIterator();
-        Recipe recipeBase;
+            while (recipeIterator.hasNext()) {
+                recipeBase = recipeIterator.next();
 
-        while (recipeIterator.hasNext()) {
-            recipeBase = recipeIterator.next();
+                if (recipeBase.getClass().isInstance(ShapedRecipe.class)) {
+                    ShapedRecipe recipe = (ShapedRecipe) recipeBase;
+                    ArrayList<ItemStack> ingredients = new ArrayList<>();
 
-            if (recipeBase.getClass().isInstance(ShapedRecipe.class)) {
-                ShapedRecipe recipe = (ShapedRecipe) recipeBase;
-                ArrayList<ItemStack> ingredients = new ArrayList<>();
+                    Map<Character, ItemStack> ingredientMap = recipe.getIngredientMap();
 
-                Map<Character, ItemStack> ingredientMap = recipe.getIngredientMap();
+                    String flatRecipe = String.join("", recipe.getShape());
+                    for (int i = 0; i < flatRecipe.length(); i++) {
+                        char letter = flatRecipe.charAt(0);
+                        ingredients.add(ingredientMap.get(letter));
+                    }
 
-                String flatRecipe = String.join("", recipe.getShape());
-                for (int i = 0; i < flatRecipe.length(); i++) {
-                    char letter = flatRecipe.charAt(0);
-                    ingredients.add(ingredientMap.get(letter));
+                    reversedRecipes.put(recipe.getResult(), ingredients);
+                } else if (recipeBase.getClass().isInstance(ShapelessRecipe.class)) {
+                    ShapelessRecipe recipe = (ShapelessRecipe) recipeBase;
+
+                    reversedRecipes.put(recipe.getResult(), new ArrayList<>(recipe.getIngredientList()));
                 }
-
-                reversedRecipes.put(recipe.getResult(), ingredients);
-            } else if (recipeBase.getClass().isInstance(ShapelessRecipe.class)) {
-                ShapelessRecipe recipe = (ShapelessRecipe) recipeBase;
-
-                reversedRecipes.put(recipe.getResult(), new ArrayList<>(recipe.getIngredientList()));
             }
         }
 

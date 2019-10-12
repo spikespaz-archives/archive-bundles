@@ -3,16 +3,12 @@ package com.spikeapaz.spigot.deconstructiontable;
 import org.bukkit.Bukkit;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public final class DeconstructionTable extends JavaPlugin {
     private static DeconstructionTable instance;
     static BlockData customBlockData;
-    private HashMap<ItemStack, ArrayList<ItemStack>> reversedRecipes;
     private PluginEventListener listener;
     private PluginInventoryHolder inventoryHolder;
 
@@ -23,12 +19,13 @@ public final class DeconstructionTable extends JavaPlugin {
 
         // Bind the event listeners.
         listener = new PluginEventListener();
-        getServer().getPluginManager().registerEvents(listener, this);
+        Bukkit.getServer().getPluginManager().registerEvents(listener, this);
 
         inventoryHolder = new PluginInventoryHolder();
 
         // Create the BlockData for the mushroom block.
         customBlockData = Bukkit.getServer().createBlockData("minecraft:red_mushroom_block[down=true,east=false,north=true,south=true,up=false,west=true]");
+
         // Tell the console that the plugin is loaded.
         tellConsole("Enabled Deconstruction Table.");
     }
@@ -43,12 +40,8 @@ public final class DeconstructionTable extends JavaPlugin {
     }
 
     // Utility function to send a message to the console.
-    private void tellConsole(String message) {
+    public static void tellConsole(String message) {
         Bukkit.getConsoleSender().sendMessage(message);
-    }
-
-    public HashMap<ItemStack, ArrayList<ItemStack>> getReversedRecipes() {
-        return reversedRecipes;
     }
 
     public static DeconstructionTable getInstance() {
