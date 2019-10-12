@@ -61,18 +61,35 @@ class PluginInventoryHolder implements InventoryHolder {
 
         for (int i : emptySlots)
             inventory.setItem(i, glassPane);
+
+        setInputItem(new ItemStack(Material.GOLDEN_CARROT));
+
+        setItemSlot(0, new ItemStack(Material.GOLD_NUGGET));
+        setItemSlot(1, new ItemStack(Material.GOLD_NUGGET));
+        setItemSlot(2, new ItemStack(Material.GOLD_NUGGET));
+        setItemSlot(3, new ItemStack(Material.GOLD_NUGGET));
+        setItemSlot(4, new ItemStack(Material.CARROT));
+        setItemSlot(5, new ItemStack(Material.GOLD_NUGGET));
+        setItemSlot(6, new ItemStack(Material.GOLD_NUGGET));
+        setItemSlot(7, new ItemStack(Material.GOLD_NUGGET));
+        setItemSlot(8, new ItemStack(Material.GOLD_NUGGET));
     }
 
     public void setItemSlot(int slot, ItemStack item) {
-        if (slot >= 0 && slot <= 2)
-            slot += 5;
-        if (slot >= 3 && slot <= 5)
-            slot += 9;
-        if (slot >= 6 && slot <= 8)
+        assert slot >= 0 && slot <= 8;
+
+        if (slot > 5)
             slot += 17;
+        else if (slot > 2)
+            slot += 11;
+        else
+            slot += 5;
 
         inventory.setItem(slot, item);
-        virtualStorage.remove(item);
+    }
+
+    public void setInputItem(ItemStack item) {
+        inventory.setItem(11, item);
     }
 
     void handleClick(InventoryClickEvent event) {
