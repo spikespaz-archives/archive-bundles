@@ -1,0 +1,5 @@
+name: DeconstructionTable
+version: ${project.version}
+main: com.spikeapaz.spigot.deconstructiontable.DeconstructionTable
+api-version: "1.14"
+website: https://github.com/spikespaz/deconstruction-table-spigot
