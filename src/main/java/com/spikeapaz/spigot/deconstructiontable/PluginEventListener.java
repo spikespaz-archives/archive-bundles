@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -42,8 +43,15 @@ public class PluginEventListener implements Listener {
         ItemStack heldItem = event.getItem();
         Block clickedBlock = event.getClickedBlock();
 
+        if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+            return;
+
+        if (heldItem != null && heldItem.getType().isBlock() && player.isSneaking())
+            return;
+
         if (Utils.isDeconstructionTableBlock(clickedBlock)) {
             player.openInventory(plugin.getInventoryHolder().getInventory());
+
             event.setCancelled(true);
         } else if (Utils.isDeconstructionTableItem(event.getItem())) {
             if (clickedBlock == null)
@@ -53,7 +61,7 @@ public class PluginEventListener implements Listener {
             event.setCancelled(true);
 
             // Add the direction of the clicked face to the clock position.
-            Location placeLocation = event.getClickedBlock().getLocation();
+            Location placeLocation = clickedBlock.getLocation();
             placeLocation.add(event.getBlockFace().getDirection());
 
             Block placedBlock = placeLocation.getBlock();

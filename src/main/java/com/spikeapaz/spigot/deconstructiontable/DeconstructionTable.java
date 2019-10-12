@@ -31,9 +31,6 @@ public final class DeconstructionTable extends JavaPlugin {
         customBlockData = Bukkit.getServer().createBlockData("minecraft:red_mushroom_block[down=true,east=false,north=true,south=true,up=false,west=true]");
         // Tell the console that the plugin is loaded.
         tellConsole("Enabled Deconstruction Table.");
-
-
-
     }
 
     @Override

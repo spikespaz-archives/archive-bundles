@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,7 +59,7 @@ class PluginInventoryHolder implements InventoryHolder {
         ItemStack glassPane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta glassPaneMeta = glassPane.getItemMeta();
         assert glassPaneMeta != null;
-        glassPaneMeta.setDisplayName(Character.toString((char) 0xE2));
+        glassPaneMeta.setDisplayName("\u00A0");
         glassPane.setItemMeta(glassPaneMeta);
 
         for (int i : emptySlots)
@@ -80,8 +79,6 @@ class PluginInventoryHolder implements InventoryHolder {
     }
 
     void handleClick(InventoryClickEvent event) {
-        Bukkit.broadcastMessage("Click Event!");
-
         if (event.getClickedInventory() == null)
             return;
 
@@ -96,6 +93,8 @@ class PluginInventoryHolder implements InventoryHolder {
         }
 
         final ItemStack cursor = event.getCursor();
+
+        Bukkit.broadcastMessage("Click Event!");
 
         if (cursor == null) {
             Bukkit.broadcastMessage("Cursor is null.");
@@ -119,8 +118,6 @@ class PluginInventoryHolder implements InventoryHolder {
     }
 
     void handleDrag(InventoryDragEvent event) {
-        Bukkit.broadcastMessage("Drag Event!");
-
         final ArrayList<ItemStack> items = new ArrayList<>(event.getNewItems().values());
 
         boolean blankChanged = false;
@@ -134,6 +131,8 @@ class PluginInventoryHolder implements InventoryHolder {
         }
 
         final ItemStack cursor = event.getCursor();
+
+        Bukkit.broadcastMessage("Drag Event!");
 
         if (cursor == null) {
             Bukkit.broadcastMessage("Cursor is null.");
@@ -158,7 +157,7 @@ class PluginInventoryHolder implements InventoryHolder {
     }
 
     @Override
-    public @NotNull Inventory getInventory() {
+    public Inventory getInventory() {
         return inventory;
     }
 }
