@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 
@@ -23,31 +24,56 @@ class PluginInventoryHolder implements InventoryHolder {
     private ArrayList<ItemStack> virtualStorage = new ArrayList<>();
     private Inventory inventory;
 
+    //      0 1 2 3 4 5 6 7 8
+    //
+    // +0   X X X X X 0 0 0 X
+    // +8   X X 0 X X 0 0 0 X
+    // +18  X X X X X 0 0 0 X
+    private int[] emptySlotsIntArray = {
+            0 + 0,
+            0 + 1,
+            0 + 2,
+            0 + 3,
+            0 + 4,
+            0 + 8,
+            9 + 0,
+            9 + 1,
+            9 + 3,
+            9 + 4,
+            9 + 8,
+            18 + 0,
+            18 + 1,
+            18 + 2,
+            18 + 3,
+            18 + 4,
+            18 + 8
+    };
+    private ArrayList<Integer> emptySlots = new ArrayList<>(Arrays.stream(emptySlotsIntArray).boxed().collect(Collectors.toList()));
+
     PluginInventoryHolder() {
-        inventory = plugin.getServer().createInventory(this, 18, "Deconstruction");
+        inventory = plugin.getServer().createInventory(this, 27, "Deconstruction");
 
         populateItems();
     }
 
-    public void populateItems() {
+    private void populateItems() {
         ItemStack glassPane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+        ItemMeta glassPaneMeta = glassPane.getItemMeta();
+        assert glassPaneMeta != null;
+        glassPaneMeta.setDisplayName(Character.toString((char) 0xE2));
+        glassPane.setItemMeta(glassPaneMeta);
 
-        inventory.setItem(1, glassPane);
-        inventory.setItem(2, glassPane);
-        inventory.setItem(3, glassPane);
-        inventory.setItem(4, glassPane);
-        inventory.setItem(9, glassPane);
-        inventory.setItem(10, glassPane);
-        inventory.setItem(11, glassPane);
-        inventory.setItem(12, glassPane);
+        for (int i : emptySlots)
+            inventory.setItem(i, glassPane);
     }
 
     public void setItemSlot(int slot, ItemStack item) {
-        if (slot < 3)
+        if (slot >= 0 && slot <= 2)
             slot += 5;
-
-        if (slot > 4)
-            slot += 13;
+        if (slot >= 3 && slot <= 5)
+            slot += 9;
+        if (slot >= 6 && slot <= 8)
+            slot += 17;
 
         inventory.setItem(slot, item);
         virtualStorage.remove(item);
@@ -64,7 +90,7 @@ class PluginInventoryHolder implements InventoryHolder {
         final ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
 
-        if ((event.getRawSlot() >= 1 && event.getRawSlot() <= 4) || (event.getRawSlot() >= 9 && event.getRawSlot() <= 12)) {
+        if (emptySlots.contains(event.getRawSlot())) {
             event.setCancelled(true);
             return;
         }
