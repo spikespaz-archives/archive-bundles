@@ -19,7 +19,7 @@ public class Utils {
 
     public static HashMap<ItemStack, ArrayList<ItemStack>> getReversedRecipes() {
         if (reversedRecipes == null) {
-            Iterator<Recipe> recipeIterator = Bukkit.getServer().recipeIterator();
+            Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
             Recipe recipeBase;
 
             while (recipeIterator.hasNext()) {

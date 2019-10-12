@@ -47,7 +47,7 @@ class PluginInventoryHolder implements InventoryHolder {
     private ArrayList<Integer> emptySlots = new ArrayList<>(Arrays.stream(emptySlotsIntArray).boxed().collect(Collectors.toList()));
 
     PluginInventoryHolder() {
-        inventory = plugin.getServer().createInventory(this, 27, "Deconstruction");
+        inventory = Bukkit.createInventory(this, 27, "Deconstruction");
 
         populateItems();
     }
