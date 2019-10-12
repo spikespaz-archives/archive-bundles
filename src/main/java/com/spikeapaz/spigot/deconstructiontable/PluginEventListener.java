@@ -1,5 +1,6 @@
 package com.spikeapaz.spigot.deconstructiontable;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -8,25 +9,31 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PluginEventListener implements Listener {
-    private DeconstructionTable plugin = (DeconstructionTable) JavaPlugin.getPlugin(DeconstructionTable.class);
+    private DeconstructionTable plugin = JavaPlugin.getPlugin(DeconstructionTable.class);
 
     @EventHandler
     public void onInventoryClickEvent(InventoryClickEvent event) {
-        org.bukkit.inventory.InventoryHolder baseHolder = event.getInventory().getHolder();
+        InventoryHolder baseHolder = event.getInventory().getHolder();
+        if (baseHolder == null) return;
 
-        if (baseHolder == null)
-            return;
+        if (PluginInventoryHolder.class.isAssignableFrom(baseHolder.getClass()))
+            ((PluginInventoryHolder) baseHolder).handleClick(event);
+    }
 
-        if (baseHolder.getClass().isInstance(PluginInventoryHolder.class)) {
-            PluginInventoryHolder holder = (PluginInventoryHolder) baseHolder;
+    @EventHandler
+    void onInventoryDragEvent(InventoryDragEvent event) {
+        InventoryHolder baseHolder = event.getInventory().getHolder();
+        if (baseHolder == null) return;
 
-            holder.handleClick(event);
-        }
+        if (PluginInventoryHolder.class.isAssignableFrom(baseHolder.getClass()))
+            ((PluginInventoryHolder) baseHolder).handleDrag(event);
     }
 
     @EventHandler

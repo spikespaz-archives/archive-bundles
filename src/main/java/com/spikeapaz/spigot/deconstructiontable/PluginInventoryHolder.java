@@ -11,20 +11,20 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 
-class PluginInventoryHolder implements InventoryHolder, Listener {
-    private Plugin plugin = DeconstructionTable.getPlugin(DeconstructionTable.class);
+class PluginInventoryHolder implements InventoryHolder {
+    private DeconstructionTable plugin = JavaPlugin.getPlugin(DeconstructionTable.class);
     private ArrayList<ItemStack> virtualStorage = new ArrayList<>();
     private Inventory inventory;
 
     PluginInventoryHolder() {
         inventory = plugin.getServer().createInventory(this, 18, "Deconstruction");
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
         populateItems();
     }
@@ -53,95 +53,86 @@ class PluginInventoryHolder implements InventoryHolder, Listener {
         virtualStorage.remove(item);
     }
 
-    @EventHandler
-    void onInventoryClickEvent(InventoryClickEvent event) {
+    void handleClick(InventoryClickEvent event) {
+        Bukkit.broadcastMessage("Click Event!");
+
         if (event.getClickedInventory() == null)
             return;
 
-        InventoryHolder holder = event.getClickedInventory().getHolder();
+        final ItemStack item = event.getCurrentItem();
+        if (item == null) return;
+        final ItemMeta meta = item.getItemMeta();
+        if (meta == null) return;
 
-        if (holder != null && holder.getClass().isInstance(this)) {
-            final ItemStack item = event.getCurrentItem();
-            if (item == null) return;
-            final ItemMeta meta = item.getItemMeta();
-            if (meta == null) return;
-
-            if ((event.getRawSlot() >= 1 && event.getRawSlot() <= 4) || (event.getRawSlot() >= 9 && event.getRawSlot() <= 12)) {
-                event.setCancelled(true);
-                return;
-            }
-
-            final ItemStack cursor = event.getCursor();
-
-            if (cursor == null) {
-                Bukkit.broadcastMessage("Cursor is null.");
-                return;
-            }
-            else if (cursor.getType().equals(Material.AIR) && !item.getType().equals(Material.AIR)) {
-                // Player has put an item in the inventory
-                Bukkit.broadcastMessage("Player has put an item in the inventory.");
-            }
-            else if (cursor.getType().equals(Material.AIR) && !item.getType().equals(Material.AIR)) {
-                // Player has taken an item
-                Bukkit.broadcastMessage("Player has taken an item.");
-            }
-            else if (!cursor.getType().equals(Material.AIR) && !item.getType().equals(Material.AIR)) {
-                // Player has swapped an item for another
-                Bukkit.broadcastMessage("Player has swapped an item for another.");
-            }
-
-            Bukkit.broadcastMessage("Cursor: " + cursor.getType().toString());
-            Bukkit.broadcastMessage("Slot: " + item.getType().toString());
+        if ((event.getRawSlot() >= 1 && event.getRawSlot() <= 4) || (event.getRawSlot() >= 9 && event.getRawSlot() <= 12)) {
+            event.setCancelled(true);
+            return;
         }
+
+        final ItemStack cursor = event.getCursor();
+
+        if (cursor == null) {
+            Bukkit.broadcastMessage("Cursor is null.");
+            return;
+        }
+        else if (cursor.getType().equals(Material.AIR) && !item.getType().equals(Material.AIR)) {
+            // Player has put an item in the inventory
+            Bukkit.broadcastMessage("Player has put an item in the inventory.");
+        }
+        else if (cursor.getType().equals(Material.AIR) && !item.getType().equals(Material.AIR)) {
+            // Player has taken an item
+            Bukkit.broadcastMessage("Player has taken an item.");
+        }
+        else if (!cursor.getType().equals(Material.AIR) && !item.getType().equals(Material.AIR)) {
+            // Player has swapped an item for another
+            Bukkit.broadcastMessage("Player has swapped an item for another.");
+        }
+
+        Bukkit.broadcastMessage("Cursor: " + cursor.getType().toString());
+        Bukkit.broadcastMessage("Slot: " + item.getType().toString());
     }
 
-    @EventHandler
-    void onInventoryDragEvent(InventoryDragEvent event) {
+    void handleDrag(InventoryDragEvent event) {
         Bukkit.broadcastMessage("Drag Event!");
-        InventoryHolder holder = event.getInventory().getHolder();
 
-        if (holder != null && holder.getClass().isInstance(this)) {
-            final ArrayList<ItemStack> items = new ArrayList<>(event.getNewItems().values());
+        final ArrayList<ItemStack> items = new ArrayList<>(event.getNewItems().values());
 
-            boolean blankChanged = false;
-            for (int slot : event.getRawSlots()) {
-                blankChanged = (slot >= 1 && slot <= 4) || (slot >= 9 && slot <= 12) || blankChanged;
-            }
-
-            if (blankChanged) {
-                event.setCancelled(true);
-                return;
-            }
-
-            final ItemStack cursor = event.getCursor();
-
-            if (cursor == null) {
-                Bukkit.broadcastMessage("Cursor is null.");
-                return;
-            }
-            else if (cursor.getType().equals(Material.AIR) && items.size() > 0) {
-                // Player has put an item in the inventory
-                Bukkit.broadcastMessage("Player has put an item in the inventory.");
-            }
-            else if (cursor.getType().equals(Material.AIR) && items.size() == 0) {
-                // Player has taken an item
-                Bukkit.broadcastMessage("Player has taken an item.");
-            }
-            else if (!cursor.getType().equals(Material.AIR) && items.size() > 0) {
-                // Player has swapped an item for another
-                Bukkit.broadcastMessage("Player has swapped an item for another.");
-            }
-
-            Bukkit.broadcastMessage("Cursor: " + cursor.getType().toString());
-            ArrayList<String> slottedItems = items.stream().map(item -> item.getItemMeta().getDisplayName()).collect(Collectors.toCollection(ArrayList::new));
-            Bukkit.broadcastMessage("Slot: " + String.join(", ", slottedItems));
+        boolean blankChanged = false;
+        for (int slot : event.getRawSlots()) {
+            blankChanged = (slot >= 1 && slot <= 4) || (slot >= 9 && slot <= 12) || blankChanged;
         }
+
+        if (blankChanged) {
+            event.setCancelled(true);
+            return;
+        }
+
+        final ItemStack cursor = event.getCursor();
+
+        if (cursor == null) {
+            Bukkit.broadcastMessage("Cursor is null.");
+            return;
+        }
+        else if (cursor.getType().equals(Material.AIR) && items.size() > 0) {
+            // Player has put an item in the inventory
+            Bukkit.broadcastMessage("Player has put an item in the inventory.");
+        }
+        else if (cursor.getType().equals(Material.AIR) && items.size() == 0) {
+            // Player has taken an item
+            Bukkit.broadcastMessage("Player has taken an item.");
+        }
+        else if (!cursor.getType().equals(Material.AIR) && items.size() > 0) {
+            // Player has swapped an item for another
+            Bukkit.broadcastMessage("Player has swapped an item for another.");
+        }
+
+        Bukkit.broadcastMessage("Cursor: " + cursor.getType().toString());
+        ArrayList<String> slottedItems = items.stream().map(item -> item.getItemMeta().getDisplayName()).collect(Collectors.toCollection(ArrayList::new));
+        Bukkit.broadcastMessage("Slot: " + String.join(", ", slottedItems));
     }
 
     @Override
     public @NotNull Inventory getInventory() {
         return inventory;
     }
-
-    void handleClick(InventoryClickEvent event) {}
 }
