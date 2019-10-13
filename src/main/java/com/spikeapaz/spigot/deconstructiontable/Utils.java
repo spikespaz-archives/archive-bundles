@@ -3,47 +3,50 @@ package com.spikeapaz.spigot.deconstructiontable;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Random;
 
 
 public class Utils {
-    private static HashMap<ItemStack, ArrayList<ItemStack>> reversedRecipes;
+    private static HashMap<ItemStack, Recipe> reversedRecipes;
 
-    public static HashMap<ItemStack, ArrayList<ItemStack>> getReversedRecipes() {
+    public static HashMap<ItemStack, Recipe> getReversedRecipes() {
         if (reversedRecipes == null) {
-            Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
-            Recipe recipeBase;
-
-            while (recipeIterator.hasNext()) {
-                recipeBase = recipeIterator.next();
-
-                if (recipeBase.getClass().isInstance(ShapedRecipe.class)) {
-                    ShapedRecipe recipe = (ShapedRecipe) recipeBase;
-                    ArrayList<ItemStack> ingredients = new ArrayList<>();
-
-                    Map<Character, ItemStack> ingredientMap = recipe.getIngredientMap();
-
-                    String flatRecipe = String.join("", recipe.getShape());
-                    for (int i = 0; i < flatRecipe.length(); i++) {
-                        char letter = flatRecipe.charAt(0);
-                        ingredients.add(ingredientMap.get(letter));
-                    }
-
-                    reversedRecipes.put(recipe.getResult(), ingredients);
-                } else if (recipeBase.getClass().isInstance(ShapelessRecipe.class)) {
-                    ShapelessRecipe recipe = (ShapelessRecipe) recipeBase;
-
-                    reversedRecipes.put(recipe.getResult(), new ArrayList<>(recipe.getIngredientList()));
-                }
-            }
+            reversedRecipes = new HashMap<>();
+            storeReversedRecipes(reversedRecipes);
         }
 
         return reversedRecipes;
+    }
+
+    public static void storeReversedRecipes(HashMap<ItemStack, Recipe> store) {
+        Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
+
+        Recipe recipeBase;
+        while (recipeIterator.hasNext()) {
+            recipeBase = recipeIterator.next();
+
+            if (ShapedRecipe.class.isAssignableFrom(recipeBase.getClass())) {
+                Utils.tellConsole("Creating reversed recipe for " + recipeBase.getResult().toString());
+
+                ShapedRecipe recipe = (ShapedRecipe) recipeBase;
+                store.put(recipe.getResult(), recipe);
+            } else if (ShapelessRecipe.class.isAssignableFrom(recipeBase.getClass())) {
+                Utils.tellConsole("Creating reversed recipe for " + recipeBase.getResult().toString());
+
+                ShapelessRecipe recipe = (ShapelessRecipe) recipeBase;
+                store.put(recipe.getResult(), recipe);
+            }
+        }
     }
 
     public static boolean isDeconstructionTableItem(ItemStack item) {
@@ -68,5 +71,14 @@ public class Utils {
     // Utility function to send a message to the console.
     public static void tellConsole(String message) {
         Bukkit.getConsoleSender().sendMessage(message);
+    }
+
+    public static void updatePlayerInventory(Plugin plugin, Player player) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.updateInventory();
+            }
+        }.runTaskLater(plugin, 0);
     }
 }
