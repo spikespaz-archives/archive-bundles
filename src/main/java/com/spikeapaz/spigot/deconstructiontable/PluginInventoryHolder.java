@@ -55,8 +55,8 @@ class PluginInventoryHolder implements InventoryHolder {
     }
 
     private void populateItems() {
-        ItemStack glassPane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-        ItemMeta glassPaneMeta = glassPane.getItemMeta();
+        final ItemStack glassPane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+        final ItemMeta glassPaneMeta = glassPane.getItemMeta();
         assert glassPaneMeta != null;
         glassPaneMeta.setDisplayName("\u00A0");
         glassPane.setItemMeta(glassPaneMeta);
@@ -103,6 +103,7 @@ class PluginInventoryHolder implements InventoryHolder {
         if (PlayerInventory.class.isAssignableFrom(event.getClickedInventory().getClass()))
             return;
 
+        // If the event is within the "crafting grid"
         if (emptySlots.contains(event.getRawSlot())) {
             event.setCancelled(true);
             return;
@@ -148,46 +149,27 @@ class PluginInventoryHolder implements InventoryHolder {
     // Delegate for the event handler that has access to an instance of this class.
     // This is here so that only one event handler for drags must exist, the rest is just a method here.
     void handleDrag(InventoryDragEvent event) {
-        final ArrayList<ItemStack> items = new ArrayList<>(event.getNewItems().values());
+//        final ArrayList<ItemStack> items = new ArrayList<>(event.getNewItems().values());
 
+        // We only want to handle the events from OUR inventory, so ignore the event if it's the Player's.
+        for (int slot : event.getRawSlots()) {
+            Inventory inventory1 = event.getView().getInventory(slot);
+            if (inventory1 == null || PlayerInventory.class.isAssignableFrom(inventory1.getClass()))
+                return;
+        }
 
+        if (event.getRawSlots().size() == 1 && event.getRawSlots().iterator().next() == 11)
+            return;
 
+        Bukkit.broadcastMessage("It's our event!");
 
-
-//        boolean blankChanged = false;
-//        for (int slot : event.getRawSlots()) {
-//            blankChanged = (slot >= 1 && slot <= 4) || (slot >= 9 && slot <= 12) || blankChanged;
-//        }
-//
-//        if (blankChanged) {
-//            event.setCancelled(true);
-//            return;
-//        }
-//
-//        final ItemStack cursor = event.getCursor();
-//
-//        Bukkit.broadcastMessage("Drag Event!");
-//
-//        if (cursor == null) {
-//            Bukkit.broadcastMessage("Cursor is null.");
-//            return;
-//        }
-//        else if (cursor.getType().equals(Material.AIR) && items.size() > 0) {
-//            // Player has put an item in the inventory
-//            Bukkit.broadcastMessage("Player has put an item in the inventory.");
-//        }
-//        else if (cursor.getType().equals(Material.AIR) && items.size() == 0) {
-//            // Player has taken an item
-//            Bukkit.broadcastMessage("Player has taken an item.");
-//        }
-//        else if (!cursor.getType().equals(Material.AIR) && items.size() > 0) {
-//            // Player has swapped an item for another
-//            Bukkit.broadcastMessage("Player has swapped an item for another.");
-//        }
-//
-//        Bukkit.broadcastMessage("Cursor: " + cursor.getType().toString());
-//        ArrayList<String> slottedItems = items.stream().map(item -> item.getItemMeta().getDisplayName()).collect(Collectors.toCollection(ArrayList::new));
-//        Bukkit.broadcastMessage("Slot: " + String.join(", ", slottedItems));
+        // If the event is within the "crafting grid"
+        for (int slot : event.getRawSlots()) {
+            if (!emptySlots.contains(slot)) {
+                event.setCancelled(true);
+                Bukkit.broadcastMessage("It's our in the grid!");
+            }
+        }
     }
 
     // Delegate for the event handler that has access to an instance of this class.
