@@ -154,7 +154,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570926296610</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Rewrite InventoryClickEvent listener">
+      <created>1570934059473</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1570934059473</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -187,6 +194,7 @@
     <MESSAGE value="Randomly generate a slug for the recipe's namespaced key" />
     <MESSAGE value="Randomly generate a slug for the recipe's namespaced key&#10;Fixes a conflict with reloading using PlugMan" />
     <MESSAGE value="Fix some bugs with block placing" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix some bugs with block placing" />
+    <MESSAGE value="Rewrite InventoryClickEvent listener" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rewrite InventoryClickEvent listener" />
   </component>
 </project>

@@ -97,6 +97,12 @@ class PluginInventoryHolder implements InventoryHolder {
     // Delegate for the event handler that has access to an instance of this class.
     // This is here so that only one event handler for clicks must exist, the rest is just a method here.
     void handleClick(InventoryClickEvent event) {
+        assert event.getClickedInventory() != null;
+
+        // We only want to handle the events from OUR inventory, so ignore the event if it's the Player's.
+        if (PlayerInventory.class.isAssignableFrom(event.getClickedInventory().getClass()))
+            return;
+
         if (emptySlots.contains(event.getRawSlot())) {
             event.setCancelled(true);
             return;
@@ -142,8 +148,12 @@ class PluginInventoryHolder implements InventoryHolder {
     // Delegate for the event handler that has access to an instance of this class.
     // This is here so that only one event handler for drags must exist, the rest is just a method here.
     void handleDrag(InventoryDragEvent event) {
-//        final ArrayList<ItemStack> items = new ArrayList<>(event.getNewItems().values());
-//
+        final ArrayList<ItemStack> items = new ArrayList<>(event.getNewItems().values());
+
+
+
+
+
 //        boolean blankChanged = false;
 //        for (int slot : event.getRawSlots()) {
 //            blankChanged = (slot >= 1 && slot <= 4) || (slot >= 9 && slot <= 12) || blankChanged;
