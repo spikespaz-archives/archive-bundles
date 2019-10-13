@@ -147,7 +147,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570886970961</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Fix some bugs with block placing">
+      <created>1570926296610</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1570926296610</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -179,6 +186,7 @@
     <MESSAGE value="Add crafting recipe for Deconstruction Table" />
     <MESSAGE value="Randomly generate a slug for the recipe's namespaced key" />
     <MESSAGE value="Randomly generate a slug for the recipe's namespaced key&#10;Fixes a conflict with reloading using PlugMan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Randomly generate a slug for the recipe's namespaced key&#10;Fixes a conflict with reloading using PlugMan" />
+    <MESSAGE value="Fix some bugs with block placing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix some bugs with block placing" />
   </component>
 </project>
