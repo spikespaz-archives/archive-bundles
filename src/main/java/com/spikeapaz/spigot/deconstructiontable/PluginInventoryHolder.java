@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -100,8 +99,13 @@ class PluginInventoryHolder implements InventoryHolder {
         assert event.getClickedInventory() != null;
 
         // We only want to handle the events from OUR inventory, so ignore the event if it's the Player's.
-        if (PlayerInventory.class.isAssignableFrom(event.getClickedInventory().getClass()))
+        if (PlayerInventory.class.isAssignableFrom(event.getClickedInventory().getClass())) {
+            // If the event is within the "crafting grid"
+            if (event.isShiftClick())
+                event.setCancelled(true);
+
             return;
+        }
 
         // If the event is within the "crafting grid"
         if (emptySlots.contains(event.getRawSlot())) {
@@ -115,7 +119,6 @@ class PluginInventoryHolder implements InventoryHolder {
                 return;
             case COLLECT_TO_CURSOR:
             case PICKUP_ALL:
-                Bukkit.broadcastMessage("Item has been removed.");
                 break;
             case DROP_ALL_CURSOR:
             case DROP_ALL_SLOT:
@@ -124,17 +127,10 @@ class PluginInventoryHolder implements InventoryHolder {
             case PLACE_ALL:
             case PLACE_ONE:
             case PLACE_SOME:
-                if (event.getRawSlot() == 11) {
-                    Bukkit.broadcastMessage("Item has been inserted.");
-                    return;
-                } else
-                    event.setCancelled(true);
-                break;
             case SWAP_WITH_CURSOR:
-                if (event.getRawSlot() == 11) {
-                    Bukkit.broadcastMessage("Swapped with cursor.");
+                if (event.getRawSlot() == 11)
                     return;
-                } else
+                else
                     event.setCancelled(true);
                 break;
             case UNKNOWN:
@@ -170,19 +166,6 @@ class PluginInventoryHolder implements InventoryHolder {
                 Bukkit.broadcastMessage("It's our in the grid!");
             }
         }
-    }
-
-    // Delegate for the event handler that has access to an instance of this class.
-    // This is here so that only one event handler for moves must exist, the rest is just a method here.
-    void handleMove(InventoryMoveItemEvent event) {
-        InventoryHolder baseSource = event.getSource().getHolder();
-        InventoryHolder baseDestination = event.getDestination().getHolder();
-        if (baseSource == null || baseDestination == null) return;
-
-//        if (PluginInventoryHolder.class.isAssignableFrom(baseSource.getClass()))
-//            return;
-//        else if (PluginInventoryHolder.class.isAssignableFrom(baseDestination.getClass()))
-//            if (event.getItem())
     }
 
     @Override
