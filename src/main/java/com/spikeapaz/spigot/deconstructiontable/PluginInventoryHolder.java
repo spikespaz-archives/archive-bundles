@@ -118,18 +118,18 @@ class PluginInventoryHolder implements InventoryHolder {
 
             final ListIterator<ItemStack> itemList = new ArrayList<>(recipe.getIngredientList()).listIterator();
 
-            for (int c = 0; c < 8; c++) {
+            for (int slot = 0; slot < 9; slot++)
                 if (itemList.hasNext())
-                    setItemSlot(c, itemList.next());
+                    setItemSlot(slot, itemList.next());
                 else
-                    setItemSlot(c, null);
-            }
+                    setItemSlot(slot, null);
         }
     }
 
     public void clearCraftingRecipe() {
-        for (int slot = 0; slot < 8; slot++)
+        for (int slot = 0; slot < 9; slot++) {
             setItemSlot(slot, null);
+        }
     }
 
     // Delegate for the event handler that has access to an instance of this class.
@@ -154,6 +154,8 @@ class PluginInventoryHolder implements InventoryHolder {
         }
 
         switch (event.getAction()) {
+            case DROP_ONE_CURSOR:
+//            case DROP_ALL_CURSOR:
             case PLACE_ALL:
             case PLACE_ONE:
             case PLACE_SOME:

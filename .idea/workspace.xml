@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="126bd1b0-42bb-4b10-813b-7948b67451c5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/DeconstructionTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/DeconstructionTable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginInventoryHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginInventoryHolder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/Utils.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -183,7 +181,21 @@
       <option name="project" value="LOCAL" />
       <updated>1570937465827</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Add util method to delay and update player inventory">
+      <created>1570958112763</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1570958112763</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Add load reversed recipes on startup">
+      <created>1570958167570</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1570958167570</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -221,7 +233,9 @@
     <MESSAGE value="Fix custom inventory handling applying in player's slots" />
     <MESSAGE value="Rewrite drag event handler" />
     <MESSAGE value="Fix shift-clicking" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix shift-clicking" />
+    <MESSAGE value="Add util method to delay and update player inventory" />
+    <MESSAGE value="Add load reversed recipes on startup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add load reversed recipes on startup" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
