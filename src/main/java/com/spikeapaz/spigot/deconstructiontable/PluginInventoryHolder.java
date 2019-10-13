@@ -2,17 +2,17 @@ package com.spikeapaz.spigot.deconstructiontable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ListIterator;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -62,18 +62,6 @@ class PluginInventoryHolder implements InventoryHolder {
 
         for (int i : emptySlots)
             inventory.setItem(i, glassPane);
-
-        setInputItem(new ItemStack(Material.GOLDEN_CARROT));
-
-        setItemSlot(0, new ItemStack(Material.GOLD_NUGGET));
-        setItemSlot(1, new ItemStack(Material.GOLD_NUGGET));
-        setItemSlot(2, new ItemStack(Material.GOLD_NUGGET));
-        setItemSlot(3, new ItemStack(Material.GOLD_NUGGET));
-        setItemSlot(4, new ItemStack(Material.CARROT));
-        setItemSlot(5, new ItemStack(Material.GOLD_NUGGET));
-        setItemSlot(6, new ItemStack(Material.GOLD_NUGGET));
-        setItemSlot(7, new ItemStack(Material.GOLD_NUGGET));
-        setItemSlot(8, new ItemStack(Material.GOLD_NUGGET));
     }
 
     public void setItemSlot(int slot, ItemStack item) {
@@ -93,10 +81,62 @@ class PluginInventoryHolder implements InventoryHolder {
         inventory.setItem(11, item);
     }
 
+    public ItemStack getInputItem() {
+        return inventory.getItem(11);
+    }
+
+    private void showCraftingRecipe(ItemStack item) {
+        if (item == null)
+            return;
+
+        if (!Utils.getReversedRecipes().containsKey(item))
+            return;
+
+        Recipe baseRecipe = Utils.getReversedRecipes().get(item);
+
+        if (ShapedRecipe.class.isAssignableFrom(baseRecipe.getClass())) {
+            ShapedRecipe recipe = (ShapedRecipe) baseRecipe;
+            Map<Character, ItemStack> ingredientMap = recipe.getIngredientMap();
+
+            int rowNum = 0;
+            for (String row : recipe.getShape()) {
+                int colNum = 0;
+                for (char c : row.toCharArray()) {
+                    if (rowNum == 0)
+                        setItemSlot(colNum, ingredientMap.get(c));
+                    else if (rowNum == 1)
+                        setItemSlot(colNum + 3, ingredientMap.get(c));
+                    else if (rowNum == 2)
+                        setItemSlot(colNum + 6, ingredientMap.get(c));
+
+                    colNum++;
+                }
+                rowNum++;
+            }
+        } else if (ShapelessRecipe.class.isAssignableFrom(baseRecipe.getClass())) {
+            ShapelessRecipe recipe = (ShapelessRecipe) baseRecipe;
+
+            final ListIterator<ItemStack> itemList = new ArrayList<>(recipe.getIngredientList()).listIterator();
+
+            for (int c = 0; c < 8; c++) {
+                if (itemList.hasNext())
+                    setItemSlot(c, itemList.next());
+                else
+                    setItemSlot(c, null);
+            }
+        }
+    }
+
+    public void clearCraftingRecipe() {
+        for (int slot = 0; slot < 8; slot++)
+            setItemSlot(slot, null);
+    }
+
     // Delegate for the event handler that has access to an instance of this class.
     // This is here so that only one event handler for clicks must exist, the rest is just a method here.
     void handleClick(InventoryClickEvent event) {
-        assert event.getClickedInventory() != null;
+        if (event.getClickedInventory() == null)
+            return;
 
         // We only want to handle the events from OUR inventory, so ignore the event if it's the Player's.
         if (PlayerInventory.class.isAssignableFrom(event.getClickedInventory().getClass())) {
@@ -114,24 +154,33 @@ class PluginInventoryHolder implements InventoryHolder {
         }
 
         switch (event.getAction()) {
-            case NOTHING:
-            case MOVE_TO_OTHER_INVENTORY:
-                return;
-            case COLLECT_TO_CURSOR:
-            case PICKUP_ALL:
-                break;
-            case DROP_ALL_CURSOR:
-            case DROP_ALL_SLOT:
-            case DROP_ONE_CURSOR:
-            case DROP_ONE_SLOT:
             case PLACE_ALL:
             case PLACE_ONE:
             case PLACE_SOME:
             case SWAP_WITH_CURSOR:
-                if (event.getRawSlot() == 11)
+                if (event.getRawSlot() == 11 && event.getCursor() != null) {
+                    showCraftingRecipe(event.getCursor());
+                    Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
                     return;
-                else
+                } else
                     event.setCancelled(true);
+                break;
+            case PICKUP_ALL:
+            case PICKUP_ONE:
+            case PICKUP_SOME:
+            case PICKUP_HALF:
+            case COLLECT_TO_CURSOR:
+            case MOVE_TO_OTHER_INVENTORY:
+                if (event.getRawSlot() == 11 && event.getCursor() != null) {
+                    clearCraftingRecipe();
+                    Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
+                    return;
+                } else {
+                    if (getInputItem() != null) {
+                        setInputItem(null);
+                        Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
+                    }
+                }
                 break;
             case UNKNOWN:
                 Utils.tellConsole("Unknown inventory action.");
@@ -154,17 +203,16 @@ class PluginInventoryHolder implements InventoryHolder {
                 return;
         }
 
-        if (event.getRawSlots().size() == 1 && event.getRawSlots().iterator().next() == 11)
+        if (event.getRawSlots().size() == 1 && event.getRawSlots().iterator().next() == 11) {
+            showCraftingRecipe(event.getNewItems().get(11));
+            Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
             return;
-
-        Bukkit.broadcastMessage("It's our event!");
+        }
 
         // If the event is within the "crafting grid"
         for (int slot : event.getRawSlots()) {
-            if (!emptySlots.contains(slot)) {
+            if (!emptySlots.contains(slot))
                 event.setCancelled(true);
-                Bukkit.broadcastMessage("It's our in the grid!");
-            }
         }
     }
 

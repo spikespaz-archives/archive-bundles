@@ -6,14 +6,9 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Random;
 
 import static com.spikeapaz.spigot.deconstructiontable.Utils.tellConsole;
 
@@ -48,6 +43,8 @@ public final class DeconstructionTable extends JavaPlugin {
         Bukkit.addRecipe(blockRecipe);
 
         tellConsole("deconstruction_table namespace: " + namespacedKey.getNamespace() + "." + namespacedKey.getKey());
+
+        Utils.getReversedRecipes();
 
         inventoryHolder = new PluginInventoryHolder();
 
