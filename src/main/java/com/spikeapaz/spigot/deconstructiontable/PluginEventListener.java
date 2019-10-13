@@ -1,6 +1,5 @@
 package com.spikeapaz.spigot.deconstructiontable;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -46,9 +45,15 @@ public class PluginEventListener implements Listener {
         final ItemStack heldItem = event.getItem();
         final Block clickedBlock = event.getClickedBlock();
 
-        if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+        // We only care about right-clicks on blocks
+        if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || clickedBlock == null)
             return;
 
+        // Player is not sneaking to place a block and the block has an inventory or action (interactable)
+        if (!player.isSneaking() && clickedBlock.getType().isInteractable())
+            return;
+
+        // Player is crouching and wishes to place a block on an interactable block (probably)
         if (heldItem != null && heldItem.getType().isBlock() && player.isSneaking())
             return;
 
@@ -57,9 +62,6 @@ public class PluginEventListener implements Listener {
 
             event.setCancelled(true);
         } else if (Utils.isDeconstructionTableItem(event.getItem())) {
-            if (clickedBlock == null)
-                return;
-
             // Prevent any vanilla default behavior.
             event.setCancelled(true);
 
@@ -67,10 +69,8 @@ public class PluginEventListener implements Listener {
             final Location placeLocation = clickedBlock.getLocation();
             placeLocation.add(event.getBlockFace().getDirection());
 
-            final Block placedBlock = placeLocation.getBlock();
-
             // Get block locations on all six sides
-            final ArrayList<Location> adjacentLocations = new ArrayList<Location>();
+            final ArrayList<Location> adjacentLocations = new ArrayList<>();
             adjacentLocations.add(placeLocation.clone().add(BlockFace.UP.getDirection()));
             adjacentLocations.add(placeLocation.clone().add(BlockFace.DOWN.getDirection()));
             adjacentLocations.add(placeLocation.clone().add(BlockFace.NORTH.getDirection()));
@@ -82,6 +82,12 @@ public class PluginEventListener implements Listener {
             for (Location location : adjacentLocations)
                 if (location.getBlock().getType().equals(Material.RED_MUSHROOM_BLOCK))
                     return;
+
+            final Block placedBlock = placeLocation.getBlock();
+
+            // If there is already a block there let the event fall through.
+            if (!placedBlock.getType().equals(Material.AIR))
+                return;
 
             // Update block data to the unused red mushroom block.
             placedBlock.setType(Material.RED_MUSHROOM_BLOCK);
