@@ -3,6 +3,7 @@ package com.spikeapaz.spigot.deconstructiontable;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
@@ -86,26 +87,26 @@ class PluginInventoryHolder implements InventoryHolder {
     }
 
     private void showCraftingRecipe(ItemStack item) {
-        if (item == null)
+        if (item == null) {
+            for (int slot = 0; slot < 9; slot++)
+                setItemSlot(slot, null);
+
             return;
+        }
 
         final ItemStack singleItem = item.clone();
         singleItem.setAmount(1);
 
-        if (!Utils.getReversedRecipes().containsKey(singleItem))
+        if (!Utils.getReversedRecipes().containsKey(singleItem)) {
+            showCraftingRecipe(null);
             return;
+        }
 
-        ReversedRecipe recipe = Utils.getReversedRecipes().get(singleItem);
-        ArrayList<ItemStack> ingredients = recipe.getOutput(item.getAmount());
+        final ReversedRecipe recipe = Utils.getReversedRecipes().get(singleItem);
+        final ArrayList<ItemStack> ingredients = recipe.getOutput(item.getAmount());
 
         for (int slot = 0; slot < 9; slot++)
             setItemSlot(slot, ingredients.get(slot));
-    }
-
-    public void clearCraftingRecipe() {
-        for (int slot = 0; slot < 9; slot++) {
-            setItemSlot(slot, null);
-        }
     }
 
     // Delegate for the event handler that has access to an instance of this class.
