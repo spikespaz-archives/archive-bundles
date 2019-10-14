@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="126bd1b0-42bb-4b10-813b-7948b67451c5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/ReversedRecipe.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginInventoryHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginInventoryHolder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/Utils.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -195,7 +197,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570958167570</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Fix slot range loop">
+      <created>1570999375743</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1570999375743</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -235,7 +244,8 @@
     <MESSAGE value="Fix shift-clicking" />
     <MESSAGE value="Add util method to delay and update player inventory" />
     <MESSAGE value="Add load reversed recipes on startup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add load reversed recipes on startup" />
+    <MESSAGE value="Fix slot range loop" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix slot range loop" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />

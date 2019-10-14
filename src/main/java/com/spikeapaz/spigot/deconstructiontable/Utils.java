@@ -17,9 +17,9 @@ import java.util.Random;
 
 
 public class Utils {
-    private static HashMap<ItemStack, Recipe> reversedRecipes;
+    private static HashMap<ItemStack, ReversedRecipe> reversedRecipes;
 
-    public static HashMap<ItemStack, Recipe> getReversedRecipes() {
+    public static HashMap<ItemStack, ReversedRecipe> getReversedRecipes() {
         if (reversedRecipes == null) {
             reversedRecipes = new HashMap<>();
             storeReversedRecipes(reversedRecipes);
@@ -28,7 +28,7 @@ public class Utils {
         return reversedRecipes;
     }
 
-    public static void storeReversedRecipes(HashMap<ItemStack, Recipe> store) {
+    public static void storeReversedRecipes(HashMap<ItemStack, ReversedRecipe> store) {
         Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
 
         Recipe recipeBase;
@@ -38,13 +38,13 @@ public class Utils {
             if (ShapedRecipe.class.isAssignableFrom(recipeBase.getClass())) {
                 Utils.tellConsole("Creating reversed recipe for " + recipeBase.getResult().toString());
 
-                ShapedRecipe recipe = (ShapedRecipe) recipeBase;
-                store.put(recipe.getResult(), recipe);
+                ReversedRecipe recipe = new ReversedRecipe((ShapedRecipe) recipeBase);
+                store.put(recipe.getInput(), recipe);
             } else if (ShapelessRecipe.class.isAssignableFrom(recipeBase.getClass())) {
                 Utils.tellConsole("Creating reversed recipe for " + recipeBase.getResult().toString());
 
-                ShapelessRecipe recipe = (ShapelessRecipe) recipeBase;
-                store.put(recipe.getResult(), recipe);
+                ReversedRecipe recipe = new ReversedRecipe((ShapelessRecipe) recipeBase);
+                store.put(recipe.getInput(), recipe);
             }
         }
     }
@@ -80,5 +80,8 @@ public class Utils {
                 player.updateInventory();
             }
         }.runTaskLater(plugin, 0);
+    }
+
+    public static void doNothing() {
     }
 }
