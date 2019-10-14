@@ -173,6 +173,7 @@ class PluginInventoryHolder implements InventoryHolder {
 
                     break;
                 case PICKUP_ALL:
+                case COLLECT_TO_CURSOR:
                     slotItem = null;
                     break;
                 case PICKUP_ONE:

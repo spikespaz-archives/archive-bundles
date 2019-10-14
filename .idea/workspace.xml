@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="126bd1b0-42bb-4b10-813b-7948b67451c5" name="Default Changelist" comment="Check if items are in slots before updating grid">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="126bd1b0-42bb-4b10-813b-7948b67451c5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginInventoryHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginInventoryHolder.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -251,7 +250,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571028581258</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Check if items are in slots before updating grid">
+      <created>1571038227141</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1571038227141</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
