@@ -46,7 +46,19 @@ class PluginInventoryHolder implements InventoryHolder {
             18 + 4,
             18 + 8
     };
+    private int[] outputSlotsArray = {
+            5 + 0,
+            5 + 1,
+            5 + 2,
+            14 + 0,
+            14 + 1,
+            14 + 2,
+            23 + 0,
+            23 + 1,
+            23 + 2
+    };
     private ArrayList<Integer> emptySlots = new ArrayList<>(Arrays.stream(emptySlotsIntArray).boxed().collect(Collectors.toList()));
+    private ArrayList<Integer> outputSlots = new ArrayList<>(Arrays.stream(outputSlotsArray).boxed().collect(Collectors.toList()));
 
     PluginInventoryHolder() {
         inventory = Bukkit.createInventory(this, 27, "Deconstruction");
@@ -271,23 +283,35 @@ class PluginInventoryHolder implements InventoryHolder {
     // Delegate for the event handler that has access to an instance of this class.
     // This is here so that only one event handler for drags must exist, the rest is just a method here.
     void handleDrag(InventoryDragEvent event) {
-        // We only want to handle the events from OUR inventory, so ignore the event if it's the Player's.
+        boolean inputSlotChanged = false;
+        boolean playerSlotsChanged = false;
+        boolean outputSlotsChanged = false;
+        boolean ownSlotsChanged = false;
+
         for (int slot : event.getRawSlots()) {
             Inventory inventory1 = event.getView().getInventory(slot);
-            if (inventory1 == null || PlayerInventory.class.isAssignableFrom(inventory1.getClass()))
+
+            if (inventory1 == null)
                 return;
+
+            inputSlotChanged = inputSlotChanged || slot == 11;
+            playerSlotsChanged = playerSlotsChanged || PlayerInventory.class.isAssignableFrom(inventory1.getClass());
+            ownSlotsChanged = ownSlotsChanged || !PlayerInventory.class.isAssignableFrom(inventory1.getClass());
+            outputSlotsChanged = outputSlotsChanged || outputSlots.contains(slot);
         }
 
-        if (event.getRawSlots().size() == 1 && event.getRawSlots().iterator().next() == 11) {
-            showCraftingRecipe(event.getNewItems().get(11));
+        ItemStack inputItem = getInputItem();
+
+        if (outputSlotsChanged)
+            event.setCancelled(true);
+        else if (inputSlotChanged && playerSlotsChanged && inputItem == null) {
+            showRecipe(event.getNewItems().get(11).clone());
             Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
-            return;
-        }
-
-        // If the event is within the "crafting grid"
-        for (int slot : event.getRawSlots()) {
-            if (!emptySlots.contains(slot))
-                event.setCancelled(true);
+        } else if (inputSlotChanged && playerSlotsChanged) {
+            inputItem = inputItem.clone();
+            inputItem.setAmount(event.getNewItems().get(11).getAmount());
+            showRecipe(inputItem);
+            Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
         }
     }
 
