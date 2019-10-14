@@ -36,13 +36,9 @@ public class Utils {
             recipeBase = recipeIterator.next();
 
             if (ShapedRecipe.class.isAssignableFrom(recipeBase.getClass())) {
-                Utils.tellConsole("Creating reversed recipe for " + recipeBase.getResult().toString());
-
                 ReversedRecipe recipe = new ReversedRecipe((ShapedRecipe) recipeBase);
                 store.put(recipe.getInput(), recipe);
             } else if (ShapelessRecipe.class.isAssignableFrom(recipeBase.getClass())) {
-                Utils.tellConsole("Creating reversed recipe for " + recipeBase.getResult().toString());
-
                 ReversedRecipe recipe = new ReversedRecipe((ShapelessRecipe) recipeBase);
                 store.put(recipe.getInput(), recipe);
             }
