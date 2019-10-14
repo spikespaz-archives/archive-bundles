@@ -1,6 +1,7 @@
 package com.spikeapaz.spigot.deconstructiontable;
 
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
@@ -11,6 +12,7 @@ public class ReversedRecipe {
     private ItemStack input;
     private ArrayList<ItemStack> items;
     private int dividend;
+    private Recipe originalRecipe;
 
     public ReversedRecipe(ItemStack input, ArrayList<ItemStack> items, int dividend) {
         this.input = input;
@@ -19,6 +21,8 @@ public class ReversedRecipe {
     }
 
     public ReversedRecipe(ShapedRecipe recipe) {
+        originalRecipe = recipe;
+
         input = recipe.getResult().clone();
         dividend = input.getAmount();
         input.setAmount(1);
@@ -45,6 +49,8 @@ public class ReversedRecipe {
     }
 
     public ReversedRecipe(ShapelessRecipe recipe) {
+        originalRecipe = recipe;
+
         input = recipe.getResult().clone();
         dividend = input.getAmount();
         input.setAmount(1);
@@ -56,6 +62,10 @@ public class ReversedRecipe {
                 items.add(recipe.getIngredientList().get(slot));
             else
                 items.add(null);
+    }
+
+    public Recipe getOriginalRecipe() {
+        return originalRecipe;
     }
 
     public ItemStack getInput() {
