@@ -3,7 +3,6 @@ package com.spikeapaz.spigot.deconstructiontable;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
@@ -15,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 
@@ -127,34 +127,31 @@ class PluginInventoryHolder implements InventoryHolder {
         if (event.getClickedInventory() == null)
             return;
 
+        final boolean playerInventory = PlayerInventory.class.isAssignableFrom(event.getClickedInventory().getClass());
+
         ItemStack slotItem = event.getCurrentItem();
         ItemStack cursorItem = event.getCursor();
 
-        // We only want to handle the events from OUR inventory, so ignore the event if it's the Player's.
-        if (PlayerInventory.class.isAssignableFrom(event.getClickedInventory().getClass())) {
-            if (event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY))
-                event.setCancelled(true);
-
-            return;
-        }
-
-        if (emptySlots.contains(event.getRawSlot())) {
+        if (playerInventory && emptySlots.contains(event.getRawSlot())) {
             event.setCancelled(true);
             return;
         }
 
         if (event.getRawSlot() == 11) {
-//            if (slotItem == null)
-//                ((Player) event.getWhoClicked()).chat("Slot: null");
-//            else
-//                ((Player) event.getWhoClicked()).chat("Slot: " + slotItem.getAmount());
-//
-//            if (cursorItem == null)
-//                ((Player) event.getWhoClicked()).chat("Cursor: null");
-//            else
-//                ((Player) event.getWhoClicked()).chat("Cursor: " + cursorItem.getAmount());
-
             switch (event.getAction()) {
+                case PLACE_ALL:
+                    if (gridIsPopulated() && slotItem != null && !slotItem.isSimilar(cursorItem)) {
+                        event.setCancelled(true);
+                        return;
+                    }
+
+                    if (slotItem != null && cursorItem != null) {
+                        slotItem = slotItem.clone();
+                        slotItem.setAmount(slotItem.getAmount() + cursorItem.getAmount());
+                    } else if (slotItem == null && cursorItem != null)
+                        slotItem = cursorItem.clone();
+
+                    break;
                 case PLACE_ONE:
                     if (gridIsPopulated() && slotItem != null && !slotItem.isSimilar(cursorItem)) {
                         event.setCancelled(true);
@@ -168,19 +165,6 @@ class PluginInventoryHolder implements InventoryHolder {
                         slotItem = cursorItem.clone();
                         slotItem.setAmount(1);
                     }
-
-                    break;
-                case PLACE_ALL:
-                    if (gridIsPopulated() && slotItem != null && !slotItem.isSimilar(cursorItem)) {
-                        event.setCancelled(true);
-                        return;
-                    }
-
-                    if (slotItem != null && cursorItem != null) {
-                        slotItem = slotItem.clone();
-                        slotItem.setAmount(slotItem.getAmount() + cursorItem.getAmount());
-                    } else if (slotItem == null && cursorItem != null)
-                        slotItem = cursorItem.clone();
 
                     break;
                 case SWAP_WITH_CURSOR:
@@ -205,8 +189,50 @@ class PluginInventoryHolder implements InventoryHolder {
             }
 
             showRecipe(slotItem);
-
             Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
+        } else if (playerInventory) {
+            switch (event.getAction()) {
+                case PLACE_ALL:
+                case PLACE_ONE:
+                case PLACE_SOME:
+                case SWAP_WITH_CURSOR:
+                case PICKUP_ALL:
+                case PICKUP_ONE:
+                case PICKUP_HALF:
+                case PICKUP_SOME:
+                    break;
+                case COLLECT_TO_CURSOR:
+                    if (getInputItem() != null && getInputItem().isSimilar(event.getCursor())) {
+                        setInputItem(null);
+                        Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
+                    } else {
+                        if (cursorItem == null)
+                            break;
+
+                        HashMap<ItemStack, ReversedRecipe> reversedRecipes = Utils.getReversedRecipes();
+                        ItemStack recipeKey = getInputItem();
+                        if (recipeKey == null) break;
+                        recipeKey = recipeKey.clone();
+                        recipeKey.setAmount(1);
+
+                        if (!reversedRecipes.containsKey(recipeKey))
+                            break;
+
+                        ItemStack cursorKey = cursorItem.clone();
+                        cursorKey.setAmount(1);
+
+                        if (reversedRecipes.get(recipeKey).getOutput(1).contains(cursorKey)) {
+                            setInputItem(null);
+                            Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
+                        }
+                    }
+
+                    break;
+                case MOVE_TO_OTHER_INVENTORY:
+                default:
+                    event.setCancelled(true);
+                    Utils.tellConsole("Unsupported inventory action: " + event.getAction().toString());
+            }
         } else {
             switch (event.getAction()) {
                 case PLACE_ALL:
