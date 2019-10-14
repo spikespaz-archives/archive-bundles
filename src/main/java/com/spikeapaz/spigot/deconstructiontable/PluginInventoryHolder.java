@@ -115,56 +115,91 @@ class PluginInventoryHolder implements InventoryHolder {
         if (event.getClickedInventory() == null)
             return;
 
+        ItemStack slotItem = event.getCurrentItem();
+        ItemStack cursorItem = event.getCursor();
+
         // We only want to handle the events from OUR inventory, so ignore the event if it's the Player's.
         if (PlayerInventory.class.isAssignableFrom(event.getClickedInventory().getClass())) {
-            // If the event is within the "crafting grid"
-            if (event.isShiftClick())
+            if (event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY))
                 event.setCancelled(true);
 
             return;
         }
 
-        // If the event is within the "crafting grid"
         if (emptySlots.contains(event.getRawSlot())) {
             event.setCancelled(true);
             return;
         }
 
-        switch (event.getAction()) {
-            case PLACE_ALL:
-            case PLACE_ONE:
-            case PLACE_SOME:
-            case SWAP_WITH_CURSOR:
-                if (event.getRawSlot() == 11 && event.getCursor() != null) {
-                    showCraftingRecipe(event.getCursor());
-                    Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
-                    return;
-                } else
-                    event.setCancelled(true);
-                break;
-            case PICKUP_ALL:
-            case PICKUP_ONE:
-            case PICKUP_SOME:
-            case PICKUP_HALF:
-            case COLLECT_TO_CURSOR:
-            case MOVE_TO_OTHER_INVENTORY:
-                if (event.getRawSlot() == 11 && event.getCursor() != null) {
-                    clearCraftingRecipe();
-                    Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
-                    return;
-                } else {
-                    if (getInputItem() != null) {
-                        setInputItem(null);
-                        Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
+        if (event.getRawSlot() == 11) {
+//            if (slotItem == null)
+//                ((Player) event.getWhoClicked()).chat("Slot: null");
+//            else
+//                ((Player) event.getWhoClicked()).chat("Slot: " + slotItem.getAmount());
+//
+//            if (cursorItem == null)
+//                ((Player) event.getWhoClicked()).chat("Cursor: null");
+//            else
+//                ((Player) event.getWhoClicked()).chat("Cursor: " + cursorItem.getAmount());
+
+            switch (event.getAction()) {
+                case PLACE_ONE:
+                    if (slotItem != null && cursorItem != null) {
+                        slotItem = slotItem.clone();
+                        slotItem.setAmount(slotItem.getAmount() + 1);
+                    } else if (slotItem == null && cursorItem != null) {
+                        slotItem = cursorItem.clone();
+                        slotItem.setAmount(1);
                     }
-                }
-                break;
-            case UNKNOWN:
-                Utils.tellConsole("Unknown inventory action.");
-                break;
-            default:
-                Utils.tellConsole("Unsupported inventory action: " + event.getAction().toString());
-                event.setCancelled(true);
+                    break;
+                case PLACE_ALL:
+                    if (slotItem != null && cursorItem != null) {
+                        slotItem = slotItem.clone();
+                        slotItem.setAmount(slotItem.getAmount() + cursorItem.getAmount());
+                    } else if (slotItem == null && cursorItem != null)
+                        slotItem = cursorItem.clone();
+                    break;
+                case SWAP_WITH_CURSOR:
+                    if (cursorItem != null)
+                        slotItem = cursorItem.clone();
+                    break;
+                case PICKUP_ALL:
+                    slotItem = null;
+                    break;
+                case PICKUP_ONE:
+                case PICKUP_HALF:
+                    if (slotItem != null) {
+                        slotItem = slotItem.clone();
+                        slotItem.setAmount(Math.floorDiv(slotItem.getAmount(), 2));
+                    }
+                    break;
+                default:
+                    event.setCancelled(true);
+                    Utils.tellConsole("Unsupported inventory action: " + event.getAction().toString());
+            }
+
+            showCraftingRecipe(slotItem);
+            Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
+        } else {
+            switch (event.getAction()) {
+                case PLACE_ALL:
+                case PLACE_ONE:
+                case PLACE_SOME:
+                case SWAP_WITH_CURSOR:
+                    event.setCancelled(true);
+                    break;
+                case PICKUP_ALL:
+                case PICKUP_ONE:
+                case PICKUP_HALF:
+                case PICKUP_SOME:
+                case MOVE_TO_OTHER_INVENTORY:
+                    setInputItem(null);
+                    Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
+                    break;
+                default:
+                    event.setCancelled(true);
+                    Utils.tellConsole("Unsupported inventory action: " + event.getAction().toString());
+            }
         }
     }
 
