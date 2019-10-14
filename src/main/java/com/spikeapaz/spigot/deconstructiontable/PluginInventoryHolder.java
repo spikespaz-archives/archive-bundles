@@ -5,20 +5,20 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.ListIterator;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
 class PluginInventoryHolder implements InventoryHolder {
     private DeconstructionTable plugin = JavaPlugin.getPlugin(DeconstructionTable.class);
-    private ArrayList<ItemStack> virtualStorage = new ArrayList<>();
     private Inventory inventory;
 
     //      0 1 2 3 4 5 6 7 8
@@ -89,41 +89,17 @@ class PluginInventoryHolder implements InventoryHolder {
         if (item == null)
             return;
 
-        if (!Utils.getReversedRecipes().containsKey(item))
+        final ItemStack singleItem = item.clone();
+        singleItem.setAmount(1);
+
+        if (!Utils.getReversedRecipes().containsKey(singleItem))
             return;
 
-        Recipe baseRecipe = Utils.getReversedRecipes().get(item);
+        ReversedRecipe recipe = Utils.getReversedRecipes().get(singleItem);
+        ArrayList<ItemStack> ingredients = recipe.getOutput(item.getAmount());
 
-        if (ShapedRecipe.class.isAssignableFrom(baseRecipe.getClass())) {
-            ShapedRecipe recipe = (ShapedRecipe) baseRecipe;
-            Map<Character, ItemStack> ingredientMap = recipe.getIngredientMap();
-
-            int rowNum = 0;
-            for (String row : recipe.getShape()) {
-                int colNum = 0;
-                for (char c : row.toCharArray()) {
-                    if (rowNum == 0)
-                        setItemSlot(colNum, ingredientMap.get(c));
-                    else if (rowNum == 1)
-                        setItemSlot(colNum + 3, ingredientMap.get(c));
-                    else if (rowNum == 2)
-                        setItemSlot(colNum + 6, ingredientMap.get(c));
-
-                    colNum++;
-                }
-                rowNum++;
-            }
-        } else if (ShapelessRecipe.class.isAssignableFrom(baseRecipe.getClass())) {
-            ShapelessRecipe recipe = (ShapelessRecipe) baseRecipe;
-
-            final ListIterator<ItemStack> itemList = new ArrayList<>(recipe.getIngredientList()).listIterator();
-
-            for (int slot = 0; slot < 9; slot++)
-                if (itemList.hasNext())
-                    setItemSlot(slot, itemList.next());
-                else
-                    setItemSlot(slot, null);
-        }
+        for (int slot = 0; slot < 9; slot++)
+            setItemSlot(slot, ingredients.get(slot));
     }
 
     public void clearCraftingRecipe() {
@@ -154,8 +130,6 @@ class PluginInventoryHolder implements InventoryHolder {
         }
 
         switch (event.getAction()) {
-            case DROP_ONE_CURSOR:
-//            case DROP_ALL_CURSOR:
             case PLACE_ALL:
             case PLACE_ONE:
             case PLACE_SOME:
@@ -188,7 +162,7 @@ class PluginInventoryHolder implements InventoryHolder {
                 Utils.tellConsole("Unknown inventory action.");
                 break;
             default:
-                Bukkit.broadcastMessage(event.getAction().toString());
+                Utils.tellConsole("Unsupported inventory action: " + event.getAction().toString());
                 event.setCancelled(true);
         }
     }
@@ -196,8 +170,6 @@ class PluginInventoryHolder implements InventoryHolder {
     // Delegate for the event handler that has access to an instance of this class.
     // This is here so that only one event handler for drags must exist, the rest is just a method here.
     void handleDrag(InventoryDragEvent event) {
-//        final ArrayList<ItemStack> items = new ArrayList<>(event.getNewItems().values());
-
         // We only want to handle the events from OUR inventory, so ignore the event if it's the Player's.
         for (int slot : event.getRawSlots()) {
             Inventory inventory1 = event.getView().getInventory(slot);
