@@ -86,7 +86,19 @@ class PluginInventoryHolder implements InventoryHolder {
         return inventory.getItem(11);
     }
 
-    private void showCraftingRecipe(ItemStack item) {
+    public boolean gridIsPopulated() {
+        for (int slot = 0; slot < 27; slot++) {
+            if (emptySlots.contains(slot))
+                continue;
+
+            if (inventory.getItem(slot) != null)
+                return true;
+        }
+
+        return false;
+    }
+
+    private void showRecipe(ItemStack item) {
         if (item == null) {
             for (int slot = 0; slot < 9; slot++)
                 setItemSlot(slot, null);
@@ -98,7 +110,7 @@ class PluginInventoryHolder implements InventoryHolder {
         singleItem.setAmount(1);
 
         if (!Utils.getReversedRecipes().containsKey(singleItem)) {
-            showCraftingRecipe(null);
+            showRecipe(null);
             return;
         }
 
@@ -144,6 +156,11 @@ class PluginInventoryHolder implements InventoryHolder {
 
             switch (event.getAction()) {
                 case PLACE_ONE:
+                    if (gridIsPopulated() && slotItem != null && !slotItem.isSimilar(cursorItem)) {
+                        event.setCancelled(true);
+                        return;
+                    }
+
                     if (slotItem != null && cursorItem != null) {
                         slotItem = slotItem.clone();
                         slotItem.setAmount(slotItem.getAmount() + 1);
@@ -151,17 +168,25 @@ class PluginInventoryHolder implements InventoryHolder {
                         slotItem = cursorItem.clone();
                         slotItem.setAmount(1);
                     }
+
                     break;
                 case PLACE_ALL:
+                    if (gridIsPopulated() && slotItem != null && !slotItem.isSimilar(cursorItem)) {
+                        event.setCancelled(true);
+                        return;
+                    }
+
                     if (slotItem != null && cursorItem != null) {
                         slotItem = slotItem.clone();
                         slotItem.setAmount(slotItem.getAmount() + cursorItem.getAmount());
                     } else if (slotItem == null && cursorItem != null)
                         slotItem = cursorItem.clone();
+
                     break;
                 case SWAP_WITH_CURSOR:
                     if (cursorItem != null)
                         slotItem = cursorItem.clone();
+
                     break;
                 case PICKUP_ALL:
                     slotItem = null;
@@ -172,13 +197,15 @@ class PluginInventoryHolder implements InventoryHolder {
                         slotItem = slotItem.clone();
                         slotItem.setAmount(Math.floorDiv(slotItem.getAmount(), 2));
                     }
+
                     break;
                 default:
                     event.setCancelled(true);
                     Utils.tellConsole("Unsupported inventory action: " + event.getAction().toString());
             }
 
-            showCraftingRecipe(slotItem);
+            showRecipe(slotItem);
+
             Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
         } else {
             switch (event.getAction()) {
@@ -192,6 +219,7 @@ class PluginInventoryHolder implements InventoryHolder {
                 case PICKUP_ONE:
                 case PICKUP_HALF:
                 case PICKUP_SOME:
+                case COLLECT_TO_CURSOR:
                 case MOVE_TO_OTHER_INVENTORY:
                     setInputItem(null);
                     Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
