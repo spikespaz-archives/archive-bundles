@@ -139,6 +139,8 @@ class PluginInventoryHolder implements InventoryHolder {
 
         if (event.getRawSlot() == 11) {
             switch (event.getAction()) {
+                case CLONE_STACK:
+                    break;
                 case PLACE_ALL:
                     if (gridIsPopulated() && slotItem != null && !slotItem.isSimilar(cursorItem)) {
                         event.setCancelled(true);
@@ -193,6 +195,7 @@ class PluginInventoryHolder implements InventoryHolder {
             Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
         } else if (playerInventory) {
             switch (event.getAction()) {
+                case CLONE_STACK:
                 case PLACE_ALL:
                 case PLACE_ONE:
                 case PLACE_SOME:
@@ -236,6 +239,8 @@ class PluginInventoryHolder implements InventoryHolder {
             }
         } else {
             switch (event.getAction()) {
+                case CLONE_STACK:
+                    break;
                 case PLACE_ALL:
                 case PLACE_ONE:
                 case PLACE_SOME:
@@ -248,6 +253,11 @@ class PluginInventoryHolder implements InventoryHolder {
                 case PICKUP_SOME:
                 case COLLECT_TO_CURSOR:
                 case MOVE_TO_OTHER_INVENTORY:
+                    if (emptySlots.contains(event.getRawSlot())) {
+                        event.setCancelled(true);
+                        break;
+                    }
+
                     setInputItem(null);
                     Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
                     break;
