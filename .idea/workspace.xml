@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="126bd1b0-42bb-4b10-813b-7948b67451c5" name="Default Changelist" comment="Add comments, arbitrary improvements&#10;&#10;Improve generation of reversed recipes">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/spike.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/spike.xml" afterDir="false" />
+    <list default="true" id="126bd1b0-42bb-4b10-813b-7948b67451c5" name="Default Changelist" comment="Update workspace files">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/DeconstructionTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/DeconstructionTable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/copy-to-server.sh" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginInventoryHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginInventoryHolder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/ReversedRecipe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/ReversedRecipe.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/Utils.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="deconstruction-table-spigot" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -39,7 +39,7 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="C:/Program Files/Git/bin/bash.exe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../Minecraft/Servers/Plugin Test Server/paper.jar" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -57,7 +57,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Bash.copy-to-server">
+  <component name="RunManager" selected="Remote.Spigot Debugger">
     <configuration default="true" type="BashConfigurationType" factoryName="Bash">
       <option name="INTERPRETER_OPTIONS" value="--login -i" />
       <option name="INTERPRETER_PATH" value="C:\Program Files\Git\bin\bash.exe" />
@@ -71,20 +71,15 @@
         <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean package" />
       </method>
     </configuration>
-    <configuration name="copy-to-server" type="BashConfigurationType" factoryName="Bash" nameIsGenerated="true">
-      <module name="deconstruction-table-spigot" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="INTERPRETER_PATH" value="C:\Program Files\Git\bin\bash.exe" />
-      <option name="PROJECT_INTERPRETER" value="false" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_WORKING_DIR$" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SCRIPT_NAME" value="copy-to-server.sh" />
-      <option name="PARAMETERS" value="" />
-      <method v="2">
-        <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean package" />
-      </method>
+    <configuration name="Spigot Server" type="JarApplication">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/../../../Minecraft/Servers/Plugin Test Server/paper.jar" />
+      <option name="VM_PARAMETERS" value="-Xmx4096M -Xms4096M -Xaggressive -Xdisableexplicitgc -Xgc:concurrentScavenge -Xgcthreads4 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\spike\Documents\Minecraft\Servers\Plugin Test Server" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="C:/Development/jdk-13.0.0.33-openj9" />
+      <method v="2" />
     </configuration>
-    <configuration name="deconstruction-table-spigot build" type="MavenRunConfiguration" factoryName="Maven">
+    <configuration name="Build Plugin" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
         <option name="myRunnerSettings" />
@@ -110,9 +105,26 @@
       </MavenSettings>
       <method v="2" />
     </configuration>
+    <configuration name="Spigot Debugger" type="Remote">
+      <module name="deconstruction-table-spigot" />
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <option name="AUTO_RESTART" value="false" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="5005" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
+      <method v="2">
+        <option name="RunConfigurationTask" enabled="true" run_configuration_name="Spigot Server" run_configuration_type="JarApplication" />
+      </method>
+    </configuration>
     <list>
-      <item itemvalue="Bash.copy-to-server" />
-      <item itemvalue="Maven.deconstruction-table-spigot build" />
+      <item itemvalue="JAR Application.Spigot Server" />
+      <item itemvalue="Maven.Build Plugin" />
+      <item itemvalue="Remote.Spigot Debugger" />
     </list>
   </component>
   <component name="TaskManager">
@@ -284,7 +296,35 @@
       <option name="project" value="LOCAL" />
       <updated>1571039976087</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Add comments, arbitrary improvements&#10;&#10;Improve generation of reversed recipes">
+      <created>1571187169918</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1571187169918</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Add new method getKeyItem to ReversedRecipe">
+      <created>1571208003078</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1571208003078</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Fixed ReversedRecipes ingredients list issues by deep-copying the whole list&#10;&#10;Also every ReversedRecipe now has multiple recipe grids&#10;In the future maybe find the actual cause of the bug instead of this.">
+      <created>1571208250155</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1571208250155</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Begin adding support for cycling multiple recipes">
+      <created>1571208332519</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1571208332519</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -312,8 +352,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
-    <MESSAGE value="Add checks for mushroom blocks before placing table" />
-    <MESSAGE value="Add a basic example of an uncrafting recipe" />
     <MESSAGE value="Add crafting recipe for Deconstruction Table" />
     <MESSAGE value="Randomly generate a slug for the recipe's namespaced key" />
     <MESSAGE value="Randomly generate a slug for the recipe's namespaced key&#10;Fixes a conflict with reloading using PlugMan" />
@@ -335,9 +373,20 @@
     <MESSAGE value="Fix missing branch COLLECT_TO_CURSOR for slot 11" />
     <MESSAGE value="Fix clone stack and picking up placeholders" />
     <MESSAGE value="Fix dragging in output slots" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix dragging in output slots" />
+    <MESSAGE value="Add comments, arbitrary improvements&#10;&#10;Improve generation of reversed recipes" />
+    <MESSAGE value="Add new method getKeyItem to ReversedRecipe" />
+    <MESSAGE value="Fixed ReversedRecipes ingredients list issues by deep-copying the whole list&#10;&#10;Also every ReversedRecipe now has multiple recipe grids&#10;In the future maybe find the actual cause of the bug instead of this." />
+    <MESSAGE value="Begin adding support for cycling multiple recipes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Begin adding support for cycling multiple recipes" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="JarApplication">
+        <watch expression="((java.util.AbstractList)this.items).get(5)" language="JAVA" custom="java.util.AbstractList,com.spikeapaz.spigot.deconstructiontable.PluginInventoryHolder" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
