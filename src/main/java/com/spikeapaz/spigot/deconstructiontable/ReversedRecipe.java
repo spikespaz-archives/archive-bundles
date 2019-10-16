@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ReversedRecipe {
     private ItemStack input;
-    private ArrayList<ItemStack> items;
+    private ArrayList<ItemStack> ingredients;
     private int dividend;
     private Recipe originalRecipe;
 
@@ -77,6 +77,12 @@ public class ReversedRecipe {
     // Returns a copy of the input item (or the result from the crafting recipe) as an ItemStack with an amount of 1
     public ItemStack getInput() {
         return input.clone();
+    }
+
+    public ItemStack getKetItem() {
+        final ItemStack cloned = input.clone();
+        cloned.setAmount(1);
+        return cloned;
     }
 
     // Get an ArrayList of 9 items, each a slot in the crafting area, some of them null.
