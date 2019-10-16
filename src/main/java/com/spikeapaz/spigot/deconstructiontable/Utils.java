@@ -19,6 +19,10 @@ import java.util.stream.Stream;
 public class Utils {
     private static Map<ItemStack, List<ReversedRecipe>> reversedRecipes;
 
+    public static void clearReversedRecipes() {
+        reversedRecipes = null;
+    }
+
     public static Map<ItemStack, List<ReversedRecipe>> getReversedRecipes() {
         // If the reverses aren't already, generate them
         if (reversedRecipes == null) {
@@ -31,6 +35,7 @@ public class Utils {
             Recipe recipeBase;
             while (recipeIterator.hasNext()) {
                 recipeBase = recipeIterator.next();
+                Utils.tellConsole("Creating reversed recipe: " + recipeBase.getResult());
 
                 ReversedRecipe recipe;
 

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="126bd1b0-42bb-4b10-813b-7948b67451c5" name="Default Changelist" comment="Update workspace files">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="126bd1b0-42bb-4b10-813b-7948b67451c5" name="Default Changelist" comment="Make">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginCommandExecutor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/copy-to-server.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginInventoryHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/PluginInventoryHolder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/DeconstructionTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/DeconstructionTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spikeapaz/spigot/deconstructiontable/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -57,7 +58,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Remote.Spigot Debugger">
+  <component name="RunManager" selected="Maven.Build Plugin">
     <configuration default="true" type="BashConfigurationType" factoryName="Bash">
       <option name="INTERPRETER_OPTIONS" value="--login -i" />
       <option name="INTERPRETER_PATH" value="C:\Program Files\Git\bin\bash.exe" />
@@ -73,7 +74,7 @@
     </configuration>
     <configuration name="Spigot Server" type="JarApplication">
       <option name="JAR_PATH" value="$PROJECT_DIR$/../../../Minecraft/Servers/Plugin Test Server/paper.jar" />
-      <option name="VM_PARAMETERS" value="-Xmx4096M -Xms4096M -Xaggressive -Xdisableexplicitgc -Xgc:concurrentScavenge -Xgcthreads4 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005" />
+      <option name="VM_PARAMETERS" value="-Xmx6G -Xms6G -Xaggressive -Xdisableexplicitgc -Xgc:concurrentScavenge -Xgcthreads4 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005" />
       <option name="WORKING_DIRECTORY" value="C:\Users\spike\Documents\Minecraft\Servers\Plugin Test Server" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="ALTERNATIVE_JRE_PATH" value="C:/Development/jdk-13.0.0.33-openj9" />
@@ -324,7 +325,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571208332519</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Update workspace files">
+      <created>1571208434246</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1571208434246</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -352,7 +360,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
-    <MESSAGE value="Add crafting recipe for Deconstruction Table" />
     <MESSAGE value="Randomly generate a slug for the recipe's namespaced key" />
     <MESSAGE value="Randomly generate a slug for the recipe's namespaced key&#10;Fixes a conflict with reloading using PlugMan" />
     <MESSAGE value="Fix some bugs with block placing" />
@@ -377,7 +384,8 @@
     <MESSAGE value="Add new method getKeyItem to ReversedRecipe" />
     <MESSAGE value="Fixed ReversedRecipes ingredients list issues by deep-copying the whole list&#10;&#10;Also every ReversedRecipe now has multiple recipe grids&#10;In the future maybe find the actual cause of the bug instead of this." />
     <MESSAGE value="Begin adding support for cycling multiple recipes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Begin adding support for cycling multiple recipes" />
+    <MESSAGE value="Update workspace files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update workspace files" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />

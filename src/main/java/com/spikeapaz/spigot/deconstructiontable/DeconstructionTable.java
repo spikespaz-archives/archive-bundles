@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -53,6 +54,11 @@ public final class DeconstructionTable extends JavaPlugin {
 
         // Create the BlockData for the mushroom block.
         customBlockData = Bukkit.createBlockData("minecraft:red_mushroom_block[down=true,east=false,north=true,south=true,up=false,west=true]");
+
+
+        final PluginCommand command = this.getCommand("dct");
+        assert command != null;
+        command.setExecutor(new PluginCommandExecutor());
 
         // Tell the console that the plugin is loaded.
         tellConsole("Enabled Deconstruction Table.");

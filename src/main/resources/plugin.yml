@@ -3,3 +3,11 @@ version: ${project.version}
 main: com.spikeapaz.spigot.deconstructiontable.DeconstructionTable
 api-version: "1.14"
 website: https://github.com/spikespaz/deconstruction-table-spigot
+commands:
+  dct:
+    description: Main command for Deconstruction Tables."
+    aliases: [deconstructiontable]
+    permission: deconstructiontable.admin
+    usage: |
+      Sub-commands:
+      - regenrecipes    | Regenerates the plugin's reversed-recipe cache.
