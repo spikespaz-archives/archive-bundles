@@ -11,15 +11,15 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Utils {
-    private static HashMap<ItemStack, ReversedRecipe> reversedRecipes;
+    private static Map<ItemStack, List<ReversedRecipe>> reversedRecipes;
 
-    public static HashMap<ItemStack, ReversedRecipe> getReversedRecipes() {
+    public static Map<ItemStack, List<ReversedRecipe>> getReversedRecipes() {
         // If the reverses aren't already, generate them
         if (reversedRecipes == null) {
             reversedRecipes = new HashMap<>();
@@ -32,26 +32,31 @@ public class Utils {
             while (recipeIterator.hasNext()) {
                 recipeBase = recipeIterator.next();
 
+                ReversedRecipe recipe;
+
                 // Create the reversed recipe and add it to the HashMap
-                if (ShapedRecipe.class.isAssignableFrom(recipeBase.getClass())) { // It is a Shaped Recipe
-                    final ReversedRecipe recipe = new ReversedRecipe((ShapedRecipe) recipeBase);
+                if (ShapedRecipe.class.isAssignableFrom(recipeBase.getClass())) // It is a Shaped Recipe
+                    recipe = new ReversedRecipe((ShapedRecipe) recipeBase);
+                else if (ShapelessRecipe.class.isAssignableFrom(recipeBase.getClass())) // It is a Shapeless Recipe
+                    recipe = new ReversedRecipe((ShapelessRecipe) recipeBase);
+                else
+                    continue;
 
-                    if (recipe.getOutput(1).size() == 0) {
-                        Utils.tellConsole("Failed to generate recipe with zero ingredients: " + recipe.getInput().getType());
-
-                        continue;
-                    }
-
-                    reversedRecipes.put(recipe.getInput(), recipe);
-                } else if (ShapelessRecipe.class.isAssignableFrom(recipeBase.getClass())) { // It is a Shapeless Recipe
-                    final ReversedRecipe recipe = new ReversedRecipe((ShapelessRecipe) recipeBase);
-                    reversedRecipes.put(recipe.getInput(), recipe);
+                if (recipe.getOutput(recipe.getOriginalRecipe().getResult().getAmount()).size() == 0) {
+                    Utils.tellConsole("Failed to generate recipe with zero ingredients: " + recipe.getInput().getType());
+                    continue;
                 }
+
+                // Add it to the recipe list
+                if (reversedRecipes.containsKey(recipe.getKetItem()))
+                    reversedRecipes.get(recipe.getInput()).add(recipe);
+                else
+                    reversedRecipes.put(recipe.getInput(), Stream.of(recipe).collect(Collectors.toList()));
             }
         }
 
         // If it is generated return it otherwise we just did generate it
-        return reversedRecipes;
+        return reversedRecipes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> new ArrayList<>(entry.getValue())));
     }
 
     // Check if the ItemStack passed is our custom firework with model data
