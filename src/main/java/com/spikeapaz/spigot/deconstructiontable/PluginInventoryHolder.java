@@ -37,7 +37,6 @@ class PluginInventoryHolder implements InventoryHolder {
             0 + 2,
             0 + 3,
             0 + 4,
-            0 + 8,
             9 + 0,
             9 + 1,
             9 + 3,
@@ -47,8 +46,7 @@ class PluginInventoryHolder implements InventoryHolder {
             18 + 1,
             18 + 2,
             18 + 3,
-            18 + 4,
-            18 + 8
+            18 + 4
     ));
     // The 9x9 grid used to show the result of the reversed recipe
     private final ArrayList<Integer> outputSlots = new ArrayList<>(Arrays.asList(
@@ -62,6 +60,8 @@ class PluginInventoryHolder implements InventoryHolder {
             23 + 1,
             23 + 2
     ));
+    private final int greenSlot = 8;
+    private final int redSlot = 26;
     // Number of the input item slot
     private final int inputSlotNum = 11;
 
@@ -80,14 +80,30 @@ class PluginInventoryHolder implements InventoryHolder {
 
     // Populate blank slots with glass panes with no name
     private void populateItems() {
-        final ItemStack glassPane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-        final ItemMeta glassPaneMeta = glassPane.getItemMeta();
+        ItemStack glassPane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+        ItemMeta glassPaneMeta = glassPane.getItemMeta();
         assert glassPaneMeta != null;
         glassPaneMeta.setDisplayName("\u00A0");
         glassPane.setItemMeta(glassPaneMeta);
 
         for (int slot : emptySlots)
             inventory.setItem(slot, glassPane);
+
+        glassPane = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
+        glassPaneMeta = glassPane.getItemMeta();
+        assert glassPaneMeta != null;
+        glassPaneMeta.setDisplayName("FORWARD");
+        glassPane.setItemMeta(glassPaneMeta);
+
+        inventory.setItem(greenSlot, glassPane);
+
+        glassPane = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+        glassPaneMeta = glassPane.getItemMeta();
+        assert glassPaneMeta != null;
+        glassPaneMeta.setDisplayName("BACKWARD");
+        glassPane.setItemMeta(glassPaneMeta);
+
+        inventory.setItem(redSlot, glassPane);
     }
 
     // Set one of the output/crafting slots (index 0-8) to an item
@@ -321,6 +337,23 @@ class PluginInventoryHolder implements InventoryHolder {
                     // Stop the glass panes in the empty slots from being picked up
                     if (emptySlots.contains(event.getRawSlot())) {
                         event.setCancelled(true);
+                        Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
+                        break;
+                    } else if (event.getRawSlot() == greenSlot) {
+                        event.setCancelled(true);
+                        if (recipeIndex + 1 > currentRecipes.size() - 1)
+                            break;
+                        recipeIndex++;
+                        showRecipe(getInputItem());
+                        Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
+                        break;
+                    } else if (event.getRawSlot() == redSlot) {
+                        event.setCancelled(true);
+                        if (recipeIndex - 1 < 0)
+                            break;
+                        recipeIndex--;
+                        showRecipe(getInputItem());
+                        Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
                         break;
                     }
 
