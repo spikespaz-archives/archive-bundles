@@ -26,6 +26,7 @@ public class PluginEventListener implements Listener {
         InventoryHolder baseHolder = event.getInventory().getHolder();
         if (baseHolder == null) return;
 
+        // If the plugin's InventoryHandler is involved, call the delegate method.
         if (PluginInventoryHolder.class.isAssignableFrom(baseHolder.getClass()))
             ((PluginInventoryHolder) baseHolder).handleClick(event);
     }
@@ -35,6 +36,7 @@ public class PluginEventListener implements Listener {
         InventoryHolder baseHolder = event.getInventory().getHolder();
         if (baseHolder == null) return;
 
+        // If the plugin's InventoryHandler is involved, call the delegate method.
         if (PluginInventoryHolder.class.isAssignableFrom(baseHolder.getClass()))
             ((PluginInventoryHolder) baseHolder).handleDrag(event);
     }

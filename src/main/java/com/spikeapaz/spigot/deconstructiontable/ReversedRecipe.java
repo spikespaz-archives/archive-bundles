@@ -6,6 +6,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ReversedRecipe {
@@ -14,68 +15,76 @@ public class ReversedRecipe {
     private int dividend;
     private Recipe originalRecipe;
 
-    public ReversedRecipe(ItemStack input, ArrayList<ItemStack> items, int dividend) {
-        this.input = input;
-        this.items = items;
-        this.dividend = dividend;
-    }
-
+    // Construct from a shaped recipe (recipe grid)
     public ReversedRecipe(ShapedRecipe recipe) {
         originalRecipe = recipe;
 
         input = recipe.getResult().clone();
         dividend = input.getAmount();
-        input.setAmount(1);
+        input.setAmount(1); // The recipe is looked for by an ItemStack with a count of 1
 
-        items = new ArrayList<>(9);
+        ingredients = new ArrayList<>(9);
 
         Map<Character, ItemStack> ingredientMap = recipe.getIngredientMap();
 
-        for (int slot = 0; slot < 9; slot++) {
-            int rowNum = Math.floorDiv(slot, 3);
+        int rowNum, colNum;
 
+        // Loop through each slot index
+        for (int slot = 0; slot < 9; slot++) {
+            // Row and column numbers. Y and X in a 9x9 grid
+            rowNum = Math.floorDiv(slot, 3);
+            colNum = slot % 3;
+
+            // If the recipe doesn't have a current row, add a null item and continue to next slot
             if (recipe.getShape().length < rowNum + 1) {
-                items.add(null);
+                ingredients.add(null);
                 continue;
             }
 
             String row = recipe.getShape()[rowNum];
 
-            if (row.length() < slot % 3 + 1)
-                items.add(null);
-            else
-                items.add(ingredientMap.get(row.charAt(slot % 3)));
+            // If the row is shorter than the requested index, add a null item
+            if (row.length() < colNum + 1)
+                ingredients.add(null);
+            else // There is an item so check the ingredient map and add it
+                ingredients.add(ingredientMap.get(row.charAt(colNum)));
         }
     }
 
+    // Construct the recipe from shapeless recipe (ingredient list, not grid)
     public ReversedRecipe(ShapelessRecipe recipe) {
         originalRecipe = recipe;
 
         input = recipe.getResult().clone();
         dividend = input.getAmount();
-        input.setAmount(1);
+        input.setAmount(1); // The recipe is looked for by an ItemStack with a count of 1
 
-        items = new ArrayList<>(9);
+        ingredients = new ArrayList<>(9);
+        final List<ItemStack> ingredients = recipe.getIngredientList();
 
         for (int slot = 0; slot < 9; slot++)
-            if (recipe.getIngredientList().size() > slot)
-                items.add(recipe.getIngredientList().get(slot));
+            if (ingredients.size() > slot) // There are more ingredients than the index of the current slot
+                this.ingredients.add(recipe.getIngredientList().get(slot)); // Add it accordingly
             else
-                items.add(null);
+                this.ingredients.add(null); // The ingredients list does not have enough items so just add null for the rest of the slots
     }
 
+    // Returns the original Recipe object that this is made from
     public Recipe getOriginalRecipe() {
         return originalRecipe;
     }
 
+    // Returns a copy of the input item (or the result from the crafting recipe) as an ItemStack with an amount of 1
     public ItemStack getInput() {
         return input.clone();
     }
 
+    // Get an ArrayList of 9 items, each a slot in the crafting area, some of them null.
+    // Each ItemStack amount will be adjusted in accordance to amount and dividend.
     public ArrayList<ItemStack> getOutput(int amount) {
         ArrayList<ItemStack> adjustedItems = new ArrayList<>();
 
-        for (ItemStack item : items) {
+        for (ItemStack item : ingredients) {
             if (item != null) {
                 ItemStack adjustedItem = item.clone();
 

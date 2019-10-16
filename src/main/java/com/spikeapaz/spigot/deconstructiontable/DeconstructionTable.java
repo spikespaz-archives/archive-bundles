@@ -28,6 +28,7 @@ public final class DeconstructionTable extends JavaPlugin {
         listener = new PluginEventListener();
         Bukkit.getPluginManager().registerEvents(listener, this);
 
+        // Make the ItemStack and ItemMeta for the custom mushroom block
         final ItemStack blockItem = new ItemStack(Material.FIREWORK_ROCKET);
         final ItemMeta itemMeta = blockItem.getItemMeta();
         assert itemMeta != null;
@@ -35,6 +36,7 @@ public final class DeconstructionTable extends JavaPlugin {
         itemMeta.setCustomModelData(10000100);
         blockItem.setItemMeta(itemMeta);
 
+        // Create the crafting recipe for the mushroom block
         final NamespacedKey namespacedKey = new NamespacedKey(this, "deconstruction_table_" + Utils.randomString(6));
         final ShapedRecipe blockRecipe = new ShapedRecipe(namespacedKey, blockItem);
         blockRecipe.shape("III", "ICI", "III");
@@ -44,6 +46,7 @@ public final class DeconstructionTable extends JavaPlugin {
 
         tellConsole("deconstruction_table namespace: " + namespacedKey.getNamespace() + "." + namespacedKey.getKey());
 
+        // Pre-generate the reversed recipes
         Utils.getReversedRecipes();
 
         inventoryHolder = new PluginInventoryHolder();
