@@ -68,8 +68,15 @@ public class PluginEventListener implements Listener {
             event.setCancelled(true);
 
             // Add the direction of the clicked face to the clock position.
-            final Location placeLocation = clickedBlock.getLocation();
-            placeLocation.add(event.getBlockFace().getDirection());
+            final Location placeLocation = clickedBlock.getLocation().add(event.getBlockFace().getDirection());
+            final Location playerBlock = Utils.locToBlock(player.getLocation());
+
+            // Make sure the player isn't standing in the block's placement
+            if (playerBlock.equals(placeLocation) ||
+                    playerBlock.add(-0, 1, 0).equals(placeLocation)) {
+                event.setCancelled(true);
+                return;
+            }
 
             // Get block locations on all six sides
             final ArrayList<Location> adjacentLocations = new ArrayList<>();

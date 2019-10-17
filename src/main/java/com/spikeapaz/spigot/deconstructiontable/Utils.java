@@ -1,6 +1,7 @@
 package com.spikeapaz.spigot.deconstructiontable;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -99,5 +100,10 @@ public class Utils {
                 player.updateInventory();
             }
         }.runTaskLater(plugin, 0);
+    }
+
+    // Rounds the location provided down to a block position
+    public static Location locToBlock(Location location) {
+        return new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 }
