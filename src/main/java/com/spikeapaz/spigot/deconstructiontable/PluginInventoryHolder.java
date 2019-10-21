@@ -14,14 +14,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 class PluginInventoryHolder implements InventoryHolder {
     private final DeconstructionTable plugin = JavaPlugin.getPlugin(DeconstructionTable.class);
     private Inventory inventory;
     private int recipeIndex;
-    private List<ReversedRecipe> currentRecipes;
+    private ReversedRecipe currentRecipe;
 
     // Here is an example grid. The slot number is the X coordinate plus the Y offset.
     //      0 1 2 3 4 5 6 7 8
@@ -67,15 +66,9 @@ class PluginInventoryHolder implements InventoryHolder {
 
     PluginInventoryHolder() {
         inventory = Bukkit.createInventory(this, 27, "Deconstruction");
-        currentRecipes = new ArrayList<>();
         recipeIndex = 0;
 
         populateItems();
-    }
-
-    public void clearRecipes() {
-        currentRecipes.clear();
-        recipeIndex = 0;
     }
 
     // Populate blank slots with glass panes with no name
@@ -160,13 +153,14 @@ class PluginInventoryHolder implements InventoryHolder {
             for (int slot = 0; slot < 9; slot++)
                 setItemSlot(slot, null);
 
-            clearRecipes();
+            recipeIndex = 0;
             return;
         }
 
-        ArrayList<ItemStack> ingredients;
 
-        if (currentRecipes.size() == 0) {
+        // The current recipe isn't populated. Should probably make sure the input
+        // items are the same but not for now because I want to catch bugs.
+        if (currentRecipe == null) {
             Utils.tellConsole("Looking up recipe for item: " + item.getType());
 
             ItemStack keyItem = item.clone();
@@ -175,13 +169,11 @@ class PluginInventoryHolder implements InventoryHolder {
             if (!Utils.getReversedRecipes().containsKey(keyItem))
                 return;
 
-            currentRecipes = Utils.getReversedRecipes().get(keyItem);
-
-            Utils.tellConsole("Recipes for this item: " + currentRecipes.size());
+            currentRecipe = Utils.getReversedRecipes().get(keyItem).get(0);
         }
 
-        Utils.tellConsole("Using recipe in stored list.");
-        ingredients = currentRecipes.get(recipeIndex).getOutput(item.getAmount());
+        ArrayList<ItemStack> ingredients = currentRecipe.getOutput(recipeIndex, item.getAmount());
+
 
         for (int slot = 0; slot < 9; slot++)
             setItemSlot(slot, ingredients.get(slot));
@@ -341,7 +333,7 @@ class PluginInventoryHolder implements InventoryHolder {
                         break;
                     } else if (event.getRawSlot() == greenSlot) {
                         event.setCancelled(true);
-                        if (recipeIndex + 1 > currentRecipes.size() - 1)
+                        if (recipeIndex + 1 > currentRecipe.choiceCount() - 1)
                             break;
                         recipeIndex++;
                         showRecipe(getInputItem());
