@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class Utils {
+class Utils {
     private static Map<ItemStack, List<ReversedRecipe>> reversedRecipes;
 
-    public static void clearReversedRecipes() {
+    static void clearReversedRecipes() {
         reversedRecipes = null;
     }
 
-    public static Map<ItemStack, List<ReversedRecipe>> getReversedRecipes() {
+    static Map<ItemStack, List<ReversedRecipe>> getReversedRecipes() {
         // If the reverses aren't already, generate them
         if (reversedRecipes == null) {
             reversedRecipes = new HashMap<>();
@@ -48,16 +48,11 @@ public class Utils {
                 else
                     continue;
 
-                if (recipe.getOutput(recipe.getOriginalRecipe().getResult().getAmount()).size() == 0) {
-                    Utils.tellConsole("Failed to generate recipe with zero ingredients: " + recipe.getInput().getType());
-                    continue;
-                }
-
                 // Add it to the recipe list
-                if (reversedRecipes.containsKey(recipe.getKetItem()))
-                    reversedRecipes.get(recipe.getInput()).add(recipe);
+                if (reversedRecipes.containsKey(recipe.getKeyItem()))
+                    reversedRecipes.get(recipe.getKeyItem()).add(recipe);
                 else
-                    reversedRecipes.put(recipe.getInput(), Stream.of(recipe).collect(Collectors.toList()));
+                    reversedRecipes.put(recipe.getKeyItem(), Stream.of(recipe).collect(Collectors.toList()));
             }
         }
 
@@ -66,17 +61,17 @@ public class Utils {
     }
 
     // Check if the ItemStack passed is our custom firework with model data
-    public static boolean isDeconstructionTableItem(ItemStack item) {
+    static boolean isDeconstructionTableItem(ItemStack item) {
         return item != null && item.getType().equals(Material.FIREWORK_ROCKET) && item.getItemMeta() != null && item.getItemMeta().getCustomModelData() == 10000100;
     }
 
     // Is the Block passed our special mushroom block?
-    public static boolean isDeconstructionTableBlock(Block block) {
+    static boolean isDeconstructionTableBlock(Block block) {
         return block != null && block.getBlockData().equals(DeconstructionTable.customBlockData);
     }
 
     // Generate a random string the specified length.
-    public static String randomString(int size) {
+    static String randomString(int size) {
         final Random random = new Random();
         final StringBuilder buffer = new StringBuilder();
         final char[] alphabet = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
@@ -88,12 +83,12 @@ public class Utils {
     }
 
     // Utility function to send a message to the console.
-    public static void tellConsole(String message) {
+    static void tellConsole(String message) {
         Bukkit.getConsoleSender().sendMessage(message);
     }
 
     // Instant "delayed" update to the player inventory. Fixes some bugginess with the inventory not updating in time to see slot changes.
-    public static void updatePlayerInventory(Plugin plugin, Player player) {
+    static void updatePlayerInventory(Plugin plugin, Player player) {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -103,7 +98,7 @@ public class Utils {
     }
 
     // Rounds the location provided down to a block position
-    public static Location locToBlock(Location location) {
+    static Location locToBlock(Location location) {
         return new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 }
