@@ -26,7 +26,7 @@ class Utils {
 
     static Map<ItemStack, List<ReversedRecipe>> getReversedRecipes() {
         // If the reverses aren't already, generate them
-        if (reversedRecipes == null) {
+        if (reversedRecipes == null || reversedRecipes.size() == 0) {
             reversedRecipes = new HashMap<>();
 
             // Get all of the recipes in the game
@@ -36,7 +36,6 @@ class Utils {
             Recipe recipeBase;
             while (recipeIterator.hasNext()) {
                 recipeBase = recipeIterator.next();
-                Utils.tellConsole("Creating reversed recipe: " + recipeBase.getResult());
 
                 ReversedRecipe recipe;
 
@@ -100,5 +99,14 @@ class Utils {
     // Rounds the location provided down to a block position
     static Location locToBlock(Location location) {
         return new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
+    }
+
+    // Get a key from the first occurrence of a value in a Map
+    static <K, V> K keyFromValue(Map<K, V> map, V value) {
+        for (Map.Entry<K, V> entry : map.entrySet())
+            if ((entry.getValue() == null && value == null) || (entry.getValue() != null && entry.getValue().equals(value)))
+                return entry.getKey();
+
+        return null;
     }
 }

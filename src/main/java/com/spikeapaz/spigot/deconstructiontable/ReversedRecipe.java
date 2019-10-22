@@ -21,27 +21,54 @@ class ReversedRecipe {
         input.setAmount(1); // The recipe is looked for by an ItemStack with a count of 1
 
         itemLists = new ArrayList<>();
+        // Create a copy of the recipe shape within which redundant keys will be removed
+        String[] shape = recipe.getShape();
 
         Utils.tellConsole("Creating reversed recipe for: " + recipe.getResult().toString());
 
+        // Represents a list of all map entries. This is a list of sets so that it can be processed by Guava.
         List<Set<Map.Entry<Character, ItemStack>>> valuePairs = new ArrayList<>();
+        // Create a new choice map that will have unique entries. No value may map to multiple keys.
+        Map<Character, RecipeChoice> dedupMap = new HashMap<>();
 
+        // Iterate all entries in the recipe's choice map, removing duplicate keys from dedupMap and shape
         for (Map.Entry<Character, RecipeChoice> entry : recipe.getChoiceMap().entrySet()) {
-            RecipeChoice.MaterialChoice choice = (RecipeChoice.MaterialChoice) entry.getValue();
-            Set<Map.Entry<Character, ItemStack>> materialList = new HashSet<>();
+            Character altKey = Utils.keyFromValue(dedupMap, entry.getValue());
 
-            if (choice == null)
-                materialList.add(new AbstractMap.SimpleEntry<>(entry.getKey(), null));
-            else
-                for (Material material : choice.getChoices())
-                    materialList.add(new AbstractMap.SimpleEntry<>(entry.getKey(), new ItemStack(material)));
-
-            valuePairs.add(materialList);
+            if (altKey != null) {
+                int rowNum = 0;
+                for (String row : shape) {
+                    shape[rowNum] = row.replace(entry.getKey(), altKey);
+                    rowNum++;
+                }
+            } else
+                dedupMap.put(entry.getKey(), entry.getValue());
         }
 
+        // Loop through all character and material choice pairs in the recipe
+        for (Map.Entry<Character, RecipeChoice> entry : dedupMap.entrySet()) {
+            RecipeChoice.MaterialChoice choice = (RecipeChoice.MaterialChoice) entry.getValue();
+            // Represents the current set of map entries to be added to valuePairs
+            Set<Map.Entry<Character, ItemStack>> mapSet = new HashSet<>();
+
+
+            if (choice == null) // The slots corresponding to this key will be empty
+                mapSet.add(new AbstractMap.SimpleEntry<>(entry.getKey(), null));
+            else
+                for (Material material : choice.getChoices())
+                    // Get an item from the material choice
+                    mapSet.add(new AbstractMap.SimpleEntry<>(entry.getKey(), new ItemStack(material)));
+
+            // Add the entries to the valuePairs list. Each set is a map.
+            valuePairs.add(mapSet);
+        }
+
+        // Combinations of all unique map entries
         Set<List<Map.Entry<Character, ItemStack>>> cartesianMaps = Sets.cartesianProduct(valuePairs);
+        // Prepare a new list of maps to be created from the lists within the cartesian product set
         List<Map<Character, ItemStack>> recipeMaps = new ArrayList<>();
 
+        // Reassemble the recipe maps with individual ItemStacks as ingredients
         for (List<Map.Entry<Character, ItemStack>> entryList : cartesianMaps) {
             Map<Character, ItemStack> recipeMap = new HashMap<>();
 
@@ -51,24 +78,22 @@ class ReversedRecipe {
             recipeMaps.add(recipeMap);
         }
 
-        int rowNum, colNum;
-
         for (Map<Character, ItemStack> recipeMap : recipeMaps) {
             List<ItemStack> ingredients = new ArrayList<>();
 
             // Loop through each slot index
             for (int slot = 0; slot < 9; slot++) {
                 // Row and column numbers. Y and X in a 9x9 grid
-                rowNum = Math.floorDiv(slot, 3);
-                colNum = slot % 3;
+                int rowNum = Math.floorDiv(slot, 3);
+                int colNum = slot % 3;
 
                 // If the recipe doesn't have a current row, add a null item and continue to next slot
-                if (recipe.getShape().length < rowNum + 1) {
+                if (shape.length < rowNum + 1) {
                     ingredients.add(null);
                     continue;
                 }
 
-                String row = recipe.getShape()[rowNum];
+                String row = shape[rowNum];
 
                 // If the row is shorter than the requested index, add a null item
                 if (row.length() < colNum + 1)
