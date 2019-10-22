@@ -398,6 +398,9 @@ class PluginInventoryHolder implements InventoryHolder {
             inputItem.setAmount(event.getNewItems().get(inputSlotNum).getAmount());
             showRecipe(inputItem);
             Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
+        } else if (inputSlotChanged) {
+            showRecipe(event.getNewItems().get(inputSlotNum));
+            Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
         }
     }
 
