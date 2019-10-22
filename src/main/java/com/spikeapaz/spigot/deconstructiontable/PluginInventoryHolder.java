@@ -334,16 +334,18 @@ class PluginInventoryHolder implements InventoryHolder {
                     } else if (event.getRawSlot() == greenSlot) {
                         event.setCancelled(true);
                         if (recipeIndex + 1 > currentRecipe.choiceCount() - 1)
-                            break;
-                        recipeIndex++;
+                            recipeIndex = 0;
+                        else
+                            recipeIndex++;
                         showRecipe(getInputItem());
                         Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
                         break;
                     } else if (event.getRawSlot() == redSlot) {
                         event.setCancelled(true);
                         if (recipeIndex - 1 < 0)
-                            break;
-                        recipeIndex--;
+                            recipeIndex = currentRecipe.choiceCount() - 1;
+                        else
+                            recipeIndex--;
                         showRecipe(getInputItem());
                         Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
                         break;
