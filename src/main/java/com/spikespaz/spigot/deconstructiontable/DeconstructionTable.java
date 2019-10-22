@@ -1,4 +1,4 @@
-package com.spikeapaz.spigot.deconstructiontable;
+package com.spikespaz.spigot.deconstructiontable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -10,8 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import static com.spikeapaz.spigot.deconstructiontable.Utils.tellConsole;
 
 
 public final class DeconstructionTable extends JavaPlugin {
@@ -45,7 +43,7 @@ public final class DeconstructionTable extends JavaPlugin {
         blockRecipe.setIngredient('C', Material.CRAFTING_TABLE);
         Bukkit.addRecipe(blockRecipe);
 
-        tellConsole("deconstruction_table namespace: " + namespacedKey.getNamespace() + "." + namespacedKey.getKey());
+        Utils.tellConsole("DeconstructionTable namespace: " + namespacedKey.getNamespace() + "." + namespacedKey.getKey());
 
         // Pre-generate the reversed recipes
         Utils.getReversedRecipes();
@@ -61,13 +59,13 @@ public final class DeconstructionTable extends JavaPlugin {
         command.setExecutor(new PluginCommandExecutor());
 
         // Tell the console that the plugin is loaded.
-        tellConsole("Enabled Deconstruction Table.");
+        Utils.tellConsole("Enabled Deconstruction Table.");
     }
 
     @Override
     public void onDisable() {
         // Inform on unload.
-        tellConsole("Disabled Deconstruction Table.");
+        Utils.tellConsole("Disabled Deconstruction Table.");
 
         // Unregister the PlayerInteractEventListener
         HandlerList.unregisterAll(listener);

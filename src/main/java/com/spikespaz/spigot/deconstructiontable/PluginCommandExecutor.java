@@ -1,4 +1,4 @@
-package com.spikeapaz.spigot.deconstructiontable;
+package com.spikespaz.spigot.deconstructiontable;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

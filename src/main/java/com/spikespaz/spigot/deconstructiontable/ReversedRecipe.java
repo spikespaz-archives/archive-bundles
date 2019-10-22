@@ -1,4 +1,4 @@
-package com.spikeapaz.spigot.deconstructiontable;
+package com.spikespaz.spigot.deconstructiontable;
 
 import com.google.common.collect.Sets;
 import org.bukkit.Material;
