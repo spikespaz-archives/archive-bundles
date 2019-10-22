@@ -1,2 +1,10 @@
 target/
 output/
+out/
+
+.idea/dictionaries/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/uiDesigner.xml
+.idea
