@@ -164,7 +164,7 @@ class ReversedRecipe {
                 if (itemAmount > 0)
                     adjustedItem.setAmount(item.getAmount() * Math.floorDiv(amount, dividend));
                 else
-                    return new ArrayList<>();
+                    return new ArrayList<>(9);
 
                 adjustedItems.add(adjustedItem);
             } else

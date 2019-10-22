@@ -175,8 +175,11 @@ class PluginInventoryHolder implements InventoryHolder {
 
         ArrayList<ItemStack> ingredients = currentRecipe.getOutput(recipeIndex, item.getAmount());
 
-        for (int slot = 0; slot < 9; slot++)
-            setItemSlot(slot, ingredients.get(slot));
+        int slot = 0;
+        for (ItemStack ingredient : ingredients) {
+            setItemSlot(slot, ingredient);
+            slot++;
+        }
     }
 
     // Delegate for the event handler that has access to an instance of this class.
