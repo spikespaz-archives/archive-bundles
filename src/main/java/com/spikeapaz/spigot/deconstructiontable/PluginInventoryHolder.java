@@ -126,7 +126,7 @@ class PluginInventoryHolder implements InventoryHolder {
     // Checks if any of the output slots have items in them
     public boolean outputIsShown() {
         for (int slot : outputSlots)
-            if (inventory.getItem(slot) != null)
+            if (inventory.getItem(slot) != null || (inventory.getItem(slot) != null && inventory.getItem(slot).getType().equals(Material.AIR)))
                 return true;
 
         return false;
@@ -154,6 +154,7 @@ class PluginInventoryHolder implements InventoryHolder {
                 setItemSlot(slot, null);
 
             recipeIndex = 0;
+            currentRecipe = null;
             return;
         }
 
@@ -169,11 +170,10 @@ class PluginInventoryHolder implements InventoryHolder {
             if (!Utils.getReversedRecipes().containsKey(keyItem))
                 return;
 
-            currentRecipe = Utils.getReversedRecipes().get(keyItem).get(0);
+            currentRecipe = Utils.getReversedRecipes().get(keyItem);
         }
 
         ArrayList<ItemStack> ingredients = currentRecipe.getOutput(recipeIndex, item.getAmount());
-
 
         for (int slot = 0; slot < 9; slot++)
             setItemSlot(slot, ingredients.get(slot));

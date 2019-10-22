@@ -12,19 +12,20 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
 
 class Utils {
-    private static Map<ItemStack, List<ReversedRecipe>> reversedRecipes;
+    private static Map<ItemStack, ReversedRecipe> reversedRecipes;
 
     static void clearReversedRecipes() {
         reversedRecipes = null;
     }
 
-    static Map<ItemStack, List<ReversedRecipe>> getReversedRecipes() {
+    static Map<ItemStack, ReversedRecipe> getReversedRecipes() {
         // If the reverses aren't already, generate them
         if (reversedRecipes == null || reversedRecipes.size() == 0) {
             reversedRecipes = new HashMap<>();
@@ -47,16 +48,12 @@ class Utils {
                 else
                     continue;
 
-                // Add it to the recipe list
-                if (reversedRecipes.containsKey(recipe.getKeyItem()))
-                    reversedRecipes.get(recipe.getKeyItem()).add(recipe);
-                else
-                    reversedRecipes.put(recipe.getKeyItem(), Stream.of(recipe).collect(Collectors.toList()));
+                reversedRecipes.put(recipe.getKeyItem(), recipe);
             }
         }
 
         // If it is generated return it otherwise we just did generate it
-        return reversedRecipes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> new ArrayList<>(entry.getValue())));
+        return new HashMap<>(reversedRecipes);
     }
 
     // Check if the ItemStack passed is our custom firework with model data

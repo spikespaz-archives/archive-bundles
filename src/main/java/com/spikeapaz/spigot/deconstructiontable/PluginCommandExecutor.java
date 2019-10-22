@@ -3,13 +3,12 @@ package com.spikeapaz.spigot.deconstructiontable;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class PluginCommandExecutor implements CommandExecutor {
-    private DeconstructionTable plugin = JavaPlugin.getPlugin(DeconstructionTable.class);
-
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
+        assert sender != null && label != null && args != null;
+
         if (!command.getName().equalsIgnoreCase("dct"))
             return false;
 
