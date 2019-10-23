@@ -174,7 +174,7 @@ class ReversedRecipe {
         return adjustedItems;
     }
 
-    int choiceCount() {
+    int getChoiceCount() {
         return itemLists.size();
     }
 }

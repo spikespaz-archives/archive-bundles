@@ -85,7 +85,7 @@ class PluginInventoryHolder implements InventoryHolder {
         glassPane = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
         glassPaneMeta = glassPane.getItemMeta();
         assert glassPaneMeta != null;
-        glassPaneMeta.setDisplayName("FORWARD");
+        glassPaneMeta.setDisplayName("Next: 0");
         glassPane.setItemMeta(glassPaneMeta);
 
         inventory.setItem(greenSlot, glassPane);
@@ -93,7 +93,7 @@ class PluginInventoryHolder implements InventoryHolder {
         glassPane = new ItemStack(Material.RED_STAINED_GLASS_PANE);
         glassPaneMeta = glassPane.getItemMeta();
         assert glassPaneMeta != null;
-        glassPaneMeta.setDisplayName("BACKWARD");
+        glassPaneMeta.setDisplayName("Previous: 0");
         glassPane.setItemMeta(glassPaneMeta);
 
         inventory.setItem(redSlot, glassPane);
@@ -120,7 +120,36 @@ class PluginInventoryHolder implements InventoryHolder {
 
     // Sets the input slot's item (slot 11)
     public void setInputItem(ItemStack item) {
+        if (item == null)
+            currentRecipe = null;
         inventory.setItem(inputSlotNum, item);
+    }
+
+    // Set the count of the buttons to tell the user how many recipes there are
+    public void updateButtonNumbers() {
+        ItemStack glassPane;
+        ItemMeta glassPaneMeta;
+
+        int greenNum = 0, redNum = 0;
+
+        if (currentRecipe != null) {
+            greenNum = currentRecipe.getChoiceCount() - recipeIndex - 1;
+            redNum = recipeIndex;
+        }
+
+        glassPane = inventory.getItem(greenSlot);
+        if (glassPane == null) return;
+        glassPaneMeta = glassPane.getItemMeta();
+        assert glassPaneMeta != null;
+        glassPaneMeta.setDisplayName("Next: " + greenNum);
+        glassPane.setItemMeta(glassPaneMeta);
+
+        glassPane = inventory.getItem(redSlot);
+        if (glassPane == null) return;
+        glassPaneMeta = glassPane.getItemMeta();
+        assert glassPaneMeta != null;
+        glassPaneMeta.setDisplayName("Previous: " + redNum);
+        glassPane.setItemMeta(glassPaneMeta);
     }
 
     // Checks if any of the output slots have items in them
@@ -155,9 +184,10 @@ class PluginInventoryHolder implements InventoryHolder {
 
             recipeIndex = 0;
             currentRecipe = null;
+
+            updateButtonNumbers();
             return;
         }
-
 
         // The current recipe isn't populated. Should probably make sure the input
         // items are the same but not for now because I want to catch bugs.
@@ -172,6 +202,8 @@ class PluginInventoryHolder implements InventoryHolder {
 
             currentRecipe = Utils.getReversedRecipes().get(keyItem);
         }
+
+        updateButtonNumbers();
 
         ArrayList<ItemStack> ingredients = currentRecipe.getOutput(recipeIndex, item.getAmount());
 
@@ -337,7 +369,7 @@ class PluginInventoryHolder implements InventoryHolder {
                     } else if (event.getRawSlot() == greenSlot) {
                         event.setCancelled(true);
                         if (currentRecipe != null)
-                            if (recipeIndex + 1 > currentRecipe.choiceCount() - 1)
+                            if (recipeIndex + 1 > currentRecipe.getChoiceCount() - 1)
                                 recipeIndex = 0;
                             else
                                 recipeIndex++;
@@ -348,7 +380,7 @@ class PluginInventoryHolder implements InventoryHolder {
                         event.setCancelled(true);
                         if (currentRecipe != null)
                             if (recipeIndex - 1 < 0)
-                                recipeIndex = currentRecipe.choiceCount() - 1;
+                                recipeIndex = currentRecipe.getChoiceCount() - 1;
                             else
                                 recipeIndex--;
                         showRecipe(getInputItem());
