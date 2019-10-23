@@ -8,7 +8,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -27,13 +26,7 @@ public final class DeconstructionTable extends JavaPlugin {
         listener = new PluginEventListener();
         Bukkit.getPluginManager().registerEvents(listener, this);
 
-        // Make the ItemStack and ItemMeta for the custom mushroom block
-        final ItemStack blockItem = new ItemStack(Material.FIREWORK_ROCKET);
-        final ItemMeta itemMeta = blockItem.getItemMeta();
-        assert itemMeta != null;
-        itemMeta.setDisplayName("Deconstruction Table");
-        itemMeta.setCustomModelData(10000100);
-        blockItem.setItemMeta(itemMeta);
+        ItemStack blockItem = Utils.getBlockItem();
 
         // Create the crafting recipe for the mushroom block
         final NamespacedKey namespacedKey = new NamespacedKey(this, "deconstruction_table_" + Utils.randomString(6));

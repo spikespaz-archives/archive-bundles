@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -20,6 +21,7 @@ import java.util.Random;
 
 class Utils {
     private static Map<ItemStack, ReversedRecipe> reversedRecipes;
+    private static ItemStack blockItem;
 
     static void clearReversedRecipes() {
         reversedRecipes = null;
@@ -105,5 +107,19 @@ class Utils {
                 return entry.getKey();
 
         return null;
+    }
+
+    static ItemStack getBlockItem() {
+        if (blockItem == null) {
+            // Make the ItemStack and ItemMeta for the custom mushroom block
+            blockItem = new ItemStack(Material.FIREWORK_ROCKET);
+            final ItemMeta itemMeta = blockItem.getItemMeta();
+            assert itemMeta != null;
+            itemMeta.setDisplayName("Deconstruction Table");
+            itemMeta.setCustomModelData(10000100);
+            blockItem.setItemMeta(itemMeta);
+        }
+
+        return blockItem.clone();
     }
 }

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -109,5 +110,11 @@ public class PluginEventListener implements Listener {
             assert heldItem != null;
             heldItem.setAmount(heldItem.getAmount() - 1);
         }
+    }
+
+    @EventHandler
+    public void onBlockBreakEvent(BlockBreakEvent event) {
+        if (Utils.isDeconstructionTableBlock(event.getBlock()))
+            event.getPlayer().getWorld().dropItem(event.getBlock().getLocation().add(0.5, 0.5, 0.5), Utils.getBlockItem());
     }
 }
