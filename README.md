@@ -26,4 +26,6 @@ To cycle through recipes with multiple options for a material (eg. wood from a c
 
 ---
 
-### [Download](https://github.com/spikespaz/deconstruction-table-spigot/releases/tag/1.0-SNAPSHOT) the first basically working release.
+### [Download](https://github.com/spikespaz/deconstruction-table-spigot/releases/latest) the latest working release.
+
+Keep in mind that **snapshot** means **beta**.

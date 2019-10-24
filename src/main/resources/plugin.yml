@@ -3,6 +3,9 @@ version: ${project.version}
 main: com.spikespaz.spigot.deconstructiontable.DeconstructionTable
 api-version: "1.14"
 website: https://github.com/spikespaz/deconstruction-table-spigot
+author: spikespaz
+prefix: DCT
+load: POSTWORLD
 commands:
   dct:
     description: Main command for Deconstruction Tables."
