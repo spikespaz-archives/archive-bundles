@@ -177,4 +177,8 @@ class ReversedRecipe {
     int getChoiceCount() {
         return itemLists.size();
     }
+
+    int getDividend() {
+        return dividend;
+    }
 }

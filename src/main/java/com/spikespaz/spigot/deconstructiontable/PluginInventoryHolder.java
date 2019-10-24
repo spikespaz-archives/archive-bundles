@@ -125,6 +125,13 @@ class PluginInventoryHolder implements InventoryHolder {
         inventory.setItem(inputSlotNum, item);
     }
 
+    public void removeInputItems() {
+        if (currentRecipe == null || getInputItem() == null || getInputItem().getType().equals(Material.AIR))
+            return;
+
+        getInputItem().setAmount(getInputItem().getAmount() % currentRecipe.getDividend());
+    }
+
     // Set the count of the buttons to tell the user how many recipes there are
     public void updateButtonNumbers() {
         ItemStack glassPane;
@@ -191,7 +198,7 @@ class PluginInventoryHolder implements InventoryHolder {
 
         // The current recipe isn't populated. Should probably make sure the input
         // items are the same but not for now because I want to catch bugs.
-        if (currentRecipe == null) {
+        if (currentRecipe == null || !currentRecipe.getInput().isSimilar(item)) {
             Utils.tellConsole("Looking up recipe for item: " + item.getType());
 
             ItemStack keyItem = item.clone();
@@ -331,7 +338,7 @@ class PluginInventoryHolder implements InventoryHolder {
                         // If the output has an item that matches according to ItemStack.isSimilar,
                         // it will be picked up so clear the input slot.
                         if (outputHasItem(cursorItem)) {
-                            setInputItem(null);
+                            removeInputItems();
                             Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
                         }
                     }
@@ -389,7 +396,7 @@ class PluginInventoryHolder implements InventoryHolder {
                     }
 
                     // If it isn't an empty slot it's something in the crafting grid. Hide the input item.
-                    setInputItem(null);
+                    removeInputItems();
                     Utils.updatePlayerInventory(plugin, (Player) event.getWhoClicked());
                     break;
                 default:
