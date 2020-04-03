@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "radialmenu",
+    "name": "Radial Menu",
+    "description": "A simple Forge mod to add a configurable radial menu to Minecraft, able to replace keybinds and command macros.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/spikespaz/forge-radialmenu",
+    "updateUrl": "",
+    "authorList": [
+      "spikespaz"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
