@@ -13,8 +13,15 @@ public class EventHandler {
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent()
+    public void onEvent(RenderGameOverlayEvent.Pre event) {
+        if (this.showGui && event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
+            event.setCanceled(true);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent()
     public void onEvent(RenderGameOverlayEvent.Post event) {
-        if (this.showGui)
+        if (this.showGui && event.getType() == RenderGameOverlayEvent.ElementType.ALL)
             new GuiRadialMenu(Minecraft.getMinecraft());
     }
 
