@@ -10,15 +10,15 @@ import org.lwjgl.input.Keyboard;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class GuiRadialMenu extends GuiScreen {
-    private final int CIRCLE_RADIUS = 40;
-    private final int DEAD_RADIUS = 10;
+    private final int CIRCLE_RADIUS = 50;
+    private final int DEAD_RADIUS = 30;
     private final int LABEL_BG_COLOR = 0xCC000000;
     private final int LABEL_TEXT_COLOR = 0xFFFFFFFF;
     private final int LABEL_PADDING_X = 4;
     private final int LABEL_PADDING_Y = 4;
     private final int BUTTON_BG_COLOR = 0xCC000000;
-    private final int BUTTON_BG_HOVER_COLOR = 0xCC000000;
-    private final int BUTTON_THICKNESS = 20;
+    private final int BUTTON_BG_HOVER_COLOR = 0xCCFFFFFF;
+    private final int BUTTON_THICKNESS = 30;
 
     public GuiRadialMenu(Minecraft mc) {
         ScaledResolution scaledRes = new ScaledResolution(mc);
@@ -44,13 +44,13 @@ public class GuiRadialMenu extends GuiScreen {
     public void initGui() {
         this.addButton(new GuiRadialButton(0, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
         this.addButton(new GuiRadialButton(1, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-//        this.addButton(new GuiRadialButton(2, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-//        this.addButton(new GuiRadialButton(3, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-//        this.addButton(new GuiRadialButton(4, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-//        this.addButton(new GuiRadialButton(5, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-//        this.addButton(new GuiRadialButton(6, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-//        this.addButton(new GuiRadialButton(7, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-//        this.addButton(new GuiRadialButton(8, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
+        this.addButton(new GuiRadialButton(2, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
+        this.addButton(new GuiRadialButton(3, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
+        this.addButton(new GuiRadialButton(4, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
+        this.addButton(new GuiRadialButton(5, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
+        this.addButton(new GuiRadialButton(6, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
+        this.addButton(new GuiRadialButton(7, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
+        this.addButton(new GuiRadialButton(8, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
     }
 
     @Override
@@ -58,12 +58,30 @@ public class GuiRadialMenu extends GuiScreen {
         for (GuiButton button : this.buttonList)
             button.drawButton(this.mc, mouseX, mouseY, partialTicks);
 
+//        final ScaledResolution scaledRes = new ScaledResolution(mc);
+
+//        final double cx = scaledRes.getScaledWidth_double() / 2;
+//        final double cy = scaledRes.getScaledHeight_double() / 2;
+//
+//        final double sa = Math.PI * 2 / this.buttonList.size(); // Slice angle
+
+        // Uncomment to draw lines at angles
+//        for (int i = 0; i < this.buttonList.size(); i++) {
+//            final double lx = Math.sin(Math.PI * 2 * i / this.buttonList.size() - sa / 2) * 2000;
+//            final double ly = Math.cos(Math.PI * 2 * i / this.buttonList.size() - sa / 2) * 2000;
+//
+//            RenderHelper.drawLine(cx, cy, cx + lx, cy + ly, 0xFFFF0000);
+//        }
+
+        // Uncomment to draw a line to the mouse
+//        final double mouseAngle = MathHelper.normAngle(Math.atan2(mouseX - cx, mouseY - cy));
+//        RenderHelper.drawLine(cx, cy, cx + Math.sin(mouseAngle) * 2000, cy + Math.cos(mouseAngle) * 2000, 0xFF00FF00);
+
 //        this.drawCenteredLabel("Radial Menu");
     }
 
     @Override
-    public boolean doesGuiPauseGame()
-    {
+    public boolean doesGuiPauseGame() {
         return false;
     }
 
