@@ -22,8 +22,6 @@ public class MathHelper {
 
     public static boolean isAngleBetween(double start, double end, double mid) {
         start = normAngle(start);
-        end = normAngle(normAngle(end) - start);
-        mid = normAngle(normAngle(mid) - start);
-        return (mid < end);
+        return (normAngle(normAngle(mid) - start) < normAngle(normAngle(end) - start));
     }
 }
