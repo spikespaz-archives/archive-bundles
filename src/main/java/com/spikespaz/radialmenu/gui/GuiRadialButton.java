@@ -68,6 +68,8 @@ public class GuiRadialButton extends GuiButton {
 //        RenderHelper.drawCircle(x1, y1, 2D, 10, 0xFFFF0000);
 //        RenderHelper.drawCircle(x2, y2, 2D, 10, 0xFFFF0000);
 //        RenderHelper.drawCircle(x3, y3, 2D, 10, 0xFFFF0000);
+
+        this.mouseDragged(mc, mouseX, mouseY);
     }
 
     @Override
