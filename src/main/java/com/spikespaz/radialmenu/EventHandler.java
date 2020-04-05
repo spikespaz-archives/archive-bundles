@@ -9,25 +9,28 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EventHandler {
-    private boolean showGui = false;
+    private static final Minecraft mc = Minecraft.getMinecraft();
+    private boolean openGuiKeyPressed = false;
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent()
     public void onEvent(RenderGameOverlayEvent.Pre event) {
-        if (this.showGui && event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
+        if (mc.currentScreen instanceof GuiRadialMenu && event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
             event.setCanceled(true);
     }
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent()
     public void onEvent(RenderGameOverlayEvent.Post event) {
-        if (this.showGui && event.getType() == RenderGameOverlayEvent.ElementType.ALL)
-            new GuiRadialMenu(Minecraft.getMinecraft());
+        if (this.openGuiKeyPressed && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+            mc.displayGuiScreen(new GuiRadialMenu(mc));
+            this.openGuiKeyPressed = false;
+        }
     }
 
     @SideOnly(Side.CLIENT)
-    @SubscribeEvent(receiveCanceled = true)
+    @SubscribeEvent()
     public void onEvent(InputEvent.KeyInputEvent event) {
-        this.showGui = ClientProxy.keyBindings.get(ClientProxy.GUI_OPEN_KEY).isPressed();
+        this.openGuiKeyPressed = ClientProxy.keyBindings.get(ClientProxy.GUI_OPEN_KEY).isPressed();
     }
 }

@@ -2,7 +2,6 @@ package com.spikespaz.radialmenu.proxy;
 
 import com.spikespaz.radialmenu.EventHandler;
 import com.spikespaz.radialmenu.RadialMenu;
-import com.spikespaz.radialmenu.proxy.IProxy;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
