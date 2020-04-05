@@ -88,7 +88,7 @@ public class GuiRadialButton extends GuiButton {
         final double mr = Math.hypot(mouseX - cx, mouseY - cy); // Mouse radius
         final double ma = Math.atan2(mouseX - cx, mouseY - cy); // Mouse angle
 
-        return MathHelper.angleBetween(ssa, esa, ma) && mr > this.deadRadius;
+        return MathHelper.isAngleBetween(ssa, esa, ma) && mr > this.deadRadius;
     }
 
     @Override

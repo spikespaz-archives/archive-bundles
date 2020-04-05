@@ -20,7 +20,7 @@ public class MathHelper {
         return r;
     }
 
-    public static boolean angleBetween(double start, double end, double mid) {
+    public static boolean isAngleBetween(double start, double end, double mid) {
         start = normAngle(start);
         end = normAngle(normAngle(end) - start);
         mid = normAngle(normAngle(mid) - start);
