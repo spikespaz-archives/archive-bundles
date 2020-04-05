@@ -1,5 +1,6 @@
 package com.spikespaz.radialmenu;
 
+import com.spikespaz.radialmenu.gui.GuiRadialMenu;
 import com.spikespaz.radialmenu.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;

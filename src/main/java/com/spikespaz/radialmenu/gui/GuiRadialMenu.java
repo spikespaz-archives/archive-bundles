@@ -1,6 +1,5 @@
-package com.spikespaz.radialmenu;
+package com.spikespaz.radialmenu.gui;
 
-import com.spikespaz.radialmenu.gui.GuiRadialButton;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
