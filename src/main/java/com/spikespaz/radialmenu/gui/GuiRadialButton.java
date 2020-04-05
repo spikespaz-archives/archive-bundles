@@ -57,20 +57,20 @@ public class GuiRadialButton extends GuiButton {
         final double ipr = this.radius / Math.cos(sa / 2); // Inner point radius
         final double opr = ipr + this.thickness; // Outer point radius
 
-        final double x0 = cx + Math.sin(ssa) * ipr;
-        final double y0 = cy - Math.cos(ssa) * ipr;
-        final double x1 = cx + Math.sin(ssa) * opr;
-        final double y1 = cy - Math.cos(ssa) * opr;
-        final double x2 = cx + Math.sin(esa) * opr;
-        final double y2 = cy - Math.cos(esa) * opr;
-        final double x3 = cx + Math.sin(esa) * ipr;
-        final double y3 = cy - Math.cos(esa) * ipr;
+        final double x3 = cx + Math.sin(ssa) * ipr;
+        final double y3 = cy - Math.cos(ssa) * ipr;
+        final double x2 = cx + Math.sin(ssa) * opr;
+        final double y2 = cy - Math.cos(ssa) * opr;
+        final double x1 = cx + Math.sin(esa) * opr;
+        final double y1 = cy - Math.cos(esa) * opr;
+        final double x0 = cx + Math.sin(esa) * ipr;
+        final double y0 = cy - Math.cos(esa) * ipr;
 
         final double[][] vertices = new double[][] {
-                {x3, y3},
-                {x2, y2},
+                {x0, y0},
                 {x1, y1},
-                {x0, y0}
+                {x2, y2},
+                {x3, y3}
         };
 
         RenderHelper.drawPoly(vertices, this.hovered ? this.hoverColor : this.color);
