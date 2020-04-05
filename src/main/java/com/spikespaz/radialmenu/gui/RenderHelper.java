@@ -48,6 +48,31 @@ public class RenderHelper {
         drawPoly(vertices, color);
     }
 
+    public static void drawLine(double x0, double y0, double x1, double y1, int color) {
+        float alpha = (float) (color >> 24 & 255) / 255.0F;
+        float red = (float) (color >> 16 & 255) / 255.0F;
+        float green = (float) (color >> 8 & 255) / 255.0F;
+        float blue = (float) (color & 255) / 255.0F;
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.color(red, green, blue, alpha);
+
+        bufferBuilder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+
+        bufferBuilder.pos(x0, y0, 0.0D).endVertex();
+        bufferBuilder.pos(x1, y1, 0.0D).endVertex();
+
+        tessellator.draw();
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+    }
+
     public static int colorToInt(Color color) {
         return (color.getAlpha() << 24) & 255 | (color.getRed() << 16) & 255 | (color.getGreen() << 8) & 255 | color.getBlue() & 255;
     }
