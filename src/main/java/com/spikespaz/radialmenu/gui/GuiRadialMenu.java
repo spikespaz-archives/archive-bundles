@@ -71,10 +71,10 @@ public class GuiRadialMenu extends GuiScreen {
 //        this.drawCenteredLabel("Radial Menu");
     }
 
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
-    }
+//    @Override
+//    public boolean doesGuiPauseGame() {
+//        return false;
+//    }
 
     private void drawCenteredLabel(String label) {
         final int boxWidth = this.fontRenderer.getStringWidth(label) + ConfigHandler.getLabelPaddingX() * 2;
