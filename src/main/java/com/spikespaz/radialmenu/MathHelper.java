@@ -24,4 +24,16 @@ public class MathHelper {
         start = normAngle(start);
         return (normAngle(normAngle(mid) - start) < normAngle(normAngle(end) - start));
     }
+
+    public static double[] centroid(double[][] vertices) {
+        double sumX = 0;
+        double sumY = 0;
+
+        for (double[] vertex : vertices) {
+            sumX += vertex[0];
+            sumY += vertex[1];
+        }
+
+        return new double[]{sumX / vertices.length, sumY / vertices.length};
+    }
 }

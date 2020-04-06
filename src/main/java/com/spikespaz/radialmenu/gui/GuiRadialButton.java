@@ -15,6 +15,7 @@ public class GuiRadialButton extends GuiButton {
     public int sliceNum;
     public int color;
     public int hoverColor;
+    public double[] centroid;
 
     public GuiRadialButton(int buttonId, int radius, int deadRadius, int thickness, int sliceCount, int sliceNum, int color, int hoverColor) {
         this(buttonId, radius, deadRadius, thickness, color, hoverColor);
@@ -61,6 +62,9 @@ public class GuiRadialButton extends GuiButton {
         final double y3 = cy + Math.cos(esa) * ipr;
 
         double[][] vertices = new double[][]{{x0, y0}, {x1, y1}, {x2, y2}, {x3, y3}};
+
+        this.centroid = MathHelper.centroid(vertices);
+
         RenderHelper.drawPoly(vertices, this.hovered ? this.hoverColor : this.color);
 
         // Uncomment to draw points in red
@@ -68,6 +72,9 @@ public class GuiRadialButton extends GuiButton {
 //        RenderHelper.drawCircle(x1, y1, 2D, 10, 0xFFFF0000);
 //        RenderHelper.drawCircle(x2, y2, 2D, 10, 0xFFFF0000);
 //        RenderHelper.drawCircle(x3, y3, 2D, 10, 0xFFFF0000);
+
+        // Uncomment to draw the a dot in the center of each button
+        RenderHelper.drawCircle(this.centroid[0], this.centroid[1], 5, 10, 0xFF00FFFF);
 
         this.mouseDragged(mc, mouseX, mouseY);
     }
