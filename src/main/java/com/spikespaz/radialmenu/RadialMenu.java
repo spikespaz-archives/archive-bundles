@@ -1,28 +1,16 @@
 package com.spikespaz.radialmenu;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = RadialMenu.MOD_ID, clientSideOnly = true, canBeDeactivated = true, useMetadata = true)
+@Mod(modid = RadialMenu.MOD_ID, name = RadialMenu.MOD_NAME, version = RadialMenu.MOD_VERSION, clientSideOnly = true, canBeDeactivated = true)
 public class RadialMenu {
     public static final String MOD_ID = "radialmenu";
-    public static String MOD_NAME;
-    public static String MOD_VERSION;
-
-    static {
-        for (ModContainer mod : Loader.instance().getModList())
-            if (mod.getModId().equals(MOD_ID)) {
-                MOD_NAME = mod.getName();
-                MOD_VERSION = mod.getVersion();
-
-                break;
-            }
-    }
+    public static final String MOD_NAME = "@MOD_NAME@";
+    public static final String MOD_VERSION = "@MOD_VERSION@";
 
     @Mod.Instance(MOD_ID)
     public static RadialMenu INSTANCE;

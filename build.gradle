@@ -17,7 +17,6 @@ apply plugin: "net.minecraftforge.gradle.forge"
 
 version = modVersion
 group = modGroup
-archivesBaseName = modBaseName
 
 minecraft {
     version = project.forgeVersion
@@ -30,7 +29,13 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = project.mcpVersion
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
+    replace '@MOD_NAME@', modName
+    replace '@MOD_VERSION@', modVersion
+    replaceIn 'RadialMenu.java'
 }
+
+archivesBaseName = modArtifact + "-" + project.minecraft.version
 
 repositories {
     mavenCentral()
