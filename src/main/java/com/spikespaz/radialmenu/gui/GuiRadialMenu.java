@@ -1,32 +1,23 @@
 package com.spikespaz.radialmenu.gui;
 
-import mcp.MethodsReturnNonnullByDefault;
+import com.spikespaz.radialmenu.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class GuiRadialMenu extends GuiScreen {
-    private final int CIRCLE_RADIUS = 50;
-    private final int DEAD_RADIUS = 30;
-    private final int LABEL_BG_COLOR = 0xCC000000;
-    private final int LABEL_TEXT_COLOR = 0xFFFFFFFF;
-    private final int LABEL_PADDING_X = 4;
-    private final int LABEL_PADDING_Y = 4;
-    private final int BUTTON_BG_COLOR = 0xCC000000;
-    private final int BUTTON_BG_HOVER_COLOR = 0xCCFFFFFF;
-    private final int BUTTON_THICKNESS = 30;
-
     public GuiRadialMenu(Minecraft mc) {
         ScaledResolution scaledRes = new ScaledResolution(mc);
         this.setWorldAndResolution(mc, scaledRes.getScaledWidth(), scaledRes.getScaledHeight());
     }
 
     @Override
-    @MethodsReturnNonnullByDefault
+    @Nonnull
     @ParametersAreNonnullByDefault
     protected <T extends GuiButton> T addButton(T newButton) {
         this.buttonList.add(newButton);
@@ -42,15 +33,15 @@ public class GuiRadialMenu extends GuiScreen {
 
     @Override
     public void initGui() {
-        this.addButton(new GuiRadialButton(0, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-        this.addButton(new GuiRadialButton(1, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-        this.addButton(new GuiRadialButton(2, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-        this.addButton(new GuiRadialButton(3, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-        this.addButton(new GuiRadialButton(4, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-        this.addButton(new GuiRadialButton(5, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-        this.addButton(new GuiRadialButton(6, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-        this.addButton(new GuiRadialButton(7, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
-        this.addButton(new GuiRadialButton(8, this.CIRCLE_RADIUS, this.DEAD_RADIUS, this.BUTTON_THICKNESS, this.BUTTON_BG_COLOR, this.BUTTON_BG_HOVER_COLOR));
+        this.addButton(new GuiRadialButton(0, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        this.addButton(new GuiRadialButton(1, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        this.addButton(new GuiRadialButton(2, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        this.addButton(new GuiRadialButton(3, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        this.addButton(new GuiRadialButton(4, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        this.addButton(new GuiRadialButton(5, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        this.addButton(new GuiRadialButton(6, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        this.addButton(new GuiRadialButton(7, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        this.addButton(new GuiRadialButton(8, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
     }
 
     @Override
@@ -86,16 +77,16 @@ public class GuiRadialMenu extends GuiScreen {
     }
 
     private void drawCenteredLabel(String label) {
-        final int boxWidth = this.fontRenderer.getStringWidth(label) + this.LABEL_PADDING_X * 2;
-        final int boxHeight = this.fontRenderer.FONT_HEIGHT + this.LABEL_PADDING_Y * 2;
+        final int boxWidth = this.fontRenderer.getStringWidth(label) + ConfigHandler.getLabelPaddingX() * 2;
+        final int boxHeight = this.fontRenderer.FONT_HEIGHT + ConfigHandler.getLabelPaddingY() * 2;
 
         drawRect((this.width - boxWidth) / 2,
                 (this.height - boxHeight) / 2,
                 (this.width + boxWidth) / 2,
                 (this.height + boxHeight) / 2,
-                this.LABEL_BG_COLOR);
+                ConfigHandler.getLabelBgColor());
 
-        this.drawCenteredString(this.mc.fontRenderer, label, this.width / 2, (this.height - this.mc.fontRenderer.FONT_HEIGHT) / 2, this.LABEL_TEXT_COLOR);
+        this.drawCenteredString(this.mc.fontRenderer, label, this.width / 2, (this.height - this.mc.fontRenderer.FONT_HEIGHT) / 2, ConfigHandler.getLabelTextColor());
     }
 
     @Override
