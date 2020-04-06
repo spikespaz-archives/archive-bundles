@@ -1,10 +1,13 @@
 package com.spikespaz.radialmenu.gui;
 
 import com.spikespaz.radialmenu.ConfigHandler;
+import com.spikespaz.radialmenu.KeyBindings;
+import com.spikespaz.radialmenu.RadialMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
@@ -46,8 +49,16 @@ public class GuiRadialMenu extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        for (GuiButton button : this.buttonList)
+        for (GuiButton button : this.buttonList) {
             button.drawButton(this.mc, mouseX, mouseY, partialTicks);
+
+            if (button.isMouseOver()) {
+                if (button.displayString.isEmpty())
+                    this.drawCenteredLabel(I18n.format("gui." + RadialMenu.MOD_ID + ".unassigned"), ConfigHandler.getLabelTextEmptyColor());
+                else
+                    this.drawCenteredLabel(I18n.format(button.displayString), ConfigHandler.getLabelTextColor());
+            }
+        }
 
 //        final ScaledResolution scaledRes = new ScaledResolution(mc);
 
@@ -67,8 +78,6 @@ public class GuiRadialMenu extends GuiScreen {
         // Uncomment to draw a line to the mouse
 //        final double mouseAngle = MathHelper.normAngle(Math.atan2(mouseX - cx, mouseY - cy));
 //        RenderHelper.drawLine(cx, cy, cx + Math.sin(mouseAngle) * 2000, cy + Math.cos(mouseAngle) * 2000, 0xFF00FF00);
-
-//        this.drawCenteredLabel("Radial Menu");
     }
 
 //    @Override
@@ -76,7 +85,7 @@ public class GuiRadialMenu extends GuiScreen {
 //        return false;
 //    }
 
-    private void drawCenteredLabel(String label) {
+    private void drawCenteredLabel(String label, int color) {
         final int boxWidth = this.fontRenderer.getStringWidth(label) + ConfigHandler.getLabelPaddingX() * 2;
         final int boxHeight = this.fontRenderer.FONT_HEIGHT + ConfigHandler.getLabelPaddingY() * 2;
 
@@ -86,19 +95,16 @@ public class GuiRadialMenu extends GuiScreen {
                 (this.height + boxHeight) / 2,
                 ConfigHandler.getLabelBgColor());
 
-        this.drawCenteredString(this.mc.fontRenderer, label, this.width / 2, (this.height - this.mc.fontRenderer.FONT_HEIGHT) / 2, ConfigHandler.getLabelTextColor());
+        this.drawCenteredString(this.mc.fontRenderer, label, this.width / 2, (this.height - this.mc.fontRenderer.FONT_HEIGHT) / 2, color);
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        switch (keyCode) {
-            case Keyboard.KEY_ESCAPE:
-            case Keyboard.KEY_X:
-                this.mc.displayGuiScreen(null);
-                if (this.mc.currentScreen == null)
-                    this.mc.setIngameFocus();
-                break;
-            default:
+        if (keyCode == Keyboard.KEY_ESCAPE || keyCode == KeyBindings.openMenu0.getKeyCode()) {
+            this.mc.displayGuiScreen(null);
+
+            if (this.mc.currentScreen == null)
+                this.mc.setIngameFocus();
         }
     }
 }

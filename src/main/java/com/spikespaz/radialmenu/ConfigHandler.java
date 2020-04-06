@@ -27,6 +27,10 @@ public class ConfigHandler {
     @Config.Comment({"Text color of the label in the center of the radial menu.", "ARGB in hexadecimal format (AARRGGBB)."})
     public static String labelTextColor = "FFFFFFFF";
 
+    @Config.LangKey(LANG_KEY_PREFIX + ".label_text_empty_color")
+    @Config.Comment({"Text color of the label in the center of the radial menu when it is empty (button unassigned).", "ARGB in hexadecimal format (AARRGGBB)."})
+    public static String labelTextEmptyColor = "FFFF0000";
+
     @Getter
     @Config.LangKey(LANG_KEY_PREFIX + ".label_padding_x")
     @Config.Comment("Horizontal padding on the left and right of the text for the label in the center of the radial menu.")
@@ -56,6 +60,10 @@ public class ConfigHandler {
 
     public static int getLabelTextColor() {
         return (int) Long.parseLong(labelTextColor, 16);
+    }
+
+    public static int getLabelTextEmptyColor() {
+        return (int) Long.parseLong(labelTextEmptyColor, 16);
     }
 
     public static int getButtonBgColor() {
