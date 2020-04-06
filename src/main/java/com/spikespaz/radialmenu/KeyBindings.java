@@ -22,10 +22,11 @@ public class KeyBindings {
     @SneakyThrows
     public static void register() {
         for (Field field : KeyBindings.class.getDeclaredFields()) {
-            if (field.getType() == KeyBinding.class) {
-                field.setAccessible(true);
-                ClientRegistry.registerKeyBinding((KeyBinding) field.get(null));
-            }
+            if (field.getType() != KeyBinding.class)
+                continue;
+
+            field.setAccessible(true);
+            ClientRegistry.registerKeyBinding((KeyBinding) field.get(null));
         }
     }
 }
