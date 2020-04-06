@@ -21,8 +21,7 @@ public class RadialMenu {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        KeyBindings.initialize();
-        KeyBindings.register();
+        KeyBindings.registerAll();
     }
 
     @Mod.EventHandler
