@@ -4,10 +4,14 @@ import com.spikespaz.radialmenu.MathHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.item.Item;
+import org.lwjgl.input.Keyboard;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class GuiRadialButton extends GuiButton {
+    private static Minecraft mc = Minecraft.getMinecraft();
     public int radius;
     public int deadRadius;
     public int thickness;
@@ -16,6 +20,8 @@ public class GuiRadialButton extends GuiButton {
     public int color;
     public int hoverColor;
     public double[] centroid;
+    public Item itemIcon;
+    public KeyBinding keyBinding;
 
     public GuiRadialButton(int buttonId, int radius, int deadRadius, int thickness, int sliceCount, int sliceNum, int color, int hoverColor) {
         this(buttonId, radius, deadRadius, thickness, color, hoverColor);
@@ -77,6 +83,9 @@ public class GuiRadialButton extends GuiButton {
         RenderHelper.drawCircle(this.centroid[0], this.centroid[1], 5, 10, 0xFF00FFFF);
 
         this.mouseDragged(mc, mouseX, mouseY);
+
+        if (this.id == 0)
+            System.out.println(this.displayString);
     }
 
     @Override
@@ -103,5 +112,20 @@ public class GuiRadialButton extends GuiButton {
     @Override
     public boolean isMouseOver() {
         return this.hovered;
+    }
+
+    @Override
+    public void mouseReleased(int mouseX, int mouseY) {
+        GuiRadialMenu parent = (GuiRadialMenu) mc.currentScreen;
+
+        if (keyBinding == null || Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
+            mc.displayGuiScreen(new GuiControlSelect(mc, parent, result -> this.setKeyBinding((KeyBinding) result)));
+        }
+    }
+
+    public void setKeyBinding(KeyBinding binding) {
+        this.displayString = binding.getKeyDescription();
+        this.keyBinding = binding;
+        System.out.println("Set key binding: " + this.displayString);
     }
 }

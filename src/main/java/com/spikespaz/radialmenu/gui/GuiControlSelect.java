@@ -2,6 +2,7 @@ package com.spikespaz.radialmenu.gui;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.spikespaz.radialmenu.Utilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -19,10 +20,12 @@ public class GuiControlSelect extends GuiScreen {
     private GuiButton buttonConfirm;
     private KeyBinding selected;
     private ControlList list;
+    private Utilities.ICallback<KeyBinding> callback;
 
-    public GuiControlSelect(Minecraft mc, GuiScreen parentScreen) {
+    public GuiControlSelect(Minecraft mc, GuiScreen parentScreen, Utilities.ICallback callback) {
         this.mc = mc;
         this.parentScreen = parentScreen;
+        this.callback = callback;
     }
 
     public void initGui() {
@@ -45,6 +48,7 @@ public class GuiControlSelect extends GuiScreen {
                     this.mc.displayGuiScreen(this.parentScreen);
                     break;
                 case 201: // Done
+                    this.callback.resolve(this.selected);
                     this.mc.displayGuiScreen(this.parentScreen);
                     break;
                 default:
