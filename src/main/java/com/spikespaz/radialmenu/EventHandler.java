@@ -36,9 +36,7 @@ public class EventHandler {
 
     @SubscribeEvent
     public void onEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (!event.getModID().equals(RadialMenu.MOD_ID))
-            return;
-
-        ConfigManager.sync(RadialMenu.MOD_ID, Config.Type.INSTANCE);
+        if (event.getModID().equals(RadialMenu.MOD_ID))
+            ConfigManager.sync(RadialMenu.MOD_ID, Config.Type.INSTANCE);
     }
 }
