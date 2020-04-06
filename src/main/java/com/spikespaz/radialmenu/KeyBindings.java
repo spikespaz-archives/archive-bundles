@@ -16,7 +16,7 @@ public class KeyBindings {
     public static KeyBinding openMenu0;
 
     public static void initialize() {
-        openMenu0 = new KeyBinding(LANG_PREFIX + ":open_menu_0", KeyConflictContext.IN_GAME, Keyboard.KEY_X, CATEGORY);
+        openMenu0 = new KeyBinding(LANG_PREFIX + ".open_menu.0", KeyConflictContext.IN_GAME, Keyboard.KEY_X, CATEGORY);
     }
 
     @SneakyThrows
