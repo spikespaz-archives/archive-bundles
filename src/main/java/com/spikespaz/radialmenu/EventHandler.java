@@ -1,7 +1,6 @@
 package com.spikespaz.radialmenu;
 
 import com.spikespaz.radialmenu.gui.GuiRadialMenu;
-import com.spikespaz.radialmenu.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.config.Config;
@@ -13,6 +12,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@Mod.EventBusSubscriber(modid = RadialMenu.MOD_ID)
 public class EventHandler {
     private static final Minecraft mc = Minecraft.getMinecraft();
     private boolean openGuiKeyPressed = false;
@@ -37,5 +37,13 @@ public class EventHandler {
     @SubscribeEvent
     public void onEvent(InputEvent.KeyInputEvent event) {
         this.openGuiKeyPressed = KeyBindings.openMenu0.isPressed();
+    }
+
+    @SubscribeEvent
+    public void onEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (!event.getModID().equals(RadialMenu.MOD_ID))
+            return;
+
+        ConfigManager.sync(RadialMenu.MOD_ID, Config.Type.INSTANCE);
     }
 }
