@@ -1,6 +1,8 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
+
         maven {
             name = "forge"
             url = "https://files.minecraftforge.net/maven"
@@ -35,6 +37,11 @@ repositories {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
 
 processResources {
