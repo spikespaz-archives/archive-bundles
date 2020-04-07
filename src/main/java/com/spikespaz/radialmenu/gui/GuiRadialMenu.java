@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.Item;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
@@ -37,14 +38,23 @@ public class GuiRadialMenu extends GuiScreen {
     @Override
     public void initGui() {
         this.addButton(new GuiRadialButton(0, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        ((GuiRadialButton) this.buttonList.get(0)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
         this.addButton(new GuiRadialButton(1, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        ((GuiRadialButton) this.buttonList.get(1)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
         this.addButton(new GuiRadialButton(2, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        ((GuiRadialButton) this.buttonList.get(2)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
         this.addButton(new GuiRadialButton(3, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        ((GuiRadialButton) this.buttonList.get(3)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
         this.addButton(new GuiRadialButton(4, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        ((GuiRadialButton) this.buttonList.get(4)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
         this.addButton(new GuiRadialButton(5, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        ((GuiRadialButton) this.buttonList.get(5)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
         this.addButton(new GuiRadialButton(6, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        ((GuiRadialButton) this.buttonList.get(6)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
         this.addButton(new GuiRadialButton(7, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        ((GuiRadialButton) this.buttonList.get(7)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
         this.addButton(new GuiRadialButton(8, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        ((GuiRadialButton) this.buttonList.get(8)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
     }
 
     @Override

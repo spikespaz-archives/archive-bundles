@@ -4,14 +4,17 @@ import com.spikespaz.radialmenu.MathHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class GuiRadialButton extends GuiButton {
-    private static Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = Minecraft.getMinecraft();
+    protected final RenderItem itemRender;
     public int radius;
     public int deadRadius;
     public int thickness;
@@ -20,18 +23,18 @@ public class GuiRadialButton extends GuiButton {
     public int color;
     public int hoverColor;
     public double[] centroid;
-    public Item itemIcon;
+    protected ItemStack itemIcon;
     public KeyBinding keyBinding;
 
     public GuiRadialButton(int buttonId, int radius, int deadRadius, int thickness, int sliceCount, int sliceNum, int color, int hoverColor) {
         this(buttonId, radius, deadRadius, thickness, color, hoverColor);
-        this.thickness = thickness;
         this.sliceCount = sliceCount;
         this.sliceNum = sliceNum;
     }
 
     public GuiRadialButton(int buttonId, int radius, int deadRadius, int thickness, int color, int hoverColor) {
         super(buttonId, 0, 0, "");
+        this.itemRender = mc.getRenderItem();
         this.id = buttonId;
         this.radius = radius;
         this.deadRadius = deadRadius;
@@ -80,12 +83,15 @@ public class GuiRadialButton extends GuiButton {
 //        RenderHelper.drawCircle(x3, y3, 2D, 10, 0xFFFF0000);
 
         // Uncomment to draw the a dot in the center of each button
-        RenderHelper.drawCircle(this.centroid[0], this.centroid[1], 5, 10, 0xFF00FFFF);
+//        RenderHelper.drawCircle(this.centroid[0], this.centroid[1], 5, 10, 0xFF00FFFF);
+
+        if (this.itemIcon != null) {
+            net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
+            this.itemRender.renderItemIntoGUI(itemIcon, (int) this.centroid[0] - 8, (int) this.centroid[1] - 8);
+            net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
+        }
 
         this.mouseDragged(mc, mouseX, mouseY);
-
-        if (this.id == 0)
-            System.out.println(this.displayString);
     }
 
     @Override
@@ -127,5 +133,9 @@ public class GuiRadialButton extends GuiButton {
         this.displayString = binding.getKeyDescription();
         this.keyBinding = binding;
         System.out.println("Set key binding: " + this.displayString);
+    }
+
+    public void setItemIcon(Item item) {
+        this.itemIcon = new ItemStack(item);
     }
 }
