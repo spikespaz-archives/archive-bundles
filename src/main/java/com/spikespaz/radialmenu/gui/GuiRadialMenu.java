@@ -4,11 +4,12 @@ import com.spikespaz.radialmenu.ConfigHandler;
 import com.spikespaz.radialmenu.KeyBindings;
 import com.spikespaz.radialmenu.RadialMenu;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
@@ -37,24 +38,30 @@ public class GuiRadialMenu extends GuiScreen {
 
     @Override
     public void initGui() {
-        this.addButton(new GuiRadialButton(0, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        ((GuiRadialButton) this.buttonList.get(0)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
-        this.addButton(new GuiRadialButton(1, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        ((GuiRadialButton) this.buttonList.get(1)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
-        this.addButton(new GuiRadialButton(2, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        ((GuiRadialButton) this.buttonList.get(2)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
-        this.addButton(new GuiRadialButton(3, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        ((GuiRadialButton) this.buttonList.get(3)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
-        this.addButton(new GuiRadialButton(4, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        ((GuiRadialButton) this.buttonList.get(4)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
-        this.addButton(new GuiRadialButton(5, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        ((GuiRadialButton) this.buttonList.get(5)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
-        this.addButton(new GuiRadialButton(6, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        ((GuiRadialButton) this.buttonList.get(6)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
-        this.addButton(new GuiRadialButton(7, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        ((GuiRadialButton) this.buttonList.get(7)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
-        this.addButton(new GuiRadialButton(8, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        ((GuiRadialButton) this.buttonList.get(8)).setItemIcon(Item.getByNameOrId("minecraft:pumpkin"));
+        GuiRadialButton btn0 = this.addButton(new GuiRadialButton(0, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        btn0.setIcon(new ResourceLocation("quark:textures/emotes/wave.png"));
+        GuiRadialButton btn1 = this.addButton(new GuiRadialButton(1, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        btn1.setIcon(new ResourceLocation("quark:textures/emotes/yes.png"));
+        GuiRadialButton btn2 = this.addButton(new GuiRadialButton(2, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        btn2.setIcon(new ResourceLocation("quark:textures/emotes/no.png"));
+        GuiRadialButton btn3 = this.addButton(new GuiRadialButton(3, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        btn3.setIcon(new ResourceLocation("quark:textures/emotes/clap.png"));
+        GuiRadialButton btn4 = this.addButton(new GuiRadialButton(4, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        btn4.setIcon(new ResourceLocation("quark:textures/emotes/cheer.png"));
+        GuiRadialButton btn5 = this.addButton(new GuiRadialButton(5, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        btn5.setIcon(new ResourceLocation("quark:textures/emotes/salute.png"));
+        GuiRadialButton btn6 = this.addButton(new GuiRadialButton(6, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        btn6.setIcon(new ResourceLocation("quark:textures/emotes/shrug.png"));
+        GuiRadialButton btn7 = this.addButton(new GuiRadialButton(7, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        btn7.setIcon(new ResourceLocation("quark:textures/emotes/point.png"));
+        GuiRadialButton btn8 = this.addButton(new GuiRadialButton(8, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        btn8.setIcon(new ResourceLocation("quark:textures/emotes/think.png"));
+        GuiRadialButton btn9 = this.addButton(new GuiRadialButton(9, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        btn9.setIcon(new ResourceLocation("quark:textures/emotes/facepalm.png"));
+        GuiRadialButton btn10 = this.addButton(new GuiRadialButton(10, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        btn10.setIcon(new ResourceLocation("quark:textures/emotes/weep.png"));
+        GuiRadialButton btn11 = this.addButton(new GuiRadialButton(11, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
+        btn11.setIcon(new ResourceLocation("quark:textures/emotes/headbang.png"));
     }
 
     @Override
@@ -99,7 +106,7 @@ public class GuiRadialMenu extends GuiScreen {
         final int boxWidth = this.fontRenderer.getStringWidth(label) + ConfigHandler.getLabelPaddingX() * 2;
         final int boxHeight = this.fontRenderer.FONT_HEIGHT + ConfigHandler.getLabelPaddingY() * 2;
 
-        drawRect((this.width - boxWidth) / 2,
+        Gui.drawRect((this.width - boxWidth) / 2,
                 (this.height - boxHeight) / 2,
                 (this.width + boxWidth) / 2,
                 (this.height + boxHeight) / 2,

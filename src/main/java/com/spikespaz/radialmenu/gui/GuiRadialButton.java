@@ -2,12 +2,15 @@ package com.spikespaz.radialmenu.gui;
 
 import com.spikespaz.radialmenu.MathHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -24,6 +27,7 @@ public class GuiRadialButton extends GuiButton {
     public int hoverColor;
     public double[] centroid;
     protected ItemStack itemIcon;
+    protected ResourceLocation imageIcon;
     public KeyBinding keyBinding;
 
     public GuiRadialButton(int buttonId, int radius, int deadRadius, int thickness, int sliceCount, int sliceNum, int color, int hoverColor) {
@@ -85,7 +89,11 @@ public class GuiRadialButton extends GuiButton {
         // Uncomment to draw the a dot in the center of each button
 //        RenderHelper.drawCircle(this.centroid[0], this.centroid[1], 5, 10, 0xFF00FFFF);
 
-        if (this.itemIcon != null) {
+        if (this.imageIcon != null) {
+            mc.getTextureManager().bindTexture(this.imageIcon);
+            GlStateManager.color(1, 1, 1);
+            Gui.drawModalRectWithCustomSizedTexture((int) this.centroid[0] - 8, (int) this.centroid[1] - 8, 0, 0, 16, 16, 16, 16);
+        } else if (this.itemIcon != null) {
             net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
             this.itemRender.renderItemIntoGUI(itemIcon, (int) this.centroid[0] - 8, (int) this.centroid[1] - 8);
             net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
@@ -135,7 +143,13 @@ public class GuiRadialButton extends GuiButton {
         System.out.println("Set key binding: " + this.displayString);
     }
 
-    public void setItemIcon(Item item) {
+    public void setIcon(Item item) {
         this.itemIcon = new ItemStack(item);
+        this.imageIcon = null;
+    }
+
+    public void setIcon(ResourceLocation resource) {
+        this.imageIcon = resource;
+        this.itemIcon = null;
     }
 }
