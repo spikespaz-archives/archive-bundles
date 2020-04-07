@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 public class GuiControlSelect extends GuiScreen {
-    private final Minecraft mc;
     private final GuiScreen parentScreen;
-    private GuiButton buttonConfirm;
-    private KeyBinding selected;
-    private ControlList list;
+    protected GuiButton buttonConfirm;
+    protected KeyBinding selected;
+    protected KeyBinding initialSelected;
+    protected ControlList list;
     private Utilities.ICallback<KeyBinding> callback;
 
     public GuiControlSelect(Minecraft mc, GuiScreen parentScreen, Utilities.ICallback callback) {
@@ -48,8 +48,7 @@ public class GuiControlSelect extends GuiScreen {
                     this.mc.displayGuiScreen(this.parentScreen);
                     break;
                 case 201: // Done
-                    this.callback.resolve(this.selected);
-                    this.mc.displayGuiScreen(this.parentScreen);
+                    this.confirmSelection();
                     break;
                 default:
                     this.list.actionPerformed(button);
@@ -61,6 +60,21 @@ public class GuiControlSelect extends GuiScreen {
         this.list.drawScreen(mouseX, mouseY, partialTicks);
         this.drawCenteredString(this.fontRenderer, I18n.format("controls.title"), this.width / 2, 16, 16777215);
         super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+
+    public void confirmSelection() {
+        this.callback.resolve(this.selected);
+        this.mc.displayGuiScreen(this.parentScreen);
+    }
+
+    public void setSelected(KeyBinding binding) {
+        this.selected = binding;
+        this.buttonConfirm.enabled = !binding.equals(this.initialSelected);
+    }
+
+    public void setInitialSelected(KeyBinding binding) {
+        this.initialSelected = binding;
+        this.setSelected(binding);
     }
 
     class ControlList extends GuiSlot {
@@ -90,8 +104,10 @@ public class GuiControlSelect extends GuiScreen {
             if (listCategories.contains(this.listStrings.get(slotIndex)))
                 return;
 
-            GuiControlSelect.this.selected = this.keyBindMap.get(this.listStrings.get(slotIndex));
-            GuiControlSelect.this.buttonConfirm.enabled = true;
+            if (isDoubleClick)
+                GuiControlSelect.this.confirmSelection();
+            else
+                GuiControlSelect.this.setSelected(this.keyBindMap.get(this.listStrings.get(slotIndex)));
         }
 
         protected boolean isSelected(int slotIndex) {
