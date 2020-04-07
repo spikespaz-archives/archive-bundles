@@ -12,16 +12,18 @@ public class ConfigHandler {
     @Getter
     @Config.LangKey(LANG_KEY_PREFIX + ".circle_radius")
     @Config.Comment("The radius of the inside of the radial menu.")
-    public static int circleRadius = 50;
+    @Config.RangeInt(min = 0)
+    public static int circleRadius = 70;
 
     @Getter
     @Config.LangKey(LANG_KEY_PREFIX + ".dead_zone_radius")
     @Config.Comment("The radius of the dead zone that the mouse must pass to highlight a radial button.")
+    @Config.RangeInt(min = 0)
     public static int deadZoneRadius = 30;
 
     @Config.LangKey(LANG_KEY_PREFIX + ".label_bg_color")
     @Config.Comment({"Background color of the label in the center of the radial menu.", "ARGB in hexadecimal format (AARRGGBB)."})
-    public static String labelBgColor = "CC000000";
+    public static String labelBgColor = "AA000000";
 
     @Config.LangKey(LANG_KEY_PREFIX + ".label_text_color")
     @Config.Comment({"Text color of the label in the center of the radial menu.", "ARGB in hexadecimal format (AARRGGBB)."})
@@ -29,29 +31,32 @@ public class ConfigHandler {
 
     @Config.LangKey(LANG_KEY_PREFIX + ".label_text_empty_color")
     @Config.Comment({"Text color of the label in the center of the radial menu when it is empty (button unassigned).", "ARGB in hexadecimal format (AARRGGBB)."})
-    public static String labelTextEmptyColor = "FFFF0000";
+    public static String labelTextEmptyColor = "FFFE3F3F";
 
     @Getter
     @Config.LangKey(LANG_KEY_PREFIX + ".label_padding_x")
     @Config.Comment("Horizontal padding on the left and right of the text for the label in the center of the radial menu.")
+    @Config.RangeInt(min = 0)
     public static int labelPaddingX = 4;
 
     @Getter
     @Config.LangKey(LANG_KEY_PREFIX + ".label_padding_y")
     @Config.Comment("Vertical padding on the top and bottom of the text for the label in the center of the radial menu.")
+    @Config.RangeInt(min = 0)
     public static int labelPaddingY = 4;
 
     @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_color")
     @Config.Comment({"Background color of each radial button.", "ARGB in hexadecimal format (AARRGGBB)."})
-    public static String buttonBgColor = "CC000000";
+    public static String buttonBgColor = "AA000000";
 
     @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_hover_color")
     @Config.Comment({"Background color of each radial button when it is hovered or highlighted.", "ARGB in hexadecimal format (AARRGGBB)."})
-    public static String buttonBgHoverColor = "CCFFFFFF";
+    public static String buttonBgHoverColor = "CCCC0000";
 
     @Getter
     @Config.LangKey(LANG_KEY_PREFIX + ".button_thickness")
     @Config.Comment("Thickness or width of each radial button's trapezoid.")
+    @Config.RangeInt(min = 0)
     public static int buttonThickness = 30;
 
     public static int getLabelBgColor() {
