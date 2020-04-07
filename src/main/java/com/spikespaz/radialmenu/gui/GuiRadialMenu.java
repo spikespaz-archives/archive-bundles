@@ -110,10 +110,10 @@ public class GuiRadialMenu extends GuiScreen {
 //        RenderHelper.drawLine(cx, cy, cx + Math.sin(mouseAngle) * 2000, cy + Math.cos(mouseAngle) * 2000, 0xFF00FF00);
     }
 
-//    @Override
-//    public boolean doesGuiPauseGame() {
-//        return false;
-//    }
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
 
     private void drawCenteredLabel(String label, int color) {
         final int boxWidth = this.fontRenderer.getStringWidth(label) + ConfigHandler.getLabelPaddingX() * 2;
