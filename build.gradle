@@ -39,6 +39,11 @@ archivesBaseName = modArtifact + "-" + project.minecraft.version
 
 repositories {
     mavenCentral()
+
+    maven {
+        name = "blamejared"
+        url = "https://maven.blamejared.com/"
+    }
 }
 
 dependencies {
@@ -47,6 +52,9 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    runtimeOnly "vazkii.autoreglib:AutoRegLib:1.3-33.1"
+    runtimeOnly 'vazkii.quark:Quark:r1.6-179.6'
 }
 
 processResources {
