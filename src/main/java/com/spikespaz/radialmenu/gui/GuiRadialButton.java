@@ -1,6 +1,7 @@
 package com.spikespaz.radialmenu.gui;
 
 import com.spikespaz.radialmenu.MathHelper;
+import com.spikespaz.radialmenu.Utilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -132,15 +133,23 @@ public class GuiRadialButton extends GuiButton {
     public void mouseReleased(int mouseX, int mouseY) {
         GuiRadialMenu parent = (GuiRadialMenu) mc.currentScreen;
 
-        if (keyBinding == null || Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
+        if (this.keyBinding == null || Keyboard.isKeyDown(Keyboard.KEY_LMENU))
             mc.displayGuiScreen(new GuiControlSelect(mc, parent, result -> this.setKeyBinding((KeyBinding) result)));
+        else if (this.keyBinding != null) {
+            Utilities.emitKeyBindEvent(this.keyBinding);
+            mc.displayGuiScreen(null);
+            mc.setIngameFocus();
         }
     }
 
     public void setKeyBinding(KeyBinding binding) {
-        this.displayString = binding.getKeyDescription();
-        this.keyBinding = binding;
-        System.out.println("Set key binding: " + this.displayString);
+        if (binding == null) {
+            this.displayString = "";
+            this.keyBinding = null;
+        } else {
+            this.displayString = binding.getKeyDescription();
+            this.keyBinding = binding;
+        }
     }
 
     public void setIcon(Item item) {
