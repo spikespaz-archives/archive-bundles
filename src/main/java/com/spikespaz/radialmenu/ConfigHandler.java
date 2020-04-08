@@ -71,7 +71,7 @@ public class ConfigHandler {
     @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_hover_opacity")
     @Config.Comment("Background opacity of each radial button when it is hovered or highlighted.")
     @Config.RangeInt(min = 0, max = 1)
-    public static double buttonBgHoverOpacity = 1.0;
+    public static double buttonBgHoverOpacity = 0.75;
 
     @Getter
     @Config.LangKey(LANG_KEY_PREFIX + ".button_thickness")
