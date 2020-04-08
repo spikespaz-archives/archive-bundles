@@ -130,11 +130,21 @@ public class GuiRadialMenu extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == Keyboard.KEY_ESCAPE || keyCode == KeyBindings.openMenu0.getKeyCode()) {
-            this.mc.displayGuiScreen(null);
+        if (keyCode == Keyboard.KEY_ESCAPE || keyCode == KeyBindings.openMenu0.getKeyCode())
+            Utilities.focusGame();
+    }
 
-            if (this.mc.currentScreen == null)
-                this.mc.setIngameFocus();
+    @Override
+    protected void actionPerformed(GuiButton guiButton) {
+        GuiRadialButton button = (GuiRadialButton) guiButton;
+
+        if (button.keyBinding == null || Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
+            GuiControlSelect selectGui = new GuiControlSelect(this.mc, this);
+
+            this.mc.displayGuiScreen(selectGui);
+        } else if (button.keyBinding != null) {
+            Utilities.focusGame();
+            Utilities.emitKeyBindEvent(button.keyBinding);
         }
     }
 }

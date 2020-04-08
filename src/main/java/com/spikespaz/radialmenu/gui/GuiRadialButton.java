@@ -1,7 +1,6 @@
 package com.spikespaz.radialmenu.gui;
 
 import com.spikespaz.radialmenu.MathHelper;
-import com.spikespaz.radialmenu.Utilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -12,7 +11,6 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Keyboard;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -127,20 +125,6 @@ public class GuiRadialButton extends GuiButton {
     @Override
     public boolean isMouseOver() {
         return this.hovered;
-    }
-
-    @Override
-    public void mouseReleased(int mouseX, int mouseY) {
-        GuiRadialMenu parent = (GuiRadialMenu) mc.currentScreen;
-
-        if (this.keyBinding == null || Keyboard.isKeyDown(Keyboard.KEY_LMENU))
-            mc.displayGuiScreen(new GuiControlSelect(mc, parent, result -> this.setKeyBinding((KeyBinding) result)));
-        else if (this.keyBinding != null) {
-            mc.displayGuiScreen(null);
-            mc.setIngameFocus();
-
-            Utilities.emitKeyBindEvent(this.keyBinding);
-        }
     }
 
     public void setKeyBinding(KeyBinding binding) {

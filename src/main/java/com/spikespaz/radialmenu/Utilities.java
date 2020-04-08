@@ -38,4 +38,11 @@ public final class Utilities {
 
         return null;
     }
+
+    public static void focusGame() {
+        mc.displayGuiScreen(null);
+
+        if (mc.currentScreen == null)
+            mc.setIngameFocus();
+    }
 }
