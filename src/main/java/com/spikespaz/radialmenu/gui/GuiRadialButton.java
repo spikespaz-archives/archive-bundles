@@ -136,9 +136,10 @@ public class GuiRadialButton extends GuiButton {
         if (this.keyBinding == null || Keyboard.isKeyDown(Keyboard.KEY_LMENU))
             mc.displayGuiScreen(new GuiControlSelect(mc, parent, result -> this.setKeyBinding((KeyBinding) result)));
         else if (this.keyBinding != null) {
-            Utilities.emitKeyBindEvent(this.keyBinding);
             mc.displayGuiScreen(null);
             mc.setIngameFocus();
+
+            Utilities.emitKeyBindEvent(this.keyBinding);
         }
     }
 

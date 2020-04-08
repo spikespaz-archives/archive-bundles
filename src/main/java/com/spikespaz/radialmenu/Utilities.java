@@ -16,12 +16,19 @@ public final class Utilities {
 
     @SneakyThrows
     public static void emitKeyBindEvent(KeyBinding binding) {
-        final Field field = KeyBinding.class.getDeclaredField("pressTime");
+        final Field pressTime = KeyBinding.class.getDeclaredField("pressTime");
+        final Field pressed = KeyBinding.class.getDeclaredField("pressed");
 
-        field.setAccessible(true);
-        field.set(binding, 1);
+        pressTime.setAccessible(true);
+        pressed.setAccessible(true);
+
+        pressTime.set(binding, 1);
+        pressed.set(binding, true);
 
         FMLCommonHandler.instance().fireKeyInput();
+
+        pressTime.set(binding, 0);
+        pressed.set(binding, false);
     }
 
     public static KeyBinding getKeyBindByName(String name) {
