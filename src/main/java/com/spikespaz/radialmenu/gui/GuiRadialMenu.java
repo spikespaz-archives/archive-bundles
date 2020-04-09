@@ -1,5 +1,6 @@
 package com.spikespaz.radialmenu.gui;
 
+import com.google.common.collect.Lists;
 import com.spikespaz.radialmenu.ConfigHandler;
 import com.spikespaz.radialmenu.KeyBindings;
 import com.spikespaz.radialmenu.RadialMenu;
@@ -10,13 +11,21 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 
 public class GuiRadialMenu extends GuiScreen {
+    public static List<KeyBinding> keyBindings = Lists.newArrayList();
+    public static List<Object> buttonIcons = Lists.newArrayList();
+
     public GuiRadialMenu(Minecraft mc) {
         ScaledResolution scaledRes = new ScaledResolution(mc);
         this.setWorldAndResolution(mc, scaledRes.getScaledWidth(), scaledRes.getScaledHeight());
@@ -37,44 +46,65 @@ public class GuiRadialMenu extends GuiScreen {
         return newButton;
     }
 
+    public static void initButtons() {
+        buttonIcons.add(new ResourceLocation("quark:textures/emotes/wave.png"));
+        keyBindings.add(Utilities.getKeyBindByName("quark.emote.wave"));
+        buttonIcons.add(new ResourceLocation("quark:textures/emotes/yes.png"));
+        keyBindings.add(Utilities.getKeyBindByName("quark.emote.yes"));
+        buttonIcons.add(new ResourceLocation("quark:textures/emotes/no.png"));
+        keyBindings.add(Utilities.getKeyBindByName("quark.emote.no"));
+        buttonIcons.add(new ResourceLocation("quark:textures/emotes/clap.png"));
+        keyBindings.add(Utilities.getKeyBindByName("quark.emote.clap"));
+        buttonIcons.add(new ResourceLocation("quark:textures/emotes/cheer.png"));
+        keyBindings.add(Utilities.getKeyBindByName("quark.emote.cheer"));
+        buttonIcons.add(new ResourceLocation("quark:textures/emotes/salute.png"));
+        keyBindings.add(Utilities.getKeyBindByName("quark.emote.salute"));
+        buttonIcons.add(new ResourceLocation("quark:textures/emotes/shrug.png"));
+        keyBindings.add(Utilities.getKeyBindByName("quark.emote.shrug"));
+        buttonIcons.add(new ResourceLocation("quark:textures/emotes/point.png"));
+        keyBindings.add(Utilities.getKeyBindByName("quark.emote.point"));
+        buttonIcons.add(new ResourceLocation("quark:textures/emotes/think.png"));
+        keyBindings.add(Utilities.getKeyBindByName("quark.emote.think"));
+        buttonIcons.add(new ResourceLocation("quark:textures/emotes/facepalm.png"));
+        keyBindings.add(Utilities.getKeyBindByName("quark.emote.facepalm"));
+        buttonIcons.add(new ResourceLocation("quark:textures/emotes/weep.png"));
+        keyBindings.add(Utilities.getKeyBindByName("quark.emote.weep"));
+        buttonIcons.add(new ResourceLocation("quark:textures/emotes/headbang.png"));
+        keyBindings.add(Utilities.getKeyBindByName("quark.emote.headbang"));
+    }
+
+    public static void clearButtons() {
+        buttonIcons.clear();
+        keyBindings.clear();
+    }
+
+    private GuiRadialButton addButton(int id, int circleRadius, int deadZoneRadius, int buttonThickness, int buttonBgColor, int buttonBgHoverColor) {
+        GuiRadialButton button = this.addButton(new GuiRadialButton(id, circleRadius, deadZoneRadius, buttonThickness, buttonBgColor, buttonBgHoverColor));
+
+        button.setKeyBinding(keyBindings.get(id));
+
+        if (Item.class.isAssignableFrom(buttonIcons.get(id).getClass()))
+            button.setIcon((Item) buttonIcons.get(id));
+        else
+            button.setIcon((ResourceLocation) buttonIcons.get(id));
+
+        return button;
+    }
+
     @Override
     public void initGui() {
-        GuiRadialButton btn0 = this.addButton(new GuiRadialButton(0, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        btn0.setIcon(new ResourceLocation("quark:textures/emotes/wave.png"));
-        btn0.setKeyBinding(Utilities.getKeyBindByName("quark.emote.wave"));
-        GuiRadialButton btn1 = this.addButton(new GuiRadialButton(1, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        btn1.setIcon(new ResourceLocation("quark:textures/emotes/yes.png"));
-        btn1.setKeyBinding(Utilities.getKeyBindByName("quark.emote.yes"));
-        GuiRadialButton btn2 = this.addButton(new GuiRadialButton(2, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        btn2.setIcon(new ResourceLocation("quark:textures/emotes/no.png"));
-        btn2.setKeyBinding(Utilities.getKeyBindByName("quark.emote.no"));
-        GuiRadialButton btn3 = this.addButton(new GuiRadialButton(3, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        btn3.setIcon(new ResourceLocation("quark:textures/emotes/clap.png"));
-        btn3.setKeyBinding(Utilities.getKeyBindByName("quark.emote.clap"));
-        GuiRadialButton btn4 = this.addButton(new GuiRadialButton(4, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        btn4.setIcon(new ResourceLocation("quark:textures/emotes/cheer.png"));
-        btn4.setKeyBinding(Utilities.getKeyBindByName("quark.emote.cheer"));
-        GuiRadialButton btn5 = this.addButton(new GuiRadialButton(5, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        btn5.setIcon(new ResourceLocation("quark:textures/emotes/salute.png"));
-        btn5.setKeyBinding(Utilities.getKeyBindByName("quark.emote.salute"));
-        GuiRadialButton btn6 = this.addButton(new GuiRadialButton(6, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        btn6.setIcon(new ResourceLocation("quark:textures/emotes/shrug.png"));
-        btn6.setKeyBinding(Utilities.getKeyBindByName("quark.emote.shrug"));
-        GuiRadialButton btn7 = this.addButton(new GuiRadialButton(7, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        btn7.setIcon(new ResourceLocation("quark:textures/emotes/point.png"));
-        btn7.setKeyBinding(Utilities.getKeyBindByName("quark.emote.point"));
-        GuiRadialButton btn8 = this.addButton(new GuiRadialButton(8, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        btn8.setIcon(new ResourceLocation("quark:textures/emotes/think.png"));
-        btn8.setKeyBinding(Utilities.getKeyBindByName("quark.emote.think"));
-        GuiRadialButton btn9 = this.addButton(new GuiRadialButton(9, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        btn9.setIcon(new ResourceLocation("quark:textures/emotes/facepalm.png"));
-        btn9.setKeyBinding(Utilities.getKeyBindByName("quark.emote.facepalm"));
-        GuiRadialButton btn10 = this.addButton(new GuiRadialButton(10, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        btn10.setIcon(new ResourceLocation("quark:textures/emotes/weep.png"));
-        btn10.setKeyBinding(Utilities.getKeyBindByName("quark.emote.weep"));
-        GuiRadialButton btn11 = this.addButton(new GuiRadialButton(11, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor()));
-        btn11.setIcon(new ResourceLocation("quark:textures/emotes/headbang.png"));
-        btn11.setKeyBinding(Utilities.getKeyBindByName("quark.emote.headbang"));
+        GuiRadialButton btn0 = this.addButton(0, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor());
+        GuiRadialButton btn1 = this.addButton(1, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor());
+        GuiRadialButton btn2 = this.addButton(2, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor());
+        GuiRadialButton btn3 = this.addButton(3, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor());
+        GuiRadialButton btn4 = this.addButton(4, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor());
+        GuiRadialButton btn5 = this.addButton(5, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor());
+        GuiRadialButton btn6 = this.addButton(6, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor());
+        GuiRadialButton btn7 = this.addButton(7, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor());
+        GuiRadialButton btn8 = this.addButton(8, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor());
+        GuiRadialButton btn9 = this.addButton(9, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor());
+        GuiRadialButton btn10 = this.addButton(10, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor());
+        GuiRadialButton btn11 = this.addButton(11, ConfigHandler.getCircleRadius(), ConfigHandler.getDeadZoneRadius(), ConfigHandler.getButtonThickness(), ConfigHandler.getButtonBgColor(), ConfigHandler.getButtonBgHoverColor());
     }
 
     @Override
@@ -140,7 +170,6 @@ public class GuiRadialMenu extends GuiScreen {
 
         if (button.keyBinding == null || Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
             GuiControlSelect selectGui = new GuiControlSelect(this.mc, this);
-
             this.mc.displayGuiScreen(selectGui);
         } else if (button.keyBinding != null) {
             Utilities.focusGame();
