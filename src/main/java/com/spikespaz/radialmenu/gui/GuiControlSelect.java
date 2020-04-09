@@ -103,9 +103,10 @@ public class GuiControlSelect extends GuiScreen {
             if (listCategories.contains(this.listStrings.get(slotIndex)))
                 return;
 
-            if (isDoubleClick)
+            if (isDoubleClick) {
+                GuiControlSelect.this.buttonConfirm.playPressSound(mc.getSoundHandler());
                 GuiControlSelect.this.confirmSelection();
-            else
+            } else
                 GuiControlSelect.this.setSelected(this.keyBindMap.get(this.listStrings.get(slotIndex)));
         }
 
