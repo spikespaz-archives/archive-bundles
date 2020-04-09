@@ -2,6 +2,8 @@ package com.spikespaz.radialmenu.gui;
 
 import com.spikespaz.radialmenu.MathHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
@@ -11,6 +13,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -28,12 +31,8 @@ public class GuiRadialButton extends GuiButton {
     protected ItemStack itemIcon;
     protected ResourceLocation imageIcon;
     public KeyBinding keyBinding;
-
-    public GuiRadialButton(int buttonId, int radius, int deadRadius, int thickness, int sliceCount, int sliceNum, int color, int hoverColor) {
-        this(buttonId, radius, deadRadius, thickness, color, hoverColor);
-        this.sliceCount = sliceCount;
-        this.sliceNum = sliceNum;
-    }
+    private SoundEvent pressSound;
+    private float pressSoundPitch;
 
     public GuiRadialButton(int buttonId, int radius, int deadRadius, int thickness, int color, int hoverColor) {
         super(buttonId, 0, 0, "");
@@ -125,6 +124,16 @@ public class GuiRadialButton extends GuiButton {
     @Override
     public boolean isMouseOver() {
         return this.hovered;
+    }
+
+    public void setPressSound(SoundEvent sound, float pitch) {
+        this.pressSound = sound;
+        this.pressSoundPitch = pitch;
+    }
+
+    @Override
+    public void playPressSound(SoundHandler soundHandlerIn) {
+        soundHandlerIn.playSound(PositionedSoundRecord.getMasterRecord(this.pressSound, this.pressSoundPitch));
     }
 
     public void setKeyBinding(KeyBinding binding) {

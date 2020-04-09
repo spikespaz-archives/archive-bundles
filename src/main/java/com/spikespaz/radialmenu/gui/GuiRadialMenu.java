@@ -81,6 +81,7 @@ public class GuiRadialMenu extends GuiScreen {
     private GuiRadialButton addButton(int id, int circleRadius, int deadZoneRadius, int buttonThickness, int buttonBgColor, int buttonBgHoverColor) {
         GuiRadialButton button = this.addButton(new GuiRadialButton(id, circleRadius, deadZoneRadius, buttonThickness, buttonBgColor, buttonBgHoverColor));
 
+        button.setPressSound(ConfigHandler.getButtonSoundEvent(), (float) ConfigHandler.getButtonSoundPitch());
         button.setKeyBinding(keyBindings.get(id));
 
         if (Item.class.isAssignableFrom(buttonIcons.get(id).getClass()))
@@ -164,9 +165,30 @@ public class GuiRadialMenu extends GuiScreen {
             Utilities.focusGame();
     }
 
+    @Override // Pure vanilla code except play sound
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+        if (mouseButton != 0)
+            return;
+
+        for (GuiButton guibutton : this.buttonList)
+            if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
+                GuiScreenEvent.ActionPerformedEvent.Pre event = new GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.buttonList);
+                if (MinecraftForge.EVENT_BUS.post(event))
+                    break;
+                guibutton = event.getButton();
+                this.selectedButton = guibutton;
+                this.actionPerformed(guibutton);
+                if (this.equals(this.mc.currentScreen))
+                    MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), this.buttonList));
+            }
+    }
+
     @Override
     protected void actionPerformed(GuiButton guiButton) {
         GuiRadialButton button = (GuiRadialButton) guiButton;
+
+        if (ConfigHandler.isButtonSoundEnabled())
+            button.playPressSound(this.mc.getSoundHandler());
 
         if (button.keyBinding == null || Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
             GuiControlSelect selectGui = new GuiControlSelect(this.mc, this);

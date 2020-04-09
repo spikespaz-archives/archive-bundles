@@ -94,7 +94,7 @@ public class ConfigHandler {
     @Getter
     @Config.LangKey(LANG_KEY_PREFIX + ".button_sound_enabled")
     @Config.Comment("Enable button press sound for radial button.")
-    public static boolean buttonSoundEnabled = false;
+    public static boolean buttonSoundEnabled = true;
 
     public static int getLabelBgColor() {
         return (int) (labelBgOpacity * 0xFF) << 24 | (int) Long.parseLong(labelBgColor, 16);
