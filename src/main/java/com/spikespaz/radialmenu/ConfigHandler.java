@@ -1,6 +1,8 @@
 package com.spikespaz.radialmenu;
 
 import lombok.Getter;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.config.Config;
 
 @Config(modid = RadialMenu.MOD_ID, name = "RadialMenu")
@@ -79,6 +81,21 @@ public class ConfigHandler {
     @Config.RangeInt(min = 0)
     public static int buttonThickness = 30;
 
+    @Config.LangKey(LANG_KEY_PREFIX + ".button_sound_event")
+    @Config.Comment("The sound for a radial button when it is pressed.")
+    public static String buttonSoundEvent = "UI_BUTTON_CLICK";
+
+    @Getter
+    @Config.LangKey(LANG_KEY_PREFIX + ".button_sound_pitch")
+    @Config.Comment("The pitch of the sound for a radial button when it is pressed.")
+    @Config.RangeDouble(min = 0.5, max = 2.0)
+    public static double buttonSoundPitch = 2.0;
+
+    @Getter
+    @Config.LangKey(LANG_KEY_PREFIX + ".button_sound_enabled")
+    @Config.Comment("Enable button press sound for radial button.")
+    public static boolean buttonSoundEnabled = false;
+
     public static int getLabelBgColor() {
         return (int) (labelBgOpacity * 255) << 24 | (int) Long.parseLong(labelBgColor, 16);
     }
@@ -97,5 +114,15 @@ public class ConfigHandler {
 
     public static int getButtonBgHoverColor() {
         return (int) (buttonBgHoverOpacity * 255) << 24 | (int) Long.parseLong(buttonBgHoverColor, 16);
+    }
+
+    public static SoundEvent getButtonSoundEvent() {
+        try {
+            SoundEvents.class.getDeclaredField(buttonSoundEvent);
+            return (SoundEvent) SoundEvents.class.getDeclaredField(buttonSoundEvent).get(null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+            return SoundEvents.ENTITY_CHICKEN_EGG;
+        }
     }
 }

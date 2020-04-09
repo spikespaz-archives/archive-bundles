@@ -16,3 +16,6 @@ config.radialmenu.button_bg_opacity=Button Background Opacity
 config.radialmenu.button_bg_hover_color=Hovered Button Background Color
 config.radialmenu.button_bg_hover_opacity=Hovered Button Background Opacity
 config.radialmenu.button_thickness=Button Thickness
+config.radialmenu.button_sound_event=Button Sound Event
+config.radialmenu.button_sound_pitch=Button Sound Pitch
+config.radialmenu.button_sound_enabled=Button Sound Enabled
