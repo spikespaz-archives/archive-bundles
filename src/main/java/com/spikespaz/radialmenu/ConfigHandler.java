@@ -29,7 +29,7 @@ public class ConfigHandler {
 
     @Config.LangKey(LANG_KEY_PREFIX + ".label_bg_opacity")
     @Config.Comment("Background opacity of the label in the center of the radial menu.")
-    @Config.RangeInt(min = 0, max = 1)
+    @Config.RangeDouble(min = 0, max = 1)
     public static double labelBgOpacity = 0.75;
 
     @Config.LangKey(LANG_KEY_PREFIX + ".label_text_color")
@@ -38,7 +38,7 @@ public class ConfigHandler {
 
     @Config.LangKey(LANG_KEY_PREFIX + ".label_text_opacity")
     @Config.Comment("Text opacity of the label in the center of the radial menu.")
-    @Config.RangeInt(min = 0, max = 1)
+    @Config.RangeDouble(min = 0, max = 1)
     public static double labelTextOpacity = 1.0;
 
     @Config.LangKey(LANG_KEY_PREFIX + ".label_text_empty_color")
@@ -63,7 +63,7 @@ public class ConfigHandler {
 
     @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_opacity")
     @Config.Comment("Background opacity of each radial button.")
-    @Config.RangeInt(min = 0, max = 1)
+    @Config.RangeDouble(min = 0, max = 1)
     public static double buttonBgOpacity = 0.75;
 
     @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_hover_color")
@@ -72,8 +72,8 @@ public class ConfigHandler {
 
     @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_hover_opacity")
     @Config.Comment("Background opacity of each radial button when it is hovered or highlighted.")
-    @Config.RangeInt(min = 0, max = 1)
-    public static double buttonBgHoverOpacity = 0.75;
+    @Config.RangeDouble(min = 0, max = 1)
+    public static double buttonBgHoverOpacity = 1.0;
 
     @Getter
     @Config.LangKey(LANG_KEY_PREFIX + ".button_thickness")
@@ -97,23 +97,23 @@ public class ConfigHandler {
     public static boolean buttonSoundEnabled = false;
 
     public static int getLabelBgColor() {
-        return (int) (labelBgOpacity * 255) << 24 | (int) Long.parseLong(labelBgColor, 16);
+        return (int) (labelBgOpacity * 0xFF) << 24 | (int) Long.parseLong(labelBgColor, 16);
     }
 
     public static int getLabelTextColor() {
-        return (int) (labelTextOpacity * 255) << 24 | (int) Long.parseLong(labelTextColor, 16);
+        return (int) (labelTextOpacity * 0xFF) << 24 | (int) Long.parseLong(labelTextColor, 16);
     }
 
     public static int getLabelTextEmptyColor() {
-        return (int) (labelTextOpacity * 255) << 24 | (int) Long.parseLong(labelTextEmptyColor, 16);
+        return (int) (labelTextOpacity * 0xFF) << 24 | (int) Long.parseLong(labelTextEmptyColor, 16);
     }
 
     public static int getButtonBgColor() {
-        return (int) (buttonBgOpacity * 255) << 24 | (int) Long.parseLong(buttonBgColor, 16);
+        return (int) (buttonBgOpacity * 0xFF) << 24 | (int) Long.parseLong(buttonBgColor, 16);
     }
 
     public static int getButtonBgHoverColor() {
-        return (int) (buttonBgHoverOpacity * 255) << 24 | (int) Long.parseLong(buttonBgHoverColor, 16);
+        return (int) (buttonBgHoverOpacity * 0xFF) << 24 | (int) Long.parseLong(buttonBgHoverColor, 16);
     }
 
     public static SoundEvent getButtonSoundEvent() {
