@@ -33,8 +33,10 @@ public class GuiRadialButton extends GuiButton {
     public KeyBinding keyBinding;
     private SoundEvent pressSound;
     private float pressSoundPitch;
+    private float iconOpacity;
+    private float hoverIconOpacity;
 
-    public GuiRadialButton(int buttonId, int radius, int deadRadius, int thickness, int color, int hoverColor) {
+    public GuiRadialButton(int buttonId, int radius, int deadRadius, int thickness, int color, int hoverColor, float iconOpacity, float hoverIconOpacity) {
         super(buttonId, 0, 0, "");
         this.itemRender = mc.getRenderItem();
         this.id = buttonId;
@@ -43,6 +45,8 @@ public class GuiRadialButton extends GuiButton {
         this.thickness = thickness;
         this.color = color;
         this.hoverColor = hoverColor;
+        this.iconOpacity = iconOpacity;
+        this.hoverIconOpacity = hoverIconOpacity;
     }
 
     @Override

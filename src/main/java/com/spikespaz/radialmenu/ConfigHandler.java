@@ -110,6 +110,18 @@ public final class ConfigHandler {
         public double buttonBgHoverOpacity = 1.0;
 
         @Getter
+        @Config.LangKey(LANG_KEY_PREFIX + ".button_icon_opacity")
+        @Config.Comment("Opacity of each radial button icon.")
+        @Config.RangeDouble(min = 0, max = 1)
+        public double buttonIconOpacity = 1.0;
+
+        @Getter
+        @Config.LangKey(LANG_KEY_PREFIX + ".button_icon_hover_opacity")
+        @Config.Comment("Opacity of each radial button icon when it is hovered or highlighted.")
+        @Config.RangeDouble(min = 0, max = 1)
+        public double buttonIconHoverOpacity = 1.0;
+
+        @Getter
         @Config.LangKey(LANG_KEY_PREFIX + ".button_thickness")
         @Config.Comment("Thickness or width of each radial button's trapezoid.")
         @Config.RangeInt(min = 0)
