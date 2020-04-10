@@ -49,7 +49,10 @@ public final class ConfigHandler {
         public static final LabelOptions INSTANCE = new LabelOptions();
 
         @Config.LangKey(LANG_KEY_PREFIX + ".label_bg_color")
-        @Config.Comment({"Background color of the label in the center of the radial menu.", "RGB in hexadecimal format (RRGGBB)."})
+        @Config.Comment({
+                "Background color of the label in the center of the radial menu.",
+                "RGB in hexadecimal format (RRGGBB)."
+        })
         public String bgColor = "000000";
 
         @Config.LangKey(LANG_KEY_PREFIX + ".label_bg_opacity")
@@ -58,7 +61,10 @@ public final class ConfigHandler {
         public double bgOpacity = 0.75;
 
         @Config.LangKey(LANG_KEY_PREFIX + ".label_text_color")
-        @Config.Comment({"Text color of the label in the center of the radial menu.", "RGB in hexadecimal format (RRGGBB)."})
+        @Config.Comment({
+                "Text color of the label in the center of the radial menu.",
+                "RGB in hexadecimal format (RRGGBB)."
+        })
         public String textColor = "FFFFFF";
 
         @Config.LangKey(LANG_KEY_PREFIX + ".label_text_opacity")
@@ -67,7 +73,10 @@ public final class ConfigHandler {
         public double textOpacity = 1.0;
 
         @Config.LangKey(LANG_KEY_PREFIX + ".label_text_empty_color")
-        @Config.Comment({"Text color of the label in the center of the radial menu when it is empty (button unassigned).", "RGB in hexadecimal format (RRGGBB)."})
+        @Config.Comment({
+                "Text color of the label in the center of the radial menu when it is empty (button unassigned).",
+                "RGB in hexadecimal format (RRGGBB)."
+        })
         public String textEmptyColor = "FE3F3F";
 
         @Getter
@@ -100,7 +109,10 @@ public final class ConfigHandler {
         public static final ButtonOptions INSTANCE = new ButtonOptions();
 
         @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_color")
-        @Config.Comment({"Background color of each radial button.", "RGB in hexadecimal format (RRGGBB)."})
+        @Config.Comment({
+                "Background color of each radial button.",
+                "RGB in hexadecimal format (RRGGBB)."
+        })
         public String bgColor = "000000";
 
         @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_opacity")
@@ -109,7 +121,10 @@ public final class ConfigHandler {
         public double bgOpacity = 0.75;
 
         @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_hover_color")
-        @Config.Comment({"Background color of each radial button when it is hovered or highlighted.", "RGB in hexadecimal format (RRGGBB)."})
+        @Config.Comment({
+                "Background color of each radial button when it is hovered or highlighted.",
+                "RGB in hexadecimal format (RRGGBB)."
+        })
         public String bgHoverColor = "CC0000";
 
         @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_hover_opacity")
