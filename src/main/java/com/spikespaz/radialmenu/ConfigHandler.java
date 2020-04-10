@@ -34,6 +34,14 @@ public final class ConfigHandler {
         @Config.Comment("The radius of the dead zone that the mouse must pass to highlight a radial button.")
         @Config.RangeInt(min = 0)
         public int deadZoneRadius = 30;
+
+        @Getter
+        @Config.LangKey(LANG_KEY_PREFIX + ".toggle_mode_enabled")
+        @Config.Comment({
+                "Whether or not the key binding will toggle the menu, or if the key has to be held.",
+                "If toggle mode is off, the selection will be confirmed where the mouse is over when released."
+        })
+        public boolean toggleModeEnabled = false;
     }
 
     public static final class LabelOptions {

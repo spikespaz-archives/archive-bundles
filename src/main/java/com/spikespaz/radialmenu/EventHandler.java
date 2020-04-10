@@ -2,6 +2,7 @@ package com.spikespaz.radialmenu;
 
 import com.spikespaz.radialmenu.gui.GuiRadialMenu;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -9,11 +10,11 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import org.lwjgl.input.Keyboard;
 
 @Mod.EventBusSubscriber(modid = RadialMenu.MOD_ID)
 public class EventHandler {
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private boolean openGuiKeyPressed = false;
 
     @SubscribeEvent
     public void onEvent(RenderGameOverlayEvent.Pre event) {
@@ -22,16 +23,20 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public void onEvent(RenderGameOverlayEvent.Post event) {
-        if (this.openGuiKeyPressed && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+    public void onEvent(InputEvent.KeyInputEvent event) {
+        if (KeyBindings.openMenu0.isPressed() && mc.currentScreen == null)
             mc.displayGuiScreen(new GuiRadialMenu(mc));
-            this.openGuiKeyPressed = false;
-        }
     }
 
     @SubscribeEvent
-    public void onEvent(InputEvent.KeyInputEvent event) {
-        this.openGuiKeyPressed = KeyBindings.openMenu0.isPressed();
+    public void onEvent(GuiScreenEvent.KeyboardInputEvent event) {
+        if (Keyboard.isRepeatEvent() || !(mc.currentScreen instanceof GuiRadialMenu))
+            return;
+
+        boolean openMenu0Released = Keyboard.getEventKey() == KeyBindings.openMenu0.getKeyCode() && !Keyboard.getEventKeyState();
+
+        if (ConfigHandler.GENERAL.isToggleModeEnabled() ^ openMenu0Released)
+            ((GuiRadialMenu) mc.currentScreen).closeGui();
     }
 
     @SubscribeEvent

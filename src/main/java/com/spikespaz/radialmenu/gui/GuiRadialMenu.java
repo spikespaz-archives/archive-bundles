@@ -2,7 +2,6 @@ package com.spikespaz.radialmenu.gui;
 
 import com.google.common.collect.Lists;
 import com.spikespaz.radialmenu.ConfigHandler;
-import com.spikespaz.radialmenu.KeyBindings;
 import com.spikespaz.radialmenu.RadialMenu;
 import com.spikespaz.radialmenu.Utilities;
 import net.minecraft.client.Minecraft;
@@ -25,6 +24,7 @@ import java.util.List;
 public class GuiRadialMenu extends GuiScreen {
     public static List<KeyBinding> keyBindings = Lists.newArrayList();
     public static List<Object> buttonIcons = Lists.newArrayList();
+    private GuiRadialButton hoveredButton;
 
     public GuiRadialMenu(Minecraft mc) {
         ScaledResolution scaledRes = new ScaledResolution(mc);
@@ -161,8 +161,6 @@ public class GuiRadialMenu extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == Keyboard.KEY_ESCAPE || keyCode == KeyBindings.openMenu0.getKeyCode())
-            Utilities.focusGame();
     }
 
     @Override // Pure vanilla code except play sound
@@ -197,5 +195,16 @@ public class GuiRadialMenu extends GuiScreen {
             Utilities.focusGame();
             Utilities.emitKeyBindEvent(button.keyBinding);
         }
+    }
+
+    public void closeGui() {
+        if (!ConfigHandler.GENERAL.isToggleModeEnabled())
+            for (GuiButton button : this.buttonList)
+                if (button.isMouseOver()) {
+                    this.actionPerformed(button);
+                    break;
+                }
+
+        Utilities.focusGame();
     }
 }
