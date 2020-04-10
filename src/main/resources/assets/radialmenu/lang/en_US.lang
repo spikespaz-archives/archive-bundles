@@ -1,7 +1,10 @@
 gui.radialmenu.unassigned=Unassigned
 key.radialmenu.category=Radial Menu
 key.radialmenu.open_menu.0=Open Radial Menu
-config.radialmenu.title=Radial Menu Configuration
+config.radialmenu.category.general=General Options
+config.radialmenu.category.label=Label Options
+config.radialmenu.category.button=Button Options
+config.radialmenu.category.sound=Sound Options
 config.radialmenu.circle_radius=Inner Circle Radius
 config.radialmenu.dead_zone_radius=Dead Zone Radius
 config.radialmenu.label_bg_color=Label Background Color
