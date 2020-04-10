@@ -94,18 +94,18 @@ public class GuiRadialMenu extends GuiScreen {
 
     @Override
     public void initGui() {
-        this.addButton(0, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getButtonThickness(), ConfigHandler.BUTTON.getButtonBgColor(), ConfigHandler.BUTTON.getButtonBgHoverColor(), (float) ConfigHandler.BUTTON.getButtonIconOpacity(), (float) ConfigHandler.BUTTON.getButtonIconHoverOpacity());
-        this.addButton(1, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getButtonThickness(), ConfigHandler.BUTTON.getButtonBgColor(), ConfigHandler.BUTTON.getButtonBgHoverColor(), (float) ConfigHandler.BUTTON.getButtonIconOpacity(), (float) ConfigHandler.BUTTON.getButtonIconHoverOpacity());
-        this.addButton(2, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getButtonThickness(), ConfigHandler.BUTTON.getButtonBgColor(), ConfigHandler.BUTTON.getButtonBgHoverColor(), (float) ConfigHandler.BUTTON.getButtonIconOpacity(), (float) ConfigHandler.BUTTON.getButtonIconHoverOpacity());
-        this.addButton(3, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getButtonThickness(), ConfigHandler.BUTTON.getButtonBgColor(), ConfigHandler.BUTTON.getButtonBgHoverColor(), (float) ConfigHandler.BUTTON.getButtonIconOpacity(), (float) ConfigHandler.BUTTON.getButtonIconHoverOpacity());
-        this.addButton(4, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getButtonThickness(), ConfigHandler.BUTTON.getButtonBgColor(), ConfigHandler.BUTTON.getButtonBgHoverColor(), (float) ConfigHandler.BUTTON.getButtonIconOpacity(), (float) ConfigHandler.BUTTON.getButtonIconHoverOpacity());
-        this.addButton(5, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getButtonThickness(), ConfigHandler.BUTTON.getButtonBgColor(), ConfigHandler.BUTTON.getButtonBgHoverColor(), (float) ConfigHandler.BUTTON.getButtonIconOpacity(), (float) ConfigHandler.BUTTON.getButtonIconHoverOpacity());
-        this.addButton(6, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getButtonThickness(), ConfigHandler.BUTTON.getButtonBgColor(), ConfigHandler.BUTTON.getButtonBgHoverColor(), (float) ConfigHandler.BUTTON.getButtonIconOpacity(), (float) ConfigHandler.BUTTON.getButtonIconHoverOpacity());
-        this.addButton(7, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getButtonThickness(), ConfigHandler.BUTTON.getButtonBgColor(), ConfigHandler.BUTTON.getButtonBgHoverColor(), (float) ConfigHandler.BUTTON.getButtonIconOpacity(), (float) ConfigHandler.BUTTON.getButtonIconHoverOpacity());
-        this.addButton(8, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getButtonThickness(), ConfigHandler.BUTTON.getButtonBgColor(), ConfigHandler.BUTTON.getButtonBgHoverColor(), (float) ConfigHandler.BUTTON.getButtonIconOpacity(), (float) ConfigHandler.BUTTON.getButtonIconHoverOpacity());
-        this.addButton(9, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getButtonThickness(), ConfigHandler.BUTTON.getButtonBgColor(), ConfigHandler.BUTTON.getButtonBgHoverColor(), (float) ConfigHandler.BUTTON.getButtonIconOpacity(), (float) ConfigHandler.BUTTON.getButtonIconHoverOpacity());
-        this.addButton(10, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getButtonThickness(), ConfigHandler.BUTTON.getButtonBgColor(), ConfigHandler.BUTTON.getButtonBgHoverColor(), (float) ConfigHandler.BUTTON.getButtonIconOpacity(), (float) ConfigHandler.BUTTON.getButtonIconHoverOpacity());
-        this.addButton(11, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getButtonThickness(), ConfigHandler.BUTTON.getButtonBgColor(), ConfigHandler.BUTTON.getButtonBgHoverColor(), (float) ConfigHandler.BUTTON.getButtonIconOpacity(), (float) ConfigHandler.BUTTON.getButtonIconHoverOpacity());
+        this.addButton(0, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+        this.addButton(1, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+        this.addButton(2, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+        this.addButton(3, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+        this.addButton(4, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+        this.addButton(5, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+        this.addButton(6, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+        this.addButton(7, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+        this.addButton(8, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+        this.addButton(9, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+        this.addButton(10, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+        this.addButton(11, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
     }
 
     @Override
@@ -115,9 +115,9 @@ public class GuiRadialMenu extends GuiScreen {
 
             if (button.isMouseOver()) {
                 if (button.displayString.isEmpty())
-                    this.drawCenteredLabel(I18n.format("gui." + RadialMenu.MOD_ID + ".unassigned"), ConfigHandler.LABEL.getLabelTextEmptyColor());
+                    this.drawCenteredLabel(I18n.format("gui." + RadialMenu.MOD_ID + ".unassigned"), ConfigHandler.LABEL.getTextEmptyColor());
                 else
-                    this.drawCenteredLabel(I18n.format(button.displayString), ConfigHandler.LABEL.getLabelTextColor());
+                    this.drawCenteredLabel(I18n.format(button.displayString), ConfigHandler.LABEL.getTextColor());
             }
         }
 
@@ -147,14 +147,14 @@ public class GuiRadialMenu extends GuiScreen {
     }
 
     private void drawCenteredLabel(String label, int color) {
-        final int boxWidth = this.fontRenderer.getStringWidth(label) + ConfigHandler.LABEL.getLabelPaddingX() * 2;
-        final int boxHeight = this.fontRenderer.FONT_HEIGHT + ConfigHandler.LABEL.getLabelPaddingY() * 2;
+        final int boxWidth = this.fontRenderer.getStringWidth(label) + ConfigHandler.LABEL.getPaddingX() * 2;
+        final int boxHeight = this.fontRenderer.FONT_HEIGHT + ConfigHandler.LABEL.getPaddingY() * 2;
 
         Gui.drawRect((this.width - boxWidth) / 2,
                 (this.height - boxHeight) / 2,
                 (this.width + boxWidth) / 2,
                 (this.height + boxHeight) / 2,
-                ConfigHandler.LABEL.getLabelBgColor());
+                ConfigHandler.LABEL.getBgColor());
 
         this.drawCenteredString(this.mc.fontRenderer, label, this.width / 2, (this.height - this.mc.fontRenderer.FONT_HEIGHT) / 2, color);
     }

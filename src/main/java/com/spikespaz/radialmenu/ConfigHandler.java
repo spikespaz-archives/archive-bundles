@@ -42,48 +42,48 @@ public final class ConfigHandler {
 
         @Config.LangKey(LANG_KEY_PREFIX + ".label_bg_color")
         @Config.Comment({"Background color of the label in the center of the radial menu.", "RGB in hexadecimal format (RRGGBB)."})
-        public String labelBgColor = "000000";
+        public String bgColor = "000000";
 
         @Config.LangKey(LANG_KEY_PREFIX + ".label_bg_opacity")
         @Config.Comment("Background opacity of the label in the center of the radial menu.")
         @Config.RangeDouble(min = 0, max = 1)
-        public double labelBgOpacity = 0.75;
+        public double bgOpacity = 0.75;
 
         @Config.LangKey(LANG_KEY_PREFIX + ".label_text_color")
         @Config.Comment({"Text color of the label in the center of the radial menu.", "RGB in hexadecimal format (RRGGBB)."})
-        public String labelTextColor = "FFFFFF";
+        public String textColor = "FFFFFF";
 
         @Config.LangKey(LANG_KEY_PREFIX + ".label_text_opacity")
         @Config.Comment("Text opacity of the label in the center of the radial menu.")
         @Config.RangeDouble(min = 0, max = 1)
-        public double labelTextOpacity = 1.0;
+        public double textOpacity = 1.0;
 
         @Config.LangKey(LANG_KEY_PREFIX + ".label_text_empty_color")
         @Config.Comment({"Text color of the label in the center of the radial menu when it is empty (button unassigned).", "RGB in hexadecimal format (RRGGBB)."})
-        public String labelTextEmptyColor = "FE3F3F";
+        public String textEmptyColor = "FE3F3F";
 
         @Getter
         @Config.LangKey(LANG_KEY_PREFIX + ".label_padding_x")
         @Config.Comment("Horizontal padding on the left and right of the text for the label in the center of the radial menu.")
         @Config.RangeInt(min = 0)
-        public int labelPaddingX = 4;
+        public int paddingX = 4;
 
         @Getter
         @Config.LangKey(LANG_KEY_PREFIX + ".label_padding_y")
         @Config.Comment("Vertical padding on the top and bottom of the text for the label in the center of the radial menu.")
         @Config.RangeInt(min = 0)
-        public int labelPaddingY = 4;
+        public int paddingY = 4;
 
-        public int getLabelBgColor() {
-            return (int) (this.labelBgOpacity * 0xFF) << 24 | (int) Long.parseLong(this.labelBgColor, 16);
+        public int getBgColor() {
+            return (int) (this.bgOpacity * 0xFF) << 24 | (int) Long.parseLong(this.bgColor, 16);
         }
 
-        public int getLabelTextColor() {
-            return (int) (this.labelTextOpacity * 0xFF) << 24 | (int) Long.parseLong(this.labelTextColor, 16);
+        public int getTextColor() {
+            return (int) (this.textOpacity * 0xFF) << 24 | (int) Long.parseLong(this.textColor, 16);
         }
 
-        public int getLabelTextEmptyColor() {
-            return (int) (this.labelTextOpacity * 0xFF) << 24 | (int) Long.parseLong(this.labelTextEmptyColor, 16);
+        public int getTextEmptyColor() {
+            return (int) (this.textOpacity * 0xFF) << 24 | (int) Long.parseLong(this.textEmptyColor, 16);
         }
     }
 
@@ -93,46 +93,46 @@ public final class ConfigHandler {
 
         @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_color")
         @Config.Comment({"Background color of each radial button.", "RGB in hexadecimal format (RRGGBB)."})
-        public String buttonBgColor = "000000";
+        public String bgColor = "000000";
 
         @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_opacity")
         @Config.Comment("Background opacity of each radial button.")
         @Config.RangeDouble(min = 0, max = 1)
-        public double buttonBgOpacity = 0.75;
+        public double bgOpacity = 0.75;
 
         @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_hover_color")
         @Config.Comment({"Background color of each radial button when it is hovered or highlighted.", "RGB in hexadecimal format (RRGGBB)."})
-        public String buttonBgHoverColor = "CC0000";
+        public String bgHoverColor = "CC0000";
 
         @Config.LangKey(LANG_KEY_PREFIX + ".button_bg_hover_opacity")
         @Config.Comment("Background opacity of each radial button when it is hovered or highlighted.")
         @Config.RangeDouble(min = 0, max = 1)
-        public double buttonBgHoverOpacity = 1.0;
+        public double bgHoverOpacity = 1.0;
 
         @Getter
         @Config.LangKey(LANG_KEY_PREFIX + ".button_icon_opacity")
         @Config.Comment("Opacity of each radial button icon.")
         @Config.RangeDouble(min = 0, max = 1)
-        public double buttonIconOpacity = 1.0;
+        public double iconOpacity = 1.0;
 
         @Getter
         @Config.LangKey(LANG_KEY_PREFIX + ".button_icon_hover_opacity")
         @Config.Comment("Opacity of each radial button icon when it is hovered or highlighted.")
         @Config.RangeDouble(min = 0, max = 1)
-        public double buttonIconHoverOpacity = 1.0;
+        public double iconHoverOpacity = 1.0;
 
         @Getter
         @Config.LangKey(LANG_KEY_PREFIX + ".button_thickness")
         @Config.Comment("Thickness or width of each radial button's trapezoid.")
         @Config.RangeInt(min = 0)
-        public int buttonThickness = 30;
+        public int thickness = 30;
 
-        public int getButtonBgColor() {
-            return (int) (this.buttonBgOpacity * 0xFF) << 24 | (int) Long.parseLong(this.buttonBgColor, 16);
+        public int getBgColor() {
+            return (int) (this.bgOpacity * 0xFF) << 24 | (int) Long.parseLong(this.bgColor, 16);
         }
 
-        public int getButtonBgHoverColor() {
-            return (int) (this.buttonBgHoverOpacity * 0xFF) << 24 | (int) Long.parseLong(this.buttonBgHoverColor, 16);
+        public int getBgHoverColor() {
+            return (int) (this.bgHoverOpacity * 0xFF) << 24 | (int) Long.parseLong(this.bgHoverColor, 16);
         }
     }
 
