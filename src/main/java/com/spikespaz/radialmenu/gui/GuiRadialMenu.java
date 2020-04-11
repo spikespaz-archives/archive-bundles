@@ -193,7 +193,7 @@ public class GuiRadialMenu extends GuiScreen {
             this.mc.displayGuiScreen(selectGui);
         } else if (button.keyBinding != null) {
             Utilities.focusGame();
-            Utilities.emitKeyBindEvent(button.keyBinding);
+            Utilities.fireKey(button.keyBinding);
         }
     }
 

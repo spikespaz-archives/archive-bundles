@@ -30,7 +30,7 @@ public class GuiControlSelect extends GuiScreen {
 
     public void initGui() {
         this.addButton(new GuiButton(200, this.width / 2 - 155 + 160, this.height - 29, 150, 20, I18n.format("gui.cancel")));
-        this.buttonConfirm = this.addButton(new GuiButton(201, this.width / 2 - 155, this.height - 29, 150, 20, I18n.format("gui.done")));
+        this.buttonConfirm = this.addButton(new GuiButton(201, this.width / 2 - 155, this.height - 29, 150, 20, I18n.format("gui.radialmenu.button.confirm")));
         this.buttonConfirm.enabled = false;
         this.list = new ControlList(this.mc);
         this.list.registerScrollButtons(7, 8);
