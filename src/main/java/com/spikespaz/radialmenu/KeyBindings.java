@@ -12,7 +12,7 @@ public class KeyBindings {
     private static final String LANG_PREFIX = "key." + RadialMenu.MOD_ID;
     private static final String CATEGORY = LANG_PREFIX + ".category";
 
-    public static final KeyBinding openMenu0 = new KeyBinding(LANG_PREFIX + ".open_menu.0", KeyConflictContext.IN_GAME, Keyboard.KEY_X, CATEGORY);
+    public static final KeyBinding OPEN_MENU_0 = new KeyBinding(LANG_PREFIX + ".open_menu.0", KeyConflictContext.IN_GAME, Keyboard.KEY_X, CATEGORY);
 
     @SneakyThrows
     public static void registerAll() {

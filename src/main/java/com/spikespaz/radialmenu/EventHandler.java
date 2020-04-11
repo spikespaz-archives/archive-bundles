@@ -24,8 +24,10 @@ public class EventHandler {
 
     @SubscribeEvent
     public void onEvent(InputEvent.KeyInputEvent event) {
-        if (KeyBindings.openMenu0.isPressed() && mc.currentScreen == null)
+        if (KeyBindings.OPEN_MENU_0.isPressed() && mc.currentScreen == null) {
+            Keyboard.enableRepeatEvents(false);
             mc.displayGuiScreen(new GuiRadialMenu(mc));
+        }
     }
 
     @SubscribeEvent
@@ -33,10 +35,12 @@ public class EventHandler {
         if (Keyboard.isRepeatEvent() || !(mc.currentScreen instanceof GuiRadialMenu))
             return;
 
-        boolean openMenu0Released = Keyboard.getEventKey() == KeyBindings.openMenu0.getKeyCode() && !Keyboard.getEventKeyState();
+        boolean openMenu0Released = Keyboard.getEventKey() == KeyBindings.OPEN_MENU_0.getKeyCode() && !Keyboard.getEventKeyState();
 
-        if (ConfigHandler.GENERAL.isToggleModeEnabled() ^ openMenu0Released)
+        if (ConfigHandler.GENERAL.isToggleModeEnabled() ^ openMenu0Released) {
             ((GuiRadialMenu) mc.currentScreen).closeGui();
+            Keyboard.enableRepeatEvents(true);
+        }
     }
 
     @SubscribeEvent
