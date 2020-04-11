@@ -115,7 +115,7 @@ public class GuiRadialMenu extends GuiScreen {
 
             if (button.isMouseOver()) {
                 if (button.displayString.isEmpty())
-                    this.drawCenteredLabel(I18n.format("gui." + RadialMenu.MOD_ID + ".unassigned"), ConfigHandler.LABEL.getTextEmptyColor());
+                    this.drawCenteredLabel(I18n.format("gui." + RadialMenu.MOD_ID + ".label.unassigned"), ConfigHandler.LABEL.getTextEmptyColor());
                 else
                     this.drawCenteredLabel(I18n.format(button.displayString), ConfigHandler.LABEL.getTextColor());
             }
