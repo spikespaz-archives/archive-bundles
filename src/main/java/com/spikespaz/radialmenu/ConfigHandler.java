@@ -184,7 +184,7 @@ public final class ConfigHandler {
                 return (SoundEvent) SoundEvents.class.getDeclaredField(this.buttonSoundEvent).get(null);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
-                return SoundEvents.ENTITY_CHICKEN_EGG;
+                return null;
             }
         }
     }
