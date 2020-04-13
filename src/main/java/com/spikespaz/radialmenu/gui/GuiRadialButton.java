@@ -1,6 +1,8 @@
 package com.spikespaz.radialmenu.gui;
 
 import com.spikespaz.radialmenu.MathHelper;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
@@ -25,7 +27,7 @@ public class GuiRadialButton extends GuiButton {
     public int thickness;
     public int sliceCount;
     public int sliceNum;
-    public int color;
+    public int normalColor;
     public int hoverColor;
     public double[] centroid;
     protected ItemStack itemIcon;
@@ -35,18 +37,31 @@ public class GuiRadialButton extends GuiButton {
     private float pressSoundPitch;
     private float iconOpacity;
     private float hoverIconOpacity;
+    public double cx;
+    public double cy;
+    private int normalAlpha;
+    @Setter
+    @Getter
+    private boolean selected;
+    private int currentColor;
+    public boolean mouseBoundary;
 
-    public GuiRadialButton(int buttonId, int radius, int deadRadius, int thickness, int color, int hoverColor, float iconOpacity, float hoverIconOpacity) {
+    public GuiRadialButton(int buttonId, int radius, int deadRadius, int thickness, int normalColor, int hoverColor, float iconOpacity, float hoverIconOpacity) {
         super(buttonId, 0, 0, "");
         this.itemRender = mc.getRenderItem();
         this.id = buttonId;
         this.radius = radius;
         this.deadRadius = deadRadius;
         this.thickness = thickness;
-        this.color = color;
+        this.normalColor = normalColor;
         this.hoverColor = hoverColor;
         this.iconOpacity = iconOpacity;
         this.hoverIconOpacity = hoverIconOpacity;
+
+        final ScaledResolution scaledRes = new ScaledResolution(mc);
+
+        this.cx = scaledRes.getScaledWidth_double() / 2;
+        this.cy = scaledRes.getScaledHeight_double() / 2;
     }
 
     @Override
@@ -54,12 +69,7 @@ public class GuiRadialButton extends GuiButton {
     public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (!this.visible) return;
 
-        this.hovered = this.isMouseOver(mc, mouseX, mouseY);
-
-        final ScaledResolution scaledRes = new ScaledResolution(mc);
-
-        final double cx = scaledRes.getScaledWidth_double() / 2;
-        final double cy = scaledRes.getScaledHeight_double() / 2;
+        this.hovered = this.isMouseOver(mouseX, mouseY);
 
         final double sa = Math.PI * 2 / this.sliceCount; // Slice angle
         final double ssa = (this.sliceCount - this.sliceNum) * sa - sa / 2 + Math.PI; // Start slice angle
@@ -67,20 +77,42 @@ public class GuiRadialButton extends GuiButton {
         final double ipr = this.radius / Math.cos(sa / 2); // Inner point radius
         final double opr = ipr + this.thickness; // Outer point radius
 
-        final double x0 = cx + Math.sin(ssa) * ipr;
-        final double y0 = cy + Math.cos(ssa) * ipr;
-        final double x1 = cx + Math.sin(ssa) * opr;
-        final double y1 = cy + Math.cos(ssa) * opr;
-        final double x2 = cx + Math.sin(esa) * opr;
-        final double y2 = cy + Math.cos(esa) * opr;
-        final double x3 = cx + Math.sin(esa) * ipr;
-        final double y3 = cy + Math.cos(esa) * ipr;
+        final double x0 = this.cx + Math.sin(ssa) * ipr;
+        final double y0 = this.cy + Math.cos(ssa) * ipr;
+        final double x1 = this.cx + Math.sin(ssa) * opr;
+        final double y1 = this.cy + Math.cos(ssa) * opr;
+        final double x2 = this.cx + Math.sin(esa) * opr;
+        final double y2 = this.cy + Math.cos(esa) * opr;
+        final double x3 = this.cx + Math.sin(esa) * ipr;
+        final double y3 = this.cy + Math.cos(esa) * ipr;
 
         double[][] vertices = new double[][]{{x0, y0}, {x1, y1}, {x2, y2}, {x3, y3}};
 
         this.centroid = MathHelper.centroid(vertices);
 
-        RenderHelper.drawPoly(vertices, this.hovered ? this.hoverColor : this.color);
+        final int normalColor = this.normalColor & 0xFFFFFF;
+        final int normalAlpha = this.normalColor >> 24 & 0xFF;
+        final int hoverColor = this.hoverColor & 0xFFFFFF;
+        final int hoverAlpha = this.hoverColor >> 24 & 0xFF;
+        final int currentColor = this.currentColor & 0xFFFFFF;
+        final int currentAlpha = this.currentColor >> 24 & 0xFF;
+
+        int alpha, color;
+
+        if (this.hovered) {
+            alpha = hoverAlpha;
+            color = hoverColor;
+        } else if (this.selected) {
+            alpha = normalAlpha;
+            color = hoverColor;
+        } else {
+            alpha = normalAlpha;
+            color = normalColor;
+        }
+
+        this.currentColor = (alpha << 24) + color;
+
+        RenderHelper.drawPoly(vertices, this.currentColor);
 
         // Uncomment to draw points in red
 //        RenderHelper.drawCircle(x0, y0, 2D, 10, 0xFFFF0000);
@@ -106,21 +138,19 @@ public class GuiRadialButton extends GuiButton {
 
     @Override
     public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-        return this.enabled && this.visible && this.isMouseOver(mc, mouseX, mouseY);
+        return this.enabled && this.visible && this.isMouseOver(mouseX, mouseY);
     }
 
-    private boolean isMouseOver(Minecraft mc, int mouseX, int mouseY) {
-        final ScaledResolution scaledRes = new ScaledResolution(mc);
-
-        final double cx = scaledRes.getScaledWidth_double() / 2;
-        final double cy = scaledRes.getScaledHeight_double() / 2;
-
+    private boolean isMouseOver(int mouseX, int mouseY) {
         final double sa = Math.PI * 2 / this.sliceCount; // Slice angle
         final double ssa = (this.sliceCount - this.sliceNum) * sa - sa / 2 + Math.PI; // Start slice angle
         final double esa = ssa + sa; // End slice angle
 
-        final double mr = Math.hypot(mouseX - cx, mouseY - cy); // Mouse radius
-        final double ma = Math.atan2(mouseX - cx, mouseY - cy); // Mouse angle
+        final double mr = Math.hypot(mouseX - this.cx, mouseY - this.cy); // Mouse radius
+        final double ma = Math.atan2(mouseX - this.cx, mouseY - this.cy); // Mouse angle
+
+        if (this.mouseBoundary && mr > this.thickness + this.radius)
+            return false;
 
         return MathHelper.isAngleBetween(ssa, esa, ma) && mr > this.deadRadius;
     }
