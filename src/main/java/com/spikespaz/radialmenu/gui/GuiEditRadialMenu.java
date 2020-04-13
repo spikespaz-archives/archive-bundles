@@ -1,6 +1,5 @@
 package com.spikespaz.radialmenu.gui;
 
-import com.spikespaz.radialmenu.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -17,6 +16,9 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
     @Override
     protected GuiRadialButton addButton(int id, int circleRadius, int deadZoneRadius, int buttonThickness, int buttonBgColor, int buttonBgHoverColor, float iconOpacity, float hoverIconOpacity) {
+        if (circleRadius * 2 + buttonThickness * 2 + 10 > this.width / 2)
+            circleRadius = this.width / 4 - buttonThickness - 10;
+
         GuiRadialButton button = super.addButton(id, circleRadius, deadZoneRadius, buttonThickness, buttonBgColor, buttonBgHoverColor, iconOpacity, hoverIconOpacity);
         button.mouseBoundary = true;
         return button;
@@ -79,7 +81,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     public void setWorldAndResolution(Minecraft mc, int width, int height) {
         super.setWorldAndResolution(mc, width, height);
 
-        this.menuX = Math.max(ConfigHandler.GENERAL.getCircleRadius() + ConfigHandler.BUTTON.getThickness() + 10, this.width / 4);
+        this.menuX = this.width / 4;
         this.menuY = this.height / 2;
         this.editsX = Math.min(this.width - 210, this.width / 4);
 
