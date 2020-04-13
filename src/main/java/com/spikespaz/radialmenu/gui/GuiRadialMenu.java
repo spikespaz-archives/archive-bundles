@@ -15,7 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -24,11 +23,15 @@ import java.util.List;
 public class GuiRadialMenu extends GuiScreen {
     public static List<KeyBinding> keyBindings = Lists.newArrayList();
     public static List<Object> buttonIcons = Lists.newArrayList();
-    private GuiRadialButton hoveredButton;
+    protected int menuX;
+    protected int menuY;
 
     public GuiRadialMenu(Minecraft mc) {
         ScaledResolution scaledRes = new ScaledResolution(mc);
         this.setWorldAndResolution(mc, scaledRes.getScaledWidth(), scaledRes.getScaledHeight());
+
+        this.menuX = this.width / 2;
+        this.menuY = this.height / 2;
     }
 
     @Override
@@ -78,7 +81,7 @@ public class GuiRadialMenu extends GuiScreen {
         keyBindings.clear();
     }
 
-    private GuiRadialButton addButton(int id, int circleRadius, int deadZoneRadius, int buttonThickness, int buttonBgColor, int buttonBgHoverColor, float iconOpacity, float hoverIconOpacity) {
+    protected GuiRadialButton addButton(int id, int circleRadius, int deadZoneRadius, int buttonThickness, int buttonBgColor, int buttonBgHoverColor, float iconOpacity, float hoverIconOpacity) {
         GuiRadialButton button = this.addButton(new GuiRadialButton(id, circleRadius, deadZoneRadius, buttonThickness, buttonBgColor, buttonBgHoverColor, iconOpacity, hoverIconOpacity));
 
         button.setPressSound(ConfigHandler.SOUND.getButtonSoundEvent(), (float) ConfigHandler.SOUND.getButtonSoundPitch());
@@ -88,6 +91,9 @@ public class GuiRadialMenu extends GuiScreen {
             button.setIcon((Item) buttonIcons.get(id));
         else
             button.setIcon((ResourceLocation) buttonIcons.get(id));
+
+        button.cx = this.menuX;
+        button.cy = this.menuY;
 
         return button;
     }
@@ -110,16 +116,27 @@ public class GuiRadialMenu extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        GuiRadialButton hoveredButton = null, selectedButton = null;
+
         for (GuiButton button : this.buttonList) {
             button.drawButton(this.mc, mouseX, mouseY, partialTicks);
 
-            if (button.isMouseOver()) {
-                if (button.displayString.isEmpty())
-                    this.drawCenteredLabel(I18n.format("gui." + RadialMenu.MOD_ID + ".label.unassigned"), ConfigHandler.LABEL.getTextEmptyColor());
-                else
-                    this.drawCenteredLabel(I18n.format(button.displayString), ConfigHandler.LABEL.getTextColor());
-            }
+            if (button.isMouseOver())
+                hoveredButton = (GuiRadialButton) button;
+            else if (((GuiRadialButton) button).isSelected())
+                selectedButton = (GuiRadialButton) button;
         }
+
+        if (hoveredButton != null)
+            if (hoveredButton.displayString.isEmpty())
+                this.drawCenteredLabel(I18n.format("gui." + RadialMenu.MOD_ID + ".label.unassigned"), ConfigHandler.LABEL.getTextEmptyColor());
+            else
+                this.drawCenteredLabel(I18n.format(hoveredButton.displayString), ConfigHandler.LABEL.getTextColor());
+        else if (selectedButton != null)
+            if (selectedButton.displayString.isEmpty())
+                this.drawCenteredLabel(I18n.format("gui." + RadialMenu.MOD_ID + ".label.unassigned"), ConfigHandler.LABEL.getTextEmptyColor());
+            else
+                this.drawCenteredLabel(I18n.format(selectedButton.displayString), ConfigHandler.LABEL.getTextColor());
 
 //        final ScaledResolution scaledRes = new ScaledResolution(mc);
 
@@ -150,13 +167,13 @@ public class GuiRadialMenu extends GuiScreen {
         final int boxWidth = this.fontRenderer.getStringWidth(label) + ConfigHandler.LABEL.getPaddingX() * 2;
         final int boxHeight = this.fontRenderer.FONT_HEIGHT + ConfigHandler.LABEL.getPaddingY() * 2;
 
-        Gui.drawRect((this.width - boxWidth) / 2,
-                (this.height - boxHeight) / 2,
-                (this.width + boxWidth) / 2,
-                (this.height + boxHeight) / 2,
+        Gui.drawRect(this.menuX - boxWidth / 2,
+                this.menuY - boxHeight / 2,
+                this.menuX + boxWidth / 2,
+                this.menuY + boxHeight / 2,
                 ConfigHandler.LABEL.getBgColor());
 
-        this.drawCenteredString(this.mc.fontRenderer, label, this.width / 2, (this.height - this.mc.fontRenderer.FONT_HEIGHT) / 2, color);
+        this.drawCenteredString(this.mc.fontRenderer, label, this.menuX, this.menuY - this.mc.fontRenderer.FONT_HEIGHT / 2, color);
     }
 
     @Override

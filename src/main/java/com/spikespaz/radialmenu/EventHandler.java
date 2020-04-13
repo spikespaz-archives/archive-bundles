@@ -1,5 +1,6 @@
 package com.spikespaz.radialmenu;
 
+import com.spikespaz.radialmenu.gui.GuiEditRadialMenu;
 import com.spikespaz.radialmenu.gui.GuiRadialMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -20,11 +21,18 @@ public class EventHandler {
     public void onEvent(RenderGameOverlayEvent.Pre event) {
         if (mc.currentScreen instanceof GuiRadialMenu && event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
             event.setCanceled(true);
+        else if (mc.currentScreen instanceof GuiEditRadialMenu && event.getType() == RenderGameOverlayEvent.ElementType.ALL)
+            event.setCanceled(true);
     }
 
     @SubscribeEvent
     public void onEvent(InputEvent.KeyInputEvent event) {
-        if (KeyBindings.OPEN_MENU_0.isPressed() && mc.currentScreen == null) {
+        if (mc.currentScreen != null) {
+            return;
+        } else if (KeyBindings.EDIT_MENU_0.isPressed()) {
+            Keyboard.enableRepeatEvents(false);
+            mc.displayGuiScreen(new GuiEditRadialMenu(mc));
+        } else if (KeyBindings.OPEN_MENU_0.isPressed()) {
             Keyboard.enableRepeatEvents(false);
             mc.displayGuiScreen(new GuiRadialMenu(mc));
         }
@@ -32,14 +40,21 @@ public class EventHandler {
 
     @SubscribeEvent
     public void onEvent(GuiScreenEvent.KeyboardInputEvent event) {
-        if (Keyboard.isRepeatEvent() || !(mc.currentScreen instanceof GuiRadialMenu))
+        if (Keyboard.isRepeatEvent())
             return;
 
-        boolean openMenu0Released = Keyboard.getEventKey() == KeyBindings.OPEN_MENU_0.getKeyCode() && !Keyboard.getEventKeyState();
+        if (mc.currentScreen instanceof GuiEditRadialMenu) {
+            if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
+                ((GuiRadialMenu) mc.currentScreen).closeGui();
+                Keyboard.enableRepeatEvents(true);
+            }
+        } else if (mc.currentScreen instanceof GuiRadialMenu) {
+            boolean openMenu0Released = Keyboard.getEventKey() == KeyBindings.OPEN_MENU_0.getKeyCode() && !Keyboard.getEventKeyState();
 
-        if (ConfigHandler.GENERAL.isToggleModeEnabled() ^ openMenu0Released) {
-            ((GuiRadialMenu) mc.currentScreen).closeGui();
-            Keyboard.enableRepeatEvents(true);
+            if (ConfigHandler.GENERAL.isToggleModeEnabled() ^ openMenu0Released) {
+                ((GuiRadialMenu) mc.currentScreen).closeGui();
+                Keyboard.enableRepeatEvents(true);
+            }
         }
     }
 
