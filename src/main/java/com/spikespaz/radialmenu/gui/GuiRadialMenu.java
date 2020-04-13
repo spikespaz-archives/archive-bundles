@@ -205,10 +205,7 @@ public class GuiRadialMenu extends GuiScreen {
         if (ConfigHandler.SOUND.isButtonSoundEnabled())
             button.playPressSound(this.mc.getSoundHandler());
 
-        if (button.keyBinding == null || Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
-            GuiControlSelect selectGui = new GuiControlSelect(mc, this, result -> this.controlSelected(button, (KeyBinding) result));
-            this.mc.displayGuiScreen(selectGui);
-        } else if (button.keyBinding != null) {
+        if (button.keyBinding != null) {
             Utilities.focusGame();
             Utilities.fireKey(button.keyBinding);
         }
