@@ -37,11 +37,12 @@ public class GuiRadialMenu extends GuiScreen {
     protected <T extends GuiButton> T addButton(T newButton) {
         this.buttonList.add(newButton);
 
-        for (int i = 0; i < this.buttonList.size(); i++) {
-            GuiRadialButton button = (GuiRadialButton) this.buttonList.get(i);
-            button.sliceCount = this.buttonList.size();
-            button.sliceNum = i;
-        }
+        if (newButton instanceof GuiRadialButton)
+            for (int i = 0; i < this.buttonList.size(); i++) {
+                GuiRadialButton button = (GuiRadialButton) this.buttonList.get(i);
+                button.sliceCount = this.buttonList.size();
+                button.sliceNum = i;
+            }
 
         return newButton;
     }
@@ -84,10 +85,13 @@ public class GuiRadialMenu extends GuiScreen {
         button.setPressSound(ConfigHandler.SOUND.getButtonSoundEvent(), (float) ConfigHandler.SOUND.getButtonSoundPitch());
         button.setKeyBinding(keyBindings.get(id));
 
-        if (Item.class.isAssignableFrom(buttonIcons.get(id).getClass()))
-            button.setIcon((Item) buttonIcons.get(id));
-        else
-            button.setIcon((ResourceLocation) buttonIcons.get(id));
+        Object buttonIcon = buttonIcons.get(id);
+
+        if (buttonIcon != null)
+            if (Item.class.isAssignableFrom(buttonIcon.getClass()))
+                button.setIcon((Item) buttonIcon);
+            else
+                button.setIcon((ResourceLocation) buttonIcon);
 
         button.cx = this.menuX;
         button.cy = this.menuY;
@@ -97,18 +101,21 @@ public class GuiRadialMenu extends GuiScreen {
 
     @Override
     public void initGui() {
-        this.addButton(0, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
-        this.addButton(1, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
-        this.addButton(2, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
-        this.addButton(3, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
-        this.addButton(4, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
-        this.addButton(5, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
-        this.addButton(6, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
-        this.addButton(7, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
-        this.addButton(8, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
-        this.addButton(9, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
-        this.addButton(10, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
-        this.addButton(11, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+        this.buttonList.clear();
+
+        for (int i = 0; i < Math.max(buttonIcons.size(), keyBindings.size()); i++)
+            this.addButton(i, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
+
+        if (this.getClass().equals(GuiRadialMenu.class)) {
+            this.menuX = this.width / 2;
+            this.menuY = this.height / 2;
+
+            for (GuiButton button : this.buttonList)
+                if (button instanceof GuiRadialButton) {
+                    ((GuiRadialButton) button).cx = this.menuX;
+                    ((GuiRadialButton) button).cy = this.menuY;
+                }
+        }
     }
 
     @Override
@@ -118,10 +125,12 @@ public class GuiRadialMenu extends GuiScreen {
         for (GuiButton button : this.buttonList) {
             button.drawButton(this.mc, mouseX, mouseY, partialTicks);
 
-            if (button.isMouseOver())
-                hoveredButton = (GuiRadialButton) button;
-            else if (((GuiRadialButton) button).isSelected())
-                selectedButton = (GuiRadialButton) button;
+            if (button instanceof GuiRadialButton) {
+                if (button.isMouseOver())
+                    hoveredButton = (GuiRadialButton) button;
+                else if (((GuiRadialButton) button).isSelected())
+                    selectedButton = (GuiRadialButton) button;
+            }
         }
 
         if (hoveredButton != null)
@@ -197,6 +206,9 @@ public class GuiRadialMenu extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton guiButton) {
+        if (!(guiButton instanceof GuiRadialButton))
+            return;
+
         GuiRadialButton button = (GuiRadialButton) guiButton;
 
         if (ConfigHandler.SOUND.isButtonSoundEnabled())
@@ -214,6 +226,18 @@ public class GuiRadialMenu extends GuiScreen {
         mc.displayGuiScreen(new GuiIconSelect(mc));
     }
 
+    protected GuiRadialButton getSelectedButton() {
+        for (GuiButton guiButton : this.buttonList)
+            if (guiButton instanceof GuiRadialButton) {
+                GuiRadialButton button = (GuiRadialButton) guiButton;
+
+                if (button.isSelected())
+                    return button;
+            }
+
+        return null;
+    }
+
     public void closeGui() {
         if (!ConfigHandler.GENERAL.isToggleModeEnabled())
             for (GuiButton button : this.buttonList)
@@ -223,20 +247,5 @@ public class GuiRadialMenu extends GuiScreen {
                 }
 
         Utilities.focusGame();
-    }
-
-    @Override
-    public void setWorldAndResolution(Minecraft mc, int width, int height) {
-        super.setWorldAndResolution(mc, width, height);
-
-        if (this.getClass().equals(GuiRadialMenu.class)) {
-            this.menuX = this.width / 2;
-            this.menuY = this.height / 2;
-
-            for (GuiButton button : this.buttonList) {
-                ((GuiRadialButton) button).cx = this.menuX;
-                ((GuiRadialButton) button).cy = this.menuY;
-            }
-        }
     }
 }
