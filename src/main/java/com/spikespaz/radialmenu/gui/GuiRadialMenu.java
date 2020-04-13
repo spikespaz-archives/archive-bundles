@@ -29,9 +29,6 @@ public class GuiRadialMenu extends GuiScreen {
     public GuiRadialMenu(Minecraft mc) {
         ScaledResolution scaledRes = new ScaledResolution(mc);
         this.setWorldAndResolution(mc, scaledRes.getScaledWidth(), scaledRes.getScaledHeight());
-
-        this.menuX = this.width / 2;
-        this.menuY = this.height / 2;
     }
 
     @Override
@@ -226,5 +223,20 @@ public class GuiRadialMenu extends GuiScreen {
                 }
 
         Utilities.focusGame();
+    }
+
+    @Override
+    public void setWorldAndResolution(Minecraft mc, int width, int height) {
+        super.setWorldAndResolution(mc, width, height);
+
+        if (this.getClass().equals(GuiRadialMenu.class)) {
+            this.menuX = this.width / 2;
+            this.menuY = this.height / 2;
+
+            for (GuiButton button : this.buttonList) {
+                ((GuiRadialButton) button).cx = this.menuX;
+                ((GuiRadialButton) button).cy = this.menuY;
+            }
+        }
     }
 }
