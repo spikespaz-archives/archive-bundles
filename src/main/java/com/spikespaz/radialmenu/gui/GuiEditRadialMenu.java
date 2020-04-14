@@ -61,7 +61,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         int labelWidth;
         String labelString;
 
-        labelString = I18n.format("Display Name");
+        labelString = I18n.format("gui.radialmenu.label.displayname");
         labelWidth = this.fontRenderer.getStringWidth(labelString);
         label = new GuiLabel(this.fontRenderer, 0, this.editsX - labelWidth / 2, this.height / 2 + OH * -2, 0, BTN_H, 0xFFFFFFFF);
         label.addLine(labelString);
@@ -71,7 +71,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         this.displayNameField.setMaxStringLength(32);
         //        this.displayNameField.setFocused(true);
 
-        labelString = I18n.format("Keybinding / Control");
+        labelString = I18n.format("gui.radialmenu.label.keybinding");
         labelWidth = this.fontRenderer.getStringWidth(labelString);
         label = new GuiLabel(this.fontRenderer, 1, this.editsX - labelWidth / 2, this.height / 2 + OH * -1, 0, BTN_H, 0xFFFFFFFF);
         label.addLine(labelString);
@@ -79,7 +79,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
         this.changeKeyBindingBtn = this.addButton(new GuiButton(CHANGE_KEYBINDING, this.editsX - BTN_W / 2, this.height / 2 + OH * -1 + BTN_H, BTN_W, BTN_H, ""));
 
-        labelString = I18n.format("Icon Resource Location");
+        labelString = I18n.format("gui.radialmenu.label.iconresourcelocation");
         labelWidth = this.fontRenderer.getStringWidth(labelString);
         label = new GuiLabel(this.fontRenderer, 2, this.editsX - labelWidth / 2, this.height / 2 + OH * 0, 0, BTN_H, 0xFFFFFFFF);
         label.addLine(labelString);

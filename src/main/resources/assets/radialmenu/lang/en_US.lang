@@ -27,3 +27,7 @@ config.radialmenu.button_thickness=Thickness
 config.radialmenu.button_sound_event=Button Sound Event
 config.radialmenu.button_sound_pitch=Button Sound Pitch
 config.radialmenu.button_sound_enabled=Button Sound Enabled
+
+gui.radialmenu.label.iconresourcelocation=Icon Resource Location
+gui.radialmenu.label.keybinding=Keybinding / Control
+gui.radialmenu.label.displayname=Display Name
