@@ -24,6 +24,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private static final int CHANGE_KEYBINDING = 103;
     private static final int CHANGE_ICON = 104;
     private static final int CHANGE_NAME = 105;
+    private static final int PANEL_W = BTN_W + 16;
     protected int editsX;
     private boolean reInitGui;
     private int lastSelectedButtonId;
@@ -49,9 +50,9 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     public void initGui() {
         super.initGui();
 
-        this.menuX = this.width / 4;
+        this.menuX = (this.width - PANEL_W) / 2;
         this.menuY = this.height / 2;
-        this.editsX = this.width * 3 / 4;
+        this.editsX = this.width - PANEL_W / 2;
 
 //        this.addButton(new GuiButton(100, this.editsX - btnW / +2, this.height / 2 - btnH / 2, btnW, btnH, "Add Button"));
         this.addButton(new GuiButton(ADD_BUTTON, this.editsX - BTN_H - 2, this.height - BTN_H - 4, BTN_H, BTN_H, "+"));
@@ -240,7 +241,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     public void drawWorldBackground(int tint) {
         if (this.mc.world != null) {
             this.drawGradientRect(0, 0, this.width, this.height, -1072689136, -804253680);
-            this.drawBackground(this.width / 2, 0, this.width, this.height, tint);
+            this.drawBackground(this.width - PANEL_W, 0, this.width, this.height, tint);
         } else {
             this.drawBackground(0, 0, this.width, this.height, tint);
         }
