@@ -27,7 +27,10 @@ config.radialmenu.button_thickness=Thickness
 config.radialmenu.button_sound_event=Button Sound Event
 config.radialmenu.button_sound_pitch=Button Sound Pitch
 config.radialmenu.button_sound_enabled=Button Sound Enabled
-
-gui.radialmenu.label.iconresourcelocation=Icon Resource Location
+gui.radialmenu.button.unassigned=Unassigned
+gui.radialmenu.label.resourcelocation=Resource Location
 gui.radialmenu.label.keybinding=Keybinding / Control
 gui.radialmenu.label.displayname=Display Name
+gui.radialmenu.label.keybindingmode=Keybinding Press Mode
+gui.radialmenu.button.togglemode=Toggle Key
+gui.radialmenu.button.pressmode=Press Key

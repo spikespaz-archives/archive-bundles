@@ -1,6 +1,8 @@
 package com.spikespaz.radialmenu.gui;
 
+import com.spikespaz.radialmenu.ConfigHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiTextField;
@@ -10,6 +12,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
@@ -18,19 +21,19 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private static final int DELETE_BUTTON = 102;
     private static final int BTN_W = 175;
     private static final int BTN_H = 20;
-    private static final int FLD_W = BTN_W - 2;
-    private static final int FLD_H = BTN_H - 2;
     private static final int OH = BTN_H * 2 + 4;
     private static final int CHANGE_KEYBINDING = 103;
-    private static final int CHANGE_ICON = 104;
-    private static final int CHANGE_NAME = 105;
+    private static final int CHANGE_KEYBINDING_MODE = 104;
     private static final int PANEL_W = BTN_W + 16;
+    private static final String TOGGLE_MODE_TEXT = I18n.format("gui.radialmenu.button.togglemode");
+    private static final String PRESS_MODE_TEXT = I18n.format("gui.radialmenu.button.pressmode");
     protected int editsX;
     private boolean reInitGui;
     private int lastSelectedButtonId;
     private GuiTextField displayNameField;
     private GuiTextField iconResourceField;
     private GuiButton changeKeyBindingBtn;
+    private GuiButton changeKeyModeBtn;
 
     public GuiEditRadialMenu(Minecraft mc) {
         super(mc);
@@ -80,7 +83,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
         this.changeKeyBindingBtn = this.addButton(new GuiButton(CHANGE_KEYBINDING, this.editsX - BTN_W / 2, this.height / 2 + OH * -1 + BTN_H, BTN_W, BTN_H, ""));
 
-        labelString = I18n.format("gui.radialmenu.label.iconresourcelocation");
+        labelString = I18n.format("gui.radialmenu.label.resourcelocation");
         labelWidth = this.fontRenderer.getStringWidth(labelString);
         label = new GuiLabel(this.fontRenderer, 2, this.editsX - labelWidth / 2, this.height / 2 + OH * 0, 0, BTN_H, 0xFFFFFFFF);
         label.addLine(labelString);
@@ -89,25 +92,41 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         this.iconResourceField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 2, this.height / 2 + OH * 0 + BTN_H + 2, BTN_W - 4, BTN_H - 4);
         this.iconResourceField.setMaxStringLength(512);
 
+        labelString = I18n.format("gui.radialmenu.label.keybindingmode");
+        labelWidth = this.fontRenderer.getStringWidth(labelString);
+        label = new GuiLabel(this.fontRenderer, 1, this.editsX - labelWidth / 2, this.height / 2 + OH * 1, 0, BTN_H, 0xFFFFFFFF);
+        label.addLine(labelString);
+        this.labelList.add(label);
+
+        this.changeKeyModeBtn = this.addButton(new GuiButton(CHANGE_KEYBINDING_MODE, this.editsX - BTN_W / 2, this.height / 2 + OH * 1 + BTN_H, BTN_W, BTN_H, ""));
+
         for (GuiButton button : this.buttonList)
             if (button instanceof GuiRadialButton) {
                 if (button.id == this.lastSelectedButtonId) {
                     GuiRadialButton radialButton = (GuiRadialButton) button;
-
-                    this.displayNameField.setText(radialButton.displayString);
-
-                    if (radialButton.imageIcon != null)
-                        this.iconResourceField.setText(radialButton.imageIcon.toString());
-
-                    if (radialButton.keyBinding != null)
-                        this.changeKeyBindingBtn.displayString = I18n.format(radialButton.keyBinding.getKeyDescription());
-
-                    ((GuiRadialButton) button).setSelected(true);
+                    this.setButtonOptionValues(radialButton);
+                    radialButton.setSelected(true);
                 }
 
                 ((GuiRadialButton) button).cx = this.menuX;
                 ((GuiRadialButton) button).cy = this.menuY;
             }
+    }
+
+    private void setButtonOptionValues(GuiRadialButton button) {
+        this.displayNameField.setText(button.displayString);
+
+        if (button.imageIcon != null)
+            this.iconResourceField.setText(button.imageIcon.toString());
+        else
+            this.iconResourceField.setText("");
+
+        if (button.keyBinding != null)
+            this.changeKeyBindingBtn.displayString = I18n.format(button.keyBinding.getKeyDescription());
+        else
+            this.changeKeyBindingBtn.displayString = I18n.format("gui.radialmenu.button.unassigned");
+
+        this.changeKeyModeBtn.displayString = toggleKeys.get(button.id) ? TOGGLE_MODE_TEXT : PRESS_MODE_TEXT;
     }
 
     @Override
@@ -149,8 +168,8 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         if (guiButton instanceof GuiRadialButton) {
             GuiRadialButton button = (GuiRadialButton) guiButton;
 
-//        if (ConfigHandler.SOUND.isButtonSoundEnabled())
-//            button.playPressSound(this.mc.getSoundHandler());
+            if (ConfigHandler.SOUND.isButtonSoundEnabled())
+                mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
             button.setSelected(true);
             this.lastSelectedButtonId = button.id;
@@ -159,14 +178,10 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                 if ((guiButton1 instanceof GuiRadialButton) && !guiButton.equals(guiButton1))
                     ((GuiRadialButton) guiButton1).setSelected(false);
 
-            this.displayNameField.setText(button.displayString);
-
-            if (button.imageIcon != null)
-                this.iconResourceField.setText(button.imageIcon.toString());
-
-            if (button.keyBinding != null)
-                this.changeKeyBindingBtn.displayString = I18n.format(button.keyBinding.getKeyDescription());
+            this.setButtonOptionValues(button);
         } else {
+            guiButton.playPressSound(this.mc.getSoundHandler());
+
             GuiRadialButton radialBtn = this.getSelectedButton();
 
             this.lastSelectedButtonId = (radialBtn == null) ? 0 : radialBtn.id;
@@ -179,7 +194,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                     this.reInitGui = true;
                     break;
                 case DELETE_BUTTON:
-                    if (this.getBtnIdCount() <= 4)
+                    if (getButtonIdCount() <= 4)
                         break;
 
                     keyBindings.remove(this.lastSelectedButtonId);
@@ -195,6 +210,15 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                         this.reInitGui = true;
                     });
                     mc.displayGuiScreen(guiControlSelect);
+                    break;
+                case CHANGE_KEYBINDING_MODE: // Assign displayString directly to avoid reInitGui
+                    if (this.changeKeyModeBtn.displayString.equals(TOGGLE_MODE_TEXT)) {
+                        toggleKeys.set(this.lastSelectedButtonId, false);
+                        this.changeKeyModeBtn.displayString = PRESS_MODE_TEXT;
+                    } else {
+                        toggleKeys.set(this.lastSelectedButtonId, true);
+                        this.changeKeyModeBtn.displayString = TOGGLE_MODE_TEXT;
+                    }
                     break;
             }
         }

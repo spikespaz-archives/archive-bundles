@@ -21,6 +21,7 @@ public class GuiRadialMenu extends GuiScreen {
     public static List<KeyBinding> keyBindings = Lists.newArrayList();
     public static List<Object> buttonIcons = Lists.newArrayList();
     public static List<String> displayStrings = Lists.newArrayList();
+    public static List<Boolean> toggleKeys = Lists.newArrayList();
     protected int menuX;
     protected int menuY;
 
@@ -82,6 +83,9 @@ public class GuiRadialMenu extends GuiScreen {
         buttonIcons.add(new ResourceLocation("quark:textures/emotes/headbang.png"));
         keyBindings.add(Utilities.getKeyBindByName("quark.emote.headbang"));
         displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
+
+        for (int i = 0; i < getButtonIdCount(); i++)
+            toggleKeys.add(i, false);
     }
 
     public static void clearButtons() {
@@ -114,7 +118,7 @@ public class GuiRadialMenu extends GuiScreen {
         this.buttonList.clear();
         this.labelList.clear();
 
-        for (int i = 0; i < this.getBtnIdCount(); i++)
+        for (int i = 0; i < getButtonIdCount(); i++)
             this.addButton(i, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
 
         if (this.getClass().equals(GuiRadialMenu.class)) {
@@ -129,7 +133,7 @@ public class GuiRadialMenu extends GuiScreen {
         }
     }
 
-    public int getBtnIdCount() {
+    public static int getButtonIdCount() {
         return Math.max(Math.max(buttonIcons.size(), keyBindings.size()), displayStrings.size());
     }
 
@@ -233,8 +237,12 @@ public class GuiRadialMenu extends GuiScreen {
             button.playPressSound(this.mc.getSoundHandler());
 
         if (button.keyBinding != null) {
-            Utilities.focusGame();
-            Utilities.fireKey(button.keyBinding);
+//            Utilities.focusGame();
+
+            if (toggleKeys.get(guiButton.id))
+                Utilities.toggleKey(button.keyBinding);
+            else
+                Utilities.fireKey(button.keyBinding);
         }
     }
 
