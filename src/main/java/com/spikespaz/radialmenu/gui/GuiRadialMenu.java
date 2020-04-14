@@ -114,7 +114,7 @@ public class GuiRadialMenu extends GuiScreen {
         this.buttonList.clear();
         this.labelList.clear();
 
-        for (int i = 0; i < Math.max(Math.max(buttonIcons.size(), keyBindings.size()), displayStrings.size()); i++)
+        for (int i = 0; i < this.getBtnIdCount(); i++)
             this.addButton(i, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
 
         if (this.getClass().equals(GuiRadialMenu.class)) {
@@ -127,6 +127,10 @@ public class GuiRadialMenu extends GuiScreen {
                     ((GuiRadialButton) button).cy = this.menuY;
                 }
         }
+    }
+
+    public int getBtnIdCount() {
+        return Math.max(Math.max(buttonIcons.size(), keyBindings.size()), displayStrings.size());
     }
 
     @Override
