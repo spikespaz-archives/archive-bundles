@@ -124,7 +124,7 @@ public class GuiRadialButton extends GuiButton {
         // Uncomment to draw the a dot in the center of each button
 //        RenderHelper.drawCircle(this.centroid[0], this.centroid[1], 5, 10, 0xFF00FFFF);
 
-        if (this.imageIcon != null) {
+        if (this.imageIcon != null && this.imageIcon.getPath().endsWith(".png") && !this.imageIcon.getNamespace().isEmpty()) {
             mc.getTextureManager().bindTexture(this.imageIcon);
             GlStateManager.color(1, 1, 1);
             Gui.drawModalRectWithCustomSizedTexture((int) this.centroid[0] - 8, (int) this.centroid[1] - 8, 0, 0, 16, 16, 16, 16);
