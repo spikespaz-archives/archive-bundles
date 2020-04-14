@@ -16,7 +16,7 @@ import org.lwjgl.input.Keyboard;
 public class GuiEditRadialMenu extends GuiRadialMenu {
     private static final int ADD_BUTTON = 101;
     private static final int DELETE_BUTTON = 102;
-    private static final int BTN_W = 150;
+    private static final int BTN_W = 175;
     private static final int BTN_H = 20;
     private static final int FLD_W = BTN_W - 2;
     private static final int FLD_H = BTN_H - 2;
@@ -240,8 +240,9 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     @Override
     public void drawWorldBackground(int tint) {
         if (this.mc.world != null) {
-            this.drawGradientRect(0, 0, this.width, this.height, -1072689136, -804253680);
-            this.drawBackground(this.width - PANEL_W, 0, this.width, this.height, tint);
+            this.drawGradientRect(0, 0, this.width - PANEL_W, this.height, 0xAA222222, 0xAA222222);
+            this.drawGradientRect(this.width - PANEL_W, 0, this.width, this.height, 0xCC000000, 0xCC000000);
+//            this.drawBackground(this.width - PANEL_W, 0, this.width, this.height, tint);
         } else {
             this.drawBackground(0, 0, this.width, this.height, tint);
         }
