@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 
 public class GuiEditRadialMenu extends GuiRadialMenu {
@@ -18,7 +19,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private static final int BTN_H = 20;
     private static final int FLD_W = BTN_W - 2;
     private static final int FLD_H = BTN_H - 2;
-    private static final int OH = BTN_H * 2;
+    private static final int OH = BTN_H * 2 + 4;
     private static final int CHANGE_KEYBINDING = 103;
     private static final int CHANGE_ICON = 104;
     private static final int CHANGE_NAME = 105;
@@ -26,6 +27,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private boolean reInitGui;
     private int lastSelectedButtonId;
     private GuiTextField displayNameField;
+    private GuiButton changeKeyBindingBtn;
 
     public GuiEditRadialMenu(Minecraft mc) {
         super(mc);
@@ -59,8 +61,16 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         label.addLine(labelString);
         this.labelList.add(label);
 
-        this.displayNameField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 1, this.height / 2 + (OH + 4) * -1 + BTN_H, BTN_W - 4, BTN_H - 4);
+        this.displayNameField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 1, this.height / 2 + OH * -1 + BTN_H, BTN_W - 4, BTN_H - 4);
 //        this.displayNameField.setFocused(true);
+
+        labelString = I18n.format("Keybinding / Control");
+        labelWidth = this.fontRenderer.getStringWidth(labelString);
+        label = new GuiLabel(this.fontRenderer, 2, this.editsX - labelWidth / 2, this.height / 2 + OH * 0, 0, BTN_H, 0xFFFFFFFF);
+        label.addLine(labelString);
+        this.labelList.add(label);
+
+        this.changeKeyBindingBtn = this.addButton(new GuiButton(CHANGE_KEYBINDING, this.editsX - BTN_W / 2, this.height / 2 + OH * 0 + BTN_H, BTN_W, BTN_H, ""));
 
         this.menuX = this.width / 4;
         this.menuY = this.height / 2;
@@ -70,6 +80,9 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
             if (button instanceof GuiRadialButton) {
                 if (button.id == this.lastSelectedButtonId) {
                     this.displayNameField.setText(button.displayString);
+                    GuiRadialButton radialButton = (GuiRadialButton) button;
+                    if (radialButton.keyBinding != null)
+                        this.changeKeyBindingBtn.displayString = I18n.format(radialButton.keyBinding.getKeyDescription());
                     ((GuiRadialButton) button).setSelected(true);
                 }
 
@@ -116,6 +129,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                     ((GuiRadialButton) guiButton1).setSelected(false);
 
             this.displayNameField.setText(button.displayString);
+            this.changeKeyBindingBtn.displayString = I18n.format(button.keyBinding.getKeyDescription());
         } else {
             GuiRadialButton radialBtn = this.getSelectedButton();
             this.lastSelectedButtonId = radialBtn.id;
@@ -132,6 +146,15 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                     buttonIcons.remove(radialBtn.id);
                     displayStrings.remove(radialBtn.id);
                     this.reInitGui = true;
+                    break;
+                case CHANGE_KEYBINDING:
+                    GuiControlSelect guiControlSelect = new GuiControlSelect(mc, this, result -> {
+                        KeyBinding binding = (KeyBinding) result;
+                        keyBindings.set(radialBtn.id, binding);
+                        displayStrings.set(radialBtn.id, I18n.format(binding.getKeyDescription()));
+                        this.reInitGui = true;
+                    });
+                    mc.displayGuiScreen(guiControlSelect);
                     break;
             }
         }
