@@ -10,11 +10,10 @@ import org.lwjgl.input.Keyboard;
 import java.lang.reflect.Field;
 
 public class KeyBindings {
-    private static final String LANG_PREFIX = "key." + RadialMenu.MOD_ID;
-    private static final String CATEGORY = LANG_PREFIX + ".category";
+    private static final String CATEGORY = "key.radialmenu.category";
 
-    public static final KeyBinding OPEN_MENU_0 = new KeyBinding(LANG_PREFIX + ".open_menu.0", KeyConflictContext.IN_GAME, Keyboard.KEY_R, CATEGORY);
-    public static final KeyBinding EDIT_MENU_0 = new KeyBinding(LANG_PREFIX + ".edit_menu.0", KeyConflictContext.IN_GAME, KeyModifier.ALT, Keyboard.KEY_R, CATEGORY);
+    public static final KeyBinding OPEN_MENU_0 = new KeyBinding("key.radialmenu.open_menu.0", KeyConflictContext.IN_GAME, Keyboard.KEY_R, CATEGORY);
+    public static final KeyBinding EDIT_MENU_0 = new KeyBinding("key.radialmenu.edit_menu.0", KeyConflictContext.IN_GAME, KeyModifier.ALT, Keyboard.KEY_R, CATEGORY);
 
     @SneakyThrows
     public static void registerAll() {
