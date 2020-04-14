@@ -2,19 +2,29 @@ package com.spikespaz.radialmenu.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLabel;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
+import org.lwjgl.input.Keyboard;
 
 public class GuiEditRadialMenu extends GuiRadialMenu {
     private static final int ADD_BUTTON = 101;
     private static final int DELETE_BUTTON = 102;
-    private static final int btnW = 150;
-    private static final int btnH = 20;
+    private static final int BTN_W = 150;
+    private static final int BTN_H = 20;
+    private static final int FLD_W = BTN_W - 2;
+    private static final int FLD_H = BTN_H - 2;
+    private static final int CHANGE_KEYBINDING = 103;
+    private static final int CHANGE_ICON = 104;
+    private static final int CHANGE_NAME = 105;
     protected int editsX;
     private boolean reInitGui;
     private int lastSelectedButtonId;
+    private GuiTextField displayNameField;
 
     public GuiEditRadialMenu(Minecraft mc) {
         super(mc);
@@ -35,22 +45,35 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         super.initGui();
 
 //        this.addButton(new GuiButton(100, this.editsX - btnW / +2, this.height / 2 - btnH / 2, btnW, btnH, "Add Button"));
-        this.addButton(new GuiButton(ADD_BUTTON, this.width / 2 + 4, this.height - btnH - 4, btnH, btnH, "+"));
-        this.addButton(new GuiButton(DELETE_BUTTON, this.width / 2 + 8 + btnH, this.height - btnH - 4, btnH, btnH, "-"));
+        this.addButton(new GuiButton(ADD_BUTTON, this.editsX - BTN_H - 2, this.height - BTN_H - 4, BTN_H, BTN_H, "+"));
+        this.addButton(new GuiButton(DELETE_BUTTON, this.editsX + 2, this.height - BTN_H - 4, BTN_H, BTN_H, "-"));
+
+        GuiLabel label;
+        int labelWidth;
+        String labelString;
+
+        labelString = I18n.format("Display Name");
+        labelWidth = this.fontRenderer.getStringWidth(labelString);
+        label = new GuiLabel(this.fontRenderer, 2, this.editsX - labelWidth / 2, this.height / 2 + (BTN_H + 4) * -1 + 2, 0, BTN_H, 0xFFFFFFFF);
+        label.addLine(labelString);
+        this.labelList.add(label);
+
+        this.displayNameField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 1, this.height / 2 + (BTN_H + 4) * 0 + 2 + 2, BTN_W - 4, BTN_H - 4);
+//        this.displayNameField.setFocused(true);
 
         this.menuX = this.width / 4;
         this.menuY = this.height / 2;
-        this.editsX = (this.width / 4) * 3;
+        this.editsX = this.width * 3 / 4;
 
         for (GuiButton button : this.buttonList)
             if (button instanceof GuiRadialButton) {
-                if (button.id == this.lastSelectedButtonId)
+                if (button.id == this.lastSelectedButtonId) {
+                    this.displayNameField.setText(button.displayString);
                     ((GuiRadialButton) button).setSelected(true);
+                }
 
                 ((GuiRadialButton) button).cx = this.menuX;
                 ((GuiRadialButton) button).cy = this.menuY;
-            } else if (button != null) {
-//                button.x = this.editsX - button.width / 2;
             }
     }
 
@@ -64,6 +87,11 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         this.drawDefaultBackground();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        this.displayNameField.drawTextBox();
+        // Uncomment to draw debug lines
+//        RenderHelper.drawLine(0, this.height / 2, this.width, this.height / 2, 0xFFFFFF00);
+//        RenderHelper.drawLine(this.width * 3 / 4, 0, this.width * 3 / 4, this.height, 0xFFFFFF00);
     }
 
     @Override
@@ -85,6 +113,8 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
             for (GuiButton guiButton1 : this.buttonList)
                 if ((guiButton1 instanceof GuiRadialButton) && !guiButton.equals(guiButton1))
                     ((GuiRadialButton) guiButton1).setSelected(false);
+
+            this.displayNameField.setText(button.displayString);
         } else {
             GuiRadialButton radialBtn = this.getSelectedButton();
             this.lastSelectedButtonId = radialBtn.id;
@@ -102,6 +132,29 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                     break;
             }
         }
+    }
+
+    @Override
+    public void updateScreen() {
+        this.displayNameField.updateCursorCounter();
+    }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) {
+        this.displayNameField.textboxKeyTyped(typedChar, keyCode);
+
+        if (keyCode == Keyboard.KEY_TAB)
+            this.displayNameField.setFocused(!this.displayNameField.isFocused());
+
+        if (this.displayNameField.isFocused())
+            displayStrings.set(this.lastSelectedButtonId, this.getSelectedButton().displayString = this.displayNameField.getText());
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        this.displayNameField.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override

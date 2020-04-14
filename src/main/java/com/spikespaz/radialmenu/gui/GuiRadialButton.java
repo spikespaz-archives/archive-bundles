@@ -11,6 +11,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -175,7 +176,7 @@ public class GuiRadialButton extends GuiButton {
             this.displayString = "";
             this.keyBinding = null;
         } else {
-            this.displayString = binding.getKeyDescription();
+            this.displayString = I18n.format(binding.getKeyDescription());
             this.keyBinding = binding;
         }
     }
