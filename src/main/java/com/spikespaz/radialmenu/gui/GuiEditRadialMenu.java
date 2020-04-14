@@ -67,7 +67,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         label.addLine(labelString);
         this.labelList.add(label);
 
-        this.displayNameField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 1, this.height / 2 + OH * -2 + BTN_H, BTN_W - 4, BTN_H - 4);
+        this.displayNameField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 2, this.height / 2 + OH * -2 + BTN_H + 2, BTN_W - 4, BTN_H - 4);
         this.displayNameField.setMaxStringLength(32);
         //        this.displayNameField.setFocused(true);
 
@@ -85,7 +85,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         label.addLine(labelString);
         this.labelList.add(label);
 
-        this.iconResourceField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 1, this.height / 2 + OH * 0 + BTN_H, BTN_W - 4, BTN_H - 4);
+        this.iconResourceField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 2, this.height / 2 + OH * 0 + BTN_H + 2, BTN_W - 4, BTN_H - 4);
         this.iconResourceField.setMaxStringLength(512);
 
         for (GuiButton button : this.buttonList)
@@ -122,9 +122,20 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
         this.displayNameField.drawTextBox();
         this.iconResourceField.drawTextBox();
+
         // Uncomment to draw debug lines
-//        RenderHelper.drawLine(0, this.height / 2, this.width, this.height / 2, 0xFFFFFF00);
-//        RenderHelper.drawLine(this.width * 3 / 4, 0, this.width * 3 / 4, this.height, 0xFFFFFF00);
+//        this.drawDebugLines();
+    }
+
+    private void drawDebugLines() {
+        RenderHelper.drawLine(this.width * 3 / 4, 0, this.width * 3 / 4, this.height, 0xFF00FF00);
+        RenderHelper.drawLine(this.width * 3 / 4 - BTN_W / 2, 0, this.width * 3 / 4 - BTN_W / 2, this.height, 0xFFFFFF00);
+        RenderHelper.drawLine(this.width * 3 / 4 + BTN_W / 2, 0, this.width * 3 / 4 + BTN_W / 2, this.height, 0xFFFFFF00);
+
+        for (int i = -3; i <= 3; i++) {
+            RenderHelper.drawLine(this.width / 2, this.height / 2 + OH * i, this.width, this.height / 2 + OH * i, 0xFFFF00FF);
+            RenderHelper.drawLine(this.width / 2, this.height / 2 + OH * i - 4, this.width, this.height / 2 + OH * i - 4, 0xFFFFFF00);
+        }
     }
 
     @Override
