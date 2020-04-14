@@ -27,15 +27,12 @@ public class EventHandler {
 
     @SubscribeEvent
     public void onEvent(InputEvent.KeyInputEvent event) {
-        if (mc.currentScreen != null) {
+        if (mc.currentScreen != null || Keyboard.isRepeatEvent())
             return;
-        } else if (KeyBindings.EDIT_MENU_0.isPressed()) {
-            Keyboard.enableRepeatEvents(false);
+        else if (KeyBindings.EDIT_MENU_0.isPressed())
             mc.displayGuiScreen(new GuiEditRadialMenu(mc));
-        } else if (KeyBindings.OPEN_MENU_0.isPressed()) {
-            Keyboard.enableRepeatEvents(false);
+        else if (KeyBindings.OPEN_MENU_0.isPressed())
             mc.displayGuiScreen(new GuiRadialMenu(mc));
-        }
     }
 
     @SubscribeEvent
@@ -44,17 +41,13 @@ public class EventHandler {
             return;
 
         if (mc.currentScreen instanceof GuiEditRadialMenu) {
-            if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
+            if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE)
                 ((GuiRadialMenu) mc.currentScreen).closeGui();
-                Keyboard.enableRepeatEvents(true);
-            }
         } else if (mc.currentScreen instanceof GuiRadialMenu) {
             boolean openMenu0Released = Keyboard.getEventKey() == KeyBindings.OPEN_MENU_0.getKeyCode() && !Keyboard.getEventKeyState();
 
-            if (ConfigHandler.GENERAL.isToggleModeEnabled() ^ openMenu0Released) {
+            if (ConfigHandler.GENERAL.isToggleModeEnabled() ^ openMenu0Released)
                 ((GuiRadialMenu) mc.currentScreen).closeGui();
-                Keyboard.enableRepeatEvents(true);
-            }
         }
     }
 
