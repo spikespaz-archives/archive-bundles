@@ -18,6 +18,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private static final int BTN_H = 20;
     private static final int FLD_W = BTN_W - 2;
     private static final int FLD_H = BTN_H - 2;
+    private static final int OH = BTN_H * 2;
     private static final int CHANGE_KEYBINDING = 103;
     private static final int CHANGE_ICON = 104;
     private static final int CHANGE_NAME = 105;
@@ -54,11 +55,11 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
         labelString = I18n.format("Display Name");
         labelWidth = this.fontRenderer.getStringWidth(labelString);
-        label = new GuiLabel(this.fontRenderer, 2, this.editsX - labelWidth / 2, this.height / 2 + (BTN_H + 4) * -1 + 2, 0, BTN_H, 0xFFFFFFFF);
+        label = new GuiLabel(this.fontRenderer, 2, this.editsX - labelWidth / 2, this.height / 2 + (OH + 4) * -1, 0, BTN_H, 0xFFFFFFFF);
         label.addLine(labelString);
         this.labelList.add(label);
 
-        this.displayNameField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 1, this.height / 2 + (BTN_H + 4) * 0 + 2 + 2, BTN_W - 4, BTN_H - 4);
+        this.displayNameField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 1, this.height / 2 + (OH + 4) * -1 + BTN_H, BTN_W - 4, BTN_H - 4);
 //        this.displayNameField.setFocused(true);
 
         this.menuX = this.width / 4;
@@ -123,11 +124,13 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                 case ADD_BUTTON:
                     keyBindings.add(radialBtn.id, null);
                     buttonIcons.add(radialBtn.id, null);
+                    displayStrings.add(radialBtn.id, "");
                     this.reInitGui = true;
                     break;
                 case DELETE_BUTTON:
                     keyBindings.remove(radialBtn.id);
                     buttonIcons.remove(radialBtn.id);
+                    displayStrings.remove(radialBtn.id);
                     this.reInitGui = true;
                     break;
             }
