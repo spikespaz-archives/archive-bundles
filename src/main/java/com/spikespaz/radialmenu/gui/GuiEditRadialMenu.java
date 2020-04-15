@@ -203,6 +203,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
             switch (guiButton.id) {
                 case ADD_BUTTON: // Should I impose hard limit?
+                    this.lastSelectedButtonId++;
                     keyBindings.add(this.lastSelectedButtonId, null);
                     buttonIcons.add(this.lastSelectedButtonId, null);
                     displayStrings.add(this.lastSelectedButtonId, "");
