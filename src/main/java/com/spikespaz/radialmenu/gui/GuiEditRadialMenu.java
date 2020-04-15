@@ -21,11 +21,12 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private static final int DELETE_BUTTON = 102;
     private static final int BTN_W = 175;
     private static final int BTN_H = 20;
-    private static final int OH = BTN_H * 2 + 4;
     private static final int CHANGE_KEYBINDING = 103;
     private static final int CHANGE_KEYBINDING_MODE = 104;
     private static final int PAD_TOP = 8;
     private static final int PAD_LR = 8;
+    private static final int PAD_OH = 4;
+    private static final int OH = BTN_H * 2 + PAD_OH;
     private static final int PANEL_W = BTN_W + PAD_LR * 2;
     private static final String TOGGLE_MODE_TEXT = I18n.format("gui.radialmenu.button.togglemode");
     private static final String PRESS_MODE_TEXT = I18n.format("gui.radialmenu.button.pressmode");
@@ -146,18 +147,23 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         this.iconResourceField.drawTextBox();
 
         // Uncomment to draw debug lines
-//        this.drawDebugLines();
+        this.drawDebugLines();
     }
 
     private void drawDebugLines() {
-        RenderHelper.drawLine(this.width * 3 / 4, 0, this.width * 3 / 4, this.height, 0xFF00FF00);
-        RenderHelper.drawLine(this.width * 3 / 4 - BTN_W / 2, 0, this.width * 3 / 4 - BTN_W / 2, this.height, 0xFFFFFF00);
-        RenderHelper.drawLine(this.width * 3 / 4 + BTN_W / 2, 0, this.width * 3 / 4 + BTN_W / 2, this.height, 0xFFFFFF00);
+        final int panelStart = this.width - PANEL_W;
 
-        for (int i = -3; i <= 3; i++) {
-            RenderHelper.drawLine(this.width / 2, this.height / 2 + OH * i, this.width, this.height / 2 + OH * i, 0xFFFF00FF);
-            RenderHelper.drawLine(this.width / 2, this.height / 2 + OH * i - 4, this.width, this.height / 2 + OH * i - 4, 0xFFFFFF00);
+        RenderHelper.drawLine(this.width - PANEL_W, PAD_TOP, this.width, PAD_TOP, 0xFF00FFFF);
+
+        for (int i = 0; i < 5; i++) {
+            RenderHelper.drawLine(this.width - PANEL_W, PAD_TOP + OH * i, this.width, PAD_TOP + OH * i, 0xFF00FF00); // Option boundary start
+            RenderHelper.drawLine(this.width - PANEL_W, PAD_TOP + OH * i + BTN_H, this.width, PAD_TOP + OH * i + BTN_H, 0xFF00FFFF); // Divide button heights
+            RenderHelper.drawLine(this.width - PANEL_W, PAD_TOP + OH * i + BTN_H * 2, this.width, PAD_TOP + OH * i + BTN_H * 2, 0xFFFF00FF); // Option boundary end
         }
+
+        RenderHelper.drawLine(this.editsX, 0, this.editsX, this.height, 0xFFFFFFFF);
+        RenderHelper.drawLine(panelStart + PAD_LR, 0, panelStart + PAD_LR, this.height, 0xFFFFFF00);
+        RenderHelper.drawLine(this.width - PAD_LR, 0, this.width - PAD_LR, this.height, 0xFFFFFF00);
     }
 
     @Override
