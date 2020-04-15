@@ -1,11 +1,9 @@
 package com.spikespaz.radialmenu;
 
-import lombok.SneakyThrows;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,20 +16,6 @@ public final class Utilities {
         void resolve(T param);
     }
 
-    @SneakyThrows
-    private static void setPressTime(KeyBinding binding, int ticks) {
-        final Field pressTimeField = KeyBinding.class.getDeclaredField("pressTime");
-        pressTimeField.setAccessible(true);
-        pressTimeField.set(binding, ticks);
-    }
-
-    @SneakyThrows
-    private static void setPressed(KeyBinding binding, boolean pressed) {
-        final Field pressedField = KeyBinding.class.getDeclaredField("pressed");
-        pressedField.setAccessible(true);
-        pressedField.set(binding, pressed);
-    }
-
     private static void fireKeyInputEvent() {
         final boolean oldFocus = mc.inGameHasFocus;
         mc.inGameHasFocus = true;
@@ -41,8 +25,8 @@ public final class Utilities {
 
     public static void fireKey(KeyBinding binding) {
         firedKeyBinds.add(binding);
-        setPressTime(binding, 1);
-        setPressed(binding, true);
+        binding.pressTime = 1;
+        binding.pressed = true;
 
         fireKeyInputEvent();
     }
@@ -50,12 +34,10 @@ public final class Utilities {
     public static void toggleKey(KeyBinding binding) {
         if (!toggledKeyBinds.contains(binding)) {
             toggledKeyBinds.add(binding);
-            setPressTime(binding, 1);
-            setPressed(binding, true);
-        } else {
-            toggledKeyBinds.remove(binding);
-            setPressed(binding, false);
-        }
+            binding.pressTime = 1;
+            binding.pressed = true;
+        } else
+            binding.pressed = false;
 
         fireKeyInputEvent();
     }
