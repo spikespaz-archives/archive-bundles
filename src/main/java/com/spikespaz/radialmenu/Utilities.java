@@ -34,7 +34,7 @@ public final class Utilities {
 
     private static void fireKeyInputEvent() {
         final boolean oldFocus = mc.inGameHasFocus;
-        mc.setIngameFocus();
+        mc.inGameHasFocus = true;
         FMLCommonHandler.instance().fireKeyInput();
         mc.inGameHasFocus = oldFocus;
     }

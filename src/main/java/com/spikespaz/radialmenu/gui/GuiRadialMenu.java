@@ -237,7 +237,7 @@ public class GuiRadialMenu extends GuiScreen {
             button.playPressSound(this.mc.getSoundHandler());
 
         if (button.keyBinding != null) {
-//            Utilities.focusGame();
+            Utilities.focusGame();
 
             if (toggleKeys.get(guiButton.id))
                 Utilities.toggleKey(button.keyBinding);
