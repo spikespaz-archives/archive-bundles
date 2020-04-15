@@ -1,6 +1,7 @@
 package com.spikespaz.radialmenu.gui;
 
 import com.spikespaz.radialmenu.ConfigHandler;
+import com.spikespaz.radialmenu.RadialButtonData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
@@ -16,15 +17,19 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
+import java.util.Collections;
+
 public class GuiEditRadialMenu extends GuiRadialMenu {
-    private static final int ADD_BUTTON = 101;
-    private static final int DELETE_BUTTON = 102;
+    private static final int ADD_BTN = 101;
+    private static final int DEL_BTN = 102;
+    private static final int MOVE_CCW_BTN = 103;
+    private static final int MOVE_CW_BTN = 104;
+    private static final int CHANGE_KEYBINDING = 110;
+    private static final int CHANGE_KEYBINDING_MODE = 111;
     private static final int BTN_W = 175;
     private static final int BTN_H = 20;
     private static final int FLD_W = BTN_W - 4;
     private static final int FLD_H = BTN_H - 4;
-    private static final int CHANGE_KEYBINDING = 103;
-    private static final int CHANGE_KEYBINDING_MODE = 104;
     private static final int PAD_TOP = 8;
     private static final int PAD_LR = 8;
     private static final int PAD_OH = 4;
@@ -64,9 +69,11 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         this.editsX = this.width - PANEL_W / 2;
 
 //        this.addButton(new GuiButton(100, this.editsX - btnW / +2, this.height / 2 - btnH / 2, btnW, btnH, "Add Button"));
-        this.addButton(new GuiButton(ADD_BUTTON, this.editsX - BTN_H - 15 - PAD_OH / 2, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "+"));
+        this.addButton(new GuiButton(MOVE_CCW_BTN, this.editsX - BTN_H - 15 - PAD_OH - BTN_H, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "<"));
+        this.addButton(new GuiButton(ADD_BTN, this.editsX - BTN_H - 15 - PAD_OH / 2, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "+"));
         this.buttonCountField = new GuiCenteredTextField(0, this.fontRenderer, this.editsX - 26 / 2, this.height - FLD_H - PAD_TOP - 2, 26, FLD_H);
-        this.addButton(new GuiButton(DELETE_BUTTON, this.editsX + 15 + PAD_OH / 2, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "-"));
+        this.addButton(new GuiButton(DEL_BTN, this.editsX + 15 + PAD_OH / 2, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "-"));
+        this.addButton(new GuiButton(MOVE_CW_BTN, this.editsX + 15 + PAD_OH + BTN_H, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, ">"));
 
         GuiLabel label;
         int labelWidth;
@@ -134,7 +141,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         else
             this.changeKeyBindingBtn.displayString = I18n.format("gui.radialmenu.button.unassigned");
 
-        this.changeKeyModeBtn.displayString = toggleKeys.get(button.id) ? TOGGLE_MODE_TEXT : PRESS_MODE_TEXT;
+        this.changeKeyModeBtn.displayString = radialMenuData.get(button.id).isToggleMode() ? TOGGLE_MODE_TEXT : PRESS_MODE_TEXT;
     }
 
     @Override
@@ -202,43 +209,56 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
             this.lastSelectedButtonId = (radialBtn == null) ? 0 : radialBtn.id;
 
             switch (guiButton.id) {
-                case ADD_BUTTON: // Should I impose hard limit?
+                case ADD_BTN: // Should I impose hard limit?
                     this.lastSelectedButtonId++;
-                    keyBindings.add(this.lastSelectedButtonId, null);
-                    buttonIcons.add(this.lastSelectedButtonId, null);
-                    displayStrings.add(this.lastSelectedButtonId, "");
-                    toggleKeys.add(this.lastSelectedButtonId, false);
+                    radialMenuData.add(this.lastSelectedButtonId, new RadialButtonData(null, null, false, null));
                     this.buttonCountField.setText(Integer.toString(this.lastSelectedButtonId));
                     this.reInitGui = true;
                     break;
-                case DELETE_BUTTON:
-                    if (getButtonIdCount() <= 4)
+                case DEL_BTN:
+                    if (radialMenuData.size() <= 4)
                         break;
 
-                    keyBindings.remove(this.lastSelectedButtonId);
-                    buttonIcons.remove(this.lastSelectedButtonId);
-                    displayStrings.remove(this.lastSelectedButtonId);
-                    toggleKeys.remove(this.lastSelectedButtonId);
+                    radialMenuData.remove(this.lastSelectedButtonId);
+                    this.buttonCountField.setText(Integer.toString(this.lastSelectedButtonId));
+                    this.lastSelectedButtonId--;
+                    this.reInitGui = true;
+                    break;
+                case MOVE_CCW_BTN:
+                    if (this.lastSelectedButtonId - 1 < 0) {
+                        Collections.swap(radialMenuData, this.lastSelectedButtonId, radialMenuData.size() - 1);
+                        this.lastSelectedButtonId = radialMenuData.size() - 1;
+                    } else {
+                        Collections.swap(radialMenuData, this.lastSelectedButtonId, this.lastSelectedButtonId - 1);
+                        this.lastSelectedButtonId--;
+                    }
+
+                    this.buttonCountField.setText(Integer.toString(this.lastSelectedButtonId));
+                    this.reInitGui = true;
+                    break;
+                case MOVE_CW_BTN:
+                    if (this.lastSelectedButtonId + 1 > radialMenuData.size() - 1) {
+                        Collections.swap(radialMenuData, this.lastSelectedButtonId, 0);
+                        this.lastSelectedButtonId = 0;
+                    } else {
+                        Collections.swap(radialMenuData, this.lastSelectedButtonId, this.lastSelectedButtonId + 1);
+                        this.lastSelectedButtonId++;
+                    }
+
                     this.buttonCountField.setText(Integer.toString(this.lastSelectedButtonId));
                     this.reInitGui = true;
                     break;
                 case CHANGE_KEYBINDING:
                     GuiControlSelect guiControlSelect = new GuiControlSelect(mc, this, result -> {
                         KeyBinding binding = (KeyBinding) result;
-                        keyBindings.set(this.lastSelectedButtonId, binding);
-                        displayStrings.set(this.lastSelectedButtonId, I18n.format(binding.getKeyDescription()));
+                        radialMenuData.get(this.lastSelectedButtonId).setKeyBinding(binding);
                         this.reInitGui = true;
                     });
                     mc.displayGuiScreen(guiControlSelect);
                     break;
                 case CHANGE_KEYBINDING_MODE: // Assign displayString directly to avoid reInitGui
-                    if (this.changeKeyModeBtn.displayString.equals(TOGGLE_MODE_TEXT)) {
-                        toggleKeys.set(this.lastSelectedButtonId, false);
-                        this.changeKeyModeBtn.displayString = PRESS_MODE_TEXT;
-                    } else {
-                        toggleKeys.set(this.lastSelectedButtonId, true);
-                        this.changeKeyModeBtn.displayString = TOGGLE_MODE_TEXT;
-                    }
+                    radialMenuData.get(this.lastSelectedButtonId).setToggleMode(!radialMenuData.get(this.lastSelectedButtonId).isToggleMode());
+                    this.changeKeyModeBtn.displayString = radialMenuData.get(this.lastSelectedButtonId).isToggleMode() ? TOGGLE_MODE_TEXT : PRESS_MODE_TEXT;
                     break;
             }
         }
@@ -262,14 +282,19 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
         GuiRadialButton button = this.getSelectedButton();
 
-        if (this.displayNameField.isFocused())
-            displayStrings.set(this.lastSelectedButtonId, button.displayString = this.displayNameField.getText());
+        if (this.displayNameField.isFocused()) {
+            button.displayString = this.displayNameField.getText();
+            radialMenuData.get(this.lastSelectedButtonId).setName(button.displayString);
+        }
 
         if (this.iconResourceField.isFocused()) {
-            if (this.iconResourceField.getText().isEmpty())
-                buttonIcons.set(this.lastSelectedButtonId, button.imageIcon = null);
-            else
-                buttonIcons.set(this.lastSelectedButtonId, button.imageIcon = new ResourceLocation(this.iconResourceField.getText()));
+            if (this.iconResourceField.getText().isEmpty()) {
+                button.imageIcon = null;
+                radialMenuData.get(this.lastSelectedButtonId).setButtonIcon(null);
+            } else {
+                button.imageIcon = new ResourceLocation(this.iconResourceField.getText());
+                radialMenuData.get(this.lastSelectedButtonId).setButtonIcon(button.imageIcon);
+            }
         }
     }
 

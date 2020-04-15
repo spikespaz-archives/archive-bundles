@@ -29,7 +29,6 @@ public class RadialMenu {
     public void postInit(FMLPostInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new EventHandler());
 
-        GuiRadialMenu.clearButtons();
         GuiRadialMenu.initButtons();
     }
 }

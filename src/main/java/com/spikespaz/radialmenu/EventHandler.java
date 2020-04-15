@@ -56,7 +56,6 @@ public class EventHandler {
         if (event.getModID().equals(RadialMenu.MOD_ID)) {
             ConfigManager.sync(RadialMenu.MOD_ID, Config.Type.INSTANCE);
 
-            GuiRadialMenu.clearButtons();
             GuiRadialMenu.initButtons();
         }
     }

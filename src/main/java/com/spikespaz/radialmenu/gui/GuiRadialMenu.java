@@ -2,12 +2,12 @@ package com.spikespaz.radialmenu.gui;
 
 import com.google.common.collect.Lists;
 import com.spikespaz.radialmenu.ConfigHandler;
+import com.spikespaz.radialmenu.RadialButtonData;
 import com.spikespaz.radialmenu.RadialMenu;
 import com.spikespaz.radialmenu.Utilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -18,10 +18,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class GuiRadialMenu extends GuiScreen {
-    public static List<KeyBinding> keyBindings = Lists.newArrayList();
-    public static List<Object> buttonIcons = Lists.newArrayList();
-    public static List<String> displayStrings = Lists.newArrayList();
-    public static List<Boolean> toggleKeys = Lists.newArrayList();
+    public static List<RadialButtonData> radialMenuData = Lists.newArrayList();
     protected int menuX;
     protected int menuY;
 
@@ -47,60 +44,90 @@ public class GuiRadialMenu extends GuiScreen {
     }
 
     public static void initButtons() {
-        buttonIcons.add(new ResourceLocation("quark:textures/emotes/wave.png"));
-        keyBindings.add(Utilities.getKeyBindByName("quark.emote.wave"));
-        displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
-        buttonIcons.add(new ResourceLocation("quark:textures/emotes/yes.png"));
-        keyBindings.add(Utilities.getKeyBindByName("quark.emote.yes"));
-        displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
-        buttonIcons.add(new ResourceLocation("quark:textures/emotes/no.png"));
-        keyBindings.add(Utilities.getKeyBindByName("quark.emote.no"));
-        displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
-        buttonIcons.add(new ResourceLocation("quark:textures/emotes/clap.png"));
-        keyBindings.add(Utilities.getKeyBindByName("quark.emote.clap"));
-        displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
-        buttonIcons.add(new ResourceLocation("quark:textures/emotes/cheer.png"));
-        keyBindings.add(Utilities.getKeyBindByName("quark.emote.cheer"));
-        displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
-        buttonIcons.add(new ResourceLocation("quark:textures/emotes/salute.png"));
-        keyBindings.add(Utilities.getKeyBindByName("quark.emote.salute"));
-        displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
-        buttonIcons.add(new ResourceLocation("quark:textures/emotes/shrug.png"));
-        keyBindings.add(Utilities.getKeyBindByName("quark.emote.shrug"));
-        displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
-        buttonIcons.add(new ResourceLocation("quark:textures/emotes/point.png"));
-        keyBindings.add(Utilities.getKeyBindByName("quark.emote.point"));
-        displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
-        buttonIcons.add(new ResourceLocation("quark:textures/emotes/think.png"));
-        keyBindings.add(Utilities.getKeyBindByName("quark.emote.think"));
-        displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
-        buttonIcons.add(new ResourceLocation("quark:textures/emotes/facepalm.png"));
-        keyBindings.add(Utilities.getKeyBindByName("quark.emote.facepalm"));
-        displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
-        buttonIcons.add(new ResourceLocation("quark:textures/emotes/weep.png"));
-        keyBindings.add(Utilities.getKeyBindByName("quark.emote.weep"));
-        displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
-        buttonIcons.add(new ResourceLocation("quark:textures/emotes/headbang.png"));
-        keyBindings.add(Utilities.getKeyBindByName("quark.emote.headbang"));
-        displayStrings.add(I18n.format(keyBindings.get(keyBindings.size() - 1).getKeyDescription()));
+        radialMenuData.clear();
 
-        for (int i = 0; i < getButtonIdCount(); i++)
-            toggleKeys.add(i, false);
-    }
-
-    public static void clearButtons() {
-        buttonIcons.clear();
-        keyBindings.clear();
+        radialMenuData.add(new RadialButtonData(
+                Utilities.getKeyBindByName("quark.emote.wave"),
+                new ResourceLocation("quark:textures/emotes/wave.png"),
+                false,
+                null
+        ));
+        radialMenuData.add(new RadialButtonData(
+                Utilities.getKeyBindByName("quark.emote.yes"),
+                new ResourceLocation("quark:textures/emotes/yes.png"),
+                false,
+                null
+        ));
+        radialMenuData.add(new RadialButtonData(
+                Utilities.getKeyBindByName("quark.emote.no"),
+                new ResourceLocation("quark:textures/emotes/no.png"),
+                false,
+                null
+        ));
+        radialMenuData.add(new RadialButtonData(
+                Utilities.getKeyBindByName("quark.emote.clap"),
+                new ResourceLocation("quark:textures/emotes/clap.png"),
+                false,
+                null
+        ));
+        radialMenuData.add(new RadialButtonData(
+                Utilities.getKeyBindByName("quark.emote.cheer"),
+                new ResourceLocation("quark:textures/emotes/cheer.png"),
+                false,
+                null
+        ));
+        radialMenuData.add(new RadialButtonData(
+                Utilities.getKeyBindByName("quark.emote.salute"),
+                new ResourceLocation("quark:textures/emotes/salute.png"),
+                false,
+                null
+        ));
+        radialMenuData.add(new RadialButtonData(
+                Utilities.getKeyBindByName("quark.emote.shrug"),
+                new ResourceLocation("quark:textures/emotes/shrug.png"),
+                false,
+                null
+        ));
+        radialMenuData.add(new RadialButtonData(
+                Utilities.getKeyBindByName("quark.emote.point"),
+                new ResourceLocation("quark:textures/emotes/point.png"),
+                false,
+                null
+        ));
+        radialMenuData.add(new RadialButtonData(
+                Utilities.getKeyBindByName("quark.emote.think"),
+                new ResourceLocation("quark:textures/emotes/think.png"),
+                false,
+                null
+        ));
+        radialMenuData.add(new RadialButtonData(
+                Utilities.getKeyBindByName("quark.emote.facepalm"),
+                new ResourceLocation("quark:textures/emotes/facepalm.png"),
+                false,
+                null
+        ));
+        radialMenuData.add(new RadialButtonData(
+                Utilities.getKeyBindByName("quark.emote.weep"),
+                new ResourceLocation("quark:textures/emotes/weep.png"),
+                false,
+                null
+        ));
+        radialMenuData.add(new RadialButtonData(
+                Utilities.getKeyBindByName("quark.emote.headbang"),
+                new ResourceLocation("quark:textures/emotes/headbang.png"),
+                false,
+                null
+        ));
     }
 
     protected GuiRadialButton addButton(int id, int circleRadius, int deadZoneRadius, int buttonThickness, int buttonBgColor, int buttonBgHoverColor, float iconOpacity, float hoverIconOpacity) {
         GuiRadialButton button = this.addButton(new GuiRadialButton(id, circleRadius, deadZoneRadius, buttonThickness, buttonBgColor, buttonBgHoverColor, iconOpacity, hoverIconOpacity));
 
         button.setPressSound(ConfigHandler.SOUND.getButtonSoundEvent(), (float) ConfigHandler.SOUND.getButtonSoundPitch());
-        button.setKeyBinding(keyBindings.get(id));
-        button.displayString = displayStrings.get(id);
+        button.setKeyBinding(radialMenuData.get(id).getKeyBinding());
+        button.displayString = radialMenuData.get(id).getName();
 
-        Object buttonIcon = buttonIcons.get(id);
+        Object buttonIcon = radialMenuData.get(id).getButtonIcon();
         if (buttonIcon != null)
             if (Item.class.isAssignableFrom(buttonIcon.getClass()))
                 button.setIcon((Item) buttonIcon);
@@ -118,7 +145,7 @@ public class GuiRadialMenu extends GuiScreen {
         this.buttonList.clear();
         this.labelList.clear();
 
-        for (int i = 0; i < getButtonIdCount(); i++)
+        for (int i = 0; i < radialMenuData.size(); i++)
             this.addButton(i, ConfigHandler.GENERAL.getCircleRadius(), ConfigHandler.GENERAL.getDeadZoneRadius(), ConfigHandler.BUTTON.getThickness(), ConfigHandler.BUTTON.getBgColor(), ConfigHandler.BUTTON.getBgHoverColor(), (float) ConfigHandler.BUTTON.getIconOpacity(), (float) ConfigHandler.BUTTON.getIconHoverOpacity());
 
         if (this.getClass().equals(GuiRadialMenu.class)) {
@@ -131,10 +158,6 @@ public class GuiRadialMenu extends GuiScreen {
                     ((GuiRadialButton) button).cy = this.menuY;
                 }
         }
-    }
-
-    public static int getButtonIdCount() {
-        return Math.max(Math.max(buttonIcons.size(), keyBindings.size()), displayStrings.size());
     }
 
     @Override
@@ -239,17 +262,11 @@ public class GuiRadialMenu extends GuiScreen {
         if (button.keyBinding != null) {
             Utilities.focusGame();
 
-            if (toggleKeys.get(guiButton.id))
+            if (radialMenuData.get(guiButton.id).isToggleMode())
                 Utilities.toggleKey(button.keyBinding);
             else
                 Utilities.fireKey(button.keyBinding);
         }
-    }
-
-    private void controlSelected(GuiRadialButton button, KeyBinding binding) {
-        button.setKeyBinding(keyBindings.set(button.id, binding));
-
-        mc.displayGuiScreen(new GuiIconSelect(mc));
     }
 
     protected GuiRadialButton getSelectedButton() {
