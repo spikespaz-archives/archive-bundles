@@ -24,7 +24,9 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private static final int OH = BTN_H * 2 + 4;
     private static final int CHANGE_KEYBINDING = 103;
     private static final int CHANGE_KEYBINDING_MODE = 104;
-    private static final int PANEL_W = BTN_W + 16;
+    private static final int PAD_TOP = 8;
+    private static final int PAD_LR = 8;
+    private static final int PANEL_W = BTN_W + PAD_LR * 2;
     private static final String TOGGLE_MODE_TEXT = I18n.format("gui.radialmenu.button.togglemode");
     private static final String PRESS_MODE_TEXT = I18n.format("gui.radialmenu.button.pressmode");
     protected int editsX;
@@ -67,38 +69,38 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
         labelString = I18n.format("gui.radialmenu.label.displayname");
         labelWidth = this.fontRenderer.getStringWidth(labelString);
-        label = new GuiLabel(this.fontRenderer, 0, this.editsX - labelWidth / 2, this.height / 2 + OH * -2, 0, BTN_H, 0xFFFFFFFF);
+        label = new GuiLabel(this.fontRenderer, 0, this.editsX - labelWidth / 2, PAD_TOP + OH * 0, 0, BTN_H, 0xFFFFFFFF);
         label.addLine(labelString);
         this.labelList.add(label);
 
-        this.displayNameField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 2, this.height / 2 + OH * -2 + BTN_H + 2, BTN_W - 4, BTN_H - 4);
+        this.displayNameField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 2, PAD_TOP + OH * 0 + BTN_H + 2, BTN_W - 4, BTN_H - 4);
         this.displayNameField.setMaxStringLength(32);
         //        this.displayNameField.setFocused(true);
 
         labelString = I18n.format("gui.radialmenu.label.keybinding");
         labelWidth = this.fontRenderer.getStringWidth(labelString);
-        label = new GuiLabel(this.fontRenderer, 1, this.editsX - labelWidth / 2, this.height / 2 + OH * -1, 0, BTN_H, 0xFFFFFFFF);
+        label = new GuiLabel(this.fontRenderer, 1, this.editsX - labelWidth / 2, PAD_TOP + OH * 1, 0, BTN_H, 0xFFFFFFFF);
         label.addLine(labelString);
         this.labelList.add(label);
 
-        this.changeKeyBindingBtn = this.addButton(new GuiButton(CHANGE_KEYBINDING, this.editsX - BTN_W / 2, this.height / 2 + OH * -1 + BTN_H, BTN_W, BTN_H, ""));
-
-        labelString = I18n.format("gui.radialmenu.label.resourcelocation");
-        labelWidth = this.fontRenderer.getStringWidth(labelString);
-        label = new GuiLabel(this.fontRenderer, 2, this.editsX - labelWidth / 2, this.height / 2 + OH * 0, 0, BTN_H, 0xFFFFFFFF);
-        label.addLine(labelString);
-        this.labelList.add(label);
-
-        this.iconResourceField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 2, this.height / 2 + OH * 0 + BTN_H + 2, BTN_W - 4, BTN_H - 4);
-        this.iconResourceField.setMaxStringLength(512);
+        this.changeKeyBindingBtn = this.addButton(new GuiButton(CHANGE_KEYBINDING, this.editsX - BTN_W / 2, PAD_TOP + OH * 1 + BTN_H, BTN_W, BTN_H, ""));
 
         labelString = I18n.format("gui.radialmenu.label.keybindingmode");
         labelWidth = this.fontRenderer.getStringWidth(labelString);
-        label = new GuiLabel(this.fontRenderer, 1, this.editsX - labelWidth / 2, this.height / 2 + OH * 1, 0, BTN_H, 0xFFFFFFFF);
+        label = new GuiLabel(this.fontRenderer, 1, this.editsX - labelWidth / 2, PAD_TOP + OH * 2, 0, BTN_H, 0xFFFFFFFF);
         label.addLine(labelString);
         this.labelList.add(label);
 
-        this.changeKeyModeBtn = this.addButton(new GuiButton(CHANGE_KEYBINDING_MODE, this.editsX - BTN_W / 2, this.height / 2 + OH * 1 + BTN_H, BTN_W, BTN_H, ""));
+        this.changeKeyModeBtn = this.addButton(new GuiButton(CHANGE_KEYBINDING_MODE, this.editsX - BTN_W / 2, PAD_TOP + OH * 2 + BTN_H, BTN_W, BTN_H, ""));
+
+        labelString = I18n.format("gui.radialmenu.label.resourcelocation");
+        labelWidth = this.fontRenderer.getStringWidth(labelString);
+        label = new GuiLabel(this.fontRenderer, 2, this.editsX - labelWidth / 2, PAD_TOP + OH * 3, 0, BTN_H, 0xFFFFFFFF);
+        label.addLine(labelString);
+        this.labelList.add(label);
+
+        this.iconResourceField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 2, PAD_TOP + OH * 3 + BTN_H + 2, BTN_W - 4, BTN_H - 4);
+        this.iconResourceField.setMaxStringLength(512);
 
         for (GuiButton button : this.buttonList)
             if (button instanceof GuiRadialButton) {
