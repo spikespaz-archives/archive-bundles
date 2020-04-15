@@ -21,6 +21,8 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private static final int DELETE_BUTTON = 102;
     private static final int BTN_W = 175;
     private static final int BTN_H = 20;
+    private static final int FLD_W = BTN_W - 4;
+    private static final int FLD_H = BTN_H - 4;
     private static final int CHANGE_KEYBINDING = 103;
     private static final int CHANGE_KEYBINDING_MODE = 104;
     private static final int PAD_TOP = 8;
@@ -37,6 +39,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private GuiTextField iconResourceField;
     private GuiButton changeKeyBindingBtn;
     private GuiButton changeKeyModeBtn;
+    private GuiCenteredTextField buttonCountField;
 
     public GuiEditRadialMenu(Minecraft mc) {
         super(mc);
@@ -61,8 +64,9 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         this.editsX = this.width - PANEL_W / 2;
 
 //        this.addButton(new GuiButton(100, this.editsX - btnW / +2, this.height / 2 - btnH / 2, btnW, btnH, "Add Button"));
-        this.addButton(new GuiButton(ADD_BUTTON, this.editsX - BTN_H - 2, this.height - BTN_H - 4, BTN_H, BTN_H, "+"));
-        this.addButton(new GuiButton(DELETE_BUTTON, this.editsX + 2, this.height - BTN_H - 4, BTN_H, BTN_H, "-"));
+        this.addButton(new GuiButton(ADD_BUTTON, this.editsX - BTN_H - 15 - PAD_OH / 2, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "+"));
+        this.buttonCountField = new GuiCenteredTextField(0, this.fontRenderer, this.editsX - 26 / 2, this.height - FLD_H - PAD_TOP - 2, 26, FLD_H);
+        this.addButton(new GuiButton(DELETE_BUTTON, this.editsX + 15 + PAD_OH / 2, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "-"));
 
         GuiLabel label;
         int labelWidth;
@@ -74,7 +78,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         label.addLine(labelString);
         this.labelList.add(label);
 
-        this.displayNameField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 2, PAD_TOP + OH * 0 + BTN_H + 2, BTN_W - 4, BTN_H - 4);
+        this.displayNameField = new GuiTextField(1, this.fontRenderer, this.editsX - FLD_W / 2, PAD_TOP + OH * 0 + BTN_H + 2, FLD_W, FLD_H);
         this.displayNameField.setMaxStringLength(32);
         //        this.displayNameField.setFocused(true);
 
@@ -100,7 +104,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         label.addLine(labelString);
         this.labelList.add(label);
 
-        this.iconResourceField = new GuiTextField(0, this.fontRenderer, this.editsX - BTN_W / 2 + 2, PAD_TOP + OH * 3 + BTN_H + 2, BTN_W - 4, BTN_H - 4);
+        this.iconResourceField = new GuiTextField(2, this.fontRenderer, this.editsX - FLD_W / 2, PAD_TOP + OH * 3 + BTN_H + 2, FLD_W, FLD_H);
         this.iconResourceField.setMaxStringLength(512);
 
         for (GuiButton button : this.buttonList)
@@ -109,6 +113,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                     GuiRadialButton radialButton = (GuiRadialButton) button;
                     this.setButtonOptionValues(radialButton);
                     radialButton.setSelected(true);
+                    this.buttonCountField.setText(Integer.toString(button.id));
                 }
 
                 ((GuiRadialButton) button).cx = this.menuX;
@@ -143,11 +148,12 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        this.buttonCountField.drawTextBox();
         this.displayNameField.drawTextBox();
         this.iconResourceField.drawTextBox();
 
         // Uncomment to draw debug lines
-        this.drawDebugLines();
+//        this.drawDebugLines();
     }
 
     private void drawDebugLines() {
@@ -181,6 +187,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
             button.setSelected(true);
             this.lastSelectedButtonId = button.id;
+            this.buttonCountField.setText(Integer.toString(this.lastSelectedButtonId));
 
             for (GuiButton guiButton1 : this.buttonList)
                 if ((guiButton1 instanceof GuiRadialButton) && !guiButton.equals(guiButton1))
@@ -199,6 +206,8 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                     keyBindings.add(this.lastSelectedButtonId, null);
                     buttonIcons.add(this.lastSelectedButtonId, null);
                     displayStrings.add(this.lastSelectedButtonId, "");
+                    toggleKeys.add(this.lastSelectedButtonId, false);
+                    this.buttonCountField.setText(Integer.toString(this.lastSelectedButtonId));
                     this.reInitGui = true;
                     break;
                 case DELETE_BUTTON:
@@ -208,6 +217,8 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                     keyBindings.remove(this.lastSelectedButtonId);
                     buttonIcons.remove(this.lastSelectedButtonId);
                     displayStrings.remove(this.lastSelectedButtonId);
+                    toggleKeys.remove(this.lastSelectedButtonId);
+                    this.buttonCountField.setText(Integer.toString(this.lastSelectedButtonId));
                     this.reInitGui = true;
                     break;
                 case CHANGE_KEYBINDING:
