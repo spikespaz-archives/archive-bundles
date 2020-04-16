@@ -2,6 +2,7 @@ package com.spikespaz.radialmenu.gui;
 
 import com.spikespaz.radialmenu.ConfigHandler;
 import com.spikespaz.radialmenu.RadialButtonData;
+import com.spikespaz.radialmenu.gui.widgets.LabelWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
@@ -45,6 +46,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private GuiButton changeKeyBindingBtn;
     private GuiButton changeKeyModeBtn;
     private GuiCenteredTextField buttonCountField;
+    private LabelWidget testWidgetLabel;
 
     public GuiEditRadialMenu(Minecraft mc) {
         super(mc);
@@ -126,6 +128,11 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                 ((GuiRadialButton) button).cx = this.menuX;
                 ((GuiRadialButton) button).cy = this.menuY;
             }
+
+
+        LabelWidget.LabelWidgetBuilder<LabelWidget.LabelWidgetBuilder, LabelWidget> labelBuilder = new LabelWidget.LabelWidgetBuilder<>();
+
+        this.testWidgetLabel = (LabelWidget) labelBuilder.start(new LabelWidget(mc.fontRenderer)).text("Sample Text").box(PANEL_W, 20, this.width - PANEL_W, PAD_TOP).build();
     }
 
     private void setButtonOptionValues(GuiRadialButton button) {
@@ -153,11 +160,14 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
         this.drawDefaultBackground();
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.testWidgetLabel.draw(partialTicks);
+        this.testWidgetLabel.drawDebug();
 
-        this.buttonCountField.drawTextBox();
-        this.displayNameField.drawTextBox();
-        this.iconResourceField.drawTextBox();
+//        super.drawScreen(mouseX, mouseY, partialTicks);
+
+//        this.buttonCountField.drawTextBox();
+//        this.displayNameField.drawTextBox();
+//        this.iconResourceField.drawTextBox();
 
         // Uncomment to draw debug lines
 //        this.drawDebugLines();
