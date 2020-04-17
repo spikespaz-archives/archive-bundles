@@ -61,6 +61,10 @@ public final class Utilities {
         return new int[]{color >> 16 & 255, color >> 8 & 255, color & 255};
     }
 
+    public static int[] intToArgb(int color) {
+        return new int[]{color >> 24 & 255, color >> 16 & 255, color >> 8 & 255, color & 255};
+    }
+
     public static int rgbToInt(int red, int green, int blue) {
         return red << 16 | green << 8 | blue;
     }
