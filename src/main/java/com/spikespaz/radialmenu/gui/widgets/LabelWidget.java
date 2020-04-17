@@ -9,20 +9,15 @@ import java.util.Arrays;
 import java.util.EnumSet;
 
 public class LabelWidget extends Widget {
+    public static final int FONT_SHADOW_HEIGHT = 1;
     private final FontRenderer fontRenderer;
-    @Getter
-    @Setter
-    @NonNull
+    @Getter @Setter @NonNull
     protected String text;
-    @Getter
-    @Setter
+    @Getter @Setter
     protected int textColor;
-    @Getter
-    @Setter
-    @NonNull
+    @Getter @Setter @NonNull
     protected EnumSet<Align> alignment;
-    @Getter
-    @Setter
+    @Getter @Setter
     protected int vPadding, hPadding;
 
     public LabelWidget(FontRenderer fontRenderer) {
@@ -34,63 +29,71 @@ public class LabelWidget extends Widget {
         this.vPadding = 0;
     }
 
-    @Override
-    public void draw(float partialTicks) {
-        double sx, sy, sw, sh;
+    public static Builder<?, ?> builder(FontRenderer fontRenderer) {
+        return new Builder<>(new LabelWidget(fontRenderer));
+    }
 
-        sw = this.fontRenderer.getStringWidth(this.text);
-        sh = this.fontRenderer.FONT_HEIGHT;
+    @Override
+    public void draw(double mouseX, double mouseY, float partialTicks) {
+        if (!this.visible)
+            return;
+
+        double sx, sy, tw, th;
+
+        tw = this.fontRenderer.getStringWidth(this.text);
+        th = this.fontRenderer.FONT_HEIGHT;
 
         if (this.alignment.contains(Align.L))
             sx = this.x + this.hPadding;
         else if (this.alignment.contains(Align.R))
-            sx = this.x + this.width - this.hPadding;
+            sx = this.x + this.width - tw - this.hPadding;
         else
-            sx = this.x + this.width / 2 - sw / 2;
+            sx = this.x + (this.width - tw) / 2;
 
         if (this.alignment.contains(Align.T))
             sy = this.y + this.vPadding;
         else if (this.alignment.contains(Align.B))
-            sy = this.y + this.height - this.vPadding - sh;
+            sy = this.y + this.height - th - this.vPadding;
         else
-            sy = this.y + this.height / 2 - sh / 2;
-
-//        sx = this.x;
-//        sy = this.y;
+            sy = this.y + (this.height - th) / 2 + FONT_SHADOW_HEIGHT;
 
         this.drawString(fontRenderer, this.text, (int) sx, (int) sy, this.textColor);
     }
 
-    public static class LabelWidgetBuilder<T extends LabelWidgetBuilder, W extends LabelWidget> extends WidgetBuilder<T, W> {
-        public T text(String text) {
+    public static class Builder<W extends LabelWidget, B extends Builder<W, B>> extends Widget.Builder<W, B> {
+        public Builder(W widget) {
+            super(widget);
+        }
+
+        public B text(String text) {
             this.widget.setText(text);
-            return (T) this;
+            return this.self();
         }
 
-        public T color(int color) {
+        public B color(int color) {
             this.widget.setTextColor(color);
-            return (T) this;
+            return this.self();
         }
 
-        public T vPad(int v) {
+        public B vPad(int v) {
             this.widget.setVPadding(v);
-            return (T) this;
+            return this.self();
         }
 
-        public T hPad(int h) {
+        public B hPad(int h) {
             this.widget.setHPadding(h);
-            return (T) this;
+            return this.self();
         }
 
-        public T pad(int v, int h) {
+        public B pad(int v, int h) {
             this.widget.setVPadding(v);
             this.widget.setHPadding(h);
-            return (T) this;
+            return this.self();
         }
 
-        public T align(Align... alignments) {
+        public B align(Align... alignments) {
             this.widget.setAlignment(EnumSet.of(alignments[0], Arrays.copyOfRange(alignments, 1, alignments.length)));
-            return (T) this;
+            return this.self();
         }
     }
 }

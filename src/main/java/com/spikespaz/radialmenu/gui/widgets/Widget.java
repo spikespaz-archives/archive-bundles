@@ -5,13 +5,10 @@ import lombok.Setter;
 import net.minecraft.client.gui.Gui;
 
 public abstract class Widget extends Gui {
-    @Getter
-    @Setter
+    @Getter @Setter
     protected double x, y, width, height;
-
-    public void drawDebug() {
-        this.drawGradientRect((int) this.getLeft(), (int) this.getTop(), (int) this.getRight(), (int) this.getBottom(), 0x44FF0000, 0x44FF0000);
-    }
+    @Getter @Setter
+    protected boolean visible = true;
 
     public double getTop() {
         return this.y;
@@ -37,8 +34,6 @@ public abstract class Widget extends Gui {
         this.x = x - this.width;
     }
 
-    public abstract void draw(float partialTicks);
-
     public void setPos(int x, int y) {
         this.x = x;
         this.y = y;
@@ -56,61 +51,76 @@ public abstract class Widget extends Gui {
         this.height = h;
     }
 
-    public static class WidgetBuilder<T extends WidgetBuilder, W extends Widget> {
+    public abstract void draw(double mouseX, double mouseY, float partialTicks);
+
+    public void drawDebug() {
+        this.drawGradientRect((int) this.getLeft(), (int) this.getTop(), (int) this.getRight(), (int) this.getBottom(), 0x44FF0000, 0x44FF0000);
+    }
+
+    static abstract class Builder<W extends Widget, B extends Builder<W, B>> {
         protected W widget;
 
-        public T start(W widget) {
-            this.widget = widget;
-            return (T) this;
+        @SuppressWarnings("unchecked")
+        protected final B self() {
+            return (B) this;
         }
 
-        public W build() {
+        public Builder(W widget) {
+            this.widget = widget;
+        }
+
+        public W done() {
             return this.widget;
         }
 
-        public T top(double y) {
+        public B visible(boolean v) {
+            this.widget.setVisible(v);
+            return this.self();
+        }
+
+        public B top(double y) {
             this.widget.setY(y);
-            return (T) this;
+            return this.self();
         }
 
-        public T bottom(double y) {
+        public B bottom(double y) {
             this.widget.setBottom(y);
-            return (T) this;
+            return this.self();
         }
 
-        public T left(double x) {
+        public B left(double x) {
             this.widget.setX(x);
-            return (T) this;
+            return this.self();
         }
 
-        public T right(double x) {
+        public B right(double x) {
             this.widget.setRight(x);
-            return (T) this;
+            return this.self();
         }
 
-        public T width(double w) {
+        public B width(double w) {
             this.widget.setWidth(w);
-            return (T) this;
+            return this.self();
         }
 
-        public T height(double h) {
+        public B height(double h) {
             this.widget.setHeight(h);
-            return (T) this;
+            return this.self();
         }
 
-        public T pos(int x, int y) {
+        public B pos(int x, int y) {
             this.widget.setPos(x, y);
-            return (T) this;
+            return this.self();
         }
 
-        public T size(int w, int h) {
+        public B size(int w, int h) {
             this.widget.setSize(w, h);
-            return (T) this;
+            return this.self();
         }
 
-        public T box(int w, int h, int x, int y) {
+        public B box(int w, int h, int x, int y) {
             this.widget.setBox(w, h, x, y);
-            return (T) this;
+            return this.self();
         }
     }
 
