@@ -29,7 +29,7 @@ public class LabelWidget extends Widget {
         this.vPadding = 0;
     }
 
-    public static Builder<?, ?> builder(FontRenderer fontRenderer) {
+    public static Builder<?, ?> build(FontRenderer fontRenderer) {
         return new Builder<>(new LabelWidget(fontRenderer));
     }
 
@@ -57,7 +57,7 @@ public class LabelWidget extends Widget {
         else
             sy = this.y + (this.height - th) / 2 + FONT_SHADOW_HEIGHT;
 
-        this.drawString(fontRenderer, this.text, (int) sx, (int) sy, this.textColor);
+        fontRenderer.drawStringWithShadow(this.text, (int) sx, (int) sy, this.textColor);
     }
 
     public static class Builder<W extends LabelWidget, B extends Builder<W, B>> extends Widget.Builder<W, B> {

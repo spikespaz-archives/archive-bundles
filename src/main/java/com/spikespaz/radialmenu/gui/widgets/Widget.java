@@ -1,10 +1,12 @@
 package com.spikespaz.radialmenu.gui.widgets;
 
+import com.spikespaz.radialmenu.gui.RenderHelper;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.client.gui.Gui;
 
-public abstract class Widget extends Gui {
+public abstract class Widget {
+    @Getter @Setter
+    protected float zLevel;
     @Getter @Setter
     protected double x, y, width, height;
     @Getter @Setter
@@ -34,17 +36,17 @@ public abstract class Widget extends Gui {
         this.x = x - this.width;
     }
 
-    public void setPos(int x, int y) {
+    public void setPos(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public void setSize(int w, int h) {
+    public void setSize(double w, double h) {
         this.width = w;
         this.height = h;
     }
 
-    public void setBox(int w, int h, int x, int y) {
+    public void setBox(double w, double h, double x, double y) {
         this.x = x;
         this.y = y;
         this.width = w;
@@ -54,7 +56,7 @@ public abstract class Widget extends Gui {
     public abstract void draw(double mouseX, double mouseY, float partialTicks);
 
     public void drawDebug() {
-        this.drawGradientRect((int) this.getLeft(), (int) this.getTop(), (int) this.getRight(), (int) this.getBottom(), 0x44FF0000, 0x44FF0000);
+        RenderHelper.drawGradientRect(this.x, this.y, this.width, this.height, this.zLevel, 0x44FF0000, 0x44FF0000);
     }
 
     static abstract class Builder<W extends Widget, B extends Builder<W, B>> {
@@ -71,6 +73,11 @@ public abstract class Widget extends Gui {
 
         public W done() {
             return this.widget;
+        }
+
+        public B zLevel(float z) {
+            this.widget.setZLevel(z);
+            return this.self();
         }
 
         public B visible(boolean v) {
@@ -108,17 +115,17 @@ public abstract class Widget extends Gui {
             return this.self();
         }
 
-        public B pos(int x, int y) {
+        public B pos(double x, double y) {
             this.widget.setPos(x, y);
             return this.self();
         }
 
-        public B size(int w, int h) {
+        public B size(double w, double h) {
             this.widget.setSize(w, h);
             return this.self();
         }
 
-        public B box(int w, int h, int x, int y) {
+        public B box(double w, double h, double x, double y) {
             this.widget.setBox(w, h, x, y);
             return this.self();
         }
