@@ -10,7 +10,22 @@ public abstract class Widget {
     @Getter @Setter
     protected double x, y, width, height;
     @Getter @Setter
-    protected boolean visible = true;
+    protected boolean visible;
+    @Getter
+    @Setter
+    protected int debugColor;
+
+    Widget() {
+        this.zLevel = 310;
+        this.x = 0;
+        this.y = 0;
+        this.width = 20;
+        this.height = 20;
+        this.visible = true;
+        this.debugColor = 0x44FF0000;
+    }
+
+//    public abstract void init();
 
     public double getTop() {
         return this.y;
@@ -56,7 +71,7 @@ public abstract class Widget {
     public abstract void draw(double mouseX, double mouseY, float partialTicks);
 
     public void drawDebug() {
-        RenderHelper.drawGradientRect(this.x, this.y, this.width, this.height, this.zLevel, 0x44FF0000, 0x44FF0000);
+        RenderHelper.drawGradientRect(this.x, this.y, this.width, this.height, this.zLevel, this.debugColor, this.debugColor);
     }
 
     static abstract class Builder<W extends Widget, B extends Builder<W, B>> {
@@ -132,6 +147,6 @@ public abstract class Widget {
     }
 
     public enum Align {
-        T, B, L, R, CV, CH
+        T, B, L, R, CH, CV
     }
 }
