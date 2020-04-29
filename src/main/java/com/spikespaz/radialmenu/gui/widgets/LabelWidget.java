@@ -10,23 +10,26 @@ import java.util.EnumSet;
 
 public class LabelWidget extends Widget {
     public static final int FONT_SHADOW_HEIGHT = 1;
-    private final FontRenderer fontRenderer;
+    protected final FontRenderer fontRenderer;
     @Getter @Setter @NonNull
     protected String text;
     @Getter @Setter
     protected int textColor;
     @Getter @Setter @NonNull
-    protected EnumSet<Align> alignment;
+    protected EnumSet<Align> align;
     @Getter @Setter
     protected int vPadding, hPadding;
 
     public LabelWidget(FontRenderer fontRenderer) {
+        super();
         this.fontRenderer = fontRenderer;
         this.text = "";
         this.textColor = 0xFFFFFFFF;
-        this.alignment = EnumSet.of(Align.CH, Align.CV);
+        this.align = EnumSet.of(Align.T, Align.B, Align.L, Align.R);
         this.hPadding = 0;
         this.vPadding = 0;
+        this.debugColor = 0x4400FF00;
+//        this.debugColor = Utilities.shiftHue(this.debugColor, 5f);
     }
 
     public static Builder<?, ?> build(FontRenderer fontRenderer) {
@@ -38,24 +41,29 @@ public class LabelWidget extends Widget {
         if (!this.visible)
             return;
 
-        double sx, sy, tw, th;
+        double sx = this.x, sy = this.y, tw, th;
 
         tw = this.fontRenderer.getStringWidth(this.text);
         th = this.fontRenderer.FONT_HEIGHT;
 
-        if (this.alignment.contains(Align.L))
-            sx = this.x + this.hPadding;
-        else if (this.alignment.contains(Align.R))
-            sx = this.x + this.width - tw - this.hPadding;
-        else
-            sx = this.x + (this.width - tw) / 2;
+        boolean stackLeft = this.align.contains(Align.L);
+        boolean stackRight = this.align.contains(Align.R);
+        boolean stackTop = this.align.contains(Align.T);
+        boolean stackBottom = this.align.contains(Align.B);
 
-        if (this.alignment.contains(Align.T))
-            sy = this.y + this.vPadding;
-        else if (this.alignment.contains(Align.B))
-            sy = this.y + this.height - th - this.vPadding;
-        else
+        if (stackLeft && stackRight)
+            sx = this.x + (this.width - tw) / 2;
+        else if (stackLeft)
+            sx = this.x + this.hPadding;
+        else if (this.align.contains(Align.R))
+            sx = this.x + this.width - tw - this.hPadding;
+
+        if (stackTop && stackBottom)
             sy = this.y + (this.height - th) / 2 + FONT_SHADOW_HEIGHT;
+        else if (stackLeft)
+            sy = this.y + this.vPadding;
+        else if (stackRight)
+            sy = this.y + this.height - th - this.vPadding;
 
         fontRenderer.drawStringWithShadow(this.text, (int) sx, (int) sy, this.textColor);
     }
@@ -91,8 +99,8 @@ public class LabelWidget extends Widget {
             return this.self();
         }
 
-        public B align(Align... alignments) {
-            this.widget.setAlignment(EnumSet.of(alignments[0], Arrays.copyOfRange(alignments, 1, alignments.length)));
+        public B align(Align... aligns) {
+            this.widget.setAlign(EnumSet.of(aligns[0], Arrays.copyOfRange(aligns, 1, aligns.length)));
             return this.self();
         }
     }
