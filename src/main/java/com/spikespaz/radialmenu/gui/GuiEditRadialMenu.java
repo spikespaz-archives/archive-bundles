@@ -48,6 +48,8 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private GuiCenteredTextField buttonCountField;
     private MultiWidget testWidget0;
     private MultiWidget testWidget1;
+    private MultiWidget testWidget2;
+    private MultiWidget testWidget3;
 
     public GuiEditRadialMenu(Minecraft mc) {
         super(mc);
@@ -67,6 +69,10 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     public void initGui() {
         super.initGui();
 
+        this.menuX = (this.width - PANEL_W) / 2;
+        this.menuY = this.height / 2;
+        this.editsX = this.width - PANEL_W / 2;
+
         if (selectedButton == null)
             this.setSelectedButton(0);
 
@@ -82,10 +88,6 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
             button.cx = this.menuX;
             button.cy = this.menuY;
         }
-
-        this.menuX = (this.width - PANEL_W) / 2;
-        this.menuY = this.height / 2;
-        this.editsX = this.width - PANEL_W / 2;
 
         this.addButton(new GuiButton(MOVE_CCW_BTN, this.editsX - BTN_H - 15 - PAD_OH - BTN_H, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "<"));
         this.addButton(new GuiButton(ADD_BTN, this.editsX - BTN_H - 15 - PAD_OH / 2, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "+"));
@@ -138,10 +140,22 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         this.testWidget0 = new LabeledButtonWidget(this.fontRenderer);
         this.testWidget0.setBox(PANEL_W, OH, this.width - PANEL_W, PAD_TOP + OH * 0);
         ((LabelWidget) this.testWidget0.getChildren().get(0)).setText("AAAAAAAAAA");
+        ((LabelWidget) this.testWidget0.getChildren().get(1)).setText("Second Label Widget A");
 
         this.testWidget1 = new LabeledButtonWidget(this.fontRenderer);
         this.testWidget1.setBox(PANEL_W, OH, this.width - PANEL_W, PAD_TOP + OH * 1);
         ((LabelWidget) this.testWidget1.getChildren().get(0)).setText("BBBBBBBBBB");
+        ((LabelWidget) this.testWidget1.getChildren().get(1)).setText("Second Label Widget B");
+
+        this.testWidget2 = new LabeledButtonWidget(this.fontRenderer);
+        this.testWidget2.setBox(PANEL_W, OH, this.width - PANEL_W, PAD_TOP + OH * 2);
+        ((LabelWidget) this.testWidget2.getChildren().get(0)).setText("CCCCCCCCCC");
+        ((LabelWidget) this.testWidget2.getChildren().get(1)).setText("Second Label Widget C");
+
+        this.testWidget3 = new LabeledButtonWidget(this.fontRenderer);
+        this.testWidget3.setBox(PANEL_W, OH, this.width - PANEL_W, PAD_TOP + OH * 3);
+        ((LabelWidget) this.testWidget3.getChildren().get(0)).setText("DDDDDDDDDD");
+        ((LabelWidget) this.testWidget3.getChildren().get(1)).setText("Second Label Widget D");
     }
 
     private boolean setSelectedButton(int id) {
@@ -190,6 +204,12 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
         this.testWidget1.draw(mouseX, mouseY, partialTicks);
         this.testWidget1.drawDebug();
+
+        this.testWidget2.draw(mouseX, mouseY, partialTicks);
+        this.testWidget2.drawDebug();
+
+        this.testWidget3.draw(mouseX, mouseY, partialTicks);
+        this.testWidget3.drawDebug();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
