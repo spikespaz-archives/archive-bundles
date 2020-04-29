@@ -137,14 +137,15 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
     private boolean setSelectedButton(int id) {
         for (GuiButton guiButton : buttonList) {
-            if (guiButton.id == id) {
-                this.selectedButton = guiButton;
+            if (guiButton.id != id || !(guiButton instanceof GuiRadialButton))
+                continue;
 
-                if (guiButton instanceof GuiRadialButton)
-                    ((GuiRadialButton) guiButton).setSelected(true);
+            GuiRadialButton button = (GuiRadialButton) guiButton;
 
-                return true;
-            }
+            this.selectedButton = button;
+            button.setSelected(true);
+
+            return true;
         }
 
         return false;
