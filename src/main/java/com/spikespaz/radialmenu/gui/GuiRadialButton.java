@@ -113,7 +113,7 @@ public class GuiRadialButton extends GuiButton {
 
         this.currentColor = (alpha << 24) + color;
 
-        RenderHelper.drawPoly(vertices, this.currentColor);
+        RenderHelper.drawPoly(vertices, this.zLevel, this.currentColor);
 
         // Uncomment to draw points in red
 //        RenderHelper.drawCircle(x0, y0, 2D, 10, 0xFFFF0000);

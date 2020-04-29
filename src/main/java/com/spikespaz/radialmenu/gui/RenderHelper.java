@@ -104,9 +104,9 @@ public class RenderHelper {
     }
 
     public static void drawGradientRect(double x, double y, double width, double height, float zLevel, int startColor, int endColor) {
-        final int[] startArgb = Utilities.intToArgb(startColor), endArgb = Utilities.intToRgb(endColor);
-        final float[] startArgbF = {startArgb[0] / 255f, startArgb[1] / 255f, startArgb[2] / 255f, startArgb[3] / 244f};
-        final float[] endArgbF = {endArgb[0] / 255f, endArgb[1] / 255f, endArgb[2] / 255f, endArgb[3] / 244f};
+        final int[] startArgb = Utilities.intToArgb(startColor), endArgb = Utilities.intToArgb(endColor);
+        final float[] startArgbF = {startArgb[0] / 255f, startArgb[1] / 255f, startArgb[2] / 255f, startArgb[3] / 255f};
+        final float[] endArgbF = {endArgb[0] / 255f, endArgb[1] / 255f, endArgb[2] / 255f, endArgb[3] / 255f};
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
@@ -122,7 +122,9 @@ public class RenderHelper {
         bufferBuilder.pos(x + width, y, zLevel).color(startArgbF[1], startArgbF[2], startArgbF[3], startArgbF[0]).endVertex();
         bufferBuilder.pos(x, y, zLevel).color(startArgbF[1], startArgbF[2], startArgbF[3], startArgbF[0]).endVertex();
         bufferBuilder.pos(x, y + height, zLevel).color(endArgbF[1], endArgbF[2], endArgbF[3], endArgbF[0]).endVertex();
-        bufferBuilder.pos(x + width, y, zLevel + height).color(endArgbF[1], endArgbF[2], startArgbF[3], endArgbF[0]).endVertex();
+        bufferBuilder.pos(x + width, y + height, zLevel + height).color(endArgbF[1], endArgbF[2], startArgbF[3], endArgbF[0]).endVertex();
+
+        tessellator.draw();
 
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         GlStateManager.disableBlend();
@@ -138,95 +140,95 @@ public class RenderHelper {
         drawGradientRect(Math.min(x0, x1), Math.min(y0, y1), Math.abs(x1 - x0), Math.abs(y1 - y0), zLevel, startColor, endColor);
     }
 
-//    /**
-//     * Draws a textured rectangle at the current z-value.
-//     */
-//    public void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height)
-//    {
-//        float f = 0.00390625F;
-//        float f1 = 0.00390625F;
-//        Tessellator tessellator = Tessellator.getInstance();
-//        BufferBuilder bufferbuilder = tessellator.getBuffer();
-//        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-//        bufferbuilder.pos((double)(x + 0), (double)(y + height), (double)this.zLevel).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + height) * 0.00390625F)).endVertex();
-//        bufferbuilder.pos((double)(x + width), (double)(y + height), (double)this.zLevel).tex((double)((float)(textureX + width) * 0.00390625F), (double)((float)(textureY + height) * 0.00390625F)).endVertex();
-//        bufferbuilder.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(textureX + width) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
-//        bufferbuilder.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
-//        tessellator.draw();
-//    }
-//
-//    /**
-//     * Draws a textured rectangle using the texture currently bound to the TextureManager
-//     */
-//    public void drawTexturedModalRect(float xCoord, float yCoord, int minU, int minV, int maxU, int maxV)
-//    {
-//        float f = 0.00390625F;
-//        float f1 = 0.00390625F;
-//        Tessellator tessellator = Tessellator.getInstance();
-//        BufferBuilder bufferbuilder = tessellator.getBuffer();
-//        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-//        bufferbuilder.pos((double)(xCoord + 0.0F), (double)(yCoord + (float)maxV), (double)this.zLevel).tex((double)((float)(minU + 0) * 0.00390625F), (double)((float)(minV + maxV) * 0.00390625F)).endVertex();
-//        bufferbuilder.pos((double)(xCoord + (float)maxU), (double)(yCoord + (float)maxV), (double)this.zLevel).tex((double)((float)(minU + maxU) * 0.00390625F), (double)((float)(minV + maxV) * 0.00390625F)).endVertex();
-//        bufferbuilder.pos((double)(xCoord + (float)maxU), (double)(yCoord + 0.0F), (double)this.zLevel).tex((double)((float)(minU + maxU) * 0.00390625F), (double)((float)(minV + 0) * 0.00390625F)).endVertex();
-//        bufferbuilder.pos((double)(xCoord + 0.0F), (double)(yCoord + 0.0F), (double)this.zLevel).tex((double)((float)(minU + 0) * 0.00390625F), (double)((float)(minV + 0) * 0.00390625F)).endVertex();
-//        tessellator.draw();
-//    }
-//
-//    /**
-//     * Draws a texture rectangle using the texture currently bound to the TextureManager
-//     */
-//    public void drawTexturedModalRect(int xCoord, int yCoord, TextureAtlasSprite textureSprite, int widthIn, int heightIn)
-//    {
-//        Tessellator tessellator = Tessellator.getInstance();
-//        BufferBuilder bufferbuilder = tessellator.getBuffer();
-//        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-//        bufferbuilder.pos((double)(xCoord + 0), (double)(yCoord + heightIn), (double)this.zLevel).tex((double)textureSprite.getMinU(), (double)textureSprite.getMaxV()).endVertex();
-//        bufferbuilder.pos((double)(xCoord + widthIn), (double)(yCoord + heightIn), (double)this.zLevel).tex((double)textureSprite.getMaxU(), (double)textureSprite.getMaxV()).endVertex();
-//        bufferbuilder.pos((double)(xCoord + widthIn), (double)(yCoord + 0), (double)this.zLevel).tex((double)textureSprite.getMaxU(), (double)textureSprite.getMinV()).endVertex();
-//        bufferbuilder.pos((double)(xCoord + 0), (double)(yCoord + 0), (double)this.zLevel).tex((double)textureSprite.getMinU(), (double)textureSprite.getMinV()).endVertex();
-//        tessellator.draw();
-//    }
-//
-//    /**
-//     * Draws a textured rectangle at z = 0. Args: x, y, u, v, width, height, textureWidth, textureHeight
-//     */
-//    public static void drawModalRectWithCustomSizedTexture(int x, int y, float u, float v, int width, int height, float textureWidth, float textureHeight)
-//    {
-//        float f = 1.0F / textureWidth;
-//        float f1 = 1.0F / textureHeight;
-//        Tessellator tessellator = Tessellator.getInstance();
-//        BufferBuilder bufferbuilder = tessellator.getBuffer();
-//        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-//        bufferbuilder.pos((double)x, (double)(y + height), 0.0D).tex((double)(u * f), (double)((v + (float)height) * f1)).endVertex();
-//        bufferbuilder.pos((double)(x + width), (double)(y + height), 0.0D).tex((double)((u + (float)width) * f), (double)((v + (float)height) * f1)).endVertex();
-//        bufferbuilder.pos((double)(x + width), (double)y, 0.0D).tex((double)((u + (float)width) * f), (double)(v * f1)).endVertex();
-//        bufferbuilder.pos((double)x, (double)y, 0.0D).tex((double)(u * f), (double)(v * f1)).endVertex();
-//        tessellator.draw();
-//    }
-//
-//    /**
-//     * Draws a scaled, textured, tiled modal rect at z = 0. This method isn't used anywhere in vanilla code.
-//     *
-//     * @param u Texture U (or x) coordinate, in pixels
-//     * @param v Texture V (or y) coordinate, in pixels
-//     * @param uWidth Width of the rendered part of the texture, in pixels. Parts of the texture outside of it will wrap
-//     * around
-//     * @param vHeight Height of the rendered part of the texture, in pixels. Parts of the texture outside of it will
-//     * wrap around
-//     * @param tileWidth total width of the texture
-//     * @param tileHeight total height of the texture
-//     */
-//    public static void drawScaledCustomSizeModalRect(int x, int y, float u, float v, int uWidth, int vHeight, int width, int height, float tileWidth, float tileHeight)
-//    {
-//        float f = 1.0F / tileWidth;
-//        float f1 = 1.0F / tileHeight;
-//        Tessellator tessellator = Tessellator.getInstance();
-//        BufferBuilder bufferbuilder = tessellator.getBuffer();
-//        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-//        bufferbuilder.pos((double)x, (double)(y + height), 0.0D).tex((double)(u * f), (double)((v + (float)vHeight) * f1)).endVertex();
-//        bufferbuilder.pos((double)(x + width), (double)(y + height), 0.0D).tex((double)((u + (float)uWidth) * f), (double)((v + (float)vHeight) * f1)).endVertex();
-//        bufferbuilder.pos((double)(x + width), (double)y, 0.0D).tex((double)((u + (float)uWidth) * f), (double)(v * f1)).endVertex();
-//        bufferbuilder.pos((double)x, (double)y, 0.0D).tex((double)(u * f), (double)(v * f1)).endVertex();
-//        tessellator.draw();
-//    }
+    /*    *//*
+      Draws a textured rectangle at the current z-value.
+     *//*
+    public void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height)
+    {
+        float f = 0.00390625F;
+        float f1 = 0.00390625F;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos((double)(x + 0), (double)(y + height), (double)this.zLevel).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + height) * 0.00390625F)).endVertex();
+        bufferbuilder.pos((double)(x + width), (double)(y + height), (double)this.zLevel).tex((double)((float)(textureX + width) * 0.00390625F), (double)((float)(textureY + height) * 0.00390625F)).endVertex();
+        bufferbuilder.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(textureX + width) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
+        bufferbuilder.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
+        tessellator.draw();
+    }
+
+    *//*
+      Draws a textured rectangle using the texture currently bound to the TextureManager
+     *//*
+    public void drawTexturedModalRect(float xCoord, float yCoord, int minU, int minV, int maxU, int maxV)
+    {
+        float f = 0.00390625F;
+        float f1 = 0.00390625F;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos((double)(xCoord + 0.0F), (double)(yCoord + (float)maxV), (double)this.zLevel).tex((double)((float)(minU + 0) * 0.00390625F), (double)((float)(minV + maxV) * 0.00390625F)).endVertex();
+        bufferbuilder.pos((double)(xCoord + (float)maxU), (double)(yCoord + (float)maxV), (double)this.zLevel).tex((double)((float)(minU + maxU) * 0.00390625F), (double)((float)(minV + maxV) * 0.00390625F)).endVertex();
+        bufferbuilder.pos((double)(xCoord + (float)maxU), (double)(yCoord + 0.0F), (double)this.zLevel).tex((double)((float)(minU + maxU) * 0.00390625F), (double)((float)(minV + 0) * 0.00390625F)).endVertex();
+        bufferbuilder.pos((double)(xCoord + 0.0F), (double)(yCoord + 0.0F), (double)this.zLevel).tex((double)((float)(minU + 0) * 0.00390625F), (double)((float)(minV + 0) * 0.00390625F)).endVertex();
+        tessellator.draw();
+    }
+
+     *//*
+     * Draws a texture rectangle using the texture currently bound to the TextureManager
+     *//*
+    public void drawTexturedModalRect(int xCoord, int yCoord, TextureAtlasSprite textureSprite, int widthIn, int heightIn)
+    {
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos((double)(xCoord + 0), (double)(yCoord + heightIn), (double)this.zLevel).tex((double)textureSprite.getMinU(), (double)textureSprite.getMaxV()).endVertex();
+        bufferbuilder.pos((double)(xCoord + widthIn), (double)(yCoord + heightIn), (double)this.zLevel).tex((double)textureSprite.getMaxU(), (double)textureSprite.getMaxV()).endVertex();
+        bufferbuilder.pos((double)(xCoord + widthIn), (double)(yCoord + 0), (double)this.zLevel).tex((double)textureSprite.getMaxU(), (double)textureSprite.getMinV()).endVertex();
+        bufferbuilder.pos((double)(xCoord + 0), (double)(yCoord + 0), (double)this.zLevel).tex((double)textureSprite.getMinU(), (double)textureSprite.getMinV()).endVertex();
+        tessellator.draw();
+    }
+
+     *//*
+     * Draws a textured rectangle at z = 0. Args: x, y, u, v, width, height, textureWidth, textureHeight
+     *//*
+    public static void drawModalRectWithCustomSizedTexture(int x, int y, float u, float v, int width, int height, float textureWidth, float textureHeight)
+    {
+        float f = 1.0F / textureWidth;
+        float f1 = 1.0F / textureHeight;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos((double)x, (double)(y + height), 0.0D).tex((double)(u * f), (double)((v + (float)height) * f1)).endVertex();
+        bufferbuilder.pos((double)(x + width), (double)(y + height), 0.0D).tex((double)((u + (float)width) * f), (double)((v + (float)height) * f1)).endVertex();
+        bufferbuilder.pos((double)(x + width), (double)y, 0.0D).tex((double)((u + (float)width) * f), (double)(v * f1)).endVertex();
+        bufferbuilder.pos((double)x, (double)y, 0.0D).tex((double)(u * f), (double)(v * f1)).endVertex();
+        tessellator.draw();
+    }
+
+    *//*
+      Draws a scaled, textured, tiled modal rect at z = 0. This method isn't used anywhere in vanilla code.
+
+      @param u Texture U (or x) coordinate, in pixels
+     * @param v Texture V (or y) coordinate, in pixels
+     * @param uWidth Width of the rendered part of the texture, in pixels. Parts of the texture outside of it will wrap
+     * around
+     * @param vHeight Height of the rendered part of the texture, in pixels. Parts of the texture outside of it will
+     * wrap around
+     * @param tileWidth total width of the texture
+     * @param tileHeight total height of the texture
+     *//*
+    public static void drawScaledCustomSizeModalRect(int x, int y, float u, float v, int uWidth, int vHeight, int width, int height, float tileWidth, float tileHeight)
+    {
+        float f = 1.0F / tileWidth;
+        float f1 = 1.0F / tileHeight;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos((double)x, (double)(y + height), 0.0D).tex((double)(u * f), (double)((v + (float)vHeight) * f1)).endVertex();
+        bufferbuilder.pos((double)(x + width), (double)(y + height), 0.0D).tex((double)((u + (float)uWidth) * f), (double)((v + (float)vHeight) * f1)).endVertex();
+        bufferbuilder.pos((double)(x + width), (double)y, 0.0D).tex((double)((u + (float)uWidth) * f), (double)(v * f1)).endVertex();
+        bufferbuilder.pos((double)x, (double)y, 0.0D).tex((double)(u * f), (double)(v * f1)).endVertex();
+        tessellator.draw();
+    }*/
 }
