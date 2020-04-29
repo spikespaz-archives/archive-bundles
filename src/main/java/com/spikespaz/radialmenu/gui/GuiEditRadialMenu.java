@@ -2,11 +2,13 @@ package com.spikespaz.radialmenu.gui;
 
 import com.spikespaz.radialmenu.ConfigHandler;
 import com.spikespaz.radialmenu.RadialButtonData;
+import com.spikespaz.radialmenu.gui.widgets.LabelWidget;
+import com.spikespaz.radialmenu.gui.widgets.LabeledButtonWidget;
+import com.spikespaz.radialmenu.gui.widgets.MultiWidget;
 import lombok.NonNull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,7 +18,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Keyboard;
 
 import java.util.Collections;
 
@@ -45,7 +46,8 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private GuiButton changeKeyBindingBtn;
     private GuiButton changeKeyModeBtn;
     private GuiCenteredTextField buttonCountField;
-    private LabelWidget testWidgetLabel;
+    private MultiWidget testWidget0;
+    private MultiWidget testWidget1;
 
     public GuiEditRadialMenu(Minecraft mc) {
         super(mc);
@@ -85,14 +87,13 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         this.menuY = this.height / 2;
         this.editsX = this.width - PANEL_W / 2;
 
-//        this.addButton(new GuiButton(100, this.editsX - btnW / +2, this.height / 2 - btnH / 2, btnW, btnH, "Add Button"));
         this.addButton(new GuiButton(MOVE_CCW_BTN, this.editsX - BTN_H - 15 - PAD_OH - BTN_H, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "<"));
         this.addButton(new GuiButton(ADD_BTN, this.editsX - BTN_H - 15 - PAD_OH / 2, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "+"));
         this.buttonCountField = new GuiCenteredTextField(0, this.fontRenderer, this.editsX - 26 / 2, this.height - FLD_H - PAD_TOP - 2, 26, FLD_H);
         this.addButton(new GuiButton(DEL_BTN, this.editsX + 15 + PAD_OH / 2, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "-"));
         this.addButton(new GuiButton(MOVE_CW_BTN, this.editsX + 15 + PAD_OH + BTN_H, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, ">"));
 
-        GuiLabel label;
+/*        GuiLabel label;
         int labelWidth;
         String labelString;
 
@@ -131,8 +132,16 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         this.iconResourceField = new GuiTextField(2, this.fontRenderer, this.editsX - FLD_W / 2, PAD_TOP + OH * 3 + BTN_H + 2, FLD_W, FLD_H);
         this.iconResourceField.setMaxStringLength(512);
 
-        this.setButtonOptionValues(radialMenuData.get(this.selectedButton.id));
+        this.setButtonOptionValues(radialMenuData.get(this.selectedButton.id));*/
         this.buttonCountField.setText(Integer.toString(this.selectedButton.id));
+
+        this.testWidget0 = new LabeledButtonWidget(this.fontRenderer);
+        this.testWidget0.setBox(PANEL_W, OH, this.width - PANEL_W, PAD_TOP + OH * 0);
+        ((LabelWidget) this.testWidget0.getChildren().get(0)).setText("AAAAAAAAAA");
+
+        this.testWidget1 = new LabeledButtonWidget(this.fontRenderer);
+        this.testWidget1.setBox(PANEL_W, OH, this.width - PANEL_W, PAD_TOP + OH * 1);
+        ((LabelWidget) this.testWidget1.getChildren().get(0)).setText("BBBBBBBBBB");
     }
 
     private boolean setSelectedButton(int id) {
@@ -176,12 +185,15 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
         this.drawDefaultBackground();
 
-        this.testWidgetLabel.draw(partialTicks);
-        this.testWidgetLabel.drawDebug();
+        this.testWidget0.draw(mouseX, mouseY, partialTicks);
+        this.testWidget0.drawDebug();
 
-//        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.testWidget1.draw(mouseX, mouseY, partialTicks);
+        this.testWidget1.drawDebug();
 
-//        this.buttonCountField.drawTextBox();
+        super.drawScreen(mouseX, mouseY, partialTicks);
+
+        this.buttonCountField.drawTextBox();
 //        this.displayNameField.drawTextBox();
 //        this.iconResourceField.drawTextBox();
 
@@ -189,6 +201,21 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 //        this.drawDebugLines();
     }
 
+/*    private void drawDebugLines() {
+        final int panelStart = this.width - PANEL_W;
+
+        RenderHelper.drawLine(this.width - PANEL_W, PAD_TOP, this.width, PAD_TOP, this.zLevel, 0xFF00FFFF);
+
+        for (int i = 0; i < 5; i++) {
+            RenderHelper.drawLine(this.width - PANEL_W, PAD_TOP + OH * i, this.width, PAD_TOP + OH * i, this.zLevel, 0xFF00FF00); // Option boundary start
+            RenderHelper.drawLine(this.width - PANEL_W, PAD_TOP + OH * i + BTN_H, this.width, PAD_TOP + OH * i + BTN_H, this.zLevel, 0xFF00FFFF); // Divide button heights
+            RenderHelper.drawLine(this.width - PANEL_W, PAD_TOP + OH * i + BTN_H * 2, this.width, PAD_TOP + OH * i + BTN_H * 2, this.zLevel, 0xFFFF00FF); // Option boundary end
+        }
+
+        RenderHelper.drawLine(this.editsX, 0, this.editsX, this.height, this.zLevel, 0xFFFFFFFF);
+        RenderHelper.drawLine(panelStart + PAD_LR, 0, panelStart + PAD_LR, this.height, this.zLevel, 0xFFFFFF00);
+        RenderHelper.drawLine(this.width - PAD_LR, 0, this.width - PAD_LR, this.height, this.zLevel, 0xFFFFFF00);
+    }*/
 
     @Override
     public boolean doesGuiPauseGame() {
@@ -211,7 +238,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                 if ((guiButton1 instanceof GuiRadialButton) && !guiButton.equals(guiButton1))
                     ((GuiRadialButton) guiButton1).setSelected(false);
 
-            this.setButtonOptionValues(radialMenuData.get(button.id));
+//            this.setButtonOptionValues(radialMenuData.get(button.id));
         } else {
             guiButton.playPressSound(this.mc.getSoundHandler());
 
@@ -267,7 +294,7 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                     break;
                 case CHANGE_KEYBINDING_MODE: // Assign displayString directly to avoid reInitGui
                     radialMenuData.get(this.selectedButton.id).setToggleMode(!radialMenuData.get(this.selectedButton.id).isToggleMode());
-                    this.changeKeyModeBtn.displayString = radialMenuData.get(this.selectedButton.id).isToggleMode() ? TOGGLE_MODE_TEXT : PRESS_MODE_TEXT;
+//                    this.changeKeyModeBtn.displayString = radialMenuData.get(this.selectedButton.id).isToggleMode() ? TOGGLE_MODE_TEXT : PRESS_MODE_TEXT;
                     break;
             }
         }
@@ -275,13 +302,13 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
     @Override
     public void updateScreen() {
-        this.displayNameField.updateCursorCounter();
-        this.iconResourceField.updateCursorCounter();
+//        this.displayNameField.updateCursorCounter();
+//        this.iconResourceField.updateCursorCounter();
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        this.displayNameField.textboxKeyTyped(typedChar, keyCode);
+        /*this.displayNameField.textboxKeyTyped(typedChar, keyCode);
         this.iconResourceField.textboxKeyTyped(typedChar, keyCode);
 
         if (keyCode == Keyboard.KEY_TAB) {
@@ -304,15 +331,15 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
                 button.imageIcon = new ResourceLocation(this.iconResourceField.getText());
                 radialMenuData.get(this.selectedButton.id).setButtonIcon(button.imageIcon);
             }
-        }
+        }*/
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
-        this.displayNameField.mouseClicked(mouseX, mouseY, mouseButton);
-        this.iconResourceField.mouseClicked(mouseX, mouseY, mouseButton);
+//        this.displayNameField.mouseClicked(mouseX, mouseY, mouseButton);
+//        this.iconResourceField.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
