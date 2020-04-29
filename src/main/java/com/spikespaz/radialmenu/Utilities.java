@@ -69,17 +69,17 @@ public final class Utilities {
         return red << 16 | green << 8 | blue;
     }
 
-    public static int interpolateValue(int fromValue, int toValue, double factor) {
+    public static int lerp(int fromValue, int toValue, double factor) {
         return (int) (fromValue + (toValue - fromValue) * factor);
     }
 
-    public static int interpolateColor(int fromColor, int toColor, double factor) {
+    public static int lerpColor(int fromColor, int toColor, double factor) {
         final int[] fromRgb = intToRgb(fromColor);
         final int[] toRgb = intToRgb(toColor);
         final int[] interRgb = new int[]{
-                interpolateValue(fromRgb[0], toRgb[0], factor),
-                interpolateValue(fromRgb[1], toRgb[1], factor),
-                interpolateValue(fromRgb[2], toRgb[2], factor),
+                lerp(fromRgb[0], toRgb[0], factor),
+                lerp(fromRgb[1], toRgb[1], factor),
+                lerp(fromRgb[2], toRgb[2], factor),
         };
 
         return rgbToInt(interRgb[0], interRgb[1], interRgb[2]);
