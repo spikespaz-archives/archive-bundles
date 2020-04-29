@@ -19,6 +19,8 @@ public class MultiWidget extends Widget {
     @Setter
     @NonNull
     protected EnumSet<Align> align;
+    @Getter
+    @NonNull
     protected List<Widget> children;
 
     public MultiWidget() {
@@ -32,13 +34,6 @@ public class MultiWidget extends Widget {
 
     @Override
     public void draw(double mouseX, double mouseY, float partialTicks) {
-        boolean stackLeft = this.align.contains(Align.L);
-        boolean stackRight = this.align.contains(Align.R);
-        boolean stackTop = this.align.contains(Align.T);
-        boolean stackBottom = this.align.contains(Align.B);
-        boolean stackCH = this.align.contains(Align.CH);
-        boolean stackCV = this.align.contains(Align.CV);
-
         this.update();
 
         for (Widget child : children)
