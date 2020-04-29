@@ -78,16 +78,19 @@ public class GuiRadialButton extends GuiButton {
         final double ipr = this.radius / Math.cos(sa / 2); // Inner point radius
         final double opr = ipr + this.thickness; // Outer point radius
 
-        final double x0 = this.cx + Math.sin(ssa) * ipr;
-        final double y0 = this.cy + Math.cos(ssa) * ipr;
-        final double x1 = this.cx + Math.sin(ssa) * opr;
-        final double y1 = this.cy + Math.cos(ssa) * opr;
-        final double x2 = this.cx + Math.sin(esa) * opr;
-        final double y2 = this.cy + Math.cos(esa) * opr;
-        final double x3 = this.cx + Math.sin(esa) * ipr;
-        final double y3 = this.cy + Math.cos(esa) * ipr;
-
-        double[][] vertices = new double[][]{{x0, y0}, {x1, y1}, {x2, y2}, {x3, y3}};
+        double[][] vertices = new double[][] {{
+                this.cx + Math.sin(ssa) * ipr, // X0, DX
+                this.cy + Math.cos(ssa) * ipr  // Y0, DY
+        }, {
+                this.cx + Math.sin(ssa) * opr, // X1, CX
+                this.cy + Math.cos(ssa) * opr  // Y1, CY
+        }, {
+                this.cx + Math.sin(esa) * opr, // X2, BX
+                this.cy + Math.cos(esa) * opr  // Y2, BY
+        }, {
+                this.cx + Math.sin(esa) * ipr, // X3, AX
+                this.cy + Math.cos(esa) * ipr  // Y4, AY
+        }};
 
         this.centroid = MathHelper.centroid(vertices);
 
@@ -95,8 +98,8 @@ public class GuiRadialButton extends GuiButton {
         final int normalAlpha = this.normalColor >> 24 & 0xFF;
         final int hoverColor = this.hoverColor & 0xFFFFFF;
         final int hoverAlpha = this.hoverColor >> 24 & 0xFF;
-        final int currentColor = this.currentColor & 0xFFFFFF;
-        final int currentAlpha = this.currentColor >> 24 & 0xFF;
+//        final int currentColor = this.currentColor & 0xFFFFFF;
+//        final int currentAlpha = this.currentColor >> 24 & 0xFF;
 
         int alpha, color;
 
