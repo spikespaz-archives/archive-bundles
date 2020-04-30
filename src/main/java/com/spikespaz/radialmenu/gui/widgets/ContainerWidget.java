@@ -8,17 +8,18 @@ import lombok.Setter;
 import java.util.EnumSet;
 import java.util.List;
 
-public class MultiWidget extends Widget {
+public class ContainerWidget extends Widget {
     @Getter @Setter
     protected double childWidth, childHeight;
     @Getter @Setter
-    protected int vPadding, hPadding;
+    protected double vPadding, hPadding;
     @Getter @Setter @NonNull
     protected EnumSet<Align> align;
     @Getter @NonNull
     protected List<Widget> children;
+    protected double contentWidth, contentHeight;
 
-    public MultiWidget() {
+    public ContainerWidget() {
         this.childWidth = 200;
         this.childHeight = 20;
         this.hPadding = 0;
@@ -65,33 +66,42 @@ public class MultiWidget extends Widget {
 
         double offsetX = 0, offsetY = 0;
 
-        final double itw = this.childWidth * this.children.size() + this.hPadding * (this.children.size() - 1);
-        final double ith = this.childHeight * this.children.size() + this.vPadding * (this.children.size() - 1);
-        final double dcw = (this.width - this.childWidth) / (this.children.size() - 1);
-        final double dch = (this.height - this.childHeight) / (this.children.size() - 1);
-
-        if (stackCV)
-            offsetY = (this.height - ith) / 2;
-        else if (stackBottom && !stackTop)
-            offsetY = this.height - ith - this.childHeight;
-
-        if (stackCH)
-            offsetX = (this.width - itw) / 2;
-        else if (stackRight && !stackLeft)
-            offsetX = this.width - itw - this.childWidth;
+        this.contentWidth = 0;
+        this.contentHeight = 0;
 
         for (Widget child : this.children) {
-            child.setBox(this.childWidth, this.childHeight, this.x + offsetX, this.y + offsetY);
+            this.contentWidth += child.width;
+            this.contentHeight += child.height;
+        }
+
+        this.contentWidth += this.hPadding * (this.children.size() - 1); // Children total width
+        this.contentHeight += this.vPadding * (this.children.size() - 1); // Children total height
+
+        final double dcw = (this.width - this.childWidth) / (this.children.size() - 1); // Distance chunk width
+        final double dch = (this.height - this.childHeight) / (this.children.size() - 1); // Distance chunk height
+
+        if (stackCV)
+            offsetY = (this.height - this.contentHeight) / 2;
+        else if (stackBottom && !stackTop)
+            offsetY = this.height - this.contentHeight - this.contentHeight;
+
+        if (stackCH)
+            offsetX = (this.width - this.contentWidth) / 2;
+        else if (stackRight && !stackLeft)
+            offsetX = this.width - this.contentWidth - this.childWidth;
+
+        for (Widget child : this.children) {
+            child.setPos(this.x + offsetX, this.y + offsetY);
 
             if (stackTop && stackBottom)
                 offsetY += dch;
             else if (stackCV || stackTop || stackBottom)
-                offsetY += this.childHeight + this.vPadding;
+                offsetY += child.height + this.vPadding;
 
             if (stackLeft && stackRight)
                 offsetX += dcw;
             else if (stackCH || stackLeft || stackRight)
-                offsetX += this.childWidth + this.hPadding;
+                offsetX += child.width + this.hPadding;
         }
     }
 
