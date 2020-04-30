@@ -2,9 +2,7 @@ package com.spikespaz.radialmenu.gui;
 
 import com.spikespaz.radialmenu.ConfigHandler;
 import com.spikespaz.radialmenu.RadialButtonData;
-import com.spikespaz.radialmenu.gui.widgets.LabelWidget;
-import com.spikespaz.radialmenu.gui.widgets.LabeledButtonWidget;
-import com.spikespaz.radialmenu.gui.widgets.MultiWidget;
+import com.spikespaz.radialmenu.gui.widgets.*;
 import lombok.NonNull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -19,7 +17,9 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 
+import java.io.IOException;
 import java.util.Collections;
+import java.util.EnumSet;
 
 public class GuiEditRadialMenu extends GuiRadialMenu {
     private static final int ADD_BTN = 101;
@@ -32,10 +32,11 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private static final int BTN_H = 20;
     private static final int FLD_W = BTN_W - 4;
     private static final int FLD_H = BTN_H - 4;
-    private static final int PAD_TOP = 8;
+    private static final int PAD_V = 8;
+    private static final int PAD_H = 4;
     private static final int PAD_LR = 8;
-    private static final int PAD_OH = 4;
-    private static final int OH = BTN_H * 2 + PAD_OH;
+    private static final int PAD_CTRLS = 4;
+    private static final int OH = BTN_H * 2;
     private static final int PANEL_W = BTN_W + PAD_LR * 2;
     private static final String TOGGLE_MODE_TEXT = I18n.format("gui.radialmenu.button.togglemode");
     private static final String PRESS_MODE_TEXT = I18n.format("gui.radialmenu.button.pressmode");
@@ -46,10 +47,8 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     private GuiButton changeKeyBindingBtn;
     private GuiButton changeKeyModeBtn;
     private GuiCenteredTextField buttonCountField;
-    private MultiWidget testWidget0;
-    private MultiWidget testWidget1;
-    private MultiWidget testWidget2;
-    private MultiWidget testWidget3;
+    private ButtonOptionsList buttonOptionsEditor;
+    private SelectionControlsWidget controlsWidget;
 
     public GuiEditRadialMenu(Minecraft mc) {
         super(mc);
@@ -89,73 +88,12 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
             button.cy = this.menuY;
         }
 
-        this.addButton(new GuiButton(MOVE_CCW_BTN, this.editsX - BTN_H - 15 - PAD_OH - BTN_H, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "<"));
-        this.addButton(new GuiButton(ADD_BTN, this.editsX - BTN_H - 15 - PAD_OH / 2, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "+"));
-        this.buttonCountField = new GuiCenteredTextField(0, this.fontRenderer, this.editsX - 26 / 2, this.height - FLD_H - PAD_TOP - 2, 26, FLD_H);
-        this.addButton(new GuiButton(DEL_BTN, this.editsX + 15 + PAD_OH / 2, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, "-"));
-        this.addButton(new GuiButton(MOVE_CW_BTN, this.editsX + 15 + PAD_OH + BTN_H, this.height - BTN_H - PAD_TOP, BTN_H, BTN_H, ">"));
+        this.buttonOptionsEditor = new ButtonOptionsList(this.mc);
+        this.buttonOptionsEditor.setBox(PANEL_W - PAD_H * 2, this.height - PAD_V * 3 - BTN_H, this.width - PANEL_W + PAD_H, PAD_V);
+        this.buttonOptionsEditor.setChildHeight(OH);
 
-/*        GuiLabel label;
-        int labelWidth;
-        String labelString;
-
-        labelString = I18n.format("gui.radialmenu.label.displayname");
-        labelWidth = this.fontRenderer.getStringWidth(labelString);
-        label = new GuiLabel(this.fontRenderer, 0, this.editsX - labelWidth / 2, PAD_TOP + OH * 0, 0, BTN_H, 0xFFFFFFFF);
-        label.addLine(labelString);
-        this.labelList.add(label);
-
-        this.displayNameField = new GuiTextField(1, this.fontRenderer, this.editsX - FLD_W / 2, PAD_TOP + OH * 0 + BTN_H + 2, FLD_W, FLD_H);
-        this.displayNameField.setMaxStringLength(32);
-        //        this.displayNameField.setFocused(true);
-
-        labelString = I18n.format("gui.radialmenu.label.keybinding");
-        labelWidth = this.fontRenderer.getStringWidth(labelString);
-        label = new GuiLabel(this.fontRenderer, 1, this.editsX - labelWidth / 2, PAD_TOP + OH * 1, 0, BTN_H, 0xFFFFFFFF);
-        label.addLine(labelString);
-        this.labelList.add(label);
-
-        this.changeKeyBindingBtn = this.addButton(new GuiButton(CHANGE_KEYBINDING, this.editsX - BTN_W / 2, PAD_TOP + OH * 1 + BTN_H, BTN_W, BTN_H, ""));
-
-        labelString = I18n.format("gui.radialmenu.label.keybindingmode");
-        labelWidth = this.fontRenderer.getStringWidth(labelString);
-        label = new GuiLabel(this.fontRenderer, 1, this.editsX - labelWidth / 2, PAD_TOP + OH * 2, 0, BTN_H, 0xFFFFFFFF);
-        label.addLine(labelString);
-        this.labelList.add(label);
-
-        this.changeKeyModeBtn = this.addButton(new GuiButton(CHANGE_KEYBINDING_MODE, this.editsX - BTN_W / 2, PAD_TOP + OH * 2 + BTN_H, BTN_W, BTN_H, ""));
-
-        labelString = I18n.format("gui.radialmenu.label.resourcelocation");
-        labelWidth = this.fontRenderer.getStringWidth(labelString);
-        label = new GuiLabel(this.fontRenderer, 2, this.editsX - labelWidth / 2, PAD_TOP + OH * 3, 0, BTN_H, 0xFFFFFFFF);
-        label.addLine(labelString);
-        this.labelList.add(label);
-
-        this.iconResourceField = new GuiTextField(2, this.fontRenderer, this.editsX - FLD_W / 2, PAD_TOP + OH * 3 + BTN_H + 2, FLD_W, FLD_H);
-        this.iconResourceField.setMaxStringLength(512);
-
-        this.setButtonOptionValues(radialMenuData.get(this.selectedButton.id));*/
-        this.buttonCountField.setText(Integer.toString(this.selectedButton.id));
-
-        this.testWidget0 = new LabeledButtonWidget(this.fontRenderer);
-        this.testWidget0.setBox(PANEL_W, OH, this.width - PANEL_W, PAD_TOP + OH * 0);
-        ((LabelWidget) this.testWidget0.getChildren().get(0)).setText("AAAAAAAAAA");
-        ((LabelWidget) this.testWidget0.getChildren().get(1)).setText("Second Label Widget A");
-
-        this.testWidget1 = new LabeledButtonWidget(this.fontRenderer);
-        this.testWidget1.setBox(PANEL_W, OH, this.width - PANEL_W, PAD_TOP + OH * 1);
-        ((LabelWidget) this.testWidget1.getChildren().get(0)).setText("BBBBBBBBBB");
-        ((LabelWidget) this.testWidget1.getChildren().get(1)).setText("Second Label Widget B");
-
-        this.testWidget2 = new LabeledButtonWidget(this.fontRenderer);
-        this.testWidget2.setBox(PANEL_W, OH, this.width - PANEL_W, PAD_TOP + OH * 2);
-        ((LabelWidget) this.testWidget2.getChildren().get(0)).setText("CCCCCCCCCC");
-        ((LabelWidget) this.testWidget2.getChildren().get(1)).setText("Second Label Widget C");
-
-        this.testWidget3 = new LabeledButtonWidget(this.fontRenderer);
-        this.testWidget3.setBox(PANEL_W, OH, this.width - PANEL_W, PAD_TOP + OH * 3);
-        ((LabelWidget) this.testWidget3.getChildren().get(0)).setText("DDDDDDDDDD");
-        ((LabelWidget) this.testWidget3.getChildren().get(1)).setText("Second Label Widget D");
+        this.controlsWidget = new SelectionControlsWidget(this.mc);
+        this.controlsWidget.setBox(PANEL_W, BTN_H, this.width - PANEL_W, this.height - BTN_H - PAD_V);
     }
 
     private boolean setSelectedButton(int id) {
@@ -199,47 +137,13 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
 
         this.drawDefaultBackground();
 
-        this.testWidget0.draw(mouseX, mouseY, partialTicks);
-        this.testWidget0.drawDebug();
+        this.buttonOptionsEditor.draw(mouseX, mouseY, partialTicks);
+        this.buttonOptionsEditor.drawDebug(true);
 
-        this.testWidget1.draw(mouseX, mouseY, partialTicks);
-        this.testWidget1.drawDebug();
-
-        this.testWidget2.draw(mouseX, mouseY, partialTicks);
-        this.testWidget2.drawDebug();
-
-        this.testWidget3.draw(mouseX, mouseY, partialTicks);
-        this.testWidget3.drawDebug();
+        this.controlsWidget.draw(mouseX, mouseY, partialTicks);
+        this.controlsWidget.drawDebug();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
-
-        this.buttonCountField.drawTextBox();
-//        this.displayNameField.drawTextBox();
-//        this.iconResourceField.drawTextBox();
-
-        // Uncomment to draw debug lines
-//        this.drawDebugLines();
-    }
-
-/*    private void drawDebugLines() {
-        final int panelStart = this.width - PANEL_W;
-
-        RenderHelper.drawLine(this.width - PANEL_W, PAD_TOP, this.width, PAD_TOP, this.zLevel, 0xFF00FFFF);
-
-        for (int i = 0; i < 5; i++) {
-            RenderHelper.drawLine(this.width - PANEL_W, PAD_TOP + OH * i, this.width, PAD_TOP + OH * i, this.zLevel, 0xFF00FF00); // Option boundary start
-            RenderHelper.drawLine(this.width - PANEL_W, PAD_TOP + OH * i + BTN_H, this.width, PAD_TOP + OH * i + BTN_H, this.zLevel, 0xFF00FFFF); // Divide button heights
-            RenderHelper.drawLine(this.width - PANEL_W, PAD_TOP + OH * i + BTN_H * 2, this.width, PAD_TOP + OH * i + BTN_H * 2, this.zLevel, 0xFFFF00FF); // Option boundary end
-        }
-
-        RenderHelper.drawLine(this.editsX, 0, this.editsX, this.height, this.zLevel, 0xFFFFFFFF);
-        RenderHelper.drawLine(panelStart + PAD_LR, 0, panelStart + PAD_LR, this.height, this.zLevel, 0xFFFFFF00);
-        RenderHelper.drawLine(this.width - PAD_LR, 0, this.width - PAD_LR, this.height, this.zLevel, 0xFFFFFF00);
-    }*/
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return true;
     }
 
     @Override
@@ -321,48 +225,6 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
     }
 
     @Override
-    public void updateScreen() {
-//        this.displayNameField.updateCursorCounter();
-//        this.iconResourceField.updateCursorCounter();
-    }
-
-    @Override
-    protected void keyTyped(char typedChar, int keyCode) {
-        /*this.displayNameField.textboxKeyTyped(typedChar, keyCode);
-        this.iconResourceField.textboxKeyTyped(typedChar, keyCode);
-
-        if (keyCode == Keyboard.KEY_TAB) {
-            this.displayNameField.setFocused(!this.displayNameField.isFocused());
-            this.iconResourceField.setFocused(!this.iconResourceField.isFocused());
-        }
-
-        GuiRadialButton button = (GuiRadialButton) this.selectedButton;
-
-        if (this.displayNameField.isFocused()) {
-            button.displayString = this.displayNameField.getText();
-            radialMenuData.get(this.selectedButton.id).setName(button.displayString);
-        }
-
-        if (this.iconResourceField.isFocused()) {
-            if (this.iconResourceField.getText().isEmpty()) {
-                button.imageIcon = null;
-                radialMenuData.get(this.selectedButton.id).setButtonIcon(null);
-            } else {
-                button.imageIcon = new ResourceLocation(this.iconResourceField.getText());
-                radialMenuData.get(this.selectedButton.id).setButtonIcon(button.imageIcon);
-            }
-        }*/
-    }
-
-    @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
-
-//        this.displayNameField.mouseClicked(mouseX, mouseY, mouseButton);
-//        this.iconResourceField.mouseClicked(mouseX, mouseY, mouseButton);
-    }
-
-    @Override
     public void drawWorldBackground(int tint) {
         if (this.mc.world != null) {
             this.drawGradientRect(0, 0, this.width - PANEL_W, this.height, 0xAA222222, 0xAA222222);
@@ -371,6 +233,18 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         } else {
             this.drawBackground(0, 0, this.width, this.height, tint);
         }
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        this.buttonOptionsEditor.handleMouseInput();
+    }
+
+    @Override
+    public void handleKeyboardInput() throws IOException {
+        super.handleKeyboardInput();
+        this.buttonOptionsEditor.handleKeyboardInput();
     }
 
     private void drawBackground(int x0, int y0, int x1, int y1, int tint) {
@@ -388,5 +262,87 @@ public class GuiEditRadialMenu extends GuiRadialMenu {
         bufferbuilder.pos(x1, y0, 0.0D).tex(width / 32f, 0).color(64, 64, 64, 255).endVertex();
         bufferbuilder.pos(x0, y0, 0.0D).tex(0, 0).color(64, 64, 64, 255).endVertex();
         tessellator.draw();
+    }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return true;
+    }
+
+    public class ButtonOptionsList extends ListWidget {
+        protected ContainerWidget testWidget0;
+        protected ContainerWidget testWidget1;
+        protected ContainerWidget testWidget2;
+        protected ContainerWidget testWidget3;
+        protected ContainerWidget testWidget4;
+        protected ContainerWidget testWidget5;
+
+        public ButtonOptionsList(Minecraft mc) {
+            super(mc);
+
+            this.testWidget0 = (LabeledButtonWidget) this.addChild(new LabeledButtonWidget(this.mc, this.mc.fontRenderer));
+            this.testWidget0.setSize(PANEL_W, OH);
+            ((LabelWidget) this.testWidget0.getChildren().get(0)).setText("AAAAAAAAAA");
+            ((ButtonWidget) this.testWidget0.getChildren().get(1)).getLabelWidget().setText("Second Label Widget A");
+
+            this.testWidget1 = (LabeledButtonWidget) this.addChild(new LabeledButtonWidget(this.mc, this.mc.fontRenderer));
+            this.testWidget1.setSize(PANEL_W, OH);
+            ((LabelWidget) this.testWidget1.getChildren().get(0)).setText("BBBBBBBBBB");
+            ((ButtonWidget) this.testWidget1.getChildren().get(1)).getLabelWidget().setText("Second Label Widget B");
+
+            this.testWidget2 = (LabeledButtonWidget) this.addChild(new LabeledButtonWidget(this.mc, this.mc.fontRenderer));
+            this.testWidget2.setSize(PANEL_W, OH);
+            ((LabelWidget) this.testWidget2.getChildren().get(0)).setText("CCCCCCCCCC");
+            ((ButtonWidget) this.testWidget2.getChildren().get(1)).getLabelWidget().setText("Second Label Widget C");
+
+            this.testWidget3 = (LabeledButtonWidget) this.addChild(new LabeledButtonWidget(this.mc, this.mc.fontRenderer));
+            this.testWidget3.setSize(PANEL_W, OH);
+            ((LabelWidget) this.testWidget3.getChildren().get(0)).setText("DDDDDDDDDD");
+            ((ButtonWidget) this.testWidget3.getChildren().get(1)).getLabelWidget().setText("Second Label Widget D");
+
+            this.testWidget4 = (LabeledButtonWidget) this.addChild(new LabeledButtonWidget(this.mc, this.mc.fontRenderer));
+            this.testWidget4.setSize(PANEL_W, OH);
+            ((LabelWidget) this.testWidget4.getChildren().get(0)).setText("EEEEEEEEEE");
+            ((ButtonWidget) this.testWidget4.getChildren().get(1)).getLabelWidget().setText("Second Label Widget E");
+
+            this.testWidget5 = (LabeledButtonWidget) this.addChild(new LabeledButtonWidget(this.mc, this.mc.fontRenderer));
+            this.testWidget5.setSize(PANEL_W, OH);
+            ((LabelWidget) this.testWidget5.getChildren().get(0)).setText("FFFFFFFFFF");
+            ((ButtonWidget) this.testWidget5.getChildren().get(1)).getLabelWidget().setText("Second Label Widget F");
+        }
+    }
+
+    public class SelectionControlsWidget extends ContainerWidget {
+        protected final Minecraft mc;
+        protected LabelWidget indexLabel;
+        protected ButtonWidget moveCcwButton, moveCwButton, insertButton, removeButton;
+
+        public SelectionControlsWidget(Minecraft mc) {
+            this.mc = mc;
+
+            this.childWidth = BTN_H;
+            this.hPadding = PAD_CTRLS;
+            this.align = EnumSet.of(Align.CH);
+
+            this.moveCcwButton = (ButtonWidget) this.addChild(new ButtonWidget(this.mc, this.mc.fontRenderer));
+            this.moveCcwButton.setWidth(BTN_H);
+            this.moveCcwButton.getLabelWidget().setText("<");
+
+            this.insertButton = (ButtonWidget) this.addChild(new ButtonWidget(this.mc, this.mc.fontRenderer));
+            this.insertButton.setWidth(BTN_H);
+            this.insertButton.getLabelWidget().setText("+");
+
+            this.indexLabel = (LabelWidget) this.addChild(new LabelWidget(this.mc.fontRenderer));
+            this.indexLabel.setWidth(BTN_H * 1.5);
+            this.indexLabel.setText("0");
+
+            this.removeButton = (ButtonWidget) this.addChild(new ButtonWidget(this.mc, this.mc.fontRenderer));
+            this.removeButton.setWidth(BTN_H);
+            this.removeButton.getLabelWidget().setText("-");
+
+            this.moveCwButton = (ButtonWidget) this.addChild(new ButtonWidget(this.mc, this.mc.fontRenderer));
+            this.moveCwButton.setWidth(BTN_H);
+            this.moveCwButton.getLabelWidget().setText(">");
+        }
     }
 }
