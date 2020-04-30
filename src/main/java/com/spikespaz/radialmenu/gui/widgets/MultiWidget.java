@@ -37,12 +37,22 @@ public class MultiWidget extends Widget {
 
     @Override
     public void update() {
-        boolean stackLeft = this.align.contains(Align.L);
-        boolean stackRight = this.align.contains(Align.R);
-        boolean stackTop = this.align.contains(Align.T);
-        boolean stackBottom = this.align.contains(Align.B);
-        boolean stackCH = this.align.contains(Align.CH);
-        boolean stackCV = this.align.contains(Align.CV);
+        boolean stackCV = false, stackCH = false, stackLeft = false, stackRight = false, stackTop = false, stackBottom = false;
+
+        stackCV = this.align.contains(Align.CV);
+
+        if (!stackCV)
+            stackCH = this.align.contains(Align.CH);
+
+        if (!stackCV && !stackCH) {
+            stackTop = this.align.contains(Align.T);
+            stackBottom = this.align.contains(Align.B);
+        }
+
+        if (!stackCV && !stackCH && !stackTop && !stackBottom) {
+            stackLeft = this.align.contains(Align.L);
+            stackRight = this.align.contains(Align.R);
+        }
 
         if (stackLeft || stackRight || stackCH)
             this.childHeight = this.height;
@@ -52,10 +62,10 @@ public class MultiWidget extends Widget {
 
         double offsetX = 0, offsetY = 0;
 
-        double itw = this.childWidth * this.children.size() + this.hPadding * (this.children.size() - 1);
-        double ith = this.childHeight * this.children.size() + this.vPadding * (this.children.size() - 1);
-        double dcw = (this.width - this.childWidth) / (this.children.size() - 1);
-        double dch = (this.height - this.childHeight) / (this.children.size() - 1);
+        final double itw = this.childWidth * this.children.size() + this.hPadding * (this.children.size() - 1);
+        final double ith = this.childHeight * this.children.size() + this.vPadding * (this.children.size() - 1);
+        final double dcw = (this.width - this.childWidth) / (this.children.size() - 1);
+        final double dch = (this.height - this.childHeight) / (this.children.size() - 1);
 
         if (stackCV)
             offsetY = (this.height - ith) / 2;
@@ -72,14 +82,12 @@ public class MultiWidget extends Widget {
 
             if (stackTop && stackBottom)
                 offsetY += dch;
-            else if (stackCV)
-                offsetY += this.childHeight + this.vPadding;
-            else if (stackTop || stackBottom)
+            else if (stackCV || stackTop || stackBottom)
                 offsetY += this.childHeight + this.vPadding;
 
             if (stackLeft && stackRight)
                 offsetX += dcw;
-            if (stackLeft || stackRight || stackCH)
+            else if (stackCH || stackLeft || stackRight)
                 offsetX += this.childWidth + this.hPadding;
         }
     }

@@ -152,6 +152,6 @@ public abstract class Widget {
     }
 
     public enum Align {
-        T, B, L, R, CH, CV
+        CV, CH, T, B, L, R
     }
 }
