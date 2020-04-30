@@ -8,12 +8,12 @@ bin/
 
 # idea
 out/
-.idea/
+.idea/*
 *.ipr
 *.iws
 *.iml
 
-!.idea/codeStyles/
+!.idea/codeStyles
 
 # gradle
 build/
