@@ -29,6 +29,9 @@ public class MultiWidget extends Widget {
 
     @Override
     public void draw(double mouseX, double mouseY, float partialTicks) {
+        if (!this.visible)
+            return;
+
         super.draw(mouseX, mouseY, partialTicks);
 
         for (Widget child : children)
@@ -94,6 +97,9 @@ public class MultiWidget extends Widget {
 
     @Override
     public void drawDebug() {
+        if (!this.visible)
+            return;
+
         super.drawDebug();
 
         for (Widget child : this.children)

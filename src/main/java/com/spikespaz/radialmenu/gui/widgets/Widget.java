@@ -69,6 +69,9 @@ public abstract class Widget {
     }
 
     public void draw(double mouseX, double mouseY, float partialTicks) {
+        if (!this.visible)
+            return;
+
         this.update();
     }
 
@@ -76,6 +79,9 @@ public abstract class Widget {
     }
 
     public void drawDebug() {
+        if (!this.visible)
+            return;
+
         RenderHelper.drawGradientRect(this.x, this.y, this.width, this.height, this.zLevel, this.debugColor, this.debugColor);
     }
 

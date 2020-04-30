@@ -41,6 +41,8 @@ public class LabelWidget extends Widget {
         if (!this.visible)
             return;
 
+        super.draw(mouseX, mouseY, partialTicks);
+
         double sx = this.x, sy = this.y, tw, th;
 
         tw = this.fontRenderer.getStringWidth(this.text);
