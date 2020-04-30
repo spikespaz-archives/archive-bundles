@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,5 +84,17 @@ public final class Utilities {
         };
 
         return rgbToInt(interRgb[0], interRgb[1], interRgb[2]);
+    }
+
+    public static int randomColor() {
+        return rgbToInt((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
+    }
+
+    public static int shiftHue(int color, float amount) {
+        final int[] rgb = intToRgb(color);
+        final float[] hsb = Color.RGBtoHSB(rgb[0], rgb[1], rgb[2], null);
+        hsb[0] += amount;
+        final int newColor = Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
+        return (color & 0xFF000000) + newColor;
     }
 }
