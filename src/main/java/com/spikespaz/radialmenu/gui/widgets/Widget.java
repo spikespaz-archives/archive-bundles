@@ -68,7 +68,12 @@ public abstract class Widget {
         this.height = h;
     }
 
-    public abstract void draw(double mouseX, double mouseY, float partialTicks);
+    public void draw(double mouseX, double mouseY, float partialTicks) {
+        this.update();
+    }
+
+    public void update() {
+    }
 
     public void drawDebug() {
         RenderHelper.drawGradientRect(this.x, this.y, this.width, this.height, this.zLevel, this.debugColor, this.debugColor);

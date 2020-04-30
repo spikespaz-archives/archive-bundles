@@ -9,18 +9,13 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class MultiWidget extends Widget {
-    @Getter
-    @Setter
+    @Getter @Setter
     protected double childWidth, childHeight;
-    @Getter
-    @Setter
+    @Getter @Setter
     protected int vPadding, hPadding;
-    @Getter
-    @Setter
-    @NonNull
+    @Getter @Setter @NonNull
     protected EnumSet<Align> align;
-    @Getter
-    @NonNull
+    @Getter @NonNull
     protected List<Widget> children;
 
     public MultiWidget() {
@@ -34,26 +29,13 @@ public class MultiWidget extends Widget {
 
     @Override
     public void draw(double mouseX, double mouseY, float partialTicks) {
-        this.update();
+        super.draw(mouseX, mouseY, partialTicks);
 
         for (Widget child : children)
             child.draw(mouseX, mouseY, partialTicks);
     }
 
     @Override
-    public void drawDebug() {
-        super.drawDebug();
-
-        for (Widget child : this.children)
-            child.drawDebug();
-    }
-
-    protected Widget addChild(Widget widget) {
-        this.children.add(widget);
-        this.update();
-        return widget;
-    }
-
     public void update() {
         boolean stackLeft = this.align.contains(Align.L);
         boolean stackRight = this.align.contains(Align.R);
@@ -100,5 +82,19 @@ public class MultiWidget extends Widget {
             if (stackLeft || stackRight || stackCH)
                 offsetX += this.childWidth + this.hPadding;
         }
+    }
+
+    @Override
+    public void drawDebug() {
+        super.drawDebug();
+
+        for (Widget child : this.children)
+            child.drawDebug();
+    }
+
+    protected Widget addChild(Widget widget) {
+        this.children.add(widget);
+        this.update();
+        return widget;
     }
 }
