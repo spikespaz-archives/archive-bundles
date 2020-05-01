@@ -15,7 +15,6 @@ public class ButtonWidget extends Widget {
         this.mc = mc;
         this.fontRenderer = fontRenderer;
         this.labelWidget = LabelWidget.build(this.fontRenderer).box(this.width, this.height, this.x, this.y).done();
-        this.debugColor = 0x440066FF;
     }
 
     @Override

@@ -28,7 +28,6 @@ public class LabelWidget extends Widget {
         this.align = EnumSet.of(Align.T, Align.B, Align.L, Align.R);
         this.hPadding = 0;
         this.vPadding = 0;
-        this.debugColor = 0x4400FF00;
 //        this.debugColor = Utilities.shiftHue(this.debugColor, 5f);
     }
 

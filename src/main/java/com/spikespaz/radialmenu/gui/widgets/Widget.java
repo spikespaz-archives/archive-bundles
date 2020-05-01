@@ -1,31 +1,34 @@
 package com.spikespaz.radialmenu.gui.widgets;
 
+import com.google.common.collect.Lists;
+import com.spikespaz.radialmenu.Utilities;
 import com.spikespaz.radialmenu.gui.RenderHelper;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 public abstract class Widget {
+    @Getter
+    private static List<Class> widgetTypes = Lists.newArrayList();
     @Getter @Setter
     protected float zLevel;
     @Getter @Setter
     protected double x, y, width, height;
     @Getter @Setter
     protected boolean visible;
-    @Getter
-    @Setter
-    protected int debugColor;
 
     Widget() {
-        this.zLevel = 310;
+        if (!widgetTypes.contains(this.getClass()))
+            widgetTypes.add(this.getClass());
+
+        this.zLevel = 0;
         this.x = 0;
         this.y = 0;
         this.width = 20;
         this.height = 20;
         this.visible = true;
-        this.debugColor = 0x44FF0000;
     }
-
-//    public abstract void init();
 
     public double getTop() {
         return this.y;
@@ -82,7 +85,11 @@ public abstract class Widget {
         if (!this.visible)
             return;
 
-        RenderHelper.drawGradientRect(this.x, this.y, this.width, this.height, this.zLevel, this.debugColor, this.debugColor);
+        RenderHelper.drawGradientRect(this.x, this.y, this.width, this.height, this.zLevel, this.getDebugColor(), this.getDebugColor());
+    }
+
+    private int getDebugColor() {
+        return Utilities.shiftHue(0x66FF0000, widgetTypes.size() / (widgetTypes.indexOf(this.getClass()) + 1f));
     }
 
     static abstract class Builder<W extends Widget, B extends Builder<W, B>> {

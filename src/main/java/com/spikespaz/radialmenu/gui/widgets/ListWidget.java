@@ -25,7 +25,6 @@ public class ListWidget extends ContainerWidget {
         super();
         this.mc = mc;
         this.align = EnumSet.of(Align.T);
-        this.debugColor = 0x4433CCFF;
         // This appears to be a factor that works nicely by default.
         this.scrollAmount = 4;
     }
