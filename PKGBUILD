@@ -1,8 +1,14 @@
 # Maintainer: Stefano Capitani <stefanoatmanjarodotorg>
-# Author: horst3180 @ deviantart 
 # Contributor: ceyhunnabiyev for Breath color <https://github.com/ceyhunnabiyev>
 # This pkgbuild provide Maia and Breath variant of Arc Theme 
 # New soft fork at https://github.com/NicoHood/arc-theme
+
+# Archlinux credits
+# Maintainer: NicoHood <archlinux {cat} nicohood {dog} de>
+# PGP ID: 97312D5EB9D7AE7D0BD4307351DAE9B7C1AE9161
+# Contributor: zach <zach {at} zach-adams {dot} com>
+# Contributor: Gordian Edenhofer <gordian.edenhofer[at]yahoo[dot]de
+# Contributor: Philipp Wolfer <ph.wolfer@gmail.com>
 
 pkgbase=arc-theme
 pkgname=('arc-themes-solid-maia'
@@ -11,27 +17,23 @@ pkgname=('arc-themes-solid-maia'
 		 'arc-themes-solid-breath')
 _pkgname=$pkgbase
 _pkgbase=arc-themes-maia
-pkgver=20190917
+pkgver=20200513
 pkgrel=1
-#_gnomever=3.22
 arch=('any')
-_url='https://github.com/horst3180/arc-theme' #original theme
-url='https://github.com/NicoHood/arc-theme' #soft fork
+# Upstream url: https://github.com/horst3180/arc-theme
+# Now using soft fork: https://github.com/jnsh/arc-theme/issues/18
+url="https://github.com/jnsh/arc-theme"
 license=('GPL3')
-depends=('gtk3')
-makedepends=('optipng' 'inkscape' 'autoconf' 'automake' 'pkg-config' 'libcanberra' 'gnome-shell' 'sassc' )
-optdepends=('arc-maia-icon-theme: recommended icon theme'
+optdepends=('arc-icon-theme: recommended icon theme'
             'gtk-engine-murrine: for gtk2 themes'
-            'gnome-themes-standard: for gtk2 themes')
-            
-source=("${_pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz"
-        "${_pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
-        #"${_pkgname}-${pkgver}.tar.xz::${url}/archive/${_commit}.tar.gz"
-)
-sha256sums=('4218e5d493adbf2bacd9d499d53849bed0226d5839b124e185f7a61323393745'
+            'gnome-themes-standard: for gtk2 themes'            )
+makedepends=('sassc' 'optipng' 'inkscape')
+
+source=("${pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz"
+        "${pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc")
+sha512sums=('ac814babf995facce72497efad7d7afb6d2eed0ad02640aeb694874681c961b136fcc4fba8350fdee715d44c26db2a336b3430c054a299285ced782ed67bbcfe'
             'SKIP')
-validpgpkeys=('97312D5EB9D7AE7D0BD4307351DAE9B7C1AE9161'  # NicoHood
-              '1E1FB0017C998A8AE2C498A6C2EAA8A26ADC59EE') # Fossfreedom
+validpgpkeys=('31743CDF250EF641E57503E5FAEDBC4FB5AA3B17')
 
 #ALL arc color
 _BLUE=5294E2 
@@ -106,7 +108,7 @@ msg "Building maia-theme"
 echo
 
   cd $srcdir/arc-themes-maia-$pkgver
-  ./autogen.sh --prefix=/usr --disable-unity --disable-plank
+  ./autogen.sh --prefix=/usr --disable-plank --with-gnome-shell=3.36 --with-cinnamon=4.6 --with-gtk3=3.24
 }
 
 build_arc-breath() {
@@ -165,7 +167,7 @@ msg "Building breath-theme"
 echo
 
   cd $srcdir/arc-themes-breath-$pkgver
-  ./autogen.sh --prefix=/usr --disable-unity --disable-plank
+  ./autogen.sh --prefix=/usr --disable-plank --with-gnome-shell=3.36 --with-cinnamon=4.6 --with-gtk3=3.24
 }
 
 build() {
@@ -179,7 +181,7 @@ build_arc-breath
 package_arc-themes-solid-maia() {
 pkgdesc="A flat theme without transparent elements Manjaro Maia variant"
 cd $srcdir/arc-themes-maia-$pkgver
-  ./configure --prefix=/usr --disable-transparency --disable-unity --disable-plank
+  ./configure --prefix=/usr --disable-transparency --disable-plank --with-gnome-shell=3.36 --with-cinnamon=4.6 --with-gtk3=3.24
   make DESTDIR="${pkgdir}" install
 
 #Change folder name for solid version 
@@ -196,14 +198,14 @@ find . -type f -name '*.*' -exec sed -i \
 package_arc-themes-maia() {
 pkgdesc="A flat theme with transparent elements Manjaro Maia variant"  
 cd $srcdir/arc-themes-maia-$pkgver
-  ./configure --prefix=/usr --disable-unity --disable-plank
+  ./configure --prefix=/usr --disable-plank --with-gnome-shell=3.36 --with-cinnamon=4.6 --with-gtk3=3.24
   make DESTDIR="${pkgdir}" install
 }
 
 package_arc-themes-solid-breath() {
 pkgdesc="A flat theme without transparent elements Manjaro Breath variant"
 cd $srcdir/arc-themes-breath-$pkgver
-  ./configure --prefix=/usr --disable-transparency --disable-unity --disable-plank
+  ./configure --prefix=/usr --disable-transparency --disable-plank --with-gnome-shell=3.36 --with-cinnamon=4.6 --with-gtk3=3.24
   make DESTDIR="${pkgdir}" install
 
 #Change folder name for solid version
@@ -219,6 +221,6 @@ find . -type f -name '*.*' -exec sed -i \
 package_arc-themes-breath() {
 pkgdesc="A flat theme with transparent elements Manjaro Breath variant" 
 cd $srcdir/arc-themes-breath-$pkgver
-  ./configure --prefix=/usr --disable-unity --disable-plank
+  ./configure --prefix=/usr --disable-plank --with-gnome-shell=3.36 --with-cinnamon=4.6 --with-gtk3=3.24
   make DESTDIR="${pkgdir}" install
 }
