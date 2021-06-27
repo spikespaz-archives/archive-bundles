@@ -15,7 +15,7 @@ pkgname=('arc-themes-solid-maia'
 		 'arc-themes-solid-breath')
 _pkgname=$pkgbase
 _pkgbase=arc-themes-maia
-pkgver=20210127
+pkgver=20210412
 pkgrel=1
 arch=('any')
 # Upstream url: https://github.com/horst3180/arc-theme
@@ -27,12 +27,10 @@ optdepends=('arc-icon-theme: recommended icon theme'
             'gnome-themes-standard: for gtk2 themes'            )
 makedepends=('meson' 'sassc' 'inkscape')
 
-source=("${pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz"
-        "${pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
-)
-sha512sums=('bb0554c96cf6c3c3891698d973e7d719931fc316ea6cd910f69d21440110690aeef0e734b5f940ad1c81bdff238477b6353de4ae074cd54fbed09c680377d594'
-            'SKIP')
-validpgpkeys=('31743CDF250EF641E57503E5FAEDBC4FB5AA3B17')
+source=("${pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz")
+        #"${pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
+sha512sums=('d3064546301e013a1e5a8db735346d74c73f37cbf808b7afeee6f88c820cea58ba6458fa63e1213377cdd33c8347167242e6f8f1eacf85ce212f3b2508c0bb80')
+#validpgpkeys=('31743CDF250EF641E57503E5FAEDBC4FB5AA3B17') #keys is expired https://pgp.mit.edu/pks/lookup?op=vindex&search=0xFAEDBC4FB5AA3B17
 
 #ALL arc color
 _BLUE=5294E2 
@@ -54,7 +52,7 @@ cd $srcdir
 
 # Latest stable Arch package versions
 _cinnamonver=4.8
-_gnomeshellver=3.38
+_gnomeshellver=40
 _gtk3ver=3.24
 
 build_arc-maia() {
