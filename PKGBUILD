@@ -15,7 +15,7 @@ pkgname=('arc-themes-solid-maia'
          'arc-themes-solid-breath')
 _pkgname=arc-theme
 pkgver=20211018
-pkgrel=1
+pkgrel=2
 arch=('any')
 # Upstream url: https://github.com/horst3180/arc-theme
 # Now using soft fork: https://github.com/jnsh/arc-theme/issues/18
@@ -183,6 +183,7 @@ echo
     meson compile -C build
 
     meson --prefix=/usr build-solid \
+      -Dtransparency=false \
       -Dgnome_shell_gresource=true \
       -Dcinnamon_version="${_cinnamonver}" \
       -Dgnome_shell_version="${_gnomeshellver}" \
