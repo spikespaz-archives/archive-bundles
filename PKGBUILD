@@ -8,14 +8,13 @@
 # Contributor: Gordian Edenhofer <gordian.edenhofer[at]yahoo[dot]de
 # Contributor: Philipp Wolfer <ph.wolfer@gmail.com>
 
-pkgbase=arc-theme
+pkgbase=arc-themes-maia
 pkgname=('arc-themes-solid-maia'
-		 'arc-themes-maia'
-		 'arc-themes-breath'
-		 'arc-themes-solid-breath')
-_pkgname=$pkgbase
-_pkgbase=arc-themes-maia
-pkgver=20210412
+         'arc-themes-maia'
+         'arc-themes-breath'
+         'arc-themes-solid-breath')
+_pkgname=arc-theme
+pkgver=20211018
 pkgrel=1
 arch=('any')
 # Upstream url: https://github.com/horst3180/arc-theme
@@ -24,13 +23,13 @@ url="https://github.com/jnsh/arc-theme"
 license=('GPL3')
 optdepends=('arc-icon-theme: recommended icon theme'
             'gtk-engine-murrine: for gtk2 themes'
-            'gnome-themes-standard: for gtk2 themes'            )
-makedepends=('meson' 'sassc' 'inkscape')
+            'gnome-themes-standard: for gtk2 themes')
+makedepends=('meson' 'sassc' 'inkscape' 'gtk4')
 
-source=("${pkgname}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz")
-        #"${pkgname}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
-sha512sums=('d3064546301e013a1e5a8db735346d74c73f37cbf808b7afeee6f88c820cea58ba6458fa63e1213377cdd33c8347167242e6f8f1eacf85ce212f3b2508c0bb80')
-#validpgpkeys=('31743CDF250EF641E57503E5FAEDBC4FB5AA3B17') #keys is expired https://pgp.mit.edu/pks/lookup?op=vindex&search=0xFAEDBC4FB5AA3B17
+source=("${pkgbase}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz")
+#        "${pkgbase}-${pkgver}.tar.xz.sig::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc")
+sha512sums=('da46efc0e38efb7f1d0cd9a5d2c4e8f00f3b8d408ec50c54d89ef67fc3bb5ea253b5fb890b0cb8e82cafebd44a599d0de2369272ed88da73dd979052b130bd55')
+#validpgpkeys=('31743CDF250EF641E57503E5FAEDBC4FB5AA3B17') # Joonas Henriksson <joonas.henriksson@gmail.com> @pgp.mit.edu
 
 #ALL arc color
 _BLUE=5294E2 
@@ -51,18 +50,19 @@ cd $srcdir
 }	
 
 # Latest stable Arch package versions
-_cinnamonver=4.8
+_cinnamonver=5.0
 _gnomeshellver=40
 _gtk3ver=3.24
+_gtk4ver=4.4
 
 build_arc-maia() {
 
 cd $srcdir/arc-themes-maia-$pkgver
-msg "Build arc-themes-maia" 
+echo "Build arc-themes-maia" 
 echo
-msg "Create arc-themes-maia:this next bit might take a little while..."
+echo "Create arc-themes-maia:this next bit might take a little while..."
 echo
-msg "Create new name : *-Maia"
+echo "Create new name : *-Maia"
 echo
 #Add Maia suffix (don't change this order)
 find . -type f -name '*.*' -exec sed -i \
@@ -73,7 +73,7 @@ find . -type f -name '*.*' -exec sed -i \
 cd $srcdir/arc-themes-maia-$pkgver
 
 #Change the color Blue > Maia
-msg "Manjarification : Change all arc color to green maia"
+echo "Manjarification : Change all arc color to green maia"
 echo
 
 #override gtk2 schemas
@@ -83,50 +83,54 @@ sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-schem
 sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/dark/gtkrc
 sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/darker/gtkrc
 sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #16A085",' $srcdir/arc-themes-maia-$pkgver/common/gtk-2.0/darker/gtkrc
-msg "Done override gtk2 schemas"
+echo "Done override gtk2 schemas"
 echo
-msg "Change Hex format"
+echo "Change Hex format"
 echo
 
 #apply maia variation
 find . -type f -name '*.scss' -exec sed -i "s|$_BLUE|$_maia|Ig" {} \;
-msg "done1"
+echo "done1"
 echo
 find . -type f -name '*.scss' -exec sed -i "s|$_BLUE3|$_maia3|Ig" {} \;
-msg "done2"
+echo "done2"
 echo
 find . -type f -name '*.svg' -exec sed -i "s|$_BLUE|$_maia|Ig" {} \;
-msg "done3"
+echo "done3"
 
-msg "Rebuild png file : waiting"
+echo "Rebuild png file : waiting"
 echo
 
-msg "Building maia-theme"
+echo "Building maia-theme"
 echo
 
   cd $srcdir/arc-themes-maia-$pkgver
   meson --prefix=/usr build \
+      -Dgnome_shell_gresource=true \
       -Dcinnamon_version="${_cinnamonver}" \
       -Dgnome_shell_version="${_gnomeshellver}" \
-      -Dgtk3_version="${_gtk3ver}"
+      -Dgtk3_version="${_gtk3ver}" \
+      -Dgtk4_version="${_gtk4ver}"
     meson compile -C build
 
     meson --prefix=/usr build-solid \
       -Dtransparency=false \
+      -Dgnome_shell_gresource=true \
       -Dcinnamon_version="${_cinnamonver}" \
       -Dgnome_shell_version="${_gnomeshellver}" \
-      -Dgtk3_version="${_gtk3ver}"
+      -Dgtk3_version="${_gtk3ver}" \
+      -Dgtk4_version="${_gtk4ver}"
     meson compile -C build-solid
 }
 
 build_arc-breath() {
 
 cd $srcdir/arc-themes-breath-$pkgver
-msg "Build arc-themes-breath" 
+echo "Build arc-themes-breath" 
 echo
-msg "Create arc-themes-breath:this next bit might take a little while..."
+echo "Create arc-themes-breath:this next bit might take a little while..."
 echo
-msg "Create new name : *-Breath"
+echo "Create new name : *-Breath"
 echo
 #Add Breath suffix (don't change this order)
 find . -type f -name '*.*' -exec sed -i \
@@ -137,7 +141,7 @@ find . -type f -name '*.*' -exec sed -i \
 cd $srcdir/arc-themes-breath-$pkgver
 
 #Change the color Blue > Breath
-msg "Manjarification : Change all arc color to green breath"
+echo "Manjarification : Change all arc color to green breath"
 echo
 
 #override gtk2 schemas
@@ -147,40 +151,43 @@ sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-schem
 sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/dark/gtkrc
 sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/darker/gtkrc
 sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-breath-$pkgver/common/gtk-2.0/darker/gtkrc
-msg "Done override gtk2 schemas"
+echo "Done override gtk2 schemas"
 echo
-msg "Change Hex format"
+echo "Change Hex format"
 echo
 
 #apply breath variation
 find . -type f -name '*.scss' -exec sed -i "s|$_BLUE|$_breath|Ig" {} \;
-msg "done1"
+echo "done1"
 echo
 find . -type f -name '*.scss' -exec sed -i "s|$_BLUE3|$_breath3|Ig" {} \;
-msg "done2"
+echo "done2"
 echo
 find . -type f -name '*.svg' -exec sed -i "s|$_BLUE|$_breath|Ig" {} \;
-msg "done3"
+echo "done3"
 
 echo
-msg "Rebuild png file : waiting"
+echo "Rebuild png file : waiting"
 echo
 
-msg "Building breath-theme"
+echo "Building breath-theme"
 echo
 
   cd $srcdir/arc-themes-breath-$pkgver
   meson --prefix=/usr build \
+      -Dgnome_shell_gresource=true \
       -Dcinnamon_version="${_cinnamonver}" \
       -Dgnome_shell_version="${_gnomeshellver}" \
-      -Dgtk3_version="${_gtk3ver}"
+      -Dgtk3_version="${_gtk3ver}" \
+      -Dgtk4_version="${_gtk4ver}"
     meson compile -C build
 
     meson --prefix=/usr build-solid \
-      -Dtransparency=false \
+      -Dgnome_shell_gresource=true \
       -Dcinnamon_version="${_cinnamonver}" \
       -Dgnome_shell_version="${_gnomeshellver}" \
-      -Dgtk3_version="${_gtk3ver}"
+      -Dgtk3_version="${_gtk3ver}" \
+      -Dgtk4_version="${_gtk4ver}"
     meson compile -C build-solid
 }
 
