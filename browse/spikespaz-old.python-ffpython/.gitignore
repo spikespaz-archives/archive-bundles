@@ -1,0 +1,18 @@
+# IDE
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+
+# Project
+
+# Testing
+_music/
+tests.py
+
+# FFmpeg
+ffprobe.exe
+ffmpeg.exe
+ffplay.exe

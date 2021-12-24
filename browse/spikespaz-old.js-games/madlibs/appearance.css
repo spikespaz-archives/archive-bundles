@@ -1,0 +1,32 @@
+body {
+    margin: 0 40px;
+}
+
+#story-edit {
+    width: 500px;
+    height: 300px;
+    border: 1px solid grey;
+    border-radius: 2px;
+    padding: 10px;
+    resize: both;
+    overflow: auto;
+    margin: 20px 0;
+}
+
+#story-edit p {
+    margin: 0;
+    padding: 0;
+}
+
+code {
+    background: lightgrey;
+    border-radius: 2px;
+    padding: 2px;
+}
+
+#footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    padding-right: 20px;
+}

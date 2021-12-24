@@ -1,0 +1,32 @@
+body {
+    font-family: sans-serif;
+    background: black;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#flood {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+#fullscreen {
+    top: 10px;
+    right: 10px;
+    width: 90px;
+    height: 30px;
+    position: absolute;
+    background: #262626;
+    color: white;
+    border: none;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}

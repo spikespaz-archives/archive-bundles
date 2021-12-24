@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>batch_media_file_converter</class>
+ <widget class="QMainWindow" name="batch_media_file_converter">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>313</width>
+    <height>438</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>FFbatcher GUI</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="vertical_layout_0">
+    <item>
+     <widget class="QLabel" name="input_directory_label">
+      <property name="text">
+       <string>Input Directory</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="input_directory_layout">
+      <item>
+       <widget class="QLineEdit" name="input_directory_edit">
+        <property name="toolTip">
+         <string>The path of the input directory. All matching files in this folder and subfolders will be converted.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="input_directory_picker">
+        <property name="toolTip">
+         <string>Select the input directory to recurse from.</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="output_directory_label">
+      <property name="text">
+       <string>Output Directory</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="output_directory_layout">
+      <item>
+       <widget class="QLineEdit" name="output_directory_edit">
+        <property name="toolTip">
+         <string>The path of the output directory. The subpaths of this will match the structure of the input directory exactly.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="output_directory_picker">
+        <property name="toolTip">
+         <string>Select directory to output converted files to.</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="vertical_spacer_0">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="grid_layout_0">
+      <item row="0" column="0">
+       <widget class="QLabel" name="input_format_label">
+        <property name="text">
+         <string>Input Format</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="output_format_combo">
+        <property name="toolTip">
+         <string>Select the output format to convert files to.</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>MP3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FLAC</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="output_format_label">
+        <property name="text">
+         <string>Output Format</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QComboBox" name="input_format_combo">
+        <property name="toolTip">
+         <string>Select the input format to match within the input path. These are the files that will be converted, the format can usually be decided by the file extension.</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>MP3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FLAC</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <layout class="QHBoxLayout" name="horizontal_layout_1">
+        <item>
+         <widget class="QLabel" name="thread_count_label">
+          <property name="text">
+           <string>Thread Count</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="thread_count_spinbox">
+          <property name="toolTip">
+           <string>Set the number of threads to use, recommended is the number of processor cores you have. If you have mre than 4, increase this for greater efficiency.</string>
+          </property>
+          <property name="value">
+           <number>4</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="overwrite_output_checkbox">
+        <property name="toolTip">
+         <string>Overwrite existing output files. This can be useful if a previous operation was force quit, and you would like to overwrite several corrupted files.</string>
+        </property>
+        <property name="text">
+         <string>Overwrite Output</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="vertical_spacer_1">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QLabel" name="files_completed_label">
+      <property name="text">
+       <string>Files Completed</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QProgressBar" name="files_completed_progress">
+      <property name="value">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="data_completed_label">
+      <property name="text">
+       <string>Data Completed</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QProgressBar" name="data_completed_progress">
+      <property name="value">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QLabel" name="information_console_label">
+      <property name="text">
+       <string>Information Console</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QListWidget" name="information_console_list"/>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="actions_section_layout">
+      <item>
+       <spacer name="horizontal_spacer_0">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="start_button">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="toolTip">
+         <string>Start the conversion operation.</string>
+        </property>
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cancel_button">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="toolTip">
+         <string>Cancel the current operation, but wait for current worker threads to finish their conversions before quitting. This is a safe exit and shouldn't corrupt the output files.</string>
+        </property>
+        <property name="text">
+         <string>Cancel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="exit_button">
+        <property name="toolTip">
+         <string>Cancel and exit the application.</string>
+        </property>
+        <property name="text">
+         <string>Exit</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

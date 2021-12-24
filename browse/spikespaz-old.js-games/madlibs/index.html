@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Madlibs Creator</title>
+    <link rel="stylesheet" type="text/css" href="appearance.css">
+    <script defer type="text/javascript" src="application.js"></script>
+</head>
+<body>
+    <h1>Madlibs Story Creator</h1>
+    <div id="intro">
+        <h2>Introduction</h2>
+        <p>
+            <b>Welcome! Create your Madlibs story by typing into the text editor below.</b>
+            <br />
+            You can insert parts of speech and other replacement areas surrounding the request in square brackets.
+        </p>
+        <p>
+            <b>Example:</b>
+            <br />
+            The big <code>[color]</code> fox jumped over the lazy <code>[animal]</code>.
+        </p>
+        <p>
+            These square bracket surrounded text can be referred to as "tags".
+            Some common tags are the following:
+        </p>
+        <ul>
+            <li><code>[noun]</code></li>
+            <li><code>[adjective]</code></li>
+            <li><code>[verb]</code></li>
+            <li><code>[color]</code></li>
+            <li><code>[animal]</code></li>
+            <li><code>[smell]</code></li>
+            <li><code>[sound]</code></li>
+            <li><code>[taste]</code></li>
+        </ul>
+    </div>
+    <button id="hide-intro">Ok, hide this please!</button>
+    <div id="story">
+        <h2>Story Editor</h2>
+        <div contenteditable="true" id="story-edit">
+            <p>The big <code>[color]</code> fox jumped over the lazy <code>[animal]</code>.</p>
+        </div>
+    </div>
+    <button id="begin-game">Done with my story, let's play it!</button>
+    <div id="footer">
+        <p>Made by spikespaz. MIT Licensed. See it on <a href="https://github.com/spikespaz/madlibs">GitHub</a>.</p>
+    </div>
+</body>
+</html>

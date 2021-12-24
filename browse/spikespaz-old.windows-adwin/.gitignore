@@ -1,0 +1,12 @@
+# editor
+.vscode/
+.idea/
+
+# project
+*.exe
+_interface.py
+hosts
+cache/
+
+# python
+__pycache__/

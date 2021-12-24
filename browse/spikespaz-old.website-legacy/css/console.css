@@ -1,0 +1,66 @@
+.console-wrapper {
+    display: block;
+    overflow-y: auto;
+    background: #000000;
+    padding: 10px 20px;
+    color: #ffff33;
+    font-family: "Source Code Pro", monospace;
+    width: 640px;
+    height: 360px;
+    font-size: 12px;
+}
+
+.console-wrapper mark {
+    background: #ffff33;
+    color: #000000;
+}
+
+.console-input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: -100px;
+}
+
+.console-buffer {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.console-buffer:last-child {
+    padding-bottom: 10px;
+}
+
+.console-line {
+    word-wrap: break-word;
+}
+
+.console-line * {
+    margin: 0;
+    color: #ffff33;
+}
+
+.console-display {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.console-display::before {
+    content: "\a>\00a0";
+}
+
+.console-cursor {
+    display: inline-block;
+    position: absolute;
+    width: 1ch;
+    height: 15px;
+    background: #ffff33;
+    animation: blink 1.5s infinite;
+    animation-delay: 750ms;
+}
+
+@keyframes blink {
+  0%,  50% { opacity: 1; }
+  20%, 30% { opacity: 0; }
+}

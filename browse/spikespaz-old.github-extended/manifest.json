@@ -1,0 +1,27 @@
+{
+    "manifest_version": 2,
+    "name": "GitHub Extended",
+    "version": "0.0.1",
+    "description": "Adds information to GitHub normally accessible only by the API.",
+    "permissions": [
+        "https://api.github.com/*",
+        "storage"
+    ],
+    "content_scripts": [
+        {
+            "all_frames": true,
+            "run_at": "document_start",
+            "matches": [
+                "https://github.com/*/*"
+            ],
+            "js": [
+                "octokat/dist/octokat.js",
+                "source/common.js",
+                "source/repository.js"
+            ]
+        }
+    ],
+    "options_ui": {
+        "page": "html/options.html"
+    }
+}

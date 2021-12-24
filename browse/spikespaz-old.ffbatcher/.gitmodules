@@ -1,0 +1,3 @@
+[submodule "pyqt5themes"]
+	path = pyqt5themes
+	url = https://github.com/spikespaz/pyqt5themes

@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    overflow: hidden;
+}
+
+code {
+    font-family: "Courier New", monospace;
+}
+
+#initial {
+    text-align: center;
+    font-size: 20px;
+}
+
+#initial input[type="text"]  {
+    width: 400px;
+}
+
+#result {
+    font-size: 40px;
+    display: block;
+}
+
+#guessed {
+    display: inline-block;
+    font-size: 40px;
+}
+
+#guessed-wrapper {
+    display: none;
+    font-size: 30px;
+}
+
+#head {
+    text-align: center;
+}
+
+#head h3 {
+    display: inline-block;
+    padding: 0 8px;
+}
+
+#game {
+    display: none;
+    text-align: center;
+}
+
+#footer {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    margin: 0;
+}

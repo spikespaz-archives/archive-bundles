@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+
+# Project
+*_state.json
+*_test.py
+
+# IDE
+*.ipr
+*.iml
+*.iws
+.idea/
+
+# FFMPEG
+ffmpeg.exe
+ffprobe.exe
