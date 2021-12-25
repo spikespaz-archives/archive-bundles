@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+.venv/
+*.pyc
+*.pyo
+
+# VS Code
+.vscode/
+
+# IDEA
+*.ipr
+*.iws
+*.iml
+
+# Project
+interface.py
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# Nuitka
+jvtgui.build/
+jvtgui.dist/

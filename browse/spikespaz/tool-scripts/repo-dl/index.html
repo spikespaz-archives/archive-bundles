@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Download</title>
+
+    <style>
+        #warning, #message {
+            display: none;
+        }
+
+        p {
+            font-family: sans-serif;
+            font-size: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <p id="warning">
+        That doesn't appear to be a valid repository or file name.
+    </p>
+    <p id="message">
+        If the download doesn't start automatically within a few seconds, click
+        <a id="download" href="https://github.com/spikespaz/search-deflector">this link</a>.
+    </p>
+
+    <p>
+        Click <a href="javascript:window.history.back()">here</a> to go back to the previous page.
+    </p>
+
+    <script src="releases.js"></script>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const author = urlParams.get("user");
+        const repository = urlParams.get("repo");
+        const filename = decodeURIComponent(urlParams.get("file"));
+
+        if (author === null || repository === null || filename === null) {
+            document.getElementById("warning").style.display = "block";
+        } else {
+            document.title = "Download " + filename;
+
+            getLatestRelease(author, repository).then((release) => {
+                for (asset of release["assets"])
+                    if (asset["name"] == filename) {
+                        document.getElementById("download").href = asset["browser_download_url"];
+                        document.getElementById("message").style.display = "block";
+
+                        window.open(asset["browser_download_url"], "_self");
+                        return;
+                    }
+
+                document.getElementById("warning").style.display = "block";
+            }).catch((error) => {
+                console.warn(error);
+
+                document.getElementById("warning").style.display = "block";
+            });
+        }
+    </script>
+</body>
+
+</html>
