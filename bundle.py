@@ -127,8 +127,19 @@ def main(repo_list_file, repo_browse_dir, repo_bundle_dir):
     print("INFO: Parsing repository list file...")
     repo_list = set(parse_repo_list(repo_list_file))
 
-    repo_browse_dir.mkdir(parents=True, exist_ok=True)
-    repo_bundle_dir.mkdir(parents=True, exist_ok=True)
+    invalid_dirs = set()
+    invalid_files = set()
+
+    if repo_browse_dir.is_file():
+        invalid_dirs.add(repo_browse_dir)
+    else:
+        repo_browse_dir.mkdir(parents=True, exist_ok=True)
+
+    if repo_bundle_dir.is_file():
+        invalid_dirs.add(repo_bundle_dir)
+    else:
+        repo_bundle_dir.mkdir(parents=True, exist_ok=True)
+
     repo_browse_dir = repo_browse_dir.resolve()
     repo_bundle_dir = repo_bundle_dir.resolve()
 
@@ -140,9 +151,12 @@ def main(repo_list_file, repo_browse_dir, repo_bundle_dir):
     browse_paths_are_empty = set()
     bundle_paths_exist = set()
     bundle_paths_no_exist = set()
+    browse_parent_dirs = set()
 
     for bundle in bundle_list:
-        if bundle.browse_path.is_dir():
+        if bundle.browse_path.is_file():
+            invalid_files.add(bundle.browse_path)
+        elif bundle.browse_path.is_dir():
             if is_dir_empty(bundle.browse_path):
                 browse_paths_are_empty.add(bundle)
             else:
@@ -150,10 +164,35 @@ def main(repo_list_file, repo_browse_dir, repo_bundle_dir):
         else:
             browse_paths_no_exist.add(bundle)
 
-        if bundle.bundle_path.is_file():
+        if bundle.bundle_path.is_dir():
+            invalid_dirs.add(bundle.bundle_path)
+        elif bundle.bundle_path.is_file():
             bundle_paths_exist.add(bundle)
         else:
             bundle_paths_no_exist.add(bundle)
+
+        browse_parent_dirs.add(bundle.browse_path.parent)
+
+    for path in browse_parent_dirs:
+        if path.is_file():
+            invalid_files.add(path)
+
+    if invalid_dirs:
+        print(
+            "FATAL: The following directories exist but should not:\n" +
+            "    " + "\n    ".join(os.path.relpath(path)
+                                   for path in invalid_dirs)
+        )
+        sys.exit(1)
+
+    if invalid_files:
+        print(
+            "FATAL: The following files exist but should be empty directories " +
+            "or not exist at all:\n" +
+            "    " + "\n    ".join(os.path.relpath(path)
+                                   for path in invalid_files)
+        )
+        sys.exit(1)
 
     if bundle_but_no_browse := bundle_paths_exist & browse_paths_no_exist:
         print(
