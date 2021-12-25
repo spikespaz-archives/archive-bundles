@@ -194,20 +194,20 @@ def main(repo_list_file, repo_browse_dir, repo_bundle_dir):
         )
         sys.exit(1)
 
-    if bundle_but_no_browse := bundle_paths_exist & browse_paths_no_exist:
-        print(
-            "WARNING: The following bundle files exist but have no corresponding " +
-            "browse directories, they will automatically be unpacked:\n" +
-            "    " + "\n    ".join(os.path.relpath(bundle.bundle_path)
-                                   for bundle in bundle_but_no_browse)
-        )
-
     if browse_but_no_bundle := browse_paths_exist & bundle_paths_no_exist:
         print(
             "WARNING: The following browse directories exist but have no corresponding " +
             "bundle files, they will be left alone:\n" +
             "    " + "\n    ".join(os.path.relpath(bundle.browse_path)
                                    for bundle in browse_but_no_bundle)
+        )
+
+    if bundle_but_no_browse := bundle_paths_exist & browse_paths_no_exist:
+        print(
+            "WARNING: The following bundle files exist but have no corresponding " +
+            "browse directories, they will automatically be unpacked:\n" +
+            "    " + "\n    ".join(os.path.relpath(bundle.bundle_path)
+                                   for bundle in bundle_but_no_browse)
         )
 
     if browse_paths_are_empty:
