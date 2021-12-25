@@ -10,16 +10,6 @@ from pathlib import Path
 from urllib import parse
 
 
-@contextlib.contextmanager
-def work_directory(path):
-    try:
-        cwd = os.getcwd()
-        os.chdir(path)
-        yield Path(path)
-    finally:
-        os.chdir(cwd)
-
-
 def is_dir_empty(path):
     path = Path(path)
     if path.exists():
