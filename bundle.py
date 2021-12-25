@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-import subprocess
 import contextlib
+import functools
 import os
+import shutil
+import subprocess
 import sys
 import tempfile
-import shutil
-import functools
-
 from pathlib import Path
-from urllib import parse as urlparse
-from collections import namedtuple
+from urllib import parse
 
 
 @contextlib.contextmanager
@@ -49,7 +47,7 @@ class Repository:
     @property
     @functools.cache
     def fullname(self):
-        return "/".join(urlparse.urlparse(self.url).path.rsplit("/", 2)[1:])
+        return "/".join(parse.urlparse(self.url).path.rsplit("/", 2)[1:])
 
 
 class Bundle:
