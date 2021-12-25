@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import subprocess
 import contextlib
 import os
@@ -299,7 +300,7 @@ def main(repo_list_file, repo_browse_dir, repo_bundle_dir):
 
 if __name__ == "__main__":
     REPO_LIST_FILE = "./repo_list.txt"
-    REPO_BROWSE_DIR = "./_browse/"
+    REPO_BROWSE_DIR = "./browse/"
     REPO_BUNDLE_DIR = "./bundle/"
 
     main(REPO_LIST_FILE, REPO_BROWSE_DIR, REPO_BUNDLE_DIR)
