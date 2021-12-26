@@ -22,27 +22,27 @@ git remote set-url --push <your_repository>
 
 If there is no description for a project, click the :open_file_folder: icon to view the frozen contents of the project's main branch. There is often a `README` that contains either a description, some build information, or both.
 
-## [:open_file_folder:][1000][:package:][2000]&nbsp;&nbsp;spikespaz-old/dockypi
-## [:open_file_folder:][1001][:package:][2001]&nbsp;&nbsp;spikespaz-old/ffbatcher
-## [:open_file_folder:][1002][:package:][2002]&nbsp;&nbsp;spikespaz-old/github-extended
-## [:open_file_folder:][1003][:package:][2003]&nbsp;&nbsp;spikespaz-old/js-games
-## [:open_file_folder:][1004][:package:][2004]&nbsp;&nbsp;spikespaz-old/litemeter
-## [:open_file_folder:][1005][:package:][2005]&nbsp;&nbsp;spikespaz-old/marker-qt
-## [:open_file_folder:][1006][:package:][2006]&nbsp;&nbsp;spikespaz-old/newstyle-widgets
-## [:open_file_folder:][1007][:package:][2007]&nbsp;&nbsp;spikespaz-old/pyqt-themes
-## [:open_file_folder:][1008][:package:][2008]&nbsp;&nbsp;spikespaz-old/python-ffpython
-## [:open_file_folder:][1009][:package:][2009]&nbsp;&nbsp;spikespaz-old/quizlet-py
-## [:open_file_folder:][1010][:package:][2010]&nbsp;&nbsp;spikespaz-old/raspi-composter
-## [:open_file_folder:][1011][:package:][2011]&nbsp;&nbsp;spikespaz-old/tools-js
-## [:open_file_folder:][1012][:package:][2012]&nbsp;&nbsp;spikespaz-old/vernier-py
-## [:open_file_folder:][1013][:package:][2013]&nbsp;&nbsp;spikespaz-old/website-legacy
-## [:open_file_folder:][1014][:package:][2014]&nbsp;&nbsp;spikespaz-old/windows-adwin
-## [:open_file_folder:][1015][:package:][2015]&nbsp;&nbsp;spikespaz/bonjour-installer
-## [:open_file_folder:][1016][:package:][2016]&nbsp;&nbsp;spikespaz/deconstruction-table-spigot
-## [:open_file_folder:][1017][:package:][2017]&nbsp;&nbsp;spikespaz/java-version-tool
-## [:open_file_folder:][1018][:package:][2018]&nbsp;&nbsp;spikespaz/public-3d-models
-## [:open_file_folder:][1019][:package:][2019]&nbsp;&nbsp;spikespaz/spikespaz-website
-## [:open_file_folder:][1020][:package:][2020]&nbsp;&nbsp;spikespaz/tool-scripts
+### [:open_file_folder:][1000][:package:][2000]&nbsp;&nbsp;spikespaz-old/dockypi
+### [:open_file_folder:][1001][:package:][2001]&nbsp;&nbsp;spikespaz-old/ffbatcher
+### [:open_file_folder:][1002][:package:][2002]&nbsp;&nbsp;spikespaz-old/github-extended
+### [:open_file_folder:][1003][:package:][2003]&nbsp;&nbsp;spikespaz-old/js-games
+### [:open_file_folder:][1004][:package:][2004]&nbsp;&nbsp;spikespaz-old/litemeter
+### [:open_file_folder:][1005][:package:][2005]&nbsp;&nbsp;spikespaz-old/marker-qt
+### [:open_file_folder:][1006][:package:][2006]&nbsp;&nbsp;spikespaz-old/newstyle-widgets
+### [:open_file_folder:][1007][:package:][2007]&nbsp;&nbsp;spikespaz-old/pyqt-themes
+### [:open_file_folder:][1008][:package:][2008]&nbsp;&nbsp;spikespaz-old/python-ffpython
+### [:open_file_folder:][1009][:package:][2009]&nbsp;&nbsp;spikespaz-old/quizlet-py
+### [:open_file_folder:][1010][:package:][2010]&nbsp;&nbsp;spikespaz-old/raspi-composter
+### [:open_file_folder:][1011][:package:][2011]&nbsp;&nbsp;spikespaz-old/tools-js
+### [:open_file_folder:][1012][:package:][2012]&nbsp;&nbsp;spikespaz-old/vernier-py
+### [:open_file_folder:][1013][:package:][2013]&nbsp;&nbsp;spikespaz-old/website-legacy
+### [:open_file_folder:][1014][:package:][2014]&nbsp;&nbsp;spikespaz-old/windows-adwin
+### [:open_file_folder:][1015][:package:][2015]&nbsp;&nbsp;spikespaz/bonjour-installer
+### [:open_file_folder:][1016][:package:][2016]&nbsp;&nbsp;spikespaz/deconstruction-table-spigot
+### [:open_file_folder:][1017][:package:][2017]&nbsp;&nbsp;spikespaz/java-version-tool
+### [:open_file_folder:][1018][:package:][2018]&nbsp;&nbsp;spikespaz/public-3d-models
+### [:open_file_folder:][1019][:package:][2019]&nbsp;&nbsp;spikespaz/spikespaz-website
+### [:open_file_folder:][1020][:package:][2020]&nbsp;&nbsp;spikespaz/tool-scripts
 
 
 [1]: https://git-scm.com/docs/git-bundle
