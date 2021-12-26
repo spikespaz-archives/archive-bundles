@@ -1,10 +1,26 @@
 # Project Archives (AKA "The Vault")
 
-Archives of my old projects, mostly stored in Git bundles. This needs to exist because I start and abandon projects, but write too much code to throw away.
+This repository serves as an archive of my old projects, with commit history preserved in [Git Bundles][1].
+This needs to exist because I start and abandon projects, but write too much code to throw away.
+Some of these may be revived in the future if I have the spare time and drive required,
+but feel free to have a go at working with the sources yourself.
 
-Every old project is packaged into a Git bundle file, in order to preserve history. To unpack these bundles, simply use the clone command. For example, `git clone ./spikespaz-old.project-name.bundle ./project-name` replacing `project-name` with an appropriate string.
+You can download the bundle for each project by clicking the :package: icon, or browse the code online with the :open_file_folder: icon.
+
+After downloading abundle, clone it to a path as if it were a normal repository.
+```
+git clone <bundle_path> <clone_path>
+```
+If you want to publish changes, create an empty repository on GitHub, change directory to the bundle's clone directory, and update the remote.
+```
+git remote set-url --push <your_repository>
+```
 
 ---
+
+## Projects
+
+If there is no description for a project, click the :open_file_folder: icon to view the frozen contents of the project's main branch. There is often a `README` that contains either a description, some build information, or both.
 
 ## [:open_file_folder:][1000][:package:][2000]&nbsp;&nbsp;spikespaz-old/dockypi
 ## [:open_file_folder:][1001][:package:][2001]&nbsp;&nbsp;spikespaz-old/ffbatcher
@@ -27,6 +43,9 @@ Every old project is packaged into a Git bundle file, in order to preserve histo
 ## [:open_file_folder:][1018][:package:][2018]&nbsp;&nbsp;spikespaz/public-3d-models
 ## [:open_file_folder:][1019][:package:][2019]&nbsp;&nbsp;spikespaz/spikespaz-website
 ## [:open_file_folder:][1020][:package:][2020]&nbsp;&nbsp;spikespaz/tool-scripts
+
+
+[1]: https://git-scm.com/docs/git-bundle
 
 [1000]: https://github.com/spikespaz/archives/tree/master/bundle/spikespaz-old/dockypi
 [1001]: https://github.com/spikespaz/archives/tree/master/bundle/spikespaz-old/ffbatcher
