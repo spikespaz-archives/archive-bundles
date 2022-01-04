@@ -28,9 +28,11 @@ optdepends=('arc-icon-theme: recommended icon theme'
 makedepends=('meson' 'sassc' 'inkscape' 'gtk4' 'gnome-shell' 'cinnamon')
 options=('!strip')
 source=("${pkgbase}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz"
-        "${pkgbase}-${pkgver}.tar.xz.asc::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc")
+        "${pkgbase}-${pkgver}.tar.xz.asc::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
+        "fix.patch::https://github.com/jnsh/arc-theme/commit/0effc8f889718e941424d4b26e592aea2e68a2f8.patch")
 sha256sums=('1c03934c78b32c019c3ee45c46193f864402e49f72d9c8c9af780634a0495ed1'
-            'SKIP')
+            'SKIP'
+            'b074372cb085710f655dfa1800c0a7d4a60c939ee56e0238beed1adad0293d67')
 validpgpkeys=('31743CDF250EF641E57503E5FAEDBC4FB5AA3B17') # Joonas Henriksson <joonas.henriksson@gmail.com>
 
 # Latest stable Arch package versions
@@ -51,6 +53,10 @@ _breath=1abc9c
 _breath3=1ccdaa
 
 prepare() {
+  pushd "$_pkgname-$pkgver"
+  patch -p1 <"${srcdir}/fix.patch"
+  popd
+
   cp -R "$_pkgname-$pkgver" "arc-themes-maia-$pkgver"
   cp -R "$_pkgname-$pkgver" "arc-themes-breath-$pkgver"
 }
@@ -128,7 +134,7 @@ _build_arc-maia() {
 
 _build_arc-breath() {
 
-  cd arc-themes-breath-$pkgver
+  cd "$srcdir/arc-themes-breath-$pkgver"
 
   echo "Build arc-themes-breath" 
   echo
