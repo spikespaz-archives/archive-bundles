@@ -1,6 +1,6 @@
 # Project Archives (AKA "The Vault")
 
-This repository serves as an archive of my old projects, with commit history preserved in [Git Bundles][1].
+This repository serves as an archive of my old projects, with commit history preserved in [Git Bundles][10000].
 This needs to exist because I start and abandon projects, but write too much code to throw away.
 Some of these may be revived in the future if I have the spare time and drive required,
 but feel free to have a go at working with the sources yourself.
@@ -151,7 +151,7 @@ No description yet. Try checking the browse directory for a README file.
 
 ---
 
-[1]: https://git-scm.com/docs/git-bundle
+[10000]: https://git-scm.com/docs/git-bundle
 
 [1000]: https://github.com/spikespaz/archives/tree/master/browse/spikespaz-old/dockypi
 [1001]: https://github.com/spikespaz/archives/tree/master/browse/spikespaz-old/ffbatcher
