@@ -29,7 +29,7 @@ A fork of [RPi-Distro/pi-gen](https://github.com/RPi-Distro/pi-gen) pre-configur
 ---
 ### [:open_file_folder:][1001]&nbsp;[:package:][2001]&nbsp;&nbsp;spikespaz-old/ffbatcher
 
-No description yet. Try checking the browse directory for a README file.
+This is a simple tool for batch-processing media, converting from one format or container to another and preserving the directory structure by duplication. Under the hood it uses [`ffmpeg`](https://www.ffmpeg.org/), and the GUI is written with PyQt5. If I recall correctly, this application may be functional and perhaps even useful, albiet incomplete, and I recommend that whoever is interested in this should complete the existing code and send me an email or create an issue telling me where you're hosting your fork. I can put a link here for any passers-by.
 
 ---
 ### [:open_file_folder:][1002]&nbsp;[:package:][2002]&nbsp;&nbsp;spikespaz-old/github-extended
