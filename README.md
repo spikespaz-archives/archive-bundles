@@ -122,6 +122,14 @@ A fork of [carbon-app/carbon][6] which adds a preset for Windows-10-style titleb
 No description yet. Try checking the browse directory for a README file.
 
 ---
+### [:open_file_folder:][1022]&nbsp;[:package:][2022]&nbsp;&nbsp;spikespaz/forge-radialmenu
+
+[7]: https://github.com/spikespaz/modpack-builder/tree/master/modpack
+[8]: https://github.com/spikespaz/modpack-builder
+
+A Forge mod for Minecraft 1.12 that adds a radial menu that can be opened by holding a keybind. It was indented to allow any custom action to be added to this menu, and then perform the action corresponding with the angle of the mouse upon release. In the current state it can only execute Quark emotes and perform basic functions such as opening an inventory GUI. It probably contains some useful code for custom GUI rendering. I was building them in tandem with my [Quarantine Modpack][7] and [Modpack Builder][8] projects.
+
+---
 ### [:open_file_folder:][1017]&nbsp;[:package:][2017]&nbsp;&nbsp;spikespaz/java-version-tool
 
 No description yet. Try checking the browse directory for a README file.
@@ -167,6 +175,7 @@ No description yet. Try checking the browse directory for a README file.
 [1019]: https://github.com/spikespaz/archives/tree/master/browse/spikespaz/spikespaz-website
 [1020]: https://github.com/spikespaz/archives/tree/master/browse/spikespaz/tool-scripts
 [1021]: https://github.com/spikespaz/archives/tree/master/browse/spikespaz/dawnlabs-carbon
+[1022]: https://github.com/spikespaz/archives/tree/master/browse/spikespaz/forge-radialmenu
 
 [2000]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz-old.dockypi.bundle
 [2001]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz-old.ffbatcher.bundle
@@ -190,3 +199,4 @@ No description yet. Try checking the browse directory for a README file.
 [2019]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz.spikespaz-website.bundle
 [2020]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz.tool-scripts.bundle
 [2021]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz.dawnlabs-carbon.bundle
+[2022]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz.spikespaz.forge-radialmenu.bundle
