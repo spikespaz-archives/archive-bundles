@@ -34,7 +34,7 @@ This is a simple tool for batch-processing media, converting from one format or 
 ---
 ### [:open_file_folder:][1002]&nbsp;[:package:][2002]&nbsp;&nbsp;spikespaz-old/github-extended
 
-No description yet. Try checking the browse directory for a README file.
+A WebExtension intended to add a useful-but-minimal set of features to GitHub, such as a download button for repository sub-directories. I wanted to make this as an alternative to the rather bloated [Refined GitHub](https://github.com/refined-github/refined-github) extension, but ended up using that anyway. I also recommend [Isometric Contributions](https://github.com/jasonlong/isometric-contributions) for some eye-candy.
 
 ---
 ### [:open_file_folder:][1003]&nbsp;[:package:][2003]&nbsp;&nbsp;spikespaz-old/js-games
