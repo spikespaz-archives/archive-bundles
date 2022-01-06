@@ -24,7 +24,7 @@ If there is no description for a project, click the :open_file_folder: icon to v
 
 ### [:open_file_folder:][1000]&nbsp;[:package:][2000]&nbsp;&nbsp;spikespaz-old/dockypi
 
-No description yet. Try checking the browse directory for a README file.
+A fork of [RPi-Distro/pi-gen](https://github.com/RPi-Distro/pi-gen) pre-configured for a minimal docker environment. This was apandoned because there are better options available, such as [DietPi](https://dietpi.com/) (although I'm not sure they have an out-of-the-box environment for Docker).
 
 ---
 ### [:open_file_folder:][1001]&nbsp;[:package:][2001]&nbsp;&nbsp;spikespaz-old/ffbatcher
