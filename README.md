@@ -24,17 +24,25 @@ If there is no description for a project, click the :open_file_folder: icon to v
 
 ### [:open_file_folder:][1000]&nbsp;[:package:][2000]&nbsp;&nbsp;spikespaz-old/dockypi
 
-A fork of [RPi-Distro/pi-gen](https://github.com/RPi-Distro/pi-gen) pre-configured for a minimal docker environment. This was apandoned because there are better options available, such as [DietPi](https://dietpi.com/) (although I'm not sure they have an out-of-the-box environment for Docker).
+[1]: https://github.com/RPi-Distro/pi-gen
+[2]: https://dietpi.com/
+
+A fork of [RPi-Distro/pi-gen][1] pre-configured for a minimal docker environment. This was apandoned because there are better options available, such as [DietPi][2] (although I'm not sure they have an out-of-the-box environment for Docker).
 
 ---
 ### [:open_file_folder:][1001]&nbsp;[:package:][2001]&nbsp;&nbsp;spikespaz-old/ffbatcher
 
-This is a simple tool for batch-processing media, converting from one format or container to another and preserving the directory structure by duplication. Under the hood it uses [`ffmpeg`](https://www.ffmpeg.org/), and the GUI is written with PyQt5. If I recall correctly, this application may be functional and perhaps even useful, albiet incomplete, and I recommend that whoever is interested in this should complete the existing code and send me an email or create an issue telling me where you're hosting your fork. I can put a link here for any passers-by.
+[3]: https://www.ffmpeg.org/
+
+This is a simple tool for batch-processing media, converting from one format or container to another and preserving the directory structure by duplication. Under the hood it uses [`ffmpeg`][3], and the GUI is written with PyQt5. If I recall correctly, this application may be functional and perhaps even useful, albiet incomplete, and I recommend that whoever is interested in this should complete the existing code and send me an email or create an issue telling me where you're hosting your fork. I can put a link here for any passers-by.
 
 ---
 ### [:open_file_folder:][1002]&nbsp;[:package:][2002]&nbsp;&nbsp;spikespaz-old/github-extended
 
-A WebExtension intended to add a useful-but-minimal set of features to GitHub, such as a download button for repository sub-directories. I wanted to make this as an alternative to the rather bloated [Refined GitHub](https://github.com/refined-github/refined-github) extension, but ended up using that anyway. I also recommend [Isometric Contributions](https://github.com/jasonlong/isometric-contributions) for some eye-candy.
+[4]: https://github.com/refined-github/refined-github
+[5]: https://github.com/jasonlong/isometric-contributions
+
+A WebExtension intended to add a useful-but-minimal set of features to GitHub, such as a download button for repository sub-directories. I wanted to make this as an alternative to the rather bloated [Refined GitHub][4] extension, but ended up using that anyway. I also recommend [Isometric Contributions][5] for some eye-candy.
 
 ---
 ### [:open_file_folder:][1003]&nbsp;[:package:][2003]&nbsp;&nbsp;spikespaz-old/js-games
@@ -104,7 +112,9 @@ No description yet. Try checking the browse directory for a README file.
 ---
 ### [:open_file_folder:][1021]&nbsp;[:package:][2021]&nbsp;&nbsp;spikespaz/dawnlabs-carbon
 
-A fork of [carbon-app/carbon](https://github.com/carbon-app/carbon) which adds a preset for Windows-10-style titlebar buttons. The addition is complete, but my pull-request was never merged as it was deemed to be outside of the interest of the project by the developers.
+[6]: https://github.com/carbon-app/carbon
+
+A fork of [carbon-app/carbon][6] which adds a preset for Windows-10-style titlebar buttons. The addition is complete, but my pull-request was never merged as it was deemed to be outside of the interest of the project by the developers.
 
 ---
 ### [:open_file_folder:][1016]&nbsp;[:package:][2016]&nbsp;&nbsp;spikespaz/deconstruction-table-spigot
