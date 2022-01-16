@@ -15,7 +15,7 @@ pkgname=('arc-themes-solid-maia'
          'arc-themes-breath'
          'arc-themes-solid-breath')
 _pkgname=arc-theme
-pkgver=20220102
+pkgver=20220105
 pkgrel=1
 arch=('any')
 # Upstream url: https://github.com/horst3180/arc-theme
@@ -28,15 +28,13 @@ optdepends=('arc-icon-theme: recommended icon theme'
 makedepends=('meson' 'sassc' 'inkscape' 'gtk4' 'gnome-shell' 'cinnamon')
 options=('!strip')
 source=("${pkgbase}-${pkgver}.tar.xz::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz"
-        "${pkgbase}-${pkgver}.tar.xz.asc::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc"
-        "fix.patch::https://github.com/jnsh/arc-theme/commit/0effc8f889718e941424d4b26e592aea2e68a2f8.patch")
-sha256sums=('1c03934c78b32c019c3ee45c46193f864402e49f72d9c8c9af780634a0495ed1'
-            'SKIP'
-            'b074372cb085710f655dfa1800c0a7d4a60c939ee56e0238beed1adad0293d67')
+        "${pkgbase}-${pkgver}.tar.xz.asc::${url}/releases/download/${pkgver}/${_pkgname}-${pkgver}.tar.xz.asc")
+sha256sums=('325ce5aedc6e1a67759e79a623308529d823f000f9d948ded2400ca0dae5520c'
+            'SKIP')
 validpgpkeys=('31743CDF250EF641E57503E5FAEDBC4FB5AA3B17') # Joonas Henriksson <joonas.henriksson@gmail.com>
 
 # Latest stable Arch package versions
-_cinnamonver=5.0
+_cinnamonver=5.2
 _gnomeshellver=41
 _gtk4ver=4.6
 
@@ -53,10 +51,6 @@ _breath=1abc9c
 _breath3=1ccdaa
 
 prepare() {
-  pushd "$_pkgname-$pkgver"
-  patch -p1 <"${srcdir}/fix.patch"
-  popd
-
   cp -R "$_pkgname-$pkgver" "arc-themes-maia-$pkgver"
   cp -R "$_pkgname-$pkgver" "arc-themes-breath-$pkgver"
 }
