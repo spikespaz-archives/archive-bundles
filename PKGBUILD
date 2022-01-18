@@ -11,7 +11,7 @@
 
 pkgbase=arc-themes-blackish-maia
 pkgname=('arc-themes-solid-blackish-maia'
-  'arc-themes-blackish-maia'
+  # 'arc-themes-blackish-maia'
   # 'arc-themes-blackish-breath'
   # 'arc-themes-solid-blackish-breath'
 )
@@ -194,14 +194,16 @@ _build_arc-blackish-maia() {
   echo "Building blackish-maia-theme"
   echo
 
-  meson --prefix=/usr build \
-    -Dgnome_shell_gresource=true \
-    -Dcinnamon_version="${_cinnamonver}" \
-    -Dgnome_shell_version="${_gnomeshellver}" \
-    -Dgtk4_version="${_gtk4ver}"
-  meson compile -C build
+  # meson --prefix=/usr build \
+  #   -Dvariants=dark \
+  #   -Dgnome_shell_gresource=true \
+  #   -Dcinnamon_version="${_cinnamonver}" \
+  #   -Dgnome_shell_version="${_gnomeshellver}" \
+  #   -Dgtk4_version="${_gtk4ver}"
+  # meson compile -C build
 
   meson --prefix=/usr build-solid \
+    -Dvariants=dark \
     -Dtransparency=false \
     -Dgnome_shell_gresource=true \
     -Dcinnamon_version="${_cinnamonver}" \
@@ -313,12 +315,12 @@ package_arc-themes-solid-blackish-maia() {
     s/Arc-Dark-Blackish-Maia/Arc-Dark-Blackish-Maia-Solid/g" {} \;
 }
 
-package_arc-themes-blackish-maia() {
-  pkgdesc="A flat theme with transparent elements and Blackish background Manjaro Maia variant"
+# package_arc-themes-blackish-maia() {
+#   pkgdesc="A flat theme with transparent elements and Blackish background Manjaro Maia variant"
 
-  cd "$pkgbase-$pkgver"
-  DESTDIR="$pkgdir" meson install -C build
-}
+#   cd "$pkgbase-$pkgver"
+#   DESTDIR="$pkgdir" meson install -C build
+# }
 
 # package_arc-themes-solid-blackish-breath() {
 #   pkgdesc="A flat theme without transparent elements and Blackish background Manjaro Breath variant"
