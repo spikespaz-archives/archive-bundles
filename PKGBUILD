@@ -38,6 +38,8 @@ _gtk4ver=4.6
 # ALL arc color
 _BLUE=5294E2
 _BLUE3=4DADD4
+_BASE=404552
+_BG=383C4A
 
 # All Maia color variation
 _maia=16A085
@@ -103,6 +105,17 @@ _build_arc-blackish-maia() {
   find . -type f -name '*.svg' -exec sed -i "s|$_BLUE|$_maia|Ig" {} \;
 
   echo "done3"
+  echo
+
+  # apply blackish variation
+  find . -type f -name '*.scss' -exec sed -i "s|$_BASE|$_blackish_base|Ig" {} \;
+
+  echo "done4"
+  echo
+
+  find . -type f -name '*.scss' -exec sed -i "s|$_BG|$_blackish_bg|Ig" {} \;
+
+  echo "done5"
   echo
 
   echo "Rebuild png file: waiting"
@@ -175,6 +188,17 @@ _build_arc-blackish-breath() {
   find . -type f -name '*.svg' -exec sed -i "s|$_BLUE|$_breath|Ig" {} \;
 
   echo "done3"
+  echo
+
+  # apply blackish variation
+  find . -type f -name '*.scss' -exec sed -i "s|$_BASE|$_blackish_base|Ig" {} \;
+
+  echo "done4"
+  echo
+
+  find . -type f -name '*.scss' -exec sed -i "s|$_BG|$_blackish_bg|Ig" {} \;
+
+  echo "done5"
   echo
 
   echo "Rebuild png file: waiting"
