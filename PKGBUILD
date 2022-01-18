@@ -40,6 +40,10 @@ _BLUE=5294E2
 _BLUE3=4DADD4
 _BASE=404552
 _BG=383C4A
+_HEADER_BG=2F343F
+_TOOLTIP_BG=4B5162
+_INSENSITIVE_BG=3E4350
+_DARK_SIDEBAR_BG=353945
 
 # All Maia color variation
 _maia=16A085
@@ -52,6 +56,10 @@ _breath3=1ccdaa
 # All Blackish background color variation
 _blackish_base=2A2A2A
 _blackish_bg=252525
+_blackish_header_bg=2A2A2A
+_blackish_tooltip_bg=363636
+_blackish_insensitive_bg=2f2f2f
+_blackish_dark_sidebar_bg=2A2A2A
 
 prepare() {
   cp -R "$_pkgname-$pkgver" "arc-themes-blackish-maia-$pkgver"
@@ -79,14 +87,55 @@ _build_arc-blackish-maia() {
   echo
 
   # override gtk2 schemas
-  sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #16A085",' $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/light/gtkrc
-  sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #16A085",' $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/light/gtkrc
-  sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #16A085",' $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/dark/gtkrc
-  sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #16A085",' $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/dark/gtkrc
-  sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #16A085",' $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/darker/gtkrc
-  sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #16A085",' $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/darker/gtkrc
 
-  echo "Done override gtk2 schemas"
+  echo "Override GTK2 schemas"
+  echo
+
+  sed -i -e "s,.*gtk-color-scheme = \"selected_bg_color: #$_BLUE\".*,gtk-color-scheme = \"selected_bg_color: #$_maia\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/light/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"link_color: #$_BLUE\".*,gtk-color-scheme = \"link_color: #$_maia\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/light/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"selected_bg_color: #$_BLUE\".*,gtk-color-scheme = \"selected_bg_color: #$_maia\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/dark/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"link_color: #$_BLUE\".*,gtk-color-scheme = \"link_color: #$_maia\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/dark/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"selected_bg_color: #$_BLUE\".*,gtk-color-scheme = \"selected_bg_color: #$_maia\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/darker/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"link_color: #$_BLUE\".*,gtk-color-scheme = \"link_color: #$_maia\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/darker/gtkrc
+
+  echo "done1"
+  echo
+
+  sed -i -e "s,.*gtk-color-scheme = \"base_color: #$_BASE\".*,gtk-color-scheme = \"base_color: #$_blackish_base\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/light/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"notebook_bg: #$_BASE\".*,gtk-color-scheme = \"notebook_bg: #$_blackish_base\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/light/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"base_color: #$_BASE\".*,gtk-color-scheme = \"base_color: #$_blackish_base\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/dark/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"notebook_bg: #$_BASE\".*,gtk-color-scheme = \"notebook_bg: #$_blackish_base\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/dark/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"base_color: #$_BASE\".*,gtk-color-scheme = \"base_color: #$_blackish_base\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/darker/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"notebook_bg: #$_BASE\".*,gtk-color-scheme = \"notebook_bg: #$_blackish_base\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/darker/gtkrc
+
+  echo "done2"
+  echo
+
+  sed -i -e "s,.*gtk-color-scheme = \"bg_color: #$_BG\".*,gtk-color-scheme = \"bg_color: #$_blackish_bg\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/light/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"menu_bg: #$_BG\".*,gtk-color-scheme = \"menu_bg: #$_blackish_bg\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/light/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"bg_color: #$_BG\".*,gtk-color-scheme = \"bg_color: #$_blackish_bg\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/dark/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"menu_bg: #$_BG\".*,gtk-color-scheme = \"menu_bg: #$_blackish_bg\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/dark/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"bg_color: #$_BG\".*,gtk-color-scheme = \"bg_color: #$_blackish_bg\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/darker/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"menu_bg: #$_BG\".*,gtk-color-scheme = \"menu_bg: #$_blackish_bg\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/darker/gtkrc
+
+  echo "done3"
+  echo
+
+  sed -i -e "s,.*gtk-color-scheme = \"tooltip_bg_color: #$_TOOLTIP_BG\".*,gtk-color-scheme = \"tooltip_bg_color: #$_blackish_tooltip_bg\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/light/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"tooltip_bg_color: #$_TOOLTIP_BG\".*,gtk-color-scheme = \"tooltip_bg_color: #$_blackish_tooltip_bg\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/dark/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"tooltip_bg_color: #$_TOOLTIP_BG\".*,gtk-color-scheme = \"tooltip_bg_color: #$_blackish_tooltip_bg\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/darker/gtkrc
+
+  echo "done4"
+  echo
+
+  sed -i -e "s,.*gtk-color-scheme = \"dark_sidebar_bg: #$_DARK_SIDEBAR_BG\".*,gtk-color-scheme = \"dark_sidebar_bg: #$_blackish_dark_sidebar_bg\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/light/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"dark_sidebar_bg: #$_DARK_SIDEBAR_BG\".*,gtk-color-scheme = \"dark_sidebar_bg: #$_blackish_dark_sidebar_bg\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/dark/gtkrc
+  sed -i -e "s,.*gtk-color-scheme = \"dark_sidebar_bg: #$_DARK_SIDEBAR_BG\".*,gtk-color-scheme = \"dark_sidebar_bg: #$_blackish_dark_sidebar_bg\",I" $srcdir/arc-themes-blackish-maia-$pkgver/common/gtk-2.0/darker/gtkrc
+
+  echo "done5"
+  echo
+
+  echo "Done override GTK2 schemas"
   echo
   echo "Change Hex format"
   echo
@@ -116,6 +165,26 @@ _build_arc-blackish-maia() {
   find . -type f -name '*.scss' -exec sed -i "s|$_BG|$_blackish_bg|Ig" {} \;
 
   echo "done5"
+  echo
+
+  find . -type f -name '*.scss' -exec sed -i "s|$_HEADER_BG|$_blackish_header_bg|Ig" {} \;
+
+  echo "done6"
+  echo
+
+  find . -type f -name '*.scss' -exec sed -i "s|$_TOOLTIP_BG|$_blackish_tooltip_bg|Ig" {} \;
+
+  echo "done7"
+  echo
+
+  find . -type f -name '*.scss' -exec sed -i "s|$_INSENSITIVE_BG|$_blackish_insensitive_bg|Ig" {} \;
+
+  echo "done8"
+  echo
+
+  find . -type f -name '*.scss' -exec sed -i "s|$_DARK_SIDEBAR_BG|$_blackish_dark_sidebar_bg|Ig" {} \;
+
+  echo "done9"
   echo
 
   echo "Rebuild png file: waiting"
