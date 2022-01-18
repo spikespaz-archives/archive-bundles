@@ -12,8 +12,9 @@
 pkgbase=arc-themes-blackish-maia
 pkgname=('arc-themes-solid-blackish-maia'
   'arc-themes-blackish-maia'
-  'arc-themes-blackish-breath'
-  'arc-themes-solid-blackish-breath')
+  # 'arc-themes-blackish-breath'
+  # 'arc-themes-solid-blackish-breath'
+)
 _pkgname=arc-theme
 pkgver=20220105
 pkgrel=1
@@ -49,9 +50,9 @@ _DARK_SIDEBAR_BG=353945
 _maia=16A085
 _maia3=16A674
 
-# All Breath color variation
-_breath=1abc9c
-_breath3=1ccdaa
+# # All Breath color variation
+# _breath=1abc9c
+# _breath3=1ccdaa
 
 # All Blackish background color variation
 _blackish_base=2A2A2A
@@ -63,7 +64,7 @@ _blackish_dark_sidebar_bg=2A2A2A
 
 prepare() {
   cp -R "$_pkgname-$pkgver" "arc-themes-blackish-maia-$pkgver"
-  cp -R "$_pkgname-$pkgver" "arc-themes-blackish-breath-$pkgver"
+  # cp -R "$_pkgname-$pkgver" "arc-themes-blackish-breath-$pkgver"
 }
 
 _build_arc-blackish-maia() {
@@ -209,92 +210,92 @@ _build_arc-blackish-maia() {
   meson compile -C build-solid
 }
 
-_build_arc-blackish-breath() {
+# _build_arc-blackish-breath() {
 
-  cd "$srcdir/arc-themes-blackish-breath-$pkgver"
+#   cd "$srcdir/arc-themes-blackish-breath-$pkgver"
 
-  echo "Build arc-themes-blackish-breath"
-  echo
-  echo "Create arc-themes-blackish-breath: this next bit might take a little while..."
-  echo
-  echo "Create new name-blackish: *-Blackish-Breath"
-  echo
+#   echo "Build arc-themes-blackish-breath"
+#   echo
+#   echo "Create arc-themes-blackish-breath: this next bit might take a little while..."
+#   echo
+#   echo "Create new name-blackish: *-Blackish-Breath"
+#   echo
 
-  # Add Breath suffix (don't change this order)
-  find . -type f -name '*.*' -exec sed -i \
-    "s/Arc/Arc-Blackish-Breath/g;\
-    s/Arc-Darker/Arc-Darker-Blackish-Breath/g;\
-    s/Arc-Dark/Arc-Dark-Blackish-Breath/g" {} \;
+#   # Add Breath suffix (don't change this order)
+#   find . -type f -name '*.*' -exec sed -i \
+#     "s/Arc/Arc-Blackish-Breath/g;\
+#     s/Arc-Darker/Arc-Darker-Blackish-Breath/g;\
+#     s/Arc-Dark/Arc-Dark-Blackish-Breath/g" {} \;
 
-  # Change the color Blue > Breath
-  echo "Manjarification : Change all arc color to green breath"
-  echo
+#   # Change the color Blue > Breath
+#   echo "Manjarification : Change all arc color to green breath"
+#   echo
 
-  # override gtk2 schemas
-  sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-blackish-breath-$pkgver/common/gtk-2.0/light/gtkrc
-  sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-blackish-breath-$pkgver/common/gtk-2.0/light/gtkrc
-  sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-blackish-breath-$pkgver/common/gtk-2.0/dark/gtkrc
-  sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-blackish-breath-$pkgver/common/gtk-2.0/dark/gtkrc
-  sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-blackish-breath-$pkgver/common/gtk-2.0/darker/gtkrc
-  sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-blackish-breath-$pkgver/common/gtk-2.0/darker/gtkrc
+#   # override gtk2 schemas
+#   sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-blackish-breath-$pkgver/common/gtk-2.0/light/gtkrc
+#   sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-blackish-breath-$pkgver/common/gtk-2.0/light/gtkrc
+#   sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-blackish-breath-$pkgver/common/gtk-2.0/dark/gtkrc
+#   sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-blackish-breath-$pkgver/common/gtk-2.0/dark/gtkrc
+#   sed -i -e 's,.*gtk-color-scheme = "selected_bg_color: #5294e2".*,gtk-color-scheme = "selected_bg_color: #1abc9c",' $srcdir/arc-themes-blackish-breath-$pkgver/common/gtk-2.0/darker/gtkrc
+#   sed -i -e 's,.*gtk-color-scheme = "link_color: #5294e2".*,gtk-color-scheme = "link_color: #1abc9c",' $srcdir/arc-themes-blackish-breath-$pkgver/common/gtk-2.0/darker/gtkrc
 
-  echo "Done override gtk2 schemas"
-  echo
-  echo "Change Hex format"
-  echo
+#   echo "Done override gtk2 schemas"
+#   echo
+#   echo "Change Hex format"
+#   echo
 
-  # apply breath variation
-  find . -type f -name '*.scss' -exec sed -i "s|$_BLUE|$_breath|Ig" {} \;
+#   # apply breath variation
+#   find . -type f -name '*.scss' -exec sed -i "s|$_BLUE|$_breath|Ig" {} \;
 
-  echo "done1"
-  echo
+#   echo "done1"
+#   echo
 
-  find . -type f -name '*.scss' -exec sed -i "s|$_BLUE3|$_breath3|Ig" {} \;
+#   find . -type f -name '*.scss' -exec sed -i "s|$_BLUE3|$_breath3|Ig" {} \;
 
-  echo "done2"
-  echo
+#   echo "done2"
+#   echo
 
-  find . -type f -name '*.svg' -exec sed -i "s|$_BLUE|$_breath|Ig" {} \;
+#   find . -type f -name '*.svg' -exec sed -i "s|$_BLUE|$_breath|Ig" {} \;
 
-  echo "done3"
-  echo
+#   echo "done3"
+#   echo
 
-  # apply blackish variation
-  find . -type f -name '*.scss' -exec sed -i "s|$_BASE|$_blackish_base|Ig" {} \;
+#   # apply blackish variation
+#   find . -type f -name '*.scss' -exec sed -i "s|$_BASE|$_blackish_base|Ig" {} \;
 
-  echo "done4"
-  echo
+#   echo "done4"
+#   echo
 
-  find . -type f -name '*.scss' -exec sed -i "s|$_BG|$_blackish_bg|Ig" {} \;
+#   find . -type f -name '*.scss' -exec sed -i "s|$_BG|$_blackish_bg|Ig" {} \;
 
-  echo "done5"
-  echo
+#   echo "done5"
+#   echo
 
-  echo "Rebuild png file: waiting"
-  echo
+#   echo "Rebuild png file: waiting"
+#   echo
 
-  echo "Building blackish-breath-theme"
-  echo
+#   echo "Building blackish-breath-theme"
+#   echo
 
-  meson --prefix=/usr build \
-    -Dgnome_shell_gresource=true \
-    -Dcinnamon_version="${_cinnamonver}" \
-    -Dgnome_shell_version="${_gnomeshellver}" \
-    -Dgtk4_version="${_gtk4ver}"
-  meson compile -C build
+#   meson --prefix=/usr build \
+#     -Dgnome_shell_gresource=true \
+#     -Dcinnamon_version="${_cinnamonver}" \
+#     -Dgnome_shell_version="${_gnomeshellver}" \
+#     -Dgtk4_version="${_gtk4ver}"
+#   meson compile -C build
 
-  meson --prefix=/usr build-solid \
-    -Dtransparency=false \
-    -Dgnome_shell_gresource=true \
-    -Dcinnamon_version="${_cinnamonver}" \
-    -Dgnome_shell_version="${_gnomeshellver}" \
-    -Dgtk4_version="${_gtk4ver}"
-  meson compile -C build-solid
-}
+#   meson --prefix=/usr build-solid \
+#     -Dtransparency=false \
+#     -Dgnome_shell_gresource=true \
+#     -Dcinnamon_version="${_cinnamonver}" \
+#     -Dgnome_shell_version="${_gnomeshellver}" \
+#     -Dgtk4_version="${_gtk4ver}"
+#   meson compile -C build-solid
+# }
 
 build() {
   _build_arc-blackish-maia
-  _build_arc-blackish-breath
+  # _build_arc-blackish-breath
 }
 
 package_arc-themes-solid-blackish-maia() {
@@ -319,24 +320,24 @@ package_arc-themes-blackish-maia() {
   DESTDIR="$pkgdir" meson install -C build
 }
 
-package_arc-themes-solid-blackish-breath() {
-  pkgdesc="A flat theme without transparent elements and Blackish background Manjaro Breath variant"
+# package_arc-themes-solid-blackish-breath() {
+#   pkgdesc="A flat theme without transparent elements and Blackish background Manjaro Breath variant"
 
-  cd arc-themes-blackish-breath-$pkgver
-  DESTDIR="$pkgdir" meson install -C build-solid
+#   cd arc-themes-blackish-breath-$pkgver
+#   DESTDIR="$pkgdir" meson install -C build-solid
 
-  # Change folder name for solid version
+#   # Change folder name for solid version
 
-  # Add Breath-Solid suffix (don't change this order)
-  find "$pkgdir/usr/share/themes" -type f -name '*.*' -exec sed -i \
-    "s/Arc-Blackish-Breath/Arc-Blackish-Breath-Solid/g;\
-    s/Arc-Darker-Blackish-Breath/Arc-Blackish-Darker-Breath-Solid/g;\
-    s/Arc-Dark-Blackish-Breath/Arc-Blackish-Dark-Breath-Solid/g" {} \;
-}
+#   # Add Breath-Solid suffix (don't change this order)
+#   find "$pkgdir/usr/share/themes" -type f -name '*.*' -exec sed -i \
+#     "s/Arc-Blackish-Breath/Arc-Blackish-Breath-Solid/g;\
+#     s/Arc-Darker-Blackish-Breath/Arc-Blackish-Darker-Breath-Solid/g;\
+#     s/Arc-Dark-Blackish-Breath/Arc-Blackish-Dark-Breath-Solid/g" {} \;
+# }
 
-package_arc-themes-blackish-breath() {
-  pkgdesc="A flat theme with transparent elements and Blackish background Manjaro Breath variant"
+# package_arc-themes-blackish-breath() {
+#   pkgdesc="A flat theme with transparent elements and Blackish background Manjaro Breath variant"
 
-  cd arc-themes-blackish-breath-$pkgver
-  DESTDIR="$pkgdir" meson install -C build
-}
+#   cd arc-themes-blackish-breath-$pkgver
+#   DESTDIR="$pkgdir" meson install -C build
+# }
