@@ -60,7 +60,7 @@ _blackish_bg=252525
 _blackish_header_bg=2A2A2A
 _blackish_tooltip_bg=363636
 _blackish_insensitive_bg=2f2f2f
-_blackish_dark_sidebar_bg=2A2A2A
+_blackish_dark_sidebar_bg=252525
 
 prepare() {
   cp -R "$_pkgname-$pkgver" "arc-themes-blackish-maia-$pkgver"
