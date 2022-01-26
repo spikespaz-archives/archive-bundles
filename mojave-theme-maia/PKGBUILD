@@ -2,8 +2,8 @@
 # Contriburor: Vince Liuice <moc.liamtoh@eciuilecniv>
 
 # shellcheck shell=bash
-# shellcheck disable=SC2034
-# {
+# shellcheck disable=SC2034,SC2154,SC2115
+
 pkgbase='mojave-theme-maia'
 pkgname=(
     "$pkgbase-light"
@@ -34,7 +34,6 @@ optdepends=(
 _clonedir="${url##*/}"
 source=("$_clonedir::git+$url.git")
 sha256sums=('SKIP')
-# }
 
 pkgver() {
     cd "$srcdir/$_clonedir" || exit 1
@@ -42,21 +41,33 @@ pkgver() {
 }
 
 prepare() {
-    echo "Copy cloned files to '$srcdir/$pkgbase'"
-    cp -R "$srcdir/$_clonedir" "$srcdir/$pkgbase"
+    [[ -d "$srcdir/$pkgbase" ]] && rm -rf "$srcdir/$pkgbase"
+    cp -R "$srcdir/$_clonedir/" "$srcdir/$pkgbase"
 
-    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-light"
-    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-light-solid"
-    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-light-alt"
-    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-light-alt-solid"
-    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-dark"
-    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-dark-solid"
-    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-dark-alt"
-    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-dark-alt-solid"
-    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-blackish"
-    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-blackish-solid"
-    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-blackish-alt"
-    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-blackish-alt-solid"
+    [[ -d "$srcdir/$pkgbase-light" ]] && rm -rf "$srcdir/$pkgbase-light"
+    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-light"
+    [[ -d "$srcdir/$pkgbase-light-solid" ]] && rm -rf "$srcdir/$pkgbase-light-solid"
+    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-light-solid"
+    [[ -d "$srcdir/$pkgbase-light-alt" ]] && rm -rf "$srcdir/$pkgbase-light-alt"
+    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-light-alt"
+    [[ -d "$srcdir/$pkgbase-light-alt-solid" ]] && rm -rf "$srcdir/$pkgbase-light-alt-solid"
+    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-light-alt-solid"
+    [[ -d "$srcdir/$pkgbase-dark" ]] && rm -rf "$srcdir/$pkgbase-dark"
+    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-dark"
+    [[ -d "$srcdir/$pkgbase-dark-solid" ]] && rm -rf "$srcdir/$pkgbase-dark-solid"
+    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-dark-solid"
+    [[ -d "$srcdir/$pkgbase-dark-alt" ]] && rm -rf "$srcdir/$pkgbase-dark-alt"
+    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-dark-alt"
+    [[ -d "$srcdir/$pkgbase-dark-alt-solid" ]] && rm -rf "$srcdir/$pkgbase-dark-alt-solid"
+    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-dark-alt-solid"
+    [[ -d "$srcdir/$pkgbase-blackish" ]] && rm -rf "$srcdir/$pkgbase-blackish"
+    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish"
+    [[ -d "$srcdir/$pkgbase-blackish-solid" ]] && rm -rf "$srcdir/$pkgbase-blackish-solid"
+    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish-solid"
+    [[ -d "$srcdir/$pkgbase-blackish-alt" ]] && rm -rf "$srcdir/$pkgbase-blackish-alt"
+    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish-alt"
+    [[ -d "$srcdir/$pkgbase-blackish-alt-solid" ]] && rm -rf "$srcdir/$pkgbase-blackish-alt-solid"
+    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish-alt-solid"
 }
 
 _build_mojave-theme-maia-light() {
