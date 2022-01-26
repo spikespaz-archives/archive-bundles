@@ -21,7 +21,7 @@ pkgname=(
 )
 pkgver=r452.b4d36a6
 pkgrel=1
-pkgdesc="A spin of vinceliuice's Mojave theme for GTK with Manjaro Maia colors and a darker variant."
+pkgdesc="A spin of Vince Liuice's Mojave theme for GTK with Manjaro Maia colors and a Blackish variant."
 arch=('any')
 url='https://github.com/vinceliuice/Mojave-gtk-theme'
 license=('GPL3')
