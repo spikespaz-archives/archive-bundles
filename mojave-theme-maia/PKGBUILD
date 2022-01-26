@@ -1,5 +1,9 @@
 #!/bin/bash
+
 # Maintainer: Jacob Birkett <jacob@birkett.dev>
+
+# shellcheck disable=SC2034
+# {
 pkgbase='mojave-theme-maia'
 pkgname=(
     "$pkgbase-light"
@@ -15,7 +19,7 @@ pkgname=(
     "$pkgbase-blackish-alt"
     "$pkgbase-blackish-alt-solid"
 )
-pkgver=1
+pkgver=r452.b4d36a6
 pkgrel=1
 pkgdesc="A spin of vinceliuice's Mojave theme for GTK with Manjaro Maia colors and a darker variant."
 arch=('any')
@@ -27,78 +31,141 @@ optdepends=(
     'mcmojave-cursors: matching cursor theme'
     'mcmojave-circle-icon-theme: matching icon theme'
 )
-source=("$pkgbase::git+https://github.com/vinceliuice/Mojave-gtk-theme.git")
-md5sum=('SKIP')
+_clonedir="${url##*/}"
+source=("$_clonedir::git+$url.git")
+sha256sums=('SKIP')
+# }
 
 pkgver() {
-    cd "$srcdir/$pkgbase"
+    cd "$srcdir/$_clonedir" || exit 1
     printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 prepare() {
-    cd "$srcdir/$pkgbase"
+    echo "Copy cloned files to '$srcdir/$pkgbase'"
+    cp -R "$srcdir/$_clonedir" "$srcdir/$pkgbase"
+
+    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-light"
+    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-light-solid"
+    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-light-alt"
+    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-light-alt-solid"
+    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-dark"
+    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-dark-solid"
+    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-dark-alt"
+    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-dark-alt-solid"
+    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-blackish"
+    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-blackish-solid"
+    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-blackish-alt"
+    cp -R "$srcdir/$pkgbase" "$srcdir/$pkgbase-blackish-alt-solid"
+}
+
+_build_mojave-theme-maia-light() {
+    cd "$srcdir/$pkgbase-light" || exit 1
+}
+
+_build_mojave-theme-maia-light-solid() {
+    cd "$srcdir/$pkgbase-light-solid" || exit 1
+}
+
+_build_mojave-theme-maia-light-alt() {
+    cd "$srcdir/$pkgbase-light-alt" || exit 1
+}
+
+_build_mojave-theme-maia-light-alt-solid() {
+    cd "$srcdir/$pkgbase-light-alt-solid" || exit 1
+}
+
+_build_mojave-theme-maia-dark() {
+    cd "$srcdir/$pkgbase-dark" || exit 1
+}
+
+_build_mojave-theme-maia-dark-solid() {
+    cd "$srcdir/$pkgbase-dark-solid" || exit 1
+}
+
+_build_mojave-theme-maia-dark-alt() {
+    cd "$srcdir/$pkgbase-dark-alt" || exit 1
+}
+
+_build_mojave-theme-maia-dark-alt-solid() {
+    cd "$srcdir/$pkgbase-dark-alt-solid" || exit 1
+}
+
+_build_mojave-theme-maia-blackish() {
+    cd "$srcdir/$pkgbase-blackish" || exit 1
+}
+
+_build_mojave-theme-maia-blackish-solid() {
+    cd "$srcdir/$pkgbase-blackish-solid" || exit 1
+}
+
+_build_mojave-theme-maia-blackish-alt() {
+    cd "$srcdir/$pkgbase-blackish-alt" || exit 1
+}
+
+_build_mojave-theme-maia-blackish-alt-solid() {
+    cd "$srcdir/$pkgbase-blackish-alt-solid" || exit 1
 }
 
 build() {
-    cd "$srcdir/$pkgbase"
+    _build_mojave-theme-maia-light
+    _build_mojave-theme-maia-light-solid
+    _build_mojave-theme-maia-light-alt
+    _build_mojave-theme-maia-light-alt-solid
+    _build_mojave-theme-maia-dark
+    _build_mojave-theme-maia-dark-solid
+    _build_mojave-theme-maia-dark-alt
+    _build_mojave-theme-maia-dark-alt-solid
+    _build_mojave-theme-maia-blackish
+    _build_mojave-theme-maia-blackish-solid
+    _build_mojave-theme-maia-blackish-alt
+    _build_mojave-theme-maia-blackish-alt-solid
 }
 
 package_mojave-theme-maia-light() {
-    cp "$srcdir/$pkgbase" "$srcdir/$pkgbase-light"
-    cd "$srcdir/$pkgbase-light"
+    cd "$srcdir/$pkgbase-light" || exit 1
 }
 
 package_mojave-theme-maia-light-solid() {
-    cp "$srcdir/$pkgbase" "$srcdir/$pkgbase-light-solid"
-    cd "$srcdir/$pkgbase-light-solid"
+    cd "$srcdir/$pkgbase-light-solid" || exit 1
 }
 
 package_mojave-theme-maia-light-alt() {
-    cp "$srcdir/$pkgbase" "$srcdir/$pkgbase-light-alt"
-    cd "$srcdir/$pkgbase-light-alt"
+    cd "$srcdir/$pkgbase-light-alt" || exit 1
 }
 
 package_mojave-theme-maia-light-alt-solid() {
-    cp "$srcdir/$pkgbase" "$srcdir/$pkgbase-light-alt-solid"
-    cd "$srcdir/$pkgbase-light-alt-solid"
+    cd "$srcdir/$pkgbase-light-alt-solid" || exit 1
 }
 
 package_mojave-theme-maia-dark() {
-    cp "$srcdir/$pkgbase" "$srcdir/$pkgbase-dark"
-    cd "$srcdir/$pkgbase-dark"
+    cd "$srcdir/$pkgbase-dark" || exit 1
 }
 
 package_mojave-theme-maia-dark-solid() {
-    cp "$srcdir/$pkgbase" "$srcdir/$pkgbase-dark-solid"
-    cd "$srcdir/$pkgbase-dark-solid"
+    cd "$srcdir/$pkgbase-dark-solid" || exit 1
 }
 
 package_mojave-theme-maia-dark-alt() {
-    cp "$srcdir/$pkgbase" "$srcdir/$pkgbase-dark-alt"
-    cd "$srcdir/$pkgbase-dark-alt"
+    cd "$srcdir/$pkgbase-dark-alt" || exit 1
 }
 
 package_mojave-theme-maia-dark-alt-solid() {
-    cp "$srcdir/$pkgbase" "$srcdir/$pkgbase-dark-alt-solid"
-    cd "$srcdir/$pkgbase-dark-alt-solid"
+    cd "$srcdir/$pkgbase-dark-alt-solid" || exit 1
 }
 
 package_mojave-theme-maia-blackish() {
-    cp "$srcdir/$pkgbase" "$srcdir/$pkgbase-blackish"
-    cd "$srcdir/$pkgbase-blackish"
+    cd "$srcdir/$pkgbase-blackish" || exit 1
 }
 
 package_mojave-theme-maia-blackish-solid() {
-    cp "$srcdir/$pkgbase" "$srcdir/$pkgbase-blackish-solid"
-    cd "$srcdir/$pkgbase-blackish-solid"
+    cd "$srcdir/$pkgbase-blackish-solid" || exit 1
 }
 
 package_mojave-theme-maia-blackish-alt() {
-    cp "$srcdir/$pkgbase" "$srcdir/$pkgbase-blackish-alt"
-    cd "$srcdir/$pkgbase-blackish-alt"
+    cd "$srcdir/$pkgbase-blackish-alt" || exit 1
 }
 
 package_mojave-theme-maia-blackish-alt-solid() {
-    cp "$srcdir/$pkgbase" "$srcdir/$pkgbase-blackish-alt-solid"
-    cd "$srcdir/$pkgbase-blackish-alt-solid"
+    cd "$srcdir/$pkgbase-blackish-alt-solid" || exit 1
 }
