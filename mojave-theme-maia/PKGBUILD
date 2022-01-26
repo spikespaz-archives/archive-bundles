@@ -35,6 +35,11 @@ _clonedir="${url##*/}"
 source=("$_clonedir::git+$url.git")
 sha256sums=('SKIP')
 
+_THEME_BTN_SIZE='standard'
+_THEME_REPLACE_COLOR='red'
+_THEME_MAIN_ICON='manjaro'
+_THEME_INSTALL_GDM=false
+
 pkgver() {
     cd "$srcdir/$_clonedir" || exit 1
     printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
@@ -70,10 +75,38 @@ prepare() {
     cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish-alt-solid"
 }
 
+_build_theme() {
+    args=(
+        --dest "$_CURR_THEME_DEST"
+        --name "$pkgbase"
+        --color "$_CURR_THEME_STYLE"
+        --opacity "$_CURR_THEME_OPACITY"
+        --alt "$_CURR_THEME_BTN_VARIANT"
+        --small "$_CURR_THEME_BTN_SIZE"
+        --theme "$_CURR_THEME_COLOR"
+        --icon "$_CURR_THEME_MAIN_ICON"
+    )
+
+    [[ "$_CURR_THEME_INSTALL_GDM" == true ]] && args+=(--gdm)
+
+    "$(pwd)/install.sh" "${args[@]}"
+}
+
 _build_mojave-theme-maia-light() {
     local theme_src="$srcdir/$pkgbase-light"
     local theme_dest="$srcdir/$pkgbase-light/build"
+
+    _CURR_THEME_DEST="$theme_dest"
+    _CURR_THEME_STYLE='light'
+    _CURR_THEME_OPACITY='standard'
+    _CURR_THEME_BTN_VARIANT='standard'
+    _CURR_THEME_BTN_SIZE="$_THEME_BTN_SIZE"
+    _CURR_THEME_COLOR="$_THEME_REPLACE_COLOR"
+    _CURR_THEME_MAIN_ICON="$_THEME_MAIN_ICON"
+    _CURR_THEME_INSTALL_GDM="$_THEME_INSTALL_GDM"
+
     cd "$theme_src" || exit 1
+    _build_theme
 }
 
 _build_mojave-theme-maia-light-solid() {
