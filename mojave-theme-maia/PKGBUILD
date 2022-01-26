@@ -35,6 +35,8 @@ _clonedir="${url##*/}"
 source=("$_clonedir::git+$url.git")
 sha256sums=('SKIP')
 
+_INSTALL_DIR='/usr/share/themes'
+
 _THEME_DEFAULT_SMALL_VARIANT='standard'
 _THEME_DEFAULT_ICON_VARIANT='manjaro'
 _THEME_REPLACE_COLOR='red'
@@ -225,49 +227,61 @@ build() {
 }
 
 package_mojave-theme-maia-light() {
-    cd "$srcdir/build/$pkgbase-light" || exit 1
+    install -d "$pkgdir/$_INSTALL_DIR"
+    cp -r "$srcdir/build/$pkgbase-light/" "$pkgdir/$_INSTALL_DIR"
 }
 
 package_mojave-theme-maia-light-solid() {
-    cd "$srcdir/build/$pkgbase-light-solid" || exit 1
+    install -d "$pkgdir/$_INSTALL_DIR"
+    cp -r "$srcdir/build/$pkgbase-light-solid/" "$pkgdir/$_INSTALL_DIR"
 }
 
 package_mojave-theme-maia-light-alt() {
-    cd "$srcdir/build/$pkgbase-light-alt" || exit 1
+    install -d "$pkgdir/$_INSTALL_DIR"
+    cp -r "$srcdir/build/$pkgbase-light-alt/" "$pkgdir/$_INSTALL_DIR"
 }
 
 package_mojave-theme-maia-light-solid-alt() {
-    cd "$srcdir/build/$pkgbase-light-solid-alt" || exit 1
+    install -d "$pkgdir/$_INSTALL_DIR"
+    cp -r "$srcdir/build/$pkgbase-light-solid-alt/" "$pkgdir/$_INSTALL_DIR"
 }
 
 package_mojave-theme-maia-dark() {
-    cd "$srcdir/build/$pkgbase-dark" || exit 1
+    install -d "$pkgdir/$_INSTALL_DIR"
+    cp -r "$srcdir/build/$pkgbase-dark/" "$pkgdir/$_INSTALL_DIR"
 }
 
 package_mojave-theme-maia-dark-solid() {
-    cd "$srcdir/build/$pkgbase-dark-solid" || exit 1
+    install -d "$pkgdir/$_INSTALL_DIR"
+    cp -r "$srcdir/build/$pkgbase-dark-solid/" "$pkgdir/$_INSTALL_DIR"
 }
 
 package_mojave-theme-maia-dark-alt() {
-    cd "$srcdir/build/$pkgbase-dark-alt" || exit 1
+    install -d "$pkgdir/$_INSTALL_DIR"
+    cp -r "$srcdir/build/$pkgbase-dark-alt/" "$pkgdir/$_INSTALL_DIR"
 }
 
 package_mojave-theme-maia-dark-solid-alt() {
-    cd "$srcdir/build/$pkgbase-dark-solid-alt" || exit 1
+    install -d "$pkgdir/$_INSTALL_DIR"
+    cp -r "$srcdir/build/$pkgbase-dark-solid-alt/" "$pkgdir/$_INSTALL_DIR"
 }
 
 package_mojave-theme-maia-blackish() {
-    cd "$srcdir/build/$pkgbase-blackish" || exit 1
+    install -d "$pkgdir/$_INSTALL_DIR"
+    cp -r "$srcdir/build/$pkgbase-blackish/" "$pkgdir/$_INSTALL_DIR"
 }
 
 package_mojave-theme-maia-blackish-solid() {
-    cd "$srcdir/build/$pkgbase-blackish-solid" || exit 1
+    install -d "$pkgdir/$_INSTALL_DIR"
+    cp -r "$srcdir/build/$pkgbase-blackish-solid/" "$pkgdir/$_INSTALL_DIR"
 }
 
 package_mojave-theme-maia-blackish-alt() {
-    cd "$srcdir/build/$pkgbase-blackish-alt" || exit 1
+    install -d "$pkgdir/$_INSTALL_DIR"
+    cp -r "$srcdir/build/$pkgbase-blackish-alt/" "$pkgdir/$_INSTALL_DIR"
 }
 
 package_mojave-theme-maia-blackish-solid-alt() {
-    cd "$srcdir/build/$pkgbase-blackish-solid-alt" || exit 1
+    install -d "$pkgdir/$_INSTALL_DIR"
+    cp -r "$srcdir/build/$pkgbase-blackish-solid-alt/" "$pkgdir/$_INSTALL_DIR"
 }
