@@ -35,10 +35,9 @@ _clonedir="${url##*/}"
 source=("$_clonedir::git+$url.git")
 sha256sums=('SKIP')
 
-_THEME_BTN_SIZE='standard'
+_THEME_DEFAULT_SMALL_VARIANT='standard'
+_THEME_DEFAULT_ICON_VARIANT='manjaro'
 _THEME_REPLACE_COLOR='red'
-_THEME_MAIN_ICON='manjaro'
-_THEME_INSTALL_GDM=false
 
 pkgver() {
     cd "$srcdir/$_clonedir" || exit 1
@@ -56,45 +55,36 @@ prepare() {
         sed -i "s,$patch_from,$patch_to," "$srcdir/$pkgbase/install.sh"
     }
 
-    [[ -d "$srcdir/$pkgbase-light" ]] && rm -rf "$srcdir/$pkgbase-light"
-    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-light"
-    [[ -d "$srcdir/$pkgbase-light-solid" ]] && rm -rf "$srcdir/$pkgbase-light-solid"
-    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-light-solid"
-    [[ -d "$srcdir/$pkgbase-light-alt" ]] && rm -rf "$srcdir/$pkgbase-light-alt"
-    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-light-alt"
-    [[ -d "$srcdir/$pkgbase-light-alt-solid" ]] && rm -rf "$srcdir/$pkgbase-light-alt-solid"
-    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-light-alt-solid"
-    [[ -d "$srcdir/$pkgbase-dark" ]] && rm -rf "$srcdir/$pkgbase-dark"
-    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-dark"
-    [[ -d "$srcdir/$pkgbase-dark-solid" ]] && rm -rf "$srcdir/$pkgbase-dark-solid"
-    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-dark-solid"
-    [[ -d "$srcdir/$pkgbase-dark-alt" ]] && rm -rf "$srcdir/$pkgbase-dark-alt"
-    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-dark-alt"
-    [[ -d "$srcdir/$pkgbase-dark-alt-solid" ]] && rm -rf "$srcdir/$pkgbase-dark-alt-solid"
-    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-dark-alt-solid"
     [[ -d "$srcdir/$pkgbase-blackish" ]] && rm -rf "$srcdir/$pkgbase-blackish"
     cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish"
-    [[ -d "$srcdir/$pkgbase-blackish-solid" ]] && rm -rf "$srcdir/$pkgbase-blackish-solid"
-    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish-solid"
-    [[ -d "$srcdir/$pkgbase-blackish-alt" ]] && rm -rf "$srcdir/$pkgbase-blackish-alt"
-    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish-alt"
-    [[ -d "$srcdir/$pkgbase-blackish-alt-solid" ]] && rm -rf "$srcdir/$pkgbase-blackish-alt-solid"
-    cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish-alt-solid"
 }
 
-_build_theme() {
-    args=(
-        --dest "$_CURR_THEME_DEST"
-        --name "$pkgbase"
-        --color "$_CURR_THEME_STYLE"
-        --opacity "$_CURR_THEME_OPACITY"
-        --alt "$_CURR_THEME_BTN_VARIANT"
-        --small "$_CURR_THEME_BTN_SIZE"
-        --theme "$_CURR_THEME_COLOR"
-        --icon "$_CURR_THEME_MAIN_ICON"
+_build_themes() {
+    local args=(
+        --dest "$_THEME_DEST"
+        --name "$_THEME_NAME"
     )
 
-    [[ "$_CURR_THEME_INSTALL_GDM" == true ]] && args+=(--gdm)
+    for color in "${_THEME_COLOR_VARIANTS[@]}"; do
+        args+=(--color "$color")
+    done
+    for opacity in "${_THEME_OPACITY_VARIANTS[@]}"; do
+        args+=(--opacity "$opacity")
+    done
+    for alt in "${_THEME_ALT_VARIANTS[@]}"; do
+        args+=(--alt "$alt")
+    done
+    for small in "${_THEME_SMALL_VARIANTS[@]}"; do
+        args+=(--small "$small")
+    done
+    for theme in "${_THEME_THEME_VARIANTS[@]}"; do
+        args+=(--theme "$theme")
+    done
+    for icon in "${_THEME_ICON_VARIANTS[@]}"; do
+        args+=(--icon "$icon")
+    done
+
+    echo "${args[@]}"
 
     "$(pwd)/install.sh" "${args[@]}"
 }
@@ -183,18 +173,27 @@ _build_mojave-theme-maia-blackish-alt-solid() {
 }
 
 build() {
-    _build_mojave-theme-maia-light
-    _build_mojave-theme-maia-light-solid
-    _build_mojave-theme-maia-light-alt
-    _build_mojave-theme-maia-light-alt-solid
-    _build_mojave-theme-maia-dark
-    _build_mojave-theme-maia-dark-solid
-    _build_mojave-theme-maia-dark-alt
-    _build_mojave-theme-maia-dark-alt-solid
-    _build_mojave-theme-maia-blackish
-    _build_mojave-theme-maia-blackish-solid
-    _build_mojave-theme-maia-blackish-alt
-    _build_mojave-theme-maia-blackish-alt-solid
+    _THEME_SMALL_VARIANTS=("$_THEME_DEFAULT_SMALL_VARIANT")
+    _THEME_THEME_VARIANTS=("$_THEME_REPLACE_COLOR")
+    _THEME_ICON_VARIANTS=("$_THEME_DEFAULT_ICON_VARIANT")
+
+    _THEME_DEST="$srcdir/$pkgbase/build"
+    _THEME_NAME="$pkgbase"
+
+    _THEME_COLOR_VARIANTS=('light' 'dark')
+    _THEME_OPACITY_VARIANTS=('standard' 'solid')
+    _THEME_ALT_VARIANTS=('standard' 'alt')
+
+    cd "$srcdir/$_THEME_NAME" || exit 1
+    _build_themes
+
+    _THEME_DEST="$srcdir/$pkgbase-blackish/build"
+    _THEME_NAME="$pkgbase-blackish"
+
+    _THEME_COLOR_VARIANTS=('dark')
+
+    cd "$srcdir/$_THEME_NAME" || exit 1
+    _build_themes
 }
 
 package_mojave-theme-maia-light() {
