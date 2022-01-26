@@ -49,6 +49,13 @@ prepare() {
     [[ -d "$srcdir/$pkgbase" ]] && rm -rf "$srcdir/$pkgbase"
     cp -R "$srcdir/$_clonedir/" "$srcdir/$pkgbase"
 
+    # shellcheck disable=SC2016
+    {
+        local patch_from='${SRC_DIR}/other/plank/${name}${color}/'
+        local patch_to='${SRC_DIR}/other/plank/Mojave${color}/'
+        sed -i "s,$patch_from,$patch_to," "$srcdir/$pkgbase/install.sh"
+    }
+
     [[ -d "$srcdir/$pkgbase-light" ]] && rm -rf "$srcdir/$pkgbase-light"
     cp -R "$srcdir/$pkgbase/" "$srcdir/$pkgbase-light"
     [[ -d "$srcdir/$pkgbase-light-solid" ]] && rm -rf "$srcdir/$pkgbase-light-solid"
