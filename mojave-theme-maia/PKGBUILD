@@ -116,100 +116,31 @@ _build_themes() {
     "$_THEME_SOURCE_DIR/install.sh" "${args[@]}"
 }
 
-_fixup_mojave-theme-maia-light() {
-    local build_name="$pkgbase-light-$_THEME_REPLACE_COLOR"
-    local theme_name="$pkgbase-light"
+_fixup_themes() {
+    local dest_dir="$1"
 
-    mv "$srcdir/$pkgbase/build/$build_name/" "$srcdir/build/$theme_name"
-    cd "$srcdir/build/$theme_name" || exit 1
-}
+    for color in "${_THEME_COLOR_VARIANTS[@]}"; do
+        for opacity in "${_THEME_OPACITY_VARIANTS[@]}"; do
+            for alt in "${_THEME_ALT_VARIANTS[@]}"; do
+                for small in "${_THEME_SMALL_VARIANTS[@]}"; do
+                    for theme in "${_THEME_THEME_VARIANTS[@]}"; do
+                        local build_name="$_THEME_BASE_NAME-$color"
+                        [[ "$opacity" != 'standard' ]] && build_name+="-$opacity"
+                        [[ "$alt" != 'standard' ]] && build_name+="-$alt"
+                        [[ "$small" != 'standard' ]] && build_name+="-$small"
+                        [[ "$theme" != 'standard' ]] && build_name+="-$theme"
 
-_fixup_mojave-theme-maia-light-solid() {
-    local build_name="$pkgbase-light-solid-$_THEME_REPLACE_COLOR"
-    local theme_name="$pkgbase-light-solid"
+                        local theme_name="$_THEME_BASE_NAME-$color"
+                        [[ "$opacity" != 'standard' ]] && theme_name+="-$opacity"
+                        [[ "$alt" != 'standard' ]] && theme_name+="-$alt"
+                        [[ "$small" != 'standard' ]] && theme_name+="-$small"
 
-    mv "$srcdir/$pkgbase/build/$build_name/" "$srcdir/build/$theme_name"
-    cd "$srcdir/build/$theme_name" || exit 1
-}
-
-_fixup_mojave-theme-maia-light-alt() {
-    local build_name="$pkgbase-light-alt-$_THEME_REPLACE_COLOR"
-    local theme_name="$pkgbase-light-alt"
-
-    mv "$srcdir/$pkgbase/build/$build_name/" "$srcdir/build/$theme_name"
-    cd "$srcdir/build/$theme_name" || exit 1
-}
-
-_fixup_mojave-theme-maia-light-solid-alt() {
-    local build_name="$pkgbase-light-solid-alt-$_THEME_REPLACE_COLOR"
-    local theme_name="$pkgbase-light-solid-alt"
-
-    mv "$srcdir/$pkgbase/build/$build_name/" "$srcdir/build/$theme_name"
-    cd "$srcdir/build/$theme_name" || exit 1
-}
-
-_fixup_mojave-theme-maia-dark() {
-    local build_name="$pkgbase-dark-$_THEME_REPLACE_COLOR"
-    local theme_name="$pkgbase-dark"
-
-    mv "$srcdir/$pkgbase/build/$build_name/" "$srcdir/build/$theme_name"
-    cd "$srcdir/build/$theme_name" || exit 1
-}
-
-_fixup_mojave-theme-maia-dark-solid() {
-    local build_name="$pkgbase-dark-solid-$_THEME_REPLACE_COLOR"
-    local theme_name="$pkgbase-dark-solid"
-
-    mv "$srcdir/$pkgbase/build/$build_name/" "$srcdir/build/$theme_name"
-    cd "$srcdir/build/$theme_name" || exit 1
-}
-
-_fixup_mojave-theme-maia-dark-alt() {
-    local build_name="$pkgbase-dark-alt-$_THEME_REPLACE_COLOR"
-    local theme_name="$pkgbase-dark-alt"
-
-    mv "$srcdir/$pkgbase/build/$build_name/" "$srcdir/build/$theme_name"
-    cd "$srcdir/build/$theme_name" || exit 1
-}
-
-_fixup_mojave-theme-maia-dark-solid-alt() {
-    local build_name="$pkgbase-dark-solid-alt-$_THEME_REPLACE_COLOR"
-    local theme_name="$pkgbase-dark-solid-alt"
-
-    mv "$srcdir/$pkgbase/build/$build_name/" "$srcdir/build/$theme_name"
-    cd "$srcdir/build/$theme_name" || exit 1
-}
-
-_fixup_mojave-theme-maia-blackish() {
-    local build_name="$pkgbase-blackish-dark-$_THEME_REPLACE_COLOR"
-    local theme_name="$pkgbase-blackish"
-
-    mv "$srcdir/$pkgbase-blackish/build/$build_name/" "$srcdir/build/$theme_name"
-    cd "$srcdir/build/$theme_name" || exit 1
-}
-
-_fixup_mojave-theme-maia-blackish-solid() {
-    local build_name="$pkgbase-blackish-dark-solid-$_THEME_REPLACE_COLOR"
-    local theme_name="$pkgbase-blackish-solid"
-
-    mv "$srcdir/$pkgbase-blackish/build/$build_name/" "$srcdir/build/$theme_name"
-    cd "$srcdir/build/$theme_name" || exit 1
-}
-
-_fixup_mojave-theme-maia-blackish-alt() {
-    local build_name="$pkgbase-blackish-dark-alt-$_THEME_REPLACE_COLOR"
-    local theme_name="$pkgbase-blackish-alt"
-
-    mv "$srcdir/$pkgbase-blackish/build/$build_name/" "$srcdir/build/$theme_name"
-    cd "$srcdir/build/$theme_name" || exit 1
-}
-
-_fixup_mojave-theme-maia-blackish-solid-alt() {
-    local build_name="$pkgbase-blackish-dark-solid-alt-$_THEME_REPLACE_COLOR"
-    local theme_name="$pkgbase-blackish-solid-alt"
-
-    mv "$srcdir/$pkgbase-blackish/build/$build_name/" "$srcdir/build/$theme_name"
-    cd "$srcdir/build/$theme_name" || exit 1
+                        mv "$_THEME_DEST_DIR/$build_name/" "$dest_dir/$theme_name"
+                    done
+                done
+            done
+        done
+    done
 }
 
 build() {
@@ -226,6 +157,7 @@ build() {
     _THEME_ALT_VARIANTS=('standard' 'alt')
 
     _build_themes
+    _fixup_themes "$srcdir/build"
 
     _THEME_SOURCE_DIR="$srcdir/$pkgbase-blackish"
     _THEME_DEST_DIR="$srcdir/$pkgbase-blackish/build"
@@ -234,20 +166,7 @@ build() {
     _THEME_COLOR_VARIANTS=('dark')
 
     _build_themes
-
-    _fixup_mojave-theme-maia-light
-    _fixup_mojave-theme-maia-light-solid
-    _fixup_mojave-theme-maia-light-alt
-    _fixup_mojave-theme-maia-light-solid-alt
-    _fixup_mojave-theme-maia-dark
-    _fixup_mojave-theme-maia-dark-solid
-    _fixup_mojave-theme-maia-dark-alt
-    _fixup_mojave-theme-maia-dark-solid-alt
-
-    _fixup_mojave-theme-maia-blackish
-    _fixup_mojave-theme-maia-blackish-solid
-    _fixup_mojave-theme-maia-blackish-alt
-    _fixup_mojave-theme-maia-blackish-solid-alt
+    _fixup_themes "$srcdir/build"
 }
 
 package_mojave-theme-maia-light() {
