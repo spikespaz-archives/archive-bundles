@@ -41,6 +41,9 @@ _THEME_DEFAULT_SMALL_VARIANT='standard'
 _THEME_DEFAULT_ICON_VARIANT='manjaro'
 _THEME_REPLACE_COLOR='red'
 
+_ACCENT_COLOR_FROM='#ED5F5D'
+_ACCENT_COLOR_TO='#16A085'
+
 pkgver() {
     cd "$srcdir/$_clonedir" || exit 1
     printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
@@ -55,10 +58,31 @@ prepare() {
 
     # shellcheck disable=SC2016
     {
-        local patch_from='${SRC_DIR}/other/plank/${name}${color}/'
-        local patch_to='${SRC_DIR}/other/plank/Mojave${color}/'
-        sed -i "s,$patch_from,$patch_to," "$srcdir/$pkgbase/install.sh"
+        local patch_from='#! */usr/bin/env/\?'
+        local patch_to='#!/usr/bin/env'
+        find "$srcdir/$pkgbase" -type f -name '*.sh' -exec \
+            sed -i "s;$patch_from;$patch_to;" {} \;
+
+        patch_from='${SRC_DIR}/other/plank/${name}${color}/'
+        patch_to='${SRC_DIR}/other/plank/Mojave${color}/'
+        sed -i "s;$patch_from;$patch_to;" "$srcdir/$pkgbase/install.sh"
+
+        patch_from='\($ASRC_DIR/\|dest:-\)gtk-3.0'
+        patch_to='\1gtk'
+        sed -i "s;$patch_from;$patch_to;g" "$srcdir/$pkgbase/render-assets.sh"
+
+        patch_from='${dest:-\(gtk\|cinnamon\)}'
+        patch_to='${dest:-\1/thumbnails}'
+        sed -i "s;$patch_from;$patch_to;g" "$srcdir/$pkgbase/render-assets.sh"
     }
+
+    find "$srcdir/$pkgbase" -type f \( -name '*.scss' -o -name '*.svg' \) -exec \
+        sed -i "s;$_ACCENT_COLOR_FROM;$_ACCENT_COLOR_TO;gI" {} \;
+
+    cd "$srcdir/$pkgbase" || exit 1
+
+    "$srcdir/$pkgbase/parse-sass.sh"
+    "$srcdir/$pkgbase/render-assets.sh"
 
     [[ -d "$srcdir/$pkgbase-blackish" ]] && rm -rf "$srcdir/$pkgbase-blackish"
     cp -r "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish"
