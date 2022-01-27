@@ -50,9 +50,6 @@ pkgver() {
 }
 
 prepare() {
-    [[ -d "$srcdir/build" ]] && rm -rf "$srcdir/build"
-    mkdir -p "$srcdir/build"
-
     [[ -d "$srcdir/$pkgbase" ]] && rm -rf "$srcdir/$pkgbase"
     cp -r "$srcdir/$_clonedir/" "$srcdir/$pkgbase"
 
@@ -75,17 +72,6 @@ prepare() {
         patch_to='${dest:-\1/thumbnails}'
         sed -i "s;$patch_from;$patch_to;g" "$srcdir/$pkgbase/render-assets.sh"
     }
-
-    find "$srcdir/$pkgbase" -type f \( -name '*.scss' -o -name '*.svg' \) -exec \
-        sed -i "s;$_ACCENT_COLOR_FROM;$_ACCENT_COLOR_TO;gI" {} \;
-
-    cd "$srcdir/$pkgbase" || exit 1
-
-    "$srcdir/$pkgbase/parse-sass.sh"
-    "$srcdir/$pkgbase/render-assets.sh"
-
-    [[ -d "$srcdir/$pkgbase-blackish" ]] && rm -rf "$srcdir/$pkgbase-blackish"
-    cp -r "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish"
 }
 
 _build_themes() {
@@ -144,6 +130,20 @@ _fixup_themes() {
 }
 
 build() {
+    [[ -d "$srcdir/build" ]] && rm -rf "$srcdir/build"
+    mkdir -p "$srcdir/build"
+
+    find "$srcdir/$pkgbase" -type f \( -name '*.scss' -o -name '*.svg' \) -exec \
+        sed -i "s;$_ACCENT_COLOR_FROM;$_ACCENT_COLOR_TO;gI" {} \;
+
+    cd "$srcdir/$pkgbase" || exit 1
+
+    "$srcdir/$pkgbase/parse-sass.sh"
+    "$srcdir/$pkgbase/render-assets.sh"
+
+    [[ -d "$srcdir/$pkgbase-blackish" ]] && rm -rf "$srcdir/$pkgbase-blackish"
+    cp -r "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish"
+
     _THEME_SMALL_VARIANTS=("$_THEME_DEFAULT_SMALL_VARIANT")
     _THEME_THEME_VARIANTS=("$_THEME_REPLACE_COLOR")
     _THEME_ICON_VARIANTS=("$_THEME_DEFAULT_ICON_VARIANT")
