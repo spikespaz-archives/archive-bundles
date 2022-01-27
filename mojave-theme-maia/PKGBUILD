@@ -41,46 +41,52 @@ _THEME_DEFAULT_SMALL_VARIANT='standard'
 _THEME_DEFAULT_ICON_VARIANT='manjaro'
 _THEME_REPLACE_COLOR='red'
 
+_THEME_SMALL_VARIANTS=("$_THEME_DEFAULT_SMALL_VARIANT")
+_THEME_THEME_VARIANTS=("$_THEME_REPLACE_COLOR")
+_THEME_ICON_VARIANTS=("$_THEME_DEFAULT_ICON_VARIANT")
+
 _ACCENT_COLOR_FROM='#ED5F5D'
 _ACCENT_COLOR_TO='#16A085'
 
-pkgver() {
+pkgver() (
     cd "$srcdir/$_clonedir" || exit 1
     printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
+)
+
+# shellcheck disable=SC2016
+_patch_scripts() (
+    patch_from='#! */usr/bin/env/\?'
+    patch_to='#!/usr/bin/env'
+    find "$srcdir/$pkgbase" -type f -name '*.sh' -exec \
+        sed -i "s;$patch_from;$patch_to;" {} \;
+
+    patch_from='${SRC_DIR}/other/plank/${name}${color}/'
+    patch_to='${SRC_DIR}/other/plank/Mojave${color}/'
+    sed -i "s;$patch_from;$patch_to;" "$srcdir/$pkgbase/install.sh"
+
+    patch_from='\($ASRC_DIR/\|dest:-\)gtk-3.0'
+    patch_to='\1gtk'
+    sed -i "s;$patch_from;$patch_to;g" "$srcdir/$pkgbase/render-assets.sh"
+
+    patch_from='${dest:-\(gtk\|cinnamon\)}'
+    patch_to='${dest:-\1/thumbnails}'
+    sed -i "s;$patch_from;$patch_to;g" "$srcdir/$pkgbase/render-assets.sh"
+)
 
 prepare() {
     [[ -d "$srcdir/$pkgbase" ]] && rm -rf "$srcdir/$pkgbase"
     cp -r "$srcdir/$_clonedir/" "$srcdir/$pkgbase"
 
-    # shellcheck disable=SC2016
-    {
-        local patch_from='#! */usr/bin/env/\?'
-        local patch_to='#!/usr/bin/env'
-        find "$srcdir/$pkgbase" -type f -name '*.sh' -exec \
-            sed -i "s;$patch_from;$patch_to;" {} \;
+    _patch_scripts
 
-        patch_from='${SRC_DIR}/other/plank/${name}${color}/'
-        patch_to='${SRC_DIR}/other/plank/Mojave${color}/'
-        sed -i "s;$patch_from;$patch_to;" "$srcdir/$pkgbase/install.sh"
+    _BUILDS_DIR="$srcdir/build"
 
-        patch_from='\($ASRC_DIR/\|dest:-\)gtk-3.0'
-        patch_to='\1gtk'
-        sed -i "s;$patch_from;$patch_to;g" "$srcdir/$pkgbase/render-assets.sh"
-
-        patch_from='${dest:-\(gtk\|cinnamon\)}'
-        patch_to='${dest:-\1/thumbnails}'
-        sed -i "s;$patch_from;$patch_to;g" "$srcdir/$pkgbase/render-assets.sh"
-    }
-
-    _BUILDS_DEST_DIR="$srcdir/build"
-
-    [[ -d "$_BUILDS_DEST_DIR" ]] && rm -rf "$_BUILDS_DEST_DIR"
-    mkdir -p "$_BUILDS_DEST_DIR"
+    [[ -d "$_BUILDS_DIR" ]] && rm -rf "$_BUILDS_DIR"
+    mkdir -p "$_BUILDS_DIR"
 }
 
-_build_themes() {
-    local args=(
+_build_themes() (
+    args=(
         --dest "$_THEME_DEST_DIR"
         --name "$_THEME_BASE_NAME"
     )
@@ -105,7 +111,7 @@ _build_themes() {
     done
 
     "$_THEME_SOURCE_DIR/install.sh" "${args[@]}"
-}
+)
 
 _fixup_themes() (
     for color in "${_THEME_COLOR_VARIANTS[@]}"; do
@@ -114,7 +120,7 @@ _fixup_themes() (
                 for small in "${_THEME_SMALL_VARIANTS[@]}"; do
                     for theme in "${_THEME_THEME_VARIANTS[@]}"; do
                         format_name() (
-                            local name="$_THEME_BASE_NAME"
+                            name="$_THEME_BASE_NAME"
 
                             [[ ! "$*" =~ (^|[[:space:]])'color'($|[[:space:]]) ]] &&
                                 name+="-$color"
@@ -137,8 +143,8 @@ _fixup_themes() (
                         build_name="$(format_name)"
                         theme_name="$(format_name "$@")"
 
-                        mv "$_THEME_DEST_DIR/$build_name/" "$_BUILDS_DEST_DIR/$theme_name"
-                        sed -i "s;$build_name;$theme_name;" "$_BUILDS_DEST_DIR/$theme_name/index.theme"
+                        mv "$_THEME_DEST_DIR/$build_name/" "$_BUILDS_DIR/$theme_name"
+                        sed -i "s;$build_name;$theme_name;" "$_BUILDS_DIR/$theme_name/index.theme"
                     done
                 done
             done
@@ -157,10 +163,6 @@ build() {
 
     [[ -d "$srcdir/$pkgbase-blackish" ]] && rm -rf "$srcdir/$pkgbase-blackish"
     cp -r "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish"
-
-    _THEME_SMALL_VARIANTS=("$_THEME_DEFAULT_SMALL_VARIANT")
-    _THEME_THEME_VARIANTS=("$_THEME_REPLACE_COLOR")
-    _THEME_ICON_VARIANTS=("$_THEME_DEFAULT_ICON_VARIANT")
 
     _THEME_SOURCE_DIR="$srcdir/$pkgbase"
     _THEME_DEST_DIR="$srcdir/$pkgbase/build"
@@ -183,62 +185,62 @@ build() {
     _fixup_themes 'color' 'theme'
 }
 
-package_mojave-theme-maia-light() {
+package_mojave-theme-maia-light() (
     install -d "$pkgdir/$_INSTALL_DIR"
     cp -r "$srcdir/build/$pkgbase-light/" "$pkgdir/$_INSTALL_DIR"
-}
+)
 
-package_mojave-theme-maia-light-solid() {
+package_mojave-theme-maia-light-solid() (
     install -d "$pkgdir/$_INSTALL_DIR"
     cp -r "$srcdir/build/$pkgbase-light-solid/" "$pkgdir/$_INSTALL_DIR"
-}
+)
 
-package_mojave-theme-maia-light-alt() {
+package_mojave-theme-maia-light-alt() (
     install -d "$pkgdir/$_INSTALL_DIR"
     cp -r "$srcdir/build/$pkgbase-light-alt/" "$pkgdir/$_INSTALL_DIR"
-}
+)
 
-package_mojave-theme-maia-light-solid-alt() {
+package_mojave-theme-maia-light-solid-alt() (
     install -d "$pkgdir/$_INSTALL_DIR"
     cp -r "$srcdir/build/$pkgbase-light-solid-alt/" "$pkgdir/$_INSTALL_DIR"
-}
+)
 
-package_mojave-theme-maia-dark() {
+package_mojave-theme-maia-dark() (
     install -d "$pkgdir/$_INSTALL_DIR"
     cp -r "$srcdir/build/$pkgbase-dark/" "$pkgdir/$_INSTALL_DIR"
-}
+)
 
-package_mojave-theme-maia-dark-solid() {
+package_mojave-theme-maia-dark-solid() (
     install -d "$pkgdir/$_INSTALL_DIR"
     cp -r "$srcdir/build/$pkgbase-dark-solid/" "$pkgdir/$_INSTALL_DIR"
-}
+)
 
-package_mojave-theme-maia-dark-alt() {
+package_mojave-theme-maia-dark-alt() (
     install -d "$pkgdir/$_INSTALL_DIR"
     cp -r "$srcdir/build/$pkgbase-dark-alt/" "$pkgdir/$_INSTALL_DIR"
-}
+)
 
-package_mojave-theme-maia-dark-solid-alt() {
+package_mojave-theme-maia-dark-solid-alt() (
     install -d "$pkgdir/$_INSTALL_DIR"
     cp -r "$srcdir/build/$pkgbase-dark-solid-alt/" "$pkgdir/$_INSTALL_DIR"
-}
+)
 
-package_mojave-theme-maia-blackish() {
+package_mojave-theme-maia-blackish() (
     install -d "$pkgdir/$_INSTALL_DIR"
     cp -r "$srcdir/build/$pkgbase-blackish/" "$pkgdir/$_INSTALL_DIR"
-}
+)
 
-package_mojave-theme-maia-blackish-solid() {
+package_mojave-theme-maia-blackish-solid() (
     install -d "$pkgdir/$_INSTALL_DIR"
     cp -r "$srcdir/build/$pkgbase-blackish-solid/" "$pkgdir/$_INSTALL_DIR"
-}
+)
 
-package_mojave-theme-maia-blackish-alt() {
+package_mojave-theme-maia-blackish-alt() (
     install -d "$pkgdir/$_INSTALL_DIR"
     cp -r "$srcdir/build/$pkgbase-blackish-alt/" "$pkgdir/$_INSTALL_DIR"
-}
+)
 
-package_mojave-theme-maia-blackish-solid-alt() {
+package_mojave-theme-maia-blackish-solid-alt() (
     install -d "$pkgdir/$_INSTALL_DIR"
     cp -r "$srcdir/build/$pkgbase-blackish-solid-alt/" "$pkgdir/$_INSTALL_DIR"
-}
+)
