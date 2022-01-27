@@ -55,22 +55,16 @@ pkgver() (
 
 # shellcheck disable=SC2016
 _patch_scripts() (
-    patch_from='#! */usr/bin/env/\?'
-    patch_to='#!/usr/bin/env'
+    script='s^#! */usr/bin/env/\?^#!/usr/bin/env^;'
     find "$srcdir/$pkgbase" -type f -name '*.sh' -exec \
-        sed -i "s;$patch_from;$patch_to;" {} \;
+        sed -i -e "$script" {} \;
 
-    patch_from='${SRC_DIR}/other/plank/${name}${color}/'
-    patch_to='${SRC_DIR}/other/plank/Mojave${color}/'
-    sed -i "s;$patch_from;$patch_to;" "$srcdir/$pkgbase/install.sh"
+    script='s^${SRC_DIR}/other/plank/${name}${color}/^${SRC_DIR}/other/plank/Mojave${color}/^;'
+    sed -i -e "$script" "$srcdir/$pkgbase/install.sh"
 
-    patch_from='\($ASRC_DIR/\|dest:-\)gtk-3.0'
-    patch_to='\1gtk'
-    sed -i "s;$patch_from;$patch_to;g" "$srcdir/$pkgbase/render-assets.sh"
-
-    patch_from='${dest:-\(gtk\|cinnamon\)}'
-    patch_to='${dest:-\1/thumbnails}'
-    sed -i "s;$patch_from;$patch_to;g" "$srcdir/$pkgbase/render-assets.sh"
+    script='s^\($ASRC_DIR/\|dest:-\)gtk-3.0^\1gtk^g;'
+    script+='s^${dest:-\(gtk\|cinnamon\)}^${dest:-\1/thumbnails}^g;'
+    sed -i -e "$script" "$srcdir/$pkgbase/render-assets.sh"
 )
 
 prepare() {
@@ -144,7 +138,7 @@ _fixup_themes() (
                         theme_name="$(format_name "$@")"
 
                         mv "$_THEME_DEST_DIR/$build_name/" "$_BUILDS_DIR/$theme_name"
-                        sed -i "s;$build_name;$theme_name;" "$_BUILDS_DIR/$theme_name/index.theme"
+                        sed -i -e "s^$build_name^$theme_name^;" "$_BUILDS_DIR/$theme_name/index.theme"
                     done
                 done
             done
@@ -154,7 +148,7 @@ _fixup_themes() (
 
 build() {
     find "$srcdir/$pkgbase" -type f \( -name '*.scss' -o -name '*.svg' \) -exec \
-        sed -i "s;$_ACCENT_COLOR_FROM;$_ACCENT_COLOR_TO;gI" {} \;
+        sed -i -e "s^$_ACCENT_COLOR_FROM^$_ACCENT_COLOR_TO^gI;" {} \;
 
     cd "$srcdir/$pkgbase" || exit 1
 
