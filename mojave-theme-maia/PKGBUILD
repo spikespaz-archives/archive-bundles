@@ -45,8 +45,30 @@ _THEME_SMALL_VARIANTS=("$_THEME_DEFAULT_SMALL_VARIANT")
 _THEME_THEME_VARIANTS=("$_THEME_REPLACE_COLOR")
 _THEME_ICON_VARIANTS=("$_THEME_DEFAULT_ICON_VARIANT")
 
-_ACCENT_COLOR_FROM='#ED5F5D'
-_ACCENT_COLOR_TO='#16A085'
+_ACCENT_COLOR_REPLACEMENT='s^#ED5F5D^#16A085^gI;'
+_BLACKISH_REPLACEMENTS=(
+    's^#242424^#1C1C1C^gI;'
+    's^#333333^#292929^gI;'
+    's^#999999^#787878^gI;'
+    's^#555555^#4C4C4C^gI;'
+    's^#373737^#2E2E2E^gI;'
+    's^#434343^#383838^gI;'
+    's^#3E3E3E^#333333^gI;'
+    's^#383838^#2E2E2E^gI;'
+    's^#313131^#262626^gI;'
+    's^#101010^#101010^gI;'
+    's^#3B3B3B^#303030^gI;'
+    's^#2A2A2A^#1F1F1F^gI;'
+    's^#656565^#575757^gI;'
+    's^#767676^#5E5E5E^gI;'
+    's^#868686^#787878^gI;'
+    's^#636363^#595959^gI;'
+    's^#696969^#5E5E5E^gI;'
+    's^#707070^#666666^gI;'
+    's^#767676^#6B6B6B^gI;'
+    's^#C1C1C1^#B8B8B8^gI;'
+    's^#C6C6C6^#BDBDBD^gI;'
+)
 
 pkgver() (
     cd "$srcdir/$_clonedir" || exit 1
@@ -148,15 +170,14 @@ _fixup_themes() (
 
 build() {
     find "$srcdir/$pkgbase" -type f \( -name '*.scss' -o -name '*.svg' \) -exec \
-        sed -i -e "s^$_ACCENT_COLOR_FROM^$_ACCENT_COLOR_TO^gI;" {} \;
-
-    cd "$srcdir/$pkgbase" || exit 1
-
-    "$srcdir/$pkgbase/parse-sass.sh"
-    "$srcdir/$pkgbase/render-assets.sh"
+        sed -i -e "$_ACCENT_COLOR_REPLACEMENT" {} \;
 
     [[ -d "$srcdir/$pkgbase-blackish" ]] && rm -rf "$srcdir/$pkgbase-blackish"
     cp -r "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish"
+
+    cd "$srcdir/$pkgbase" || exit 1
+    "$srcdir/$pkgbase/parse-sass.sh"
+    # "$srcdir/$pkgbase/render-assets.sh"
 
     _THEME_SOURCE_DIR="$srcdir/$pkgbase"
     _THEME_DEST_DIR="$srcdir/$pkgbase/build"
@@ -168,6 +189,12 @@ build() {
 
     _build_themes
     _fixup_themes 'theme'
+
+    find "$srcdir/$pkgbase-blackish" -type f -name '*.scss' -exec \
+        sed -i -e "$(IFS=; echo "${_BLACKISH_REPLACEMENTS[*]}")" {} \;
+
+    cd "$srcdir/$pkgbase-blackish" || exit 1
+    "$srcdir/$pkgbase-blackish/parse-sass.sh"
 
     _THEME_SOURCE_DIR="$srcdir/$pkgbase-blackish"
     _THEME_DEST_DIR="$srcdir/$pkgbase-blackish/build"
