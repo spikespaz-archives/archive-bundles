@@ -72,6 +72,11 @@ prepare() {
         patch_to='${dest:-\1/thumbnails}'
         sed -i "s;$patch_from;$patch_to;g" "$srcdir/$pkgbase/render-assets.sh"
     }
+
+    _BUILDS_DEST_DIR="$srcdir/build"
+
+    [[ -d "$_BUILDS_DEST_DIR" ]] && rm -rf "$_BUILDS_DEST_DIR"
+    mkdir -p "$_BUILDS_DEST_DIR"
 }
 
 _build_themes() {
@@ -102,37 +107,46 @@ _build_themes() {
     "$_THEME_SOURCE_DIR/install.sh" "${args[@]}"
 }
 
-_fixup_themes() {
-    local dest_dir="$1"
-
+_fixup_themes() (
     for color in "${_THEME_COLOR_VARIANTS[@]}"; do
         for opacity in "${_THEME_OPACITY_VARIANTS[@]}"; do
             for alt in "${_THEME_ALT_VARIANTS[@]}"; do
                 for small in "${_THEME_SMALL_VARIANTS[@]}"; do
                     for theme in "${_THEME_THEME_VARIANTS[@]}"; do
-                        local build_name="$_THEME_BASE_NAME-$color"
-                        [[ "$opacity" != 'standard' ]] && build_name+="-$opacity"
-                        [[ "$alt" != 'standard' ]] && build_name+="-$alt"
-                        [[ "$small" != 'standard' ]] && build_name+="-$small"
-                        [[ "$theme" != 'standard' ]] && build_name+="-$theme"
+                        format_name() (
+                            local name="$_THEME_BASE_NAME"
 
-                        local theme_name="$_THEME_BASE_NAME-$color"
-                        [[ "$opacity" != 'standard' ]] && theme_name+="-$opacity"
-                        [[ "$alt" != 'standard' ]] && theme_name+="-$alt"
-                        [[ "$small" != 'standard' ]] && theme_name+="-$small"
+                            [[ ! "$*" =~ (^|[[:space:]])'color'($|[[:space:]]) ]] &&
+                                name+="-$color"
+                            [[ ! "$*" =~ (^|[[:space:]])'opacity'($|[[:space:]]) ]] &&
+                                [[ "$opacity" != 'standard' ]] &&
+                                name+="-$opacity"
+                            [[ ! "$*" =~ (^|[[:space:]])'alt'($|[[:space:]]) ]] &&
+                                [[ "$alt" != 'standard' ]] &&
+                                name+="-$alt"
+                            [[ ! "$*" =~ (^|[[:space:]])'small'($|[[:space:]]) ]] &&
+                                [[ "$small" != 'standard' ]] &&
+                                name+="-$small"
+                            [[ ! "$*" =~ (^|[[:space:]])'theme'($|[[:space:]]) ]] &&
+                                [[ "$theme" != 'standard' ]] &&
+                                name+="-$theme"
 
-                        mv "$_THEME_DEST_DIR/$build_name/" "$dest_dir/$theme_name"
+                            echo "$name"
+                        )
+
+                        build_name="$(format_name)"
+                        theme_name="$(format_name "$@")"
+
+                        mv "$_THEME_DEST_DIR/$build_name/" "$_BUILDS_DEST_DIR/$theme_name"
+                        sed -i "s;$build_name;$theme_name;" "$_BUILDS_DEST_DIR/$theme_name/index.theme"
                     done
                 done
             done
         done
     done
-}
+)
 
 build() {
-    [[ -d "$srcdir/build" ]] && rm -rf "$srcdir/build"
-    mkdir -p "$srcdir/build"
-
     find "$srcdir/$pkgbase" -type f \( -name '*.scss' -o -name '*.svg' \) -exec \
         sed -i "s;$_ACCENT_COLOR_FROM;$_ACCENT_COLOR_TO;gI" {} \;
 
@@ -157,7 +171,7 @@ build() {
     _THEME_ALT_VARIANTS=('standard' 'alt')
 
     _build_themes
-    _fixup_themes "$srcdir/build"
+    _fixup_themes 'theme'
 
     _THEME_SOURCE_DIR="$srcdir/$pkgbase-blackish"
     _THEME_DEST_DIR="$srcdir/$pkgbase-blackish/build"
@@ -166,7 +180,7 @@ build() {
     _THEME_COLOR_VARIANTS=('dark')
 
     _build_themes
-    _fixup_themes "$srcdir/build"
+    _fixup_themes 'color' 'theme'
 }
 
 package_mojave-theme-maia-light() {
