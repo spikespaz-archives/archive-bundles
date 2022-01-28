@@ -35,6 +35,7 @@ _clonedir="${url##*/}"
 source=("$_clonedir::git+$url.git")
 sha256sums=('SKIP')
 
+_SKIP_RENDER_ASSETS="${SKIP_RENDER_ASSETS:-false}"
 _INSTALL_DIR='/usr/share/themes'
 
 _THEME_DEFAULT_SMALL_VARIANT='standard'
@@ -117,7 +118,7 @@ _patch_scripts() (
 
 prepare() {
     _BUILDS_DIR="$srcdir/build"
-    
+
     [[ -d "$_BUILDS_DIR" ]] && rm -rf "$_BUILDS_DIR"
     [[ -d "$srcdir/$pkgbase" ]] && rm -rf "$srcdir/$pkgbase"
     [[ -d "$srcdir/$pkgbase-blackish" ]] && rm -rf "$srcdir/$pkgbase-blackish"
@@ -203,7 +204,9 @@ build() {
 
     cd "$srcdir/$pkgbase" || exit 1
     "$srcdir/$pkgbase/parse-sass.sh"
-    "$srcdir/$pkgbase/render-assets.sh"
+
+    [[ "$_SKIP_RENDER_ASSETS" != true ]] &&
+        "$srcdir/$pkgbase/render-assets.sh"
 
     _THEME_SOURCE_DIR="$srcdir/$pkgbase"
     _THEME_DEST_DIR="$srcdir/$pkgbase/build"
