@@ -123,6 +123,8 @@ prepare() {
     [[ -d "$srcdir/$pkgbase" ]] && rm -rf "$srcdir/$pkgbase"
     [[ -d "$srcdir/$pkgbase-blackish" ]] && rm -rf "$srcdir/$pkgbase-blackish"
 
+    find "$startdir" -type f -name "$pkgbase*$(pkgver)*.pkg.tar.xz" -delete 2> /dev/null || true
+
     cp -r "$srcdir/$_clonedir/" "$srcdir/$pkgbase"
     _patch_scripts
 
