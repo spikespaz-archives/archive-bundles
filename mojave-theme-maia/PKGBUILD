@@ -90,14 +90,14 @@ _patch_scripts() (
 )
 
 prepare() {
+    [[ -d "$_BUILDS_DIR" ]] && rm -rf "$_BUILDS_DIR"
     [[ -d "$srcdir/$pkgbase" ]] && rm -rf "$srcdir/$pkgbase"
-    cp -r "$srcdir/$_clonedir/" "$srcdir/$pkgbase"
+    [[ -d "$srcdir/$pkgbase-blackish" ]] && rm -rf "$srcdir/$pkgbase-blackish"
 
+    cp -r "$srcdir/$_clonedir/" "$srcdir/$pkgbase"
     _patch_scripts
 
     _BUILDS_DIR="$srcdir/build"
-
-    [[ -d "$_BUILDS_DIR" ]] && rm -rf "$_BUILDS_DIR"
     mkdir -p "$_BUILDS_DIR"
 }
 
@@ -172,7 +172,6 @@ build() {
     find "$srcdir/$pkgbase" -type f \( -name '*.scss' -o -name '*.svg' \) -exec \
         sed -i -e "$_ACCENT_COLOR_REPLACEMENT" {} \;
 
-    [[ -d "$srcdir/$pkgbase-blackish" ]] && rm -rf "$srcdir/$pkgbase-blackish"
     cp -r "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish"
 
     cd "$srcdir/$pkgbase" || exit 1
@@ -190,8 +189,10 @@ build() {
     _build_themes
     _fixup_themes 'theme'
 
+    local script
+    script="$(IFS=; echo "${_BLACKISH_REPLACEMENTS[*]}")"
     find "$srcdir/$pkgbase-blackish" -type f -name '*.scss' -exec \
-        sed -i -e "$(IFS=; echo "${_BLACKISH_REPLACEMENTS[*]}")" {} \;
+        sed -i -e "$script" {} \;
 
     cd "$srcdir/$pkgbase-blackish" || exit 1
     "$srcdir/$pkgbase-blackish/parse-sass.sh"
