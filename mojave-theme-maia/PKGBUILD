@@ -210,13 +210,13 @@ build() {
     find "$srcdir/$pkgbase" -type f \( -name '*.scss' -o -name '*.svg' \) -exec \
         sed -i -e "$_ACCENT_COLOR_REPLACEMENT" {} \;
 
+    [[ "$_SKIP_RENDER_ASSETS" != true ]] &&
+        "$srcdir/$pkgbase/render-assets.sh"
+    
     cp -r "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish"
 
     cd "$srcdir/$pkgbase" || exit 1
     "$srcdir/$pkgbase/parse-sass.sh"
-
-    [[ "$_SKIP_RENDER_ASSETS" != true ]] &&
-        "$srcdir/$pkgbase/render-assets.sh"
 
     _THEME_SOURCE_DIR="$srcdir/$pkgbase"
     _THEME_DEST_DIR="$srcdir/$pkgbase/build"
