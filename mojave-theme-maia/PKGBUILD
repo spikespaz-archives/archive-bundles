@@ -165,6 +165,12 @@ _build_themes() (
     "$_THEME_SOURCE_DIR/install.sh" "${args[@]}"
 )
 
+_contains_arg() {
+    local word="$1"
+    shift 1
+    [[ "$*" =~ (^|[[:space:]])"$word"($|[[:space:]]) ]]
+}
+
 _fixup_themes() (
     for color in "${_THEME_COLOR_VARIANTS[@]}"; do
         for opacity in "${_THEME_OPACITY_VARIANTS[@]}"; do
@@ -174,19 +180,15 @@ _fixup_themes() (
                         format_name() (
                             name="$_THEME_BASE_NAME"
 
-                            [[ ! "$*" =~ (^|[[:space:]])'color'($|[[:space:]]) ]] &&
+                            ! (_contains_arg 'color' "$@") &&
                                 name+="-$color"
-                            [[ ! "$*" =~ (^|[[:space:]])'opacity'($|[[:space:]]) ]] &&
-                                [[ "$opacity" != 'standard' ]] &&
+                            ! (_contains_arg 'opacity' "$@" || [[ "$opacity" == 'standard' ]]) &&
                                 name+="-$opacity"
-                            [[ ! "$*" =~ (^|[[:space:]])'alt'($|[[:space:]]) ]] &&
-                                [[ "$alt" != 'standard' ]] &&
+                            ! (_contains_arg 'alt' "$@" || [[ "$alt" == 'standard' ]]) &&
                                 name+="-$alt"
-                            [[ ! "$*" =~ (^|[[:space:]])'small'($|[[:space:]]) ]] &&
-                                [[ "$small" != 'standard' ]] &&
+                            ! (_contains_arg 'small' "$@" || [[ "$small" == 'standard' ]]) &&
                                 name+="-$small"
-                            [[ ! "$*" =~ (^|[[:space:]])'theme'($|[[:space:]]) ]] &&
-                                [[ "$theme" != 'standard' ]] &&
+                            ! (_contains_arg 'theme' "$@" || [[ "$theme" == 'standard' ]]) &&
                                 name+="-$theme"
 
                             echo "$name"
@@ -227,10 +229,8 @@ build() {
     _build_themes
     _fixup_themes 'theme'
 
-    local script
-    script="$(IFS=; echo "${_BLACKISH_REPLACEMENTS[*]}")"
     find "$srcdir/$pkgbase-blackish" -type f -name '*.scss' -exec \
-        sed -i -e "$script" {} \;
+        sed -i -e "$(IFS=;echo "${_BLACKISH_REPLACEMENTS[*]}")" {} \;
 
     cd "$srcdir/$pkgbase-blackish" || exit 1
     "$srcdir/$pkgbase-blackish/parse-sass.sh"
