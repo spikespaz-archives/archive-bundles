@@ -90,6 +90,8 @@ _patch_scripts() (
 )
 
 prepare() {
+    _BUILDS_DIR="$srcdir/build"
+    
     [[ -d "$_BUILDS_DIR" ]] && rm -rf "$_BUILDS_DIR"
     [[ -d "$srcdir/$pkgbase" ]] && rm -rf "$srcdir/$pkgbase"
     [[ -d "$srcdir/$pkgbase-blackish" ]] && rm -rf "$srcdir/$pkgbase-blackish"
@@ -97,7 +99,6 @@ prepare() {
     cp -r "$srcdir/$_clonedir/" "$srcdir/$pkgbase"
     _patch_scripts
 
-    _BUILDS_DIR="$srcdir/build"
     mkdir -p "$_BUILDS_DIR"
 }
 
@@ -176,7 +177,7 @@ build() {
 
     cd "$srcdir/$pkgbase" || exit 1
     "$srcdir/$pkgbase/parse-sass.sh"
-    # "$srcdir/$pkgbase/render-assets.sh"
+    "$srcdir/$pkgbase/render-assets.sh"
 
     _THEME_SOURCE_DIR="$srcdir/$pkgbase"
     _THEME_DEST_DIR="$srcdir/$pkgbase/build"
