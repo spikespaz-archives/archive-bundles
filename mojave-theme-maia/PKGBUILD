@@ -25,9 +25,15 @@ pkgdesc="A spin of Vince Liuice's Mojave theme for GTK with Manjaro Maia colors 
 arch=('any')
 url='https://github.com/vinceliuice/Mojave-gtk-theme'
 license=('GPL3')
-depends=()
-makedepends=('git' 'meson')
+makedepends=(
+    'git'
+    'sassc'
+    'optipng'
+    'inkscape'
+)
 optdepends=(
+    'gtk-engine-murrine: required for GTK2 support'
+    'gtk-engines: required for GTK2 support'
     'mcmojave-cursors: matching cursor theme'
     'mcmojave-circle-icon-theme: matching icon theme'
 )
