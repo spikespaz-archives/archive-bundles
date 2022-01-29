@@ -61,51 +61,49 @@ _grey() (
 _BLACKISH_REPLACEMENTS=(
     # base_colors:base_color
     # background_colors:alt_solid_bg_color
-    "s^#242424^$(_grey 0)^gI;"
+    "s^#242424^$(_grey 8)^gI;"
     # base_colors:bg_color
     # panel_colors:panel_top_color
-    "s^#333333^$(_grey 0)^gI;"
+    "s^#333333^$(_grey 10)^gI;"
     # base_colors:hint_fg_color
-    "s^#999999^$(_grey 0)^gI;"
+    "s^#999999^$(_grey 100)^gI;"
     # background_colors:solid_bg_color
-    "s^#555555^$(_grey 0)^gI;"
+    "s^#555555^$(_grey 14)^gI;"
     # headerbar_colors:header_bg
-    "s^#373737^$(_grey 0)^gI;"
+    "s^#373737^$(_grey 12)^gI;"
     # headerbar_colors:header_highlight
-    "s^#434343^$(_grey 0)^gI;"
+    "s^#434343^$(_grey 12)^gI;"
     # headerbar_colors:header_top
-    "s^#3E3E3E^$(_grey 0)^gI;"
+    "s^#3E3E3E^$(_grey 10)^gI;"
     # headerbar_colors:header_bottom
-    "s^#383838^$(_grey 0)^gI;"
+    "s^#383838^$(_grey 12)^gI;"
     # headerbar_colors:header_bg_backdrop
-    "s^#313131^$(_grey 0)^gI;"
+    "s^#313131^$(_grey 9)^gI;"
     # headerbar_colors:header_border
-    "s^#101010^$(_grey 0)^gI;"
+    "s^#101010^$(_grey 20)^gI;"
     # sidebar_colors:dark_sidebar_bg
-    "s^#3B3B3B^$(_grey 0)^gI;"
+    "s^#3B3B3B^$(_grey 7)^gI;"
     # osd_colors:osd_bg_color
     # panel_colors:panel_bg
     # panel_colors:panel_bottom_color
-    "s^#2A2A2A^$(_grey 0)^gI;"
+    "s^#2A2A2A^$(_grey 9)^gI;"
     # button_colors:button_bg
-    "s^#656565^$(_grey 0)^gI;"
+    "s^#656565^$(_grey 16)^gI;"
     # button_borders_and_highlights_colors:header_button_highlight
     # images:header_button_hover_image
-    "s^#767676^$(_grey 0)^gI;"
+    "s^#767676^$(_grey 28)^gI;"
     # button_borders_and_highlights_colors:header_button_hover_highlight
-    "s^#868686^$(_grey 0)^gI;"
+    "s^#868686^$(_grey 25)^gI;"
     # images:header_button_image
-    "s^#636363^$(_grey 0)^gI;"
+    "s^#636363^$(_grey 20)^gI;"
     # images:header_button_image
-    "s^#696969^$(_grey 0)^gI;"
-    # images:heaser_button_hover_image
-    "s^#707070^$(_grey 0)^gI;"
+    "s^#696969^$(_grey 22)^gI;"
     # images:header_button_hover_image
-    "s^#767676^$(_grey 0)^gI;"
+    "s^#707070^$(_grey 26)^gI;"
     # images:header_button_checked_image
-    "s^#C1C1C1^$(_grey 0)^gI;"
+    's^#C1C1C1^#16A085^gI;'
     # images:header_button_checked_image
-    "s^#C6C6C6^$(_grey 0)^gI;"
+    "s^#C6C6C6^#16A085^gI;"
 )
 
 pkgver() (
