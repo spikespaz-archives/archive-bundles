@@ -53,54 +53,60 @@ _THEME_THEME_VARIANTS=("$_THEME_REPLACE_COLOR")
 _THEME_ICON_VARIANTS=("$_THEME_DEFAULT_ICON_VARIANT")
 
 _ACCENT_COLOR_REPLACEMENT='s^#ED5F5D^#16A085^gI;'
+
+_grey() (
+    value=$(($1 * 255 / 100))
+    printf '#%02X%02X%02X' "$value" "$value" "$value"
+)
+
 _BLACKISH_REPLACEMENTS=(
     # base_colors:base_color
     # background_colors:alt_solid_bg_color
-    # 's^#242424^#1C1C1C^gI;'
+    "s^#242424^$(_grey 0)^gI;"
     # base_colors:bg_color
     # panel_colors:panel_top_color
-    # 's^#333333^#292929^gI;'
+    "s^#333333^$(_grey 0)^gI;"
     # base_colors:hint_fg_color
-    # 's^#999999^#787878^gI;'
+    "s^#999999^$(_grey 0)^gI;"
     # background_colors:solid_bg_color
-    # 's^#555555^#4C4C4C^gI;'
+    "s^#555555^$(_grey 0)^gI;"
     # headerbar_colors:header_bg
-    # 's^#373737^#2E2E2E^gI;'
+    "s^#373737^$(_grey 0)^gI;"
     # headerbar_colors:header_highlight
-    # 's^#434343^#383838^gI;'
+    "s^#434343^$(_grey 0)^gI;"
     # headerbar_colors:header_top
-    # 's^#3E3E3E^#333333^gI;'
+    "s^#3E3E3E^$(_grey 0)^gI;"
     # headerbar_colors:header_bottom
-    # 's^#383838^#2E2E2E^gI;'
+    "s^#383838^$(_grey 0)^gI;"
     # headerbar_colors:header_bg_backdrop
-    # 's^#313131^#262626^gI;'
+    "s^#313131^$(_grey 0)^gI;"
     # headerbar_colors:header_border
-    # 's^#101010^#101010^gI;'
+    "s^#101010^$(_grey 0)^gI;"
     # sidebar_colors:dark_sidebar_bg
-    # 's^#3B3B3B^#303030^gI;'
+    "s^#3B3B3B^$(_grey 0)^gI;"
     # osd_colors:osd_bg_color
     # panel_colors:panel_bg
     # panel_colors:panel_bottom_color
-    # 's^#2A2A2A^#1F1F1F^gI;'
+    "s^#2A2A2A^$(_grey 0)^gI;"
     # button_colors:button_bg
-    # 's^#656565^#575757^gI;'
+    "s^#656565^$(_grey 0)^gI;"
     # button_borders_and_highlights_colors:header_button_highlight
     # images:header_button_hover_image
-    # 's^#767676^#5E5E5E^gI;'
+    "s^#767676^$(_grey 0)^gI;"
     # button_borders_and_highlights_colors:header_button_hover_highlight
-    # 's^#868686^#787878^gI;'
+    "s^#868686^$(_grey 0)^gI;"
     # images:header_button_image
-    # 's^#636363^#595959^gI;'
+    "s^#636363^$(_grey 0)^gI;"
     # images:header_button_image
-    # 's^#696969^#5E5E5E^gI;'
+    "s^#696969^$(_grey 0)^gI;"
     # images:heaser_button_hover_image
-    # 's^#707070^#666666^gI;'
+    "s^#707070^$(_grey 0)^gI;"
     # images:header_button_hover_image
-    # 's^#767676^#6B6B6B^gI;'
+    "s^#767676^$(_grey 0)^gI;"
     # images:header_button_checked_image
-    # 's^#C1C1C1^#B8B8B8^gI;'
+    "s^#C1C1C1^$(_grey 0)^gI;"
     # images:header_button_checked_image
-    # 's^#C6C6C6^#BDBDBD^gI;'
+    "s^#C6C6C6^$(_grey 0)^gI;"
 )
 
 pkgver() (
@@ -209,7 +215,7 @@ _fixup_themes() (
 build() {
     find "$srcdir/$pkgbase" -type f \( -name '*.scss' -o -name '*.svg' \) -exec \
         sed -i -e "$_ACCENT_COLOR_REPLACEMENT" {} \;
-
+    
     cp -r "$srcdir/$pkgbase/" "$srcdir/$pkgbase-blackish"
 
     cd "$srcdir/$pkgbase" || exit 1
