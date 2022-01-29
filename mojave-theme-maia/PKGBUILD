@@ -244,7 +244,7 @@ build() {
     "$srcdir/$pkgbase-blackish/parse-sass.sh"
 
     [[ "$_SKIP_RENDER_ASSETS" != true ]] &&
-        "$srcdir/$pkgbase/render-assets.sh"
+        "$srcdir/$pkgbase-blackish/render-assets.sh"
 
     _THEME_SOURCE_DIR="$srcdir/$pkgbase-blackish"
     _THEME_DEST_DIR="$srcdir/$pkgbase-blackish/build"
