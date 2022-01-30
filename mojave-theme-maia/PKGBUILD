@@ -67,7 +67,7 @@ _BLACKISH_REPLACEMENTS=(
     # panel_colors:panel_top_color
     "s^#333333^$(_grey 10)^gI;"
     # base_colors:hint_fg_color
-    "s^#999999^$(_grey 100)^gI;"
+    "s^#999999^$(_grey 35)^gI;"
     # background_colors:solid_bg_color
     "s^#555555^$(_grey 14)^gI;"
     # headerbar_colors:header_bg
@@ -88,7 +88,7 @@ _BLACKISH_REPLACEMENTS=(
     # osd_colors:osd_bg_color
     # panel_colors:panel_bg
     # panel_colors:panel_bottom_color
-    "s^#2A2A2A^$(_grey 9)^gI;"
+    "s^#2A2A2A^$(_grey 14)^gI;"
     # button_colors:button_bg
     "s^#656565^$(_grey 16)^gI;"
     # button_borders_and_highlights_colors:header_button_highlight
@@ -115,15 +115,14 @@ _blackish_replace() (
     find "$1" -type f -name '*.scss' -exec \
         sed -i -e "$(IFS=;echo "${_BLACKISH_REPLACEMENTS[*]}")" {} \;
 
-    script='/./{H;$!d};x;s^\^\(.*$t==header-.*\)color: if($variant=='\''light'\'', $selected_fg_color, $bg_color);\(.*\)$^\1\2^g;'
-    # script+='/./{H;$!d};x;s^\^\(.*$t==header-.*\)border-color: $borders_color;\(.*\)$^\1border: none;\2^g;'
-    # script+='/./{H;$!d};x;s^\^\(.*$t==header-.*\)@if $variant == '\''dark'\'' { box-shadow: inset 0 1px $header_button.*; }\(.*\)$^\1\2^g;'
+    script='/./{H;$!d};x;'
+    script+='s^\^\(.*$t==header-.*\)color:.*$selected_fg_color, $bg_color);\(.*\)$^\1\2^g;'
     sed -i -e \
-        "$script"
+        "$script" \
         "$1/src/sass/gtk/_drawing.scss"
 
     sed -i -e \
-        's^.*$header_button\w*highlight.*\(.*\)^^;' \
+        's^.*$header_button\w*highlight.*^^;' \
         "$1/src/sass/gtk/_drawing.scss"
 )
 
