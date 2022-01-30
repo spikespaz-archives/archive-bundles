@@ -58,6 +58,7 @@ _grey() (
     printf '#%02X%02X%02X' "$value" "$value" "$value"
 )
 
+# shellcheck disable=SC2016
 _BLACKISH_REPLACEMENTS=(
     # base_colors:base_color
     # background_colors:alt_solid_bg_color
@@ -72,8 +73,9 @@ _BLACKISH_REPLACEMENTS=(
     # headerbar_colors:header_bg
     "s^#373737^$(_grey 12)^gI;"
     # headerbar_colors:header_highlight
-    "s^#434343^$(_grey 12)^gI;"
     # headerbar_colors:header_top
+    "s^#434343^$(_grey 12)^gI;"
+    # headerbar_colors:header_middle
     "s^#3E3E3E^$(_grey 10)^gI;"
     # headerbar_colors:header_bottom
     "s^#383838^$(_grey 12)^gI;"
@@ -93,7 +95,9 @@ _BLACKISH_REPLACEMENTS=(
     # images:header_button_hover_image
     "s^#767676^$(_grey 28)^gI;"
     # button_borders_and_highlights_colors:header_button_hover_highlight
-    "s^#868686^$(_grey 25)^gI;"
+    # "s^#868686^$(_grey 25)^gI;"
+    # button_borders_and_highlights_colors:header_button_checked_highlight
+    # "s^#CECECE^#2DB59A^gI;"
     # images:header_button_image
     "s^#636363^$(_grey 20)^gI;"
     # images:header_button_image
@@ -101,9 +105,26 @@ _BLACKISH_REPLACEMENTS=(
     # images:header_button_hover_image
     "s^#707070^$(_grey 26)^gI;"
     # images:header_button_checked_image
-    's^#C1C1C1^#16A085^gI;'
+    's^#C1C1C1^#14947B^gI;'
     # images:header_button_checked_image
-    "s^#C6C6C6^#16A085^gI;"
+    "s^#C6C6C6^#32C9AB^gI;"
+)
+
+# shellcheck disable=SC2016
+_blackish_replace() (
+    find "$1" -type f -name '*.scss' -exec \
+        sed -i -e "$(IFS=;echo "${_BLACKISH_REPLACEMENTS[*]}")" {} \;
+
+    script='/./{H;$!d};x;s^\^\(.*$t==header-.*\)color: if($variant=='\''light'\'', $selected_fg_color, $bg_color);\(.*\)$^\1\2^g;'
+    # script+='/./{H;$!d};x;s^\^\(.*$t==header-.*\)border-color: $borders_color;\(.*\)$^\1border: none;\2^g;'
+    # script+='/./{H;$!d};x;s^\^\(.*$t==header-.*\)@if $variant == '\''dark'\'' { box-shadow: inset 0 1px $header_button.*; }\(.*\)$^\1\2^g;'
+    sed -i -e \
+        "$script"
+        "$1/src/sass/gtk/_drawing.scss"
+
+    sed -i -e \
+        's^.*$header_button\w*highlight.*\(.*\)^^;' \
+        "$1/src/sass/gtk/_drawing.scss"
 )
 
 pkgver() (
@@ -233,8 +254,7 @@ build() {
     _build_themes
     _fixup_themes 'theme'
 
-    find "$srcdir/$pkgbase-blackish" -type f -name '*.scss' -exec \
-        sed -i -e "$(IFS=;echo "${_BLACKISH_REPLACEMENTS[*]}")" {} \;
+    _blackish_replace "$srcdir/$pkgbase-blackish"
 
     cd "$srcdir/$pkgbase-blackish" || exit 1
     
