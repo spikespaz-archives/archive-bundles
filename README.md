@@ -135,6 +135,13 @@ A Forge mod for Minecraft 1.12 that adds a radial menu that can be opened by hol
 No description yet. Try checking the browse directory for a README file.
 
 ---
+### [:open_file_folder:][1023]&nbsp;[:package:][2023]&nbsp;&nbsp;spikespaz/manjaro-themes-pkgbuild
+
+[9]: https://github.com/vinceliuice/Mojave-gtk-theme
+
+This is a collection of `PKGBUILD` files for various GTK themes intended for the Arch User Repository. The one directory inside this that is noteworthy is `mojave-theme-maia`, which is a modified version of[Vince Liuice's excellent theme][9] that emulates the look and feel of macOS Mojave. This `PKGBUILD` adds variants with the Manjaro "Maia" green accent and adds a "blackish" variant and reduces the rounded look a little bit. I would still be using it if I hadn't switched to using primarily Qt programs. If you're on GNOME, this may be worth taking a look at.
+
+---
 ### [:open_file_folder:][1018]&nbsp;[:package:][2018]&nbsp;&nbsp;spikespaz/public-3d-models
 
 No description yet. Try checking the browse directory for a README file.
@@ -176,6 +183,7 @@ No description yet. Try checking the browse directory for a README file.
 [1020]: https://github.com/spikespaz/archives/tree/master/browse/spikespaz/tool-scripts
 [1021]: https://github.com/spikespaz/archives/tree/master/browse/spikespaz/dawnlabs-carbon
 [1022]: https://github.com/spikespaz/archives/tree/master/browse/spikespaz/forge-radialmenu
+[1023]: https://github.com/spikespaz/archives/tree/master/browse/spikespaz/manjaro-themes-pkgbuild
 
 [2000]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz-old.dockypi.bundle
 [2001]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz-old.ffbatcher.bundle
@@ -199,4 +207,5 @@ No description yet. Try checking the browse directory for a README file.
 [2019]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz.spikespaz-website.bundle
 [2020]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz.tool-scripts.bundle
 [2021]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz.dawnlabs-carbon.bundle
-[2022]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz.spikespaz.forge-radialmenu.bundle
+[2022]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz.forge-radialmenu.bundle
+[2023]: https://github.com/spikespaz/archives/raw/master/bundle/spikespaz.manjaro-themes-pkgbuild.bundle
