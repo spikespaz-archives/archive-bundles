@@ -139,7 +139,7 @@ No description yet. Try checking the browse directory for a README file.
 
 [9]: https://github.com/vinceliuice/Mojave-gtk-theme
 
-This is a collection of `PKGBUILD` files for various GTK themes intended for the Arch User Repository. The one directory inside this that is noteworthy is `mojave-theme-maia`, which is a modified version of[Vince Liuice's excellent theme][9] that emulates the look and feel of macOS Mojave. This `PKGBUILD` adds variants with the Manjaro "Maia" green accent and adds a "blackish" variant and reduces the rounded look a little bit. I would still be using it if I hadn't switched to using primarily Qt programs. If you're on GNOME, this may be worth taking a look at.
+This is a collection of `PKGBUILD` files for various GTK themes intended for the Arch User Repository. The one directory inside this that is noteworthy is `mojave-theme-maia`, which is a modified version of [Vince Liuice's excellent theme][9] that emulates the look and feel of macOS Mojave. This `PKGBUILD` adds variants with the Manjaro "Maia" green accent and adds a "blackish" variant and reduces the rounded look a little bit. I would still be using it if I hadn't switched to using primarily Qt programs. If you're on GNOME, this may be worth taking a look at.
 
 ---
 ### [:open_file_folder:][1018]&nbsp;[:package:][2018]&nbsp;&nbsp;spikespaz/public-3d-models
